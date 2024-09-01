@@ -31,3 +31,11 @@ const App = () => {
 export default App
 
 const styles = StyleSheet.create({})
+
+
+// onPress={() =>
+  // navigation.navigate('Test', {name: 'Test', 'parametru': {'oras': 'Brasov '}})
+// }
+
+
+// iau pachet care ia detalii despre telefonul utilizatorului
