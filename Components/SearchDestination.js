@@ -4,11 +4,12 @@ import Fuse from "fuse.js";
 import {countries} from '../country_capital';
 
 
-const SearchDestination = () => {
+const SearchDestination = (props) => {
 
   const [inputText, setInputText] = useState('');
   const [suggestions, setSuggestions] = useState([]);
  
+
 
   const options = {
     includeScore: true,
@@ -26,8 +27,12 @@ const SearchDestination = () => {
   } , [inputText]);
 
   function selectDestination(country, capital){
-    console.log(country, capital);
+    
+    props.setCheckBoxActivities({isOpen: true, city: capital, country});
+   
   }
+
+
   return (
     <View>
       
@@ -61,10 +66,11 @@ export default SearchDestination
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: '#f8f8f8',
         borderRadius: 8,
         elevation: 3,
-        padding: 10,
+        
+        flex: 1,
+        padding: 16,
     },
     input: {
         backgroundColor: '#FFFFFF',
@@ -98,4 +104,5 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         letterSpacing: 1.2, 
     },
+
 })
