@@ -1,10 +1,9 @@
-import { View, Text, Pressable, FlatList, StyleSheet, Button } from 'react-native';
+import { ScrollView, View, Text, Pressable, FlatList, StyleSheet } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-// import { Spinner, HStack, Center, NativeBaseProvider } from "native-base";
+import { Spinner, Button, ButtonText, Icon, CheckIcon, SearchIcon } from "@gluestack-ui/themed";
 
 const CheckboxActivities = (props) => {
-
     const [checkbox, setCheckbox] = useState([]);
 
     useEffect(() => {
@@ -21,20 +20,23 @@ const CheckboxActivities = (props) => {
                     console.log(err);
                 });
         }
+
+
+        console.log(props);
     }, [props.checkBoxActivities]);
 
     function pressOnOption(index) {
         setCheckbox((prev) => {
-            prev[index].selected = !prev[index].selected;
-            return [...prev];
+            const updatedCheckbox = [...prev];
+            updatedCheckbox[index].selected = !updatedCheckbox[index].selected;
+            return updatedCheckbox;
         });
     }
 
     return (
         <View style={styles.container}>
-
             {checkbox.length ? 
-            <View>
+            <ScrollView>
                 <FlatList
                     data={checkbox}
                     keyExtractor={(item, index) => index.toString()}
@@ -42,47 +44,34 @@ const CheckboxActivities = (props) => {
                         return (
                             <Pressable 
                                 style={[
-                                    styles.suggestion, 
-                                    item.selected && styles.suggestionSelected
-                                ]} 
+                                    styles.pressable, 
+                                    item.selected && styles.pressableSelected
+                                ]}
                                 onPress={() => pressOnOption(index)}
                             >
-                                <Text 
-                                    style={[
-                                        styles.suggestionText, 
-                                        item.selected && styles.suggestionTextSelected
-                                    ]}
-                                >
+                                <Text style={styles.text}>
                                     {item.category}
                                 </Text>
+                                {item.selected ? 
+                                    <Icon as={CheckIcon} style={styles.icon} />
+                                    :
+                                    <View style={styles.iconPlaceholder}></View>
+                                }
                             </Pressable>
                         );
                     }}
                 />
-
-                <Pressable  onPress={()=>{console.log('perfect')}} style={styles.button}>
-                    <Text style={styles.buttonText}>Acesta este butonul</Text>
-                </Pressable>
-                
-            </View>
+                <Button onPress={() =>props.navigation.navigate('Schedule', {name: 'Schedule'})} style={styles.button}>
+                    <ButtonText>
+                        <Icon as={SearchIcon} style={styles.searchIcon} />
+                    </ButtonText>
+                </Button>
+            </ScrollView>
             : 
-
-            <View>
-               <Text> ---</Text>
-            </View>
-            
-            // <NativeBaseProvider>
-            //     <Center >
-
-            //         <HStack>
-            //             <Spinner color="cyan.500" />
-            //         </HStack>
-            //     </Center>
-            // </NativeBaseProvider>
-        
+            <View style={styles.spinnerContainer}>
+                <Spinner color="$indigo600" />
+            </View> 
             }
-
-           
         </View>
     );
 }
@@ -92,44 +81,50 @@ export default CheckboxActivities;
 const styles = StyleSheet.create({
     container: {
         padding: 16,
-        backgroundColor: '#f5f5f5',
+        flex: 1,
     },
-    suggestion: {
-        backgroundColor: '#4A90E2', 
-        paddingVertical: 15,
-        paddingHorizontal: 25,
-        borderRadius: 10,
-        marginVertical: 10,
-        elevation: 5,
+    pressable: {
+        flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'center', 
+        justifyContent: 'space-between',
+        padding: 12,
+        marginVertical: 5,
+        backgroundColor: '#f0f0f0',
+        borderRadius: 8,
     },
-    suggestionSelected: {
-        backgroundColor: '#7B4397',  // Culoare mai închisă pentru elementul selectat
+    pressableSelected: {
+        backgroundColor: '#e0e0e0',
+        borderColor: '#007BFF',
+        borderWidth: 1,
     },
-    suggestionText: {
-        color: '#FFFFFF',
-        fontSize: 18,
-        fontWeight: 'bold',
-        textAlign: 'center',
-        letterSpacing: 1.2, 
+    text: {
+        fontSize: 16,
+        color: '#333',
     },
-    suggestionTextSelected: {
-        color: '#FFD700',  // Culoare aurie pentru textul selectat
+    icon: {
+        width: 24,
+        height: 24,
+        color: '#007BFF',
+    },
+    iconPlaceholder: {
+        width: 24,
+        height: 24,
     },
     button: {
-        marginTop: 10,
-        backgroundColor: '#7B4397',  // Culoare vibrantă pentru buton
-        paddingVertical: 15,
-        paddingHorizontal: 30,
-        borderRadius: 25,
-        elevation: 5,
+        marginTop: 20,
+        backgroundColor: '#007BFF',
+        paddingVertical: 12,
+        paddingHorizontal: 20,
+        borderRadius: 8,
+        alignItems: 'center',
     },
-    buttonText: {
-        color: '#FFFFFF',
-        fontSize: 16,
-        fontWeight: 'bold',
-        textAlign: 'center',
-        letterSpacing: 1.2,
+    searchIcon: {
+        color: '#fff',
+        marginHorizontal: 5,
+    },
+    spinnerContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
     },
 });

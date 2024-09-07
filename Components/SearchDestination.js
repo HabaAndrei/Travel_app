@@ -1,8 +1,8 @@
-import { View, TextInput,Pressable ,TouchableOpacity, Text, FlatList, StyleSheet } from 'react-native';
+import { View, TextInput,Pressable , Text, FlatList, StyleSheet } from 'react-native';
 import React, {useState, useEffect} from 'react'
 import Fuse from "fuse.js";
 import {countries} from '../country_capital';
-
+import { Input, InputField,  } from '@gluestack-ui/themed';
 
 const SearchDestination = (props) => {
 
@@ -34,15 +34,17 @@ const SearchDestination = (props) => {
 
 
   return (
+
     <View>
       
       <View style={styles.container}>
-        <TextInput
-          style={styles.input}
-          placeholder="Search your destination"
-          value={inputText}
-          onChangeText={(text) => setInputText(text)}
-        />
+        <Input>
+          <InputField
+            placeholder="Search your destination"
+            value={inputText}
+            onChangeText={(text) => setInputText(text)}
+            />
+        </Input>
         <FlatList
           data={suggestions}
           keyExtractor={(item, index) => {
@@ -56,9 +58,17 @@ const SearchDestination = (props) => {
             </Pressable>
           )}
           style={styles.suggestionsList}
-        />
+          />
+
       </View>
+
+     
+     
     </View>
+
+
+    
+   
   )
 }
 
@@ -71,18 +81,6 @@ const styles = StyleSheet.create({
         
         flex: 1,
         padding: 16,
-    },
-    input: {
-        backgroundColor: '#FFFFFF',
-        paddingVertical: 15,
-        paddingHorizontal: 20,
-        borderRadius: 10,
-        marginVertical: 10,
-        borderWidth: 1,
-        borderColor: '#4A90E2', 
-        fontSize: 16,
-        color: '#333333',
-        elevation: 3, 
     },
     suggestionsList: {
         marginTop: 5,

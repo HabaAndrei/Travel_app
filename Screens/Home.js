@@ -8,6 +8,15 @@ const Home =  (props) => {
 
   const [checkBoxActivities, setCheckBoxActivities] = useState({isOpen: false, city: '', country: ''})
   
+  // onPress={() =>
+  // navigation.navigate('Test', {name: 'Test', 'parametru': {'oras': 'Brasov '}})
+// }
+
+
+  // trebuie sa caut o varianta in care sa trimit navigate prin props, dar cred ca nu se poate!!!!!!!!!!!
+
+
+  // console.log(props.navigation)
   return (
     <View style={styles.wrapper}>
 
@@ -16,6 +25,7 @@ const Home =  (props) => {
 
       {checkBoxActivities.isOpen ? 
         <Checkbox_activities
+        navigation={props.natigation}
         setCheckBoxActivities={setCheckBoxActivities}  checkBoxActivities={checkBoxActivities} 
         />
         : 
@@ -24,7 +34,6 @@ const Home =  (props) => {
         /> 
       }
       
-      {/* <Text onPress={()=>getData()} >Press</Text> */}
       
     </View>
   );
