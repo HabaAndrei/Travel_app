@@ -1,8 +1,11 @@
 import { View, TextInput,Pressable , Text, FlatList, StyleSheet } from 'react-native';
 import React, {useState, useEffect} from 'react'
 import Fuse from "fuse.js";
-import {countries} from '../country_capital';
 import { Input, InputField,  } from '@gluestack-ui/themed';
+import axios from 'axios';
+import {address_function_fuzzy} from '../diverse.js';
+
+
 
 const SearchDestination = (props) => {
 
@@ -10,20 +13,20 @@ const SearchDestination = (props) => {
   const [suggestions, setSuggestions] = useState([]);
  
 
-
-  const options = {
-    includeScore: true,
-    includeMatches: true,
-    threshold: 0.2,
-    keys: ["capital", "name"]
-  }
-  const fuse = new Fuse(countries, options);
- 
-
   useEffect(()=>{
-    const results = fuse.search(inputText);
-    const items = results.map((result) => result.item);
-    setSuggestions(items.slice(0 , 5));
+    try{
+      axios.post(`${address_function_fuzzy}`,
+        {
+          "input" : inputText, 
+          "value" : "country", 
+          "country" : inputText  
+        }
+      ).then((data)=>{
+        setSuggestions(data.data);
+      });
+    }catch(err){
+      console.log(err);
+    }
   } , [inputText]);
 
   function selectDestination(country, capital){
@@ -53,7 +56,7 @@ const SearchDestination = (props) => {
           renderItem={({ item }) => (
             <Pressable style={styles.suggestion} onPress={()=>selectDestination(item.name, item.capital)}>
               <Text style={styles.suggestionText}>
-                  {item.name} {"   "} {item.capital}
+                  {item}
               </Text>            
             </Pressable>
           )}

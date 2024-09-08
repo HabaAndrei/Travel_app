@@ -9,16 +9,16 @@ const CheckboxActivities = (props) => {
     useEffect(() => {
         const { isOpen, city, country } = props.checkBoxActivities;
         if (isOpen) {
-            axios.post('http://localhost:4000/getActivities', { city, country })
-                .then((data) => {
-                    const ar = Object.values(data.data).map((category) => {
-                        return { category, selected: false }
-                    });
-                    setCheckbox([...ar]);
-                })
-                .catch((err) => {
-                    console.log(err);
-                });
+            // axios.post('http://localhost:4000/getActivities', { city, country })
+            //     .then((data) => {
+            //         const ar = Object.values(data.data).map((category) => {
+            //             return { category, selected: false }
+            //         });
+            //         setCheckbox([...ar]);
+            //     })
+            //     .catch((err) => {
+            //         console.log(err);
+            //     });
         }
 
 
