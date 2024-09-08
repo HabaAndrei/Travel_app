@@ -1,6 +1,5 @@
-import { View, TextInput,Pressable , Text, FlatList, StyleSheet } from 'react-native';
+import { View, Pressable , Text, FlatList, StyleSheet } from 'react-native';
 import React, {useState, useEffect} from 'react'
-import Fuse from "fuse.js";
 import { Input, InputField,  } from '@gluestack-ui/themed';
 import axios from 'axios';
 import {address_function_fuzzy} from '../diverse.js';
@@ -11,28 +10,57 @@ const SearchDestination = (props) => {
 
   const [inputText, setInputText] = useState('');
   const [suggestions, setSuggestions] = useState([]);
- 
+  const [dataDestination, setDataDestination] = useState({country: '', city: ''});
 
   useEffect(()=>{
+    if(!inputText.length){
+      setSuggestions([]);
+      return;
+    }
+
     try{
-      axios.post(`${address_function_fuzzy}`,
-        {
-          "input" : inputText, 
-          "value" : "country", 
-          "country" : inputText  
-        }
-      ).then((data)=>{
-        setSuggestions(data.data);
-      });
+      if(!dataDestination.country && !dataDestination.city){
+        axios.post(`${address_function_fuzzy}`,
+          {
+            "input" : inputText, 
+            "value" : "country", 
+            "country" : inputText  
+          }
+        ).then((data)=>{
+          setSuggestions(data.data);
+        });
+      }else if(dataDestination.country && !dataDestination.city){
+        axios.post(`${address_function_fuzzy}`,
+          {
+            "input" : inputText, 
+            "value" : "city", 
+            "country" :  dataDestination.country 
+          }
+        ).then((data)=>{
+          setSuggestions(data.data);
+        });
+      }
+      
     }catch(err){
       console.log(err);
     }
   } , [inputText]);
 
-  function selectDestination(country, capital){
-    
-    props.setCheckBoxActivities({isOpen: true, city: capital, country});
-   
+
+
+  function selectDestination(place){
+    if(!dataDestination.country && !dataDestination.city){
+      setDataDestination((ob)=>{
+        return {...ob, country: place }
+      })
+      setSuggestions([]);
+      setInputText('');
+    }else if(dataDestination.country && !dataDestination.city){
+      setDataDestination((ob)=>{
+        return {...ob, city: place }
+      })
+      props.setCheckBoxActivities({isOpen: true, city: place ,country: dataDestination.country });
+    }
   }
 
 
@@ -43,7 +71,11 @@ const SearchDestination = (props) => {
       <View style={styles.container}>
         <Input>
           <InputField
-            placeholder="Search your destination"
+            placeholder={
+              selectDestination.country ? 
+              "Search the country"
+              :"Search the city"
+            }
             value={inputText}
             onChangeText={(text) => setInputText(text)}
             />
@@ -54,7 +86,9 @@ const SearchDestination = (props) => {
             return index;
           }}
           renderItem={({ item }) => (
-            <Pressable style={styles.suggestion} onPress={()=>selectDestination(item.name, item.capital)}>
+            <Pressable style={styles.suggestion} 
+            onPress={()=>selectDestination(item)}
+            >
               <Text style={styles.suggestionText}>
                   {item}
               </Text>            
@@ -62,11 +96,7 @@ const SearchDestination = (props) => {
           )}
           style={styles.suggestionsList}
           />
-
       </View>
-
-     
-     
     </View>
 
 

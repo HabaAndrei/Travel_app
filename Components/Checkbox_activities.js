@@ -2,6 +2,8 @@ import { ScrollView, View, Text, Pressable, FlatList, StyleSheet } from 'react-n
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Spinner, Button, ButtonText, Icon, CheckIcon, SearchIcon } from "@gluestack-ui/themed";
+import {address_function_checkbox} from '../diverse.js';
+
 
 const CheckboxActivities = (props) => {
     const [checkbox, setCheckbox] = useState([]);
@@ -9,20 +11,15 @@ const CheckboxActivities = (props) => {
     useEffect(() => {
         const { isOpen, city, country } = props.checkBoxActivities;
         if (isOpen) {
-            // axios.post('http://localhost:4000/getActivities', { city, country })
-            //     .then((data) => {
-            //         const ar = Object.values(data.data).map((category) => {
-            //             return { category, selected: false }
-            //         });
-            //         setCheckbox([...ar]);
-            //     })
-            //     .catch((err) => {
-            //         console.log(err);
-            //     });
+            console.log(city, country);
+            axios.post(`${address_function_checkbox}`,
+                {city, country}
+            ).then(data=>{
+                let arVariants = Object.values(data.data);
+                setCheckbox(arVariants.map((a)=> {return {selected:false, category:a};}));
+            })
         }
 
-
-        console.log(props);
     }, [props.checkBoxActivities]);
 
     function pressOnOption(index) {
@@ -36,7 +33,7 @@ const CheckboxActivities = (props) => {
     return (
         <View style={styles.container}>
             {checkbox.length ? 
-            <ScrollView>
+            <View>
                 <FlatList
                     data={checkbox}
                     keyExtractor={(item, index) => index.toString()}
@@ -61,12 +58,14 @@ const CheckboxActivities = (props) => {
                         );
                     }}
                 />
-                <Button onPress={() =>props.navigation.navigate('Schedule', {name: 'Schedule'})} style={styles.button}>
+                <Button onPress={() =>{
+                    props.goToSchedulePage(props.checkBoxActivities.city, props.checkBoxActivities.country, checkbox)
+                    }} style={styles.button}>
                     <ButtonText>
                         <Icon as={SearchIcon} style={styles.searchIcon} />
                     </ButtonText>
                 </Button>
-            </ScrollView>
+            </View>
             : 
             <View style={styles.spinnerContainer}>
                 <Spinner color="$indigo600" />

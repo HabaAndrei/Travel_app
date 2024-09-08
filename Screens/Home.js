@@ -1,5 +1,5 @@
 import {useState, useEffect} from 'react'
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Pressable, Text } from 'react-native';
 import SearchDestination from '../Components/SearchDestination';
 import Checkbox_activities from '../Components/Checkbox_activities';
 
@@ -8,15 +8,13 @@ const Home =  (props) => {
 
   const [checkBoxActivities, setCheckBoxActivities] = useState({isOpen: false, city: '', country: ''})
   
-  // onPress={() =>
-  // navigation.navigate('Test', {name: 'Test', 'parametru': {'oras': 'Brasov '}})
-// }
 
+  function goToSchedulePage(city, country, checkbox){
+    //city, country, checkbox
+    props.navigation.navigate('Schedule', {city, country, checkbox})
 
-  // trebuie sa caut o varianta in care sa trimit navigate prin props, dar cred ca nu se poate!!!!!!!!!!!
+  }
 
-
-  // console.log(props.navigation)
   return (
     <View style={styles.wrapper}>
 
@@ -25,7 +23,7 @@ const Home =  (props) => {
 
       {checkBoxActivities.isOpen ? 
         <Checkbox_activities
-        navigation={props.natigation}
+        goToSchedulePage={goToSchedulePage}
         setCheckBoxActivities={setCheckBoxActivities}  checkBoxActivities={checkBoxActivities} 
         />
         : 
@@ -34,7 +32,11 @@ const Home =  (props) => {
         /> 
       }
       
-      
+      {/* <Pressable onPress={goToSchedulePage} >
+            <Text>
+              okokok
+            </Text>
+          </Pressable> */}
     </View>
   );
 }

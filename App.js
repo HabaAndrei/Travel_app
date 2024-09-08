@@ -1,14 +1,12 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React, { useState } from 'react'
+import { StyleSheet} from 'react-native'
+import React from 'react'
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Home from './Screens/Home.js';
 import Schedule from './Screens/Schedule.js';
 import {db} from './Firebase.js';
-//
-import { GluestackUIProvider, Box } from "@gluestack-ui/themed"
+import { GluestackUIProvider } from "@gluestack-ui/themed"
 import { config } from "@gluestack-ui/config"
-import { Alert, AlertIcon, AlertText } from "@gluestack-ui/themed"
 
 const Stack = createNativeStackNavigator();
 
@@ -26,7 +24,6 @@ const App = () => {
           name="Home"
           component={Home}
           options={{ headerShown: false }}
-          // initialParams={{ 'ok': ok, 'setOk': setOk }}
         />
         <Stack.Screen
           name="Schedule"
