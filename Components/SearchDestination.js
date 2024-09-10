@@ -104,7 +104,7 @@ const SearchDestination = (props) => {
             </Pressable>
           )}
           style={styles.suggestionsList}
-          />
+        />
       </View>
     </View>
 
