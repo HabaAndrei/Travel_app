@@ -1,6 +1,6 @@
-import { View, Pressable , Text, FlatList, StyleSheet } from 'react-native';
+import { View, Pressable ,TextInput,  Text, FlatList, StyleSheet } from 'react-native';
 import React, {useState, useEffect} from 'react'
-import { Input, InputField,  } from '@gluestack-ui/themed';
+import { Input, InputField, InputSlot, InputIcon, SearchIcon } from '@gluestack-ui/themed';
 import axios from 'axios';
 import {address_function_fuzzy} from '../diverse.js';
 
@@ -18,6 +18,7 @@ const SearchDestination = (props) => {
       return;
     }
 
+    
     try{
       if(!dataDestination.country && !dataDestination.city){
         axios.post(`${address_function_fuzzy}`,
@@ -69,17 +70,25 @@ const SearchDestination = (props) => {
     <View>
       
       <View style={styles.container}>
-        <Input>
-          <InputField
-            placeholder={
-              selectDestination.country ? 
-              "Search the country"
-              :"Search the city"
-            }
-            value={inputText}
-            onChangeText={(text) => setInputText(text)}
-            />
-        </Input>
+      <TextInput
+  placeholder={
+    dataDestination.country ? 
+    "Search the city" :
+    "Search the country"
+  }
+  value={inputText}
+  onChangeText={(text) => setInputText(text)}
+  style={{
+    borderWidth: 1, 
+    borderColor: 'gray', 
+    padding: 10, 
+    borderRadius: 5,
+    color: 'black',  
+    backgroundColor: 'white' 
+  }}
+  placeholderTextColor="gray"
+/>
+
         <FlatList
           data={suggestions}
           keyExtractor={(item, index) => {

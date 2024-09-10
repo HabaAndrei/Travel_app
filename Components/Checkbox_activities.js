@@ -11,7 +11,6 @@ const CheckboxActivities = (props) => {
     useEffect(() => {
         const { isOpen, city, country } = props.checkBoxActivities;
         if (isOpen) {
-            console.log(city, country);
             axios.post(`${address_function_checkbox}`,
                 {city, country}
             ).then(data=>{

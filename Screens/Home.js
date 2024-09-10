@@ -32,11 +32,7 @@ const Home =  (props) => {
         /> 
       }
       
-      {/* <Pressable onPress={goToSchedulePage} >
-            <Text>
-              okokok
-            </Text>
-          </Pressable> */}
+
     </View>
   );
 }
