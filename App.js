@@ -51,3 +51,4 @@ const styles = StyleSheet.create({})
 
 
 // iau pachet care ia detalii despre telefonul utilizatorului
+// implementez detalii despre alterta 
