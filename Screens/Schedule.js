@@ -1,7 +1,7 @@
-import { StyleSheet, Text,ScrollView, View, FlatList, Pressable } from 'react-native'
+import { StyleSheet, Text,ScrollView, View, FlatList, Pressablem, Button } from 'react-native'
 import React, {useEffect, useState} from 'react'
-
-
+// import {Calendar, CalendarList, Agenda} from 'react-native-calendars';
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 const Schedule = (props) => {
 
@@ -32,7 +32,7 @@ const Schedule = (props) => {
     const presentYear = new Date().getFullYear();
 
     useEffect(()=>{
-        console.log(chosenCalendar);
+        // console.log(chosenCalendar);
         generateArrayOfDays(chosenCalendar.month, chosenCalendar.year);
         if(chosenCalendar.day > maxDaysOfMonth[chosenCalendar.month]){
             setChosenCalendar((items) => ({ ...items, day: '' }))
@@ -112,12 +112,43 @@ const Schedule = (props) => {
     //////////////////////////////////////////
 
   
+    const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
 
+    const showDatePicker = () => {
+      setDatePickerVisibility(true);
+    };
+  
+    const hideDatePicker = () => {
+      setDatePickerVisibility(false);
+    };
+  
+    const handleConfirm = (date) => {
+      console.warn("A date has been picked: ", date);
+      hideDatePicker();
+    };
    
 
     return (
     <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center', marginTop: 50 }}>
-    <Text style={{ fontSize: 24, fontWeight: 'bold', marginBottom: 20 }}>Schedule</Text>
+
+
+    {/* <Calendar
+    onDayPress={day => {
+        console.log('selected day', day);
+    }}
+    /> */}
+
+<Button title="Show Date Picker" onPress={showDatePicker} />
+      <DateTimePickerModal
+        isVisible={isDatePickerVisible}
+        mode="date"
+        onConfirm={handleConfirm}
+        onCancel={hideDatePicker}
+      />
+
+
+
+    {/* <Text style={{ fontSize: 24, fontWeight: 'bold', marginBottom: 20 }}>Schedule</Text>
     
     <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
         <ScrollView 
@@ -181,7 +212,7 @@ const Schedule = (props) => {
                 )}
             />
         </ScrollView>
-    </View>
+    </View> */}
 </View>
 
   )

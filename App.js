@@ -26,12 +26,12 @@ const App = () => {
           component={Schedule}
           options={{ headerShown: false }}
         />
+      </Stack.Navigator>
         <Stack.Screen
           name="Home"
           component={Home}
           options={{ headerShown: false }}
         />
-      </Stack.Navigator>
     </NavigationContainer>
 
 
