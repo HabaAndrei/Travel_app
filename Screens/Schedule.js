@@ -1,95 +1,77 @@
-import { StyleSheet, TextInput, View, Text, TouchableOpacity } from 'react-native'
+import { StyleSheet, View, Text, TouchableOpacity } from 'react-native'
 import React, {useEffect, useState} from 'react'
 import Calendar from '../Components/Calendar.js';
-import { Select, SelectTrigger, SelectInput, SelectIcon, ChevronDownIcon, Icon, SelectPortal, SelectBackdrop, SelectContent, SelectDragIndicatorWrapper, SelectDragIndicator, SelectItem } from '@gluestack-ui/themed';
+import { Slider,Center,  VStack, Heading, SliderTrack, SliderFilledTrack, SliderThumb,
+    Button, ButtonText
+ } from '@gluestack-ui/themed';
+ import {formatDateFromMilliseconds} from '../diverse.js';
 
 
 const Schedule = (props) => {
 
-    const [period, setPeriod] = useState({from:1726157653435, to:""});
-
-    // props.route.params.city
-    // props.route.params.country
-    // props.route.params.checkbox
-    const city = 'Kraków';
-    const country = 'Poland';
-    const checkbox = [
-        {selected: true, category: 'Visit historical sites'},
-        {selected: false, category: 'Explore cultural attractions'},
-        {selected: true, category: 'Try local cuisine'},
-        {selected: false, category: 'Attend music festivals or concerts'},     
-        {selected: false, category: 'Join guided tours'},
-        {selected: true, category: 'Experience traditional folk activities'},
-        {selected: true, category: 'Engage in outdoor recreational activities'}
-    ]
-
- 
-
-
-    function formatDateFromMilliseconds(milliseconds) {
-        const date = new Date(milliseconds);
-        const day = String(date.getDate()).padStart(2, '0');
-        const month = String(date.getMonth() + 1).padStart(2, '0'); 
-        const year = date.getFullYear(); 
-        return `${day}-${month}-${year}`;
-    }
-
-    function generateNumber(){
-        let arFin = [];
-        for(let i = 1 ; i < 1000; i++){
-            arFin.push(i);
-        }
-        return arFin;
-    }
+    const [period, setPeriod] = useState({from:new Date().getTime(), to:""});
+    const [sliderValue, setSliderValue] = React.useState(5)
 
     useEffect(()=>{
-        console.log(period);
-    }, [period]);
+        setPeriod((prev)=>{return {...prev, to: sliderValue}})
+    }, [sliderValue]);
+
     
-   
+
     
+
+
+    const handleChange = (value) => {
+      setSliderValue(value)
+    }
+
+
+
+
+
+    function goToProgramPage(){
+        const {city, country, checkbox} = props.route.params;
+        props.navigation.navigate('Program', {from: period.from, to: period.to, city, country, checkbox})
+    }
+    
+
+
+
     return (
     <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center', marginTop: 150 }}>
 
-        <Calendar  period={period} setPeriod={setPeriod} />
+        <Calendar  period={period} setPeriod={setPeriod} 
+            style={{marginTop: 10}}
+        />
 
-                        
-            <Select>
-                <SelectInput placeholder="Choose duration in days" />
-                <SelectIcon mr="$3">
-                    <Icon as={ChevronDownIcon} />
-                </SelectIcon>
-                <SelectPortal>
+      
+
+        <VStack  style={{marginTop: 40}}>
+            <Center>
+                <Heading>Choose duration</Heading>
+            </Center>
+            <Slider
                 
-    
-                {generateNumber().map((item) => {
-                    console.log(item);
-    return <SelectItem onPress={()=>console.log('ok')}
-        key={item}
-        
-        disabled={period.to == item}
-    >{item}
-        {/* <TouchableOpacity
-        onPress={() => {
-            console.log('am dat click');
-            setPeriod((prev) => ({ ...prev, to: item }));
-        }}
-            label={item > 1 ? `${item} days` : `${item} day`}
-            value={item}
-        >
-            {item}
-        </TouchableOpacity> */}
-    </SelectItem>
-})}
+                value={sliderValue}
+                w={320}
+                defaultValue={5}
+                minValue={1}
+                maxValue={100}
+                step={1}
+                onChange={(value) => {
+                    handleChange(value)
+                }}
+            >
+                <SliderTrack> 
+                    <SliderFilledTrack />
+                </SliderTrack>
+                <SliderThumb />
+            </Slider>
+        </VStack>
 
-    
-    
-    
-                </SelectPortal>
-            </Select>
 
         {period.from && period.to ? 
-            <View>
+            <View  style={{marginTop: 40}} >
                 <Text
                     style={{ 
                     fontSize: 16, 
@@ -106,7 +88,20 @@ const Schedule = (props) => {
         }
 
 
-      
+        <Button
+
+            style={{marginTop: 200}}
+            size="md"
+            variant="solid"
+            action="primary"
+            isDisabled={false}
+            isFocusVisible={false}
+            onPress={goToProgramPage}
+        >
+            <ButtonText>Create the program</ButtonText>
+        </Button>
+
+    
 
     </View>
 

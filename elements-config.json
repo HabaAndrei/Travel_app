@@ -1,0 +1,11 @@
+{
+  "theme": "default",
+  "components": {
+    "directory": "src/components",
+    "installed": [
+      "button group",
+      "button group",
+      "button"
+    ]
+  }
+}
