@@ -17,10 +17,6 @@ const Home =  (props) => {
 
   return (
     <View style={styles.wrapper}>
-
-
-      
-
       {checkBoxActivities.isOpen ? 
         <Checkbox_activities
         goToSchedulePage={goToSchedulePage}
@@ -31,8 +27,6 @@ const Home =  (props) => {
         setCheckBoxActivities={setCheckBoxActivities}  checkBoxActivities={checkBoxActivities} 
         /> 
       }
-      
-
     </View>
   );
 }

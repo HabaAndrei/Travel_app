@@ -70,24 +70,24 @@ const SearchDestination = (props) => {
     <View>
       
       <View style={styles.container}>
-      <TextInput
-  placeholder={
-    dataDestination.country ? 
-    "Search the city" :
-    "Search the country"
-  }
-  value={inputText}
-  onChangeText={(text) => setInputText(text)}
-  style={{
-    borderWidth: 1, 
-    borderColor: 'gray', 
-    padding: 10, 
-    borderRadius: 5,
-    color: 'black',  
-    backgroundColor: 'white' 
-  }}
-  placeholderTextColor="gray"
-/>
+        <TextInput
+          placeholder={
+            dataDestination.country ? 
+            "Search the city" :
+            "Search the country"
+          }
+          value={inputText}
+          onChangeText={(text) => setInputText(text)}
+          style={{
+            borderWidth: 1, 
+            borderColor: 'gray', 
+            padding: 10, 
+            borderRadius: 5,
+            color: 'black',  
+            backgroundColor: 'white' 
+          }}
+          placeholderTextColor="gray"
+        />
 
         <FlatList
           data={suggestions}
