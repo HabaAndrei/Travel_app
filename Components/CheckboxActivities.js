@@ -6,7 +6,6 @@ import {address_function_checkbox} from '../diverse.js';
 
 
 const CheckboxActivities = (props) => {
-    const [checkbox, setCheckbox] = useState([]);
 
     useEffect(() => {
         const { isOpen, city, country } = props.checkBoxActivities;
@@ -15,19 +14,22 @@ const CheckboxActivities = (props) => {
                 {city, country}
             ).then(data=>{
                 let arVariants = Object.values(data.data);
-                setCheckbox(arVariants.map((a)=> {return {selected:false, category:a};}));
+                props.setCheckbox(arVariants.map((a)=> {return {selected:false, category:a};}));
             })
         }
 
     }, [props.checkBoxActivities]);
 
     function pressOnOption(index) {
-        setCheckbox((prev) => {
+        props.setCheckbox((prev) => {
             const updatedCheckbox = [...prev];
             updatedCheckbox[index].selected = !updatedCheckbox[index].selected;
             return updatedCheckbox;
         });
     }
+
+
+    console.log(props);
 
     return (
         <View style={styles.centeredView}>
@@ -36,10 +38,10 @@ const CheckboxActivities = (props) => {
                 transparent={true}
                 visible={props.checkBoxActivities.isOpen}
             >
-                {checkbox.length ? 
+                {props.checkbox.length ? 
                 <View style={styles.modalView}>
                     <FlatList
-                        data={checkbox}
+                        data={props.checkbox}
                         keyExtractor={(item, index) => index.toString()}
                         renderItem={({ item, index }) => {
                             return (
@@ -62,9 +64,7 @@ const CheckboxActivities = (props) => {
                             );
                         }}
                     />
-                    <Button onPress={() =>{
-                        props.setCheckBoxActivities((prev)=>{return {...prev, isOpen:false}})
-                        }} style={styles.button}>
+                    <Button onPress={() =>{props.closeCheckbox()}} style={styles.button}>
                         <ButtonText>
                             <Icon as={SearchIcon} style={styles.searchIcon} />
                         </ButtonText>

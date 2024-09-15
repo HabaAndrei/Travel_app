@@ -7,7 +7,8 @@ import ModalDayProgram from '../Components/ModalDayProgram.js';
 
 const Program = (props) => {
 
-    const [program, setProgram] = useState([{
+    const [program, setProgram] = useState([
+      {
         day: 1,
         title: "Explore Skyscrapers and Modern Architecture",
         date: "14-09-2024",
@@ -65,23 +66,25 @@ const Program = (props) => {
 
     
     useEffect(()=>{
-        const fromDate = '14-09-2024';
-        const toDate = '19-09-2024';
-        const city = 'Dubai';
-        const country = 'United Arab Emirates';
-        const newCheckbox = ['Explore skyscrapers and modern architecture', 'Enjoy desert safari and camel riding', 'Visit cultural heritage sites and museums', 'Attend international events and conferences', 'Try water sports and activities'];
+        // const from = '14-09-2024';
+        // const to = '19-09-2024';
+        // const city = 'Dubai';
+        // const country = 'United Arab Emirates';
+        // const newCheckbox = ['Explore skyscrapers and modern architecture', 'Enjoy desert safari and camel riding', 'Visit cultural heritage sites and museums', 'Attend international events and conferences', 'Try water sports and activities'];
+
+
+        
+        // const {from, to, city, country, checkbox} = props.route.params;
+        
+        // console.log({from, to, city, country, checkbox});
 
 
 
-        // let {from, to, city, country, checkbox} = props.route.params;
-        // const fromDate = formatDateFromMilliseconds(from);
-        // const toDate = formatDateFromMilliseconds(from + (to * 86_400_000));
         // let newCheckbox =[];
         // checkbox.forEach((ob)=>{if(ob.selected)newCheckbox.push(ob.category)});
 
-
         // axios.post(`${address_function_program}`, 
-        //     {  fromDate, toDate, city, country, newCheckbox
+        //     {  from, to, city, country, newCheckbox
         // }).then((data)=>{
         //     const val = Object.values(data.data.program);
         //     setProgram(val)

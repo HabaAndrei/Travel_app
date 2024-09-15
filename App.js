@@ -3,9 +3,7 @@ import React from 'react'
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Home from './Screens/Home.js';
-import Schedule from './Screens/Schedule.js';
 import Program from './Screens/Program.js';
-import Home2 from './Screens/Home2.js';
 import {db} from './Firebase.js';
 import { GluestackUIProvider } from "@gluestack-ui/themed"
 import { config } from "@gluestack-ui/config"
@@ -24,24 +22,14 @@ const App = () => {
     <NavigationContainer>
       <Stack.Navigator>
         <Stack.Screen
-          name="Home2"
-          component={Home2}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="Schedule"
-          component={Schedule}
+          name="Home"
+          component={Home}
           options={{ headerShown: false }}
         />
         <Stack.Screen
           name="Program"
           component={Program}
           options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name="Home"
-          component={Home}
-          options={{ headerShown: false }}
         />
       </Stack.Navigator>
     </NavigationContainer>
