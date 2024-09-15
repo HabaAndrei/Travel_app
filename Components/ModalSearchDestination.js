@@ -7,7 +7,7 @@ const ModalSearchDestination = (props) => {
 
 
     useEffect(()=>{
-        if(!props.inputCountry.length){props.setModalVisible({type: false, data:''}); return};
+        if(!props.inputCountry.length){return};
         props.setModalVisible({type: true, data:'country'});
 
 
@@ -30,15 +30,42 @@ const ModalSearchDestination = (props) => {
 
 
     useEffect(()=>{
-        if(!props.inputCity.length){props.setModalVisible({type: false, data:''}); return};
+        if(!props.dataDestination.country)return;
+        if(!props.inputCity.length){return};
         props.setModalVisible({type: true, data: "city"});
+
+
+        axios.post(`${address_function_fuzzy}`,
+            {
+                "input" : props.inputCity, 
+                "value" : "city", 
+                "country" : props.dataDestination.country  
+            }
+            ).then((data)=>{
+                console.log(data.data);
+                const list = data.data?.map((country)=>{return{place: country, type: "city"}})
+                props.setSuggestions(list);
+            }
+        );
     }, [props.inputCity]);
 
 
 
 
     function selectDestination(item){
-        console.log(item);
+        if(item.type === "country"){
+            props.setDataDestination((ob)=>{
+                return {city: '', country: item.place }
+            })
+            props.setInputCountry('');
+        }else if(item.type === "city"){
+            props.setDataDestination((ob)=>{
+                return {...ob, city: item.place }
+            })
+            props.setInputCity('');
+        }
+        props.setModalVisible({type: false, data:''}); 
+        return;
     }
 
     return (
@@ -50,42 +77,31 @@ const ModalSearchDestination = (props) => {
           onRequestClose={() => {
             props.setModalVisible({type: false, data:''});
           }}>
-          <View style={styles.centeredView}>
-
-
-
-
+            <View style={styles.centeredView}>
             <View style={styles.modalView}>
 
-            {/* ///////////////// */}
-
-            {props.modalVisible.data === 'country' ? 
-                <TextInput
-                    placeholder="Search the country"
-                    value={props.inputCountry}
-                    onChangeText={(text) => props.setInputCountry(text)}
-                    style={styles.textInput}
-                    placeholderTextColor="gray"
-                /> : <View></View>
-            
-            }
+                {props.modalVisible.data === 'country' ? 
+                    <TextInput
+                        placeholder="Country"
+                        value={props.inputCountry}
+                        onChangeText={(text) => props.setInputCountry(text)}
+                        style={styles.textInput}
+                        placeholderTextColor="gray"
+                    /> : <View></View>
+                
+                }
 
 
-            {props.modalVisible.data === 'city' ? 
-                <TextInput
-                    placeholder="Search the city"
-                    value={props.inputCity}
-                    onChangeText={(text) => props.setInputCity(text)}
-                    style={styles.textInput}
-                    placeholderTextColor="gray"
-                /> : <View></View>
-            
-            }
-
-
-            {/* //////////////// */}
-
-
+                {props.modalVisible.data === 'city' ? 
+                    <TextInput
+                        placeholder="City"
+                        value={props.inputCity}
+                        onChangeText={(text) => props.setInputCity(text)}
+                        style={styles.textInput}
+                        placeholderTextColor="gray"
+                    /> : <View></View>
+                
+                }
 
                 <FlatList
                     data={props.suggestions}
@@ -103,24 +119,18 @@ const ModalSearchDestination = (props) => {
                     )}
                     style={styles.suggestionsList}
                 />
-
-
-
-
-            {/* /////////////////////////// */}
-              <Pressable
-                style={[styles.button, styles.buttonClose]}
-                onPress={() => {
-                    props.setModalVisible({type: false, data:''})
-                    props.setInputCity('');
-                    props.setInputCountry('');
-                }}>
-                <Text style={styles.textStyle}>Hide Modal</Text>
-              </Pressable>
+                <Pressable
+                    style={[styles.button, styles.buttonClose]}
+                    onPress={() => {
+                        props.setModalVisible({type: false, data:''})
+                        props.setInputCity('');
+                        props.setInputCountry('');
+                    }}>
+                    <Text style={styles.textStyle}>Hide Modal</Text>
+                </Pressable>
             </View>
-          </View>
+            </View>
         </Modal>
-        
       </View>
     )
 }
@@ -132,7 +142,7 @@ const styles = StyleSheet.create({
       flex: 1,
       justifyContent: 'center',
       alignItems: 'center',
-      marginTop: 22,
+   
     },
     modalView: {
       margin: 20,
@@ -170,12 +180,14 @@ const styles = StyleSheet.create({
       textAlign: 'center',
     },
     textInput: {
-        borderWidth: 1, 
-        borderColor: 'gray', 
-        padding: 10, 
+        borderWidth: 1,
+        borderColor: 'gray',
+        padding: 10,
         borderRadius: 5,
-        color: 'black',  
-        backgroundColor: 'white' 
+        color: 'black',
+        backgroundColor: 'white',
+        width: 200, 
+ 
     },
     suggestionsList: {
         marginTop: 5,

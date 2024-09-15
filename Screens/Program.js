@@ -169,7 +169,7 @@ export default Program
 
 const styles = StyleSheet.create({
  
-    container: {
-        marginTop: 300
-    }
+  container: {
+    marginTop: 300
+  }
 })

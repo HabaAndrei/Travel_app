@@ -15,57 +15,12 @@ const SearchDestination = (props) => {
   const [modalVisible, setModalVisible] = useState({type: false, data:''});
 
 
-  // useEffect(()=>{
-  //   if(!inputCity.length){
-  //     setSuggestions([]);
-  //     return;
-  //   }
-  //   try{
-  //     if(!dataDestination.country && !dataDestination.city){
-  //       axios.post(`${address_function_fuzzy}`,
-  //         {
-  //           "input" : inputCity, 
-  //           "value" : "country", 
-  //           "country" : inputCity  
-  //         }
-  //       ).then((data)=>{
-  //         setSuggestions(data.data);
-  //       });
-  //     }else if(dataDestination.country && !dataDestination.city){
-  //       axios.post(`${address_function_fuzzy}`,
-  //         {
-  //           "input" : inputCity, 
-  //           "value" : "city", 
-  //           "country" :  dataDestination.country 
-  //         }
-  //       ).then((data)=>{
-  //         setSuggestions(data.data);
-  //       });
-  //     }
-      
-  //   }catch(err){
-  //     console.log(err);
-  //   }
-  // } , [inputCity]);
+  useEffect(()=>{
+    console.log(dataDestination)
+  }, [dataDestination]);
 
 
-
-  function selectDestination(place){
-    if(!dataDestination.country && !dataDestination.city){
-      setDataDestination((ob)=>{
-        return {...ob, country: place }
-      })
-      setSuggestions([]);
-      setInputCity('');
-    }else if(dataDestination.country && !dataDestination.city){
-      setDataDestination((ob)=>{
-        return {...ob, city: place }
-      })
-      props.setCheckBoxActivities({isOpen: true, city: place ,country: dataDestination.country });
-    }
-  }
-
-
+  
   return (
 
     <View>
@@ -80,7 +35,10 @@ const SearchDestination = (props) => {
       
       <View >
         <TextInput
-          placeholder="Search the country"
+          placeholder={!dataDestination.country ? 
+            "Country" : 
+            `Country - ${dataDestination.country}`      
+          }
           value={inputCountry}
           onChangeText={(text) => setInputCountry(text)}
           style={styles.textInput}
@@ -88,29 +46,20 @@ const SearchDestination = (props) => {
         />
 
         <TextInput
-          placeholder="Search the city"
+          
+          placeholder={!dataDestination.city ? 
+            "City" : 
+            `City - ${dataDestination.city}`      
+          }
           value={inputCity}
-          onChangeText={(text) => setInputCity(text)}
+          onChangeText={(text) => {
+            if(!dataDestination.country)return;
+            setInputCity(text)}
+          }
           style={styles.textInput}
           placeholderTextColor="gray"
         />
 
-        {/* <FlatList
-          data={suggestions}
-          keyExtractor={(item, index) => {
-            return index;
-          }}
-          renderItem={({ item }) => (
-            <Pressable style={styles.suggestion} 
-            onPress={()=>selectDestination(item)}
-            >
-              <Text style={styles.suggestionText}>
-                  {item}
-              </Text>            
-            </Pressable>
-          )}
-          style={styles.suggestionsList}
-        /> */}
       </View>
     </View>
 
@@ -149,7 +98,8 @@ const styles = StyleSheet.create({
       padding: 10, 
       borderRadius: 5,
       color: 'black',  
-      backgroundColor: 'white' 
+      backgroundColor: 'white',
+      marginTop: 20, 
     }
 
 })
