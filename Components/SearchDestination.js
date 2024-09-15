@@ -1,51 +1,52 @@
 import { View, Pressable ,TextInput,  Text, FlatList, StyleSheet } from 'react-native';
 import React, {useState, useEffect} from 'react'
-import { Input, InputField, InputSlot, InputIcon, SearchIcon } from '@gluestack-ui/themed';
 import axios from 'axios';
 import {address_function_fuzzy} from '../diverse.js';
-
+import ModalSearchDestination from './ModalSearchDestination.js';
 
 
 const SearchDestination = (props) => {
 
-  const [inputText, setInputText] = useState('');
+  const [inputCity, setInputCity] = useState('');
+  const [inputCountry, setInputCountry] = useState('');
+
   const [suggestions, setSuggestions] = useState([]);
   const [dataDestination, setDataDestination] = useState({country: '', city: ''});
+  const [modalVisible, setModalVisible] = useState({type: false, data:''});
 
-  useEffect(()=>{
-    if(!inputText.length){
-      setSuggestions([]);
-      return;
-    }
 
-    
-    try{
-      if(!dataDestination.country && !dataDestination.city){
-        axios.post(`${address_function_fuzzy}`,
-          {
-            "input" : inputText, 
-            "value" : "country", 
-            "country" : inputText  
-          }
-        ).then((data)=>{
-          setSuggestions(data.data);
-        });
-      }else if(dataDestination.country && !dataDestination.city){
-        axios.post(`${address_function_fuzzy}`,
-          {
-            "input" : inputText, 
-            "value" : "city", 
-            "country" :  dataDestination.country 
-          }
-        ).then((data)=>{
-          setSuggestions(data.data);
-        });
-      }
+  // useEffect(()=>{
+  //   if(!inputCity.length){
+  //     setSuggestions([]);
+  //     return;
+  //   }
+  //   try{
+  //     if(!dataDestination.country && !dataDestination.city){
+  //       axios.post(`${address_function_fuzzy}`,
+  //         {
+  //           "input" : inputCity, 
+  //           "value" : "country", 
+  //           "country" : inputCity  
+  //         }
+  //       ).then((data)=>{
+  //         setSuggestions(data.data);
+  //       });
+  //     }else if(dataDestination.country && !dataDestination.city){
+  //       axios.post(`${address_function_fuzzy}`,
+  //         {
+  //           "input" : inputCity, 
+  //           "value" : "city", 
+  //           "country" :  dataDestination.country 
+  //         }
+  //       ).then((data)=>{
+  //         setSuggestions(data.data);
+  //       });
+  //     }
       
-    }catch(err){
-      console.log(err);
-    }
-  } , [inputText]);
+  //   }catch(err){
+  //     console.log(err);
+  //   }
+  // } , [inputCity]);
 
 
 
@@ -55,7 +56,7 @@ const SearchDestination = (props) => {
         return {...ob, country: place }
       })
       setSuggestions([]);
-      setInputText('');
+      setInputCity('');
     }else if(dataDestination.country && !dataDestination.city){
       setDataDestination((ob)=>{
         return {...ob, city: place }
@@ -68,28 +69,33 @@ const SearchDestination = (props) => {
   return (
 
     <View>
+
+      <ModalSearchDestination
+        modalVisible={modalVisible} setModalVisible={setModalVisible}
+        dataDestination={dataDestination} setDataDestination={setDataDestination}
+        inputCity={inputCity} setInputCity={setInputCity}
+        inputCountry={inputCountry} setInputCountry={setInputCountry}
+        suggestions={suggestions} setSuggestions={setSuggestions}
+      />
       
-      <View style={styles.container}>
+      <View >
         <TextInput
-          placeholder={
-            dataDestination.country ? 
-            "Search the city" :
-            "Search the country"
-          }
-          value={inputText}
-          onChangeText={(text) => setInputText(text)}
-          style={{
-            borderWidth: 1, 
-            borderColor: 'gray', 
-            padding: 10, 
-            borderRadius: 5,
-            color: 'black',  
-            backgroundColor: 'white' 
-          }}
+          placeholder="Search the country"
+          value={inputCountry}
+          onChangeText={(text) => setInputCountry(text)}
+          style={styles.textInput}
           placeholderTextColor="gray"
         />
 
-        <FlatList
+        <TextInput
+          placeholder="Search the city"
+          value={inputCity}
+          onChangeText={(text) => setInputCity(text)}
+          style={styles.textInput}
+          placeholderTextColor="gray"
+        />
+
+        {/* <FlatList
           data={suggestions}
           keyExtractor={(item, index) => {
             return index;
@@ -104,7 +110,7 @@ const SearchDestination = (props) => {
             </Pressable>
           )}
           style={styles.suggestionsList}
-        />
+        /> */}
       </View>
     </View>
 
@@ -117,13 +123,6 @@ const SearchDestination = (props) => {
 export default SearchDestination
 
 const styles = StyleSheet.create({
-    container: {
-        borderRadius: 8,
-        elevation: 3,
-        
-        flex: 1,
-        padding: 16,
-    },
     suggestionsList: {
         marginTop: 5,
     },
@@ -144,5 +143,13 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         letterSpacing: 1.2, 
     },
+    textInput: {
+      borderWidth: 1, 
+      borderColor: 'gray', 
+      padding: 10, 
+      borderRadius: 5,
+      color: 'black',  
+      backgroundColor: 'white' 
+    }
 
 })

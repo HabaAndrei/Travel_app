@@ -1,6 +1,8 @@
 import React from 'react';
 import { View, Text, Pressable, StyleSheet } from 'react-native';
 import { Card } from '@gluestack-ui/themed';
+import SearchDestination from '../Components/SearchDestination';
+
 
 const MyComponent = () => {
   return (
@@ -20,7 +22,7 @@ const MyComponent = () => {
 
 
         <Card p="$5" borderRadius="$lg" maxWidth={360} m="$3">
-        
+            <SearchDestination/>
         </Card>
     </View>
   );
@@ -28,8 +30,8 @@ const MyComponent = () => {
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: 'row', // Aranjează elementele în linie
-    justifyContent: 'space-between', // Distribuie spațiul între butoane
+    flexDirection: 'row', 
+    justifyContent: 'space-between', 
     padding: 10,
   },
   button: {
