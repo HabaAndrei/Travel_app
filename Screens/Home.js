@@ -1,7 +1,7 @@
 import {useState, useEffect} from 'react'
 import { View, StyleSheet, Pressable, Text } from 'react-native';
 import SearchDestination from '../Components/SearchDestination';
-import Checkbox_activities from '../Components/Checkbox_activities';
+import Checkbox_activities from '../Components/CheckboxActivities';
 
 
 const Home =  (props) => {
@@ -18,7 +18,7 @@ const Home =  (props) => {
   return (
     <View style={styles.wrapper}>
       {checkBoxActivities.isOpen ? 
-        <Checkbox_activities
+        <CheckboxActivities
         goToSchedulePage={goToSchedulePage}
         setCheckBoxActivities={setCheckBoxActivities}  checkBoxActivities={checkBoxActivities} 
         />

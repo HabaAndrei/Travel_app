@@ -3,22 +3,76 @@ import React, {useState, useEffect} from 'react'
 import {formatDateFromMilliseconds, address_function_program} from '../diverse.js';
 import { ArrowRightIcon, Spinner, Center, Card, Heading, Link, LinkText, HStack, Image, Icon } from "@gluestack-ui/themed";
 import axios from 'axios';
-
+import ModalDayProgram from '../Components/ModalDayProgram.js';
 
 const Program = (props) => {
 
-    const [program, setProgram] = useState([]);
+    const [program, setProgram] = useState([{
+        day: 1,
+        title: "Explore Skyscrapers and Modern Architecture",
+        date: "14-09-2024",
+        activities: [
+          {
+            description: "Visit the tallest building in the world and enjoy the view from the observation deck.",
+            info: "Purchase tickets online in advance.",
+            place: "Burj Khalifa",
+            time: "09:00"
+          },
+          {
+            description: "Explore one of the largest shopping malls in the world.",
+            info: "Free to enter, but some attractions inside may require tickets.",
+            place: "Dubai Mall",
+            time: "12:00"
+          },
+          {
+            description: "Walk along the marina and enjoy the stunning skyscrapers and waterfront views.",
+            info: "Free to visit.",
+            place: "Dubai Marina",
+            time: "15:00"
+          }
+        ]
+      }, 
+      {
+        day: 2,
+        title: "Enjoy Desert Safari and Camel Riding",
+        date: "15-09-2024",
+        activities: [
+          {
+            description: "Experience the thrill of dune bashing in the desert.",
+            info: "Book a tour package in advance.",
+            place: "Desert Safari",
+            time: "09:00"
+          },
+          {
+            description: "Enjoy a camel ride through the desert.",
+            info: "Often included in desert safari packages.",
+            place: "Camel Riding",
+            time: "12:00"
+          },
+          {
+            description: "Visit a traditional desert camp and enjoy activities like sandboarding and henna painting.",
+            info: "Book as part of a desert safari tour.",
+            place: "Desert Camp",
+            time: "15:00"
+          }
+        ]
+      }
+    
+    
+    
+    ]);
 
 
-    const fromDate = '14-09-2024';
-    const toDate = '19-09-2024';
-    const city = 'Dubai';
-    const country = 'United Arab Emirates';
-    const newCheckbox = ['Explore skyscrapers and modern architecture', 'Enjoy desert safari and camel riding', 'Visit cultural heritage sites and museums', 'Attend international events and conferences', 'Try water sports and activities'];
-
-
-
+    
     useEffect(()=>{
+        const fromDate = '14-09-2024';
+        const toDate = '19-09-2024';
+        const city = 'Dubai';
+        const country = 'United Arab Emirates';
+        const newCheckbox = ['Explore skyscrapers and modern architecture', 'Enjoy desert safari and camel riding', 'Visit cultural heritage sites and museums', 'Attend international events and conferences', 'Try water sports and activities'];
+
+
+
         // let {from, to, city, country, checkbox} = props.route.params;
         // const fromDate = formatDateFromMilliseconds(from);
         // const toDate = formatDateFromMilliseconds(from + (to * 86_400_000));
@@ -26,14 +80,14 @@ const Program = (props) => {
         // checkbox.forEach((ob)=>{if(ob.selected)newCheckbox.push(ob.category)});
 
 
-        axios.post(`${address_function_program}`, 
-            {  fromDate, toDate, city, country, newCheckbox
-        }).then((data)=>{
-            const val = Object.values(data.data.program);
-            setProgram(val)
-        }).catch((err)=>{
-            console.log(err);
-        })
+        // axios.post(`${address_function_program}`, 
+        //     {  fromDate, toDate, city, country, newCheckbox
+        // }).then((data)=>{
+        //     const val = Object.values(data.data.program);
+        //     setProgram(val)
+        // }).catch((err)=>{
+        //     console.log(err);
+        // })
 
     }, []);
 
@@ -41,6 +95,10 @@ const Program = (props) => {
 
   return (
     <ScrollView  style={{marginTop: 40, marginBottom: 40}} >
+
+
+        {/* <ModalDayProgram/> */}
+
 
         {!program.length ? 
             <View style={styles.container} >

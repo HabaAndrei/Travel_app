@@ -1,8 +1,7 @@
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native'
 import React, {useEffect, useState} from 'react'
 import Calendar from '../Components/Calendar.js';
-import { Slider,Center,  VStack, Heading, SliderTrack, SliderFilledTrack, SliderThumb,
-    Button, ButtonText
+import { Slider,Center,  VStack, Heading, SliderTrack, SliderFilledTrack, SliderThumb, Button, ButtonText
  } from '@gluestack-ui/themed';
  import {formatDateFromMilliseconds} from '../diverse.js';
 

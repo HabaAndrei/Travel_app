@@ -24,10 +24,14 @@ const Calendar = (props) => {
 
   return (
     <View>
-      <Button title="Choose Start Time" onPress={showDatePicker} />
+      <Button 
+      
+      title="Choose Start Time" onPress={showDatePicker} />
         <DateTimePickerModal
             isVisible={isDatePickerVisible}
             mode="date"
+            minimumDate={new Date()}
+            maximumDate={new Date()}
             onConfirm={handleConfirm}
             onCancel={hideDatePicker}
         />
