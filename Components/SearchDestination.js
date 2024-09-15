@@ -11,13 +11,10 @@ const SearchDestination = (props) => {
   const [inputCountry, setInputCountry] = useState('');
 
   const [suggestions, setSuggestions] = useState([]);
-  const [dataDestination, setDataDestination] = useState({country: '', city: ''});
   const [modalVisible, setModalVisible] = useState({type: false, data:''});
 
 
-  useEffect(()=>{
-    console.log(dataDestination)
-  }, [dataDestination]);
+
 
 
   
@@ -26,8 +23,9 @@ const SearchDestination = (props) => {
     <View>
 
       <ModalSearchDestination
+        setCheckBoxActivities={props.setCheckBoxActivities}
         modalVisible={modalVisible} setModalVisible={setModalVisible}
-        dataDestination={dataDestination} setDataDestination={setDataDestination}
+        dataDestination={props.dataDestination} setDataDestination={props.setDataDestination}
         inputCity={inputCity} setInputCity={setInputCity}
         inputCountry={inputCountry} setInputCountry={setInputCountry}
         suggestions={suggestions} setSuggestions={setSuggestions}
@@ -35,9 +33,9 @@ const SearchDestination = (props) => {
       
       <View >
         <TextInput
-          placeholder={!dataDestination.country ? 
+          placeholder={!props.dataDestination.country ? 
             "Country" : 
-            `Country - ${dataDestination.country}`      
+            `Country - ${props.dataDestination.country}`      
           }
           value={inputCountry}
           onChangeText={(text) => setInputCountry(text)}
@@ -47,13 +45,13 @@ const SearchDestination = (props) => {
 
         <TextInput
           
-          placeholder={!dataDestination.city ? 
+          placeholder={!props.dataDestination.city ? 
             "City" : 
-            `City - ${dataDestination.city}`      
+            `City - ${props.dataDestination.city}`      
           }
           value={inputCity}
           onChangeText={(text) => {
-            if(!dataDestination.country)return;
+            if(!props.dataDestination.country)return;
             setInputCity(text)}
           }
           style={styles.textInput}

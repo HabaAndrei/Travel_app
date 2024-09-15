@@ -58,6 +58,7 @@ const ModalSearchDestination = (props) => {
                 return {city: '', country: item.place }
             })
             props.setInputCountry('');
+            props.setCheckBoxActivities((prev)=>{return {...prev, country: item.place}})
         }else if(item.type === "city"){
             props.setDataDestination((ob)=>{
                 return {...ob, city: item.place }
@@ -65,6 +66,7 @@ const ModalSearchDestination = (props) => {
             props.setInputCity('');
         }
         props.setModalVisible({type: false, data:''}); 
+        props.setCheckBoxActivities((prev)=>{return {...prev, city: item.place}})
         return;
     }
 

@@ -1,4 +1,4 @@
-import { ScrollView, View, Text, Pressable, FlatList, StyleSheet } from 'react-native';
+import { Modal, View, Text, Pressable, FlatList, StyleSheet } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Spinner, Button, ButtonText, Icon, CheckIcon, SearchIcon } from "@gluestack-ui/themed";
@@ -30,46 +30,52 @@ const CheckboxActivities = (props) => {
     }
 
     return (
-        <View style={styles.container}>
-            {checkbox.length ? 
-            <View>
-                <FlatList
-                    data={checkbox}
-                    keyExtractor={(item, index) => index.toString()}
-                    renderItem={({ item, index }) => {
-                        return (
-                            <Pressable 
-                                style={[
-                                    styles.pressable, 
-                                    item.selected && styles.pressableSelected
-                                ]}
-                                onPress={() => pressOnOption(index)}
-                            >
-                                <Text style={styles.text}>
-                                    {item.category}
-                                </Text>
-                                {item.selected ? 
-                                    <Icon as={CheckIcon} style={styles.icon} />
-                                    :
-                                    <View style={styles.iconPlaceholder}></View>
-                                }
-                            </Pressable>
-                        );
-                    }}
-                />
-                <Button onPress={() =>{
-                    props.goToSchedulePage(props.checkBoxActivities.city, props.checkBoxActivities.country, checkbox)
-                    }} style={styles.button}>
-                    <ButtonText>
-                        <Icon as={SearchIcon} style={styles.searchIcon} />
-                    </ButtonText>
-                </Button>
-            </View>
-            : 
-            <View style={styles.spinnerContainer}>
-                <Spinner color="$indigo600" />
-            </View> 
-            }
+        <View style={styles.centeredView}>
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={props.checkBoxActivities.isOpen}
+            >
+                {checkbox.length ? 
+                <View style={styles.modalView}>
+                    <FlatList
+                        data={checkbox}
+                        keyExtractor={(item, index) => index.toString()}
+                        renderItem={({ item, index }) => {
+                            return (
+                                <Pressable 
+                                    style={[
+                                        styles.pressable, 
+                                        item.selected && styles.pressableSelected
+                                    ]}
+                                    onPress={() => pressOnOption(index)}
+                                >
+                                    <Text style={styles.text}>
+                                        {item.category}
+                                    </Text>
+                                    {item.selected ? 
+                                        <Icon as={CheckIcon} style={styles.icon} />
+                                        :
+                                        <View style={styles.iconPlaceholder}></View>
+                                    }
+                                </Pressable>
+                            );
+                        }}
+                    />
+                    <Button onPress={() =>{
+                        props.setCheckBoxActivities((prev)=>{return {...prev, isOpen:false}})
+                        }} style={styles.button}>
+                        <ButtonText>
+                            <Icon as={SearchIcon} style={styles.searchIcon} />
+                        </ButtonText>
+                    </Button>
+                </View>
+                : 
+                <View style={styles.spinnerContainer}>
+                    <Spinner color="$indigo600" />
+                </View> 
+                }
+            </Modal>
         </View>
     );
 }
@@ -77,10 +83,7 @@ const CheckboxActivities = (props) => {
 export default CheckboxActivities;
 
 const styles = StyleSheet.create({
-    container: {
-        padding: 16,
-        flex: 1,
-    },
+
     pressable: {
         flexDirection: 'row',
         alignItems: 'center',
@@ -125,4 +128,26 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
+    centeredView: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 22,
+      },
+    modalView: {
+        margin: 20,
+        backgroundColor: 'white',
+        borderRadius: 20,
+        padding: 35,
+        alignItems: 'center',
+        shadowColor: '#000',
+        shadowOffset: {
+          width: 0,
+          height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
+    }
+    
 });

@@ -1,36 +1,31 @@
 import { StyleSheet, Text, View, Button } from 'react-native';
-import React, {useEffect, useState} from 'react'
+import React from 'react'
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 
 const Calendar = (props) => {
 
-   
-
-    const showDatePicker = () => {
-        props.setDatePickerVisibility({type: true});
-    };
-    
     const hideDatePicker = () => {
-        props.setDatePickerVisibility({type: false});
+      props.setDatePickerVisibility({type: false});
     };
     
     const handleConfirm = (date) => {
-        props.setPeriod((prev)=>{return {...prev, from: date.getTime()}})
-        hideDatePicker();
+      if(props.datePickerVisibility.data === "from"){
+        props.datePickerVisibility.func(new Date(date).getTime());
+      }else if(props.datePickerVisibility.data === "to"){
+        props.datePickerVisibility.func(new Date(date).getTime());
+      }
+      hideDatePicker();
     };
-
 
   return (
     <View>
       <Button 
       
-      title="Choose Start Time" onPress={showDatePicker} />
+      title="Choose Start Time" onPress={props.showDatePicker} />
         <DateTimePickerModal
-            isVisible={props.datePickerVisible.type}
+            isVisible={props.datePickerVisibility.type}
             mode="date"
-            minimumDate={new Date()}
-            maximumDate={new Date()}
             onConfirm={handleConfirm}
             onCancel={hideDatePicker}
         />
