@@ -1,7 +1,5 @@
-import { View, Pressable ,TextInput,  Text, FlatList, StyleSheet } from 'react-native';
+import { View ,TextInput,  Text, FlatList, StyleSheet } from 'react-native';
 import React, {useState, useEffect} from 'react'
-import axios from 'axios';
-import {address_function_fuzzy} from '../diverse.js';
 import ModalSearchDestination from './ModalSearchDestination.js';
 
 

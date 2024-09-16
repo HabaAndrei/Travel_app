@@ -21,8 +21,11 @@ const Calendar = (props) => {
   return (
     <View>
       <Button 
-      
-      title="Choose Start Time" onPress={props.showDatePicker} />
+      title={
+        props.how == "from" ? "Select start date" : 
+        "Select end date"
+      }
+      onPress={props.showDatePicker} />
         <DateTimePickerModal
             isVisible={props.datePickerVisibility.type}
             mode="date"

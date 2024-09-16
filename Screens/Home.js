@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
-import { View, Text, Pressable, StyleSheet } from 'react-native';
-import { Card } from '@gluestack-ui/themed';
+import { View, Text, StyleSheet, Center } from 'react-native';
+import { Card, Pressable } from '@gluestack-ui/themed';
 import SearchDestination from '../Components/SearchDestination';
 import Calendar from '../Components/Calendar';
 import {formatDateFromMilliseconds} from '../diverse';
@@ -52,7 +52,8 @@ const Home = (props) => {
 
 
         {dataDestination.city && dataDestination.country ? 
-          <Pressable onPress={()=>{setCheckBoxActivities((prev)=>{return{...prev, isOpen:true}})}} >
+          <Pressable style={styles.button}
+          onPress={()=>{setCheckBoxActivities((prev)=>{return{...prev, isOpen:true}})}} >
             <Text>Buton alege activitati</Text>
           </Pressable> : <Text></Text>
         }
@@ -69,6 +70,7 @@ const Home = (props) => {
               <Text></Text>
             }
             <Calendar  
+            how={"from"}
             showDatePicker={()=>setDatePickerVisibility({type: true, data: 'from', func: setDateFrom})}
             datePickerVisibility={datePickerVisibility} setDatePickerVisibility={setDatePickerVisibility} />
         </Card>
@@ -79,14 +81,20 @@ const Home = (props) => {
               <Text></Text>
             }
             <Calendar  
+            how={"to"}
             showDatePicker={()=>setDatePickerVisibility({type: true, data: 'to', func: setDateTo})}
             datePickerVisibility={datePickerVisibility} setDatePickerVisibility={setDatePickerVisibility}/>
         </Card>
 
 
-        <Pressable  onPress={goToProgramPage} >
-          <Text>Go!!!</Text>
-        </Pressable>
+
+          <Pressable  style={styles.buttonGo}
+            onPress={goToProgramPage} > 
+            <Text style={styles.buttonTextGo} >okook</Text>
+          </Pressable>
+        
+        
+        
 
     </View>
   );
@@ -111,6 +119,16 @@ const styles = StyleSheet.create({
     textAlign: 'center',   
     fontWeight: '600',    
     fontSize: 16,         
+  },
+  buttonGo: {
+    backgroundColor: '#4CAF50',
+    padding: 10,
+    borderRadius: 5,
+    alignItems: 'center',
+  },
+  buttonTextGo: {
+    color: '#fff',
+    fontSize: 16,
   }
 });
 
