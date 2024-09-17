@@ -18,7 +18,6 @@ const ModalSearchDestination = (props) => {
                 "country" : props.inputCountry  
             }
             ).then((data)=>{
-                console.log(data.data);
                 const list = data.data?.map((country)=>{return{place: country, type: "country"}})
                 props.setSuggestions(list);
             }
@@ -42,7 +41,6 @@ const ModalSearchDestination = (props) => {
                 "country" : props.dataDestination.country  
             }
             ).then((data)=>{
-                console.log(data.data);
                 const list = data.data?.map((country)=>{return{place: country, type: "city"}})
                 props.setSuggestions(list);
             }
@@ -147,19 +145,20 @@ const styles = StyleSheet.create({
    
     },
     modalView: {
-      margin: 20,
-      backgroundColor: 'white',
-      borderRadius: 20,
-      padding: 35,
-      alignItems: 'center',
-      shadowColor: '#000',
-      shadowOffset: {
-        width: 0,
-        height: 2,
-      },
-      shadowOpacity: 0.25,
-      shadowRadius: 4,
-      elevation: 5,
+    margin: 30,
+    marginTop: 90,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 35,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+    width: 0,
+    height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
     },
     button: {
       borderRadius: 20,

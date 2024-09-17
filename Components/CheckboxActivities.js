@@ -28,9 +28,6 @@ const CheckboxActivities = (props) => {
         });
     }
 
-
-    console.log(props);
-
     return (
         <View style={styles.centeredView}>
             <Modal
@@ -132,10 +129,10 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        marginTop: 22,
       },
     modalView: {
-        margin: 20,
+        margin: 30,
+        marginTop: 90,
         backgroundColor: 'white',
         borderRadius: 20,
         padding: 35,

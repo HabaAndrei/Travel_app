@@ -7,13 +7,26 @@ import Program from './Screens/Program.js';
 import {db} from './Firebase.js';
 import { GluestackUIProvider } from "@gluestack-ui/themed"
 import { config } from "@gluestack-ui/config"
-
+import Layout from './Components/Layout.js';
 
 const Stack = createNativeStackNavigator();
 
 
 
 const App = () => {
+
+
+  const HomeScreen = ({ navigation }) => (
+    <Layout  navigation={navigation}>
+      <Home />
+    </Layout>
+  );
+  
+  const ProgramScreen = ({ navigation }) => (
+    <Layout  navigation={navigation}>
+      <Program />
+    </Layout>
+  );
 
 
   return (
@@ -23,12 +36,12 @@ const App = () => {
       <Stack.Navigator>
         <Stack.Screen
           name="Home"
-          component={Home}
-          options={{ headerShown: false }}
+          component={HomeScreen}
+          options={{headerShown: false}}
         />
         <Stack.Screen
           name="Program"
-          component={Program}
+          component={ProgramScreen}
           options={{headerShown: false}}
         />
       </Stack.Navigator>

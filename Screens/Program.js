@@ -57,7 +57,8 @@ const Program = (props) => {
             time: "15:00"
           }
         ]
-      }
+      }, 
+      
     
     
     
@@ -97,73 +98,46 @@ const Program = (props) => {
 
 
   return (
-    <ScrollView  style={{marginTop: 40, marginBottom: 40}} >
+    <ScrollView  >
 
 
         {/* <ModalDayProgram/> */}
 
+      {!program.length ? 
+      <View style={styles.container} >
+        <Center  >
+          <Spinner color="$indigo600" />
+        </Center>
+      </View> :
 
-        {!program.length ? 
-            <View style={styles.container} >
-                <Center  >
-                    <Spinner color="$indigo600" />
-                </Center>
-            </View> :
-            <View  >
-                
-            {program.map((ob, index)=>{
-                console.log(ob);
-                return  <Card  key={index}  p="$5" borderRadius="$lg" maxWidth={360} m="$3">
-      
-                    <Text
-                    fontSize="$sm"
-                    fontStyle="normal"
-                    fontFamily="$heading"
-                    fontWeight="$normal"
-                    lineHeight="$sm"
-                    mb="$2"
-                    sx={{
-                        color: "$textLight700",
-                        _dark: {
-                        color: "$textDark200",
-                        },
-                    }}
-                    >
-                       {'Day' + ob.day + " | " } {ob.date}  
-                    </Text>
-                    <Heading size="md" fontFamily="$heading" mb="$4">
-                        {ob.title}
-                    </Heading>
-                    <Link href="https://v1.gluestack.io/" isExternal>
-                        <HStack alignItems="center">
-                            <LinkText
-                            size="sm"
-                            fontFamily="$heading"
-                            fontWeight="$semibold"
-                            color="$primary600"
-                            $dark-color="$primary300"
-                            textDecorationLine="none"
-                            >
-                                See full day
-                            </LinkText>
-                            <Icon
-                            as={ArrowRightIcon}
-                            size="sm"
-                            color="$primary600"
-                            mt="$0.5"
-                            ml="$0.5"
-                            $dark-color="$primary300"
-                            />
-                        </HStack>
-                    </Link>
-                </Card>
-               
-            })}
-            
+      <View> 
+      {program.map((ob, index)=>{
+        return  <Card  key={index}  p="$5" borderRadius="$lg" maxWidth={360} m="$3">
 
-
-            </View>
-        }
+          <Text fontSize="$sm"  fontStyle="normal"  fontFamily="$heading"  fontWeight="$normal"  lineHeight="$sm"  mb="$2"
+            sx={{
+                color: "$textLight700",
+                _dark: {
+                color: "$textDark200",
+                },
+            }}
+          >
+            {'Day' + ob.day + " | " } {ob.date}  
+          </Text>
+          <Heading size="md" fontFamily="$heading" mb="$4">
+            {ob.title}
+          </Heading>
+          <Link href="https://v1.gluestack.io/" isExternal>
+            <HStack alignItems="center">
+              <LinkText    size="sm"  fontFamily="$heading"  fontWeight="$semibold"  color="$primary600"  $dark-color="$primary300"  textDecorationLine="none" >
+                  See full day
+              </LinkText>
+              <Icon as={ArrowRightIcon}  size="sm"  color="$primary600"  mt="$0.5"  ml="$0.5"  $dark-color="$primary300"/>
+            </HStack>
+          </Link>
+        </Card>   
+      })}
+      </View>}
     </ScrollView>
   )
 }
