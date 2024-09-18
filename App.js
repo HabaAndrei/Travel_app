@@ -18,13 +18,13 @@ const App = () => {
 
   const HomeScreen = ({ navigation }) => (
     <Layout  navigation={navigation}>
-      <Home />
+      <Home navigation={navigation}/>
     </Layout>
   );
   
   const ProgramScreen = ({ navigation }) => (
     <Layout  navigation={navigation}>
-      <Program />
+      <Program navigation={navigation} />
     </Layout>
   );
 
@@ -64,6 +64,9 @@ const styles = StyleSheet.create({})
 
 
 // iau pachet care ia detalii despre telefonul utilizatorului
-// implementez detalii despre alterta 
 // adaug un buton care o sa ia de la inceput toata operatiunea de programare a vacantei
 // adaug un buton sa se regenereze programul de la open ai, si daca il vrea si il accepta atunci il bag in baza de date !!
+
+
+
+// am latenta mare la prima intrare in aplicatie cand fac call la azure

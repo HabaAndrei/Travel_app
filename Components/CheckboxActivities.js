@@ -10,11 +10,15 @@ const CheckboxActivities = (props) => {
     useEffect(() => {
         const { isOpen, city, country } = props.checkBoxActivities;
         if (isOpen) {
+            if(props.checkbox.length)return;
             axios.post(`${address_function_checkbox}`,
                 {city, country}
             ).then(data=>{
                 let arVariants = Object.values(data.data);
-                props.setCheckbox(arVariants.map((a)=> {return {selected:false, category:a};}));
+                props.setCheckbox(arVariants.map((a)=> {
+                    let word = a[0].toUpperCase() + a.slice(1, a.length);
+                    return  {selected:false, category:word};
+                }));
             })
         }
 

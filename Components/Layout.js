@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, ScrollView, Pressable } from 'react-native';
-import { Icon, AddIcon } from "@gluestack-ui/themed";
+import { Icon, GlobeIcon, CalendarDaysIcon } from "@gluestack-ui/themed";
 
 const Layout = ({ children, navigation }) => {
   return (
@@ -17,19 +17,15 @@ const Layout = ({ children, navigation }) => {
           contentContainerStyle={styles.footerContent}
         >
           <Pressable style={styles.pressable} onPress={() => navigation.navigate('Home')} >
-            <Icon as={AddIcon} m="$2" w="$4" h="$4" />
+            <Icon as={GlobeIcon} m="$2" w="$5" h="$5"  color="white"/>
             <Text style={styles.pressableText}>Home</Text>
           </Pressable>
 
           <Pressable style={styles.pressable} onPress={() => navigation.navigate('Program')} >
-            <Icon as={AddIcon} m="$2" w="$4" h="$4" />
+            <Icon as={CalendarDaysIcon} m="$2" w="$5" h="$5" color="white" />
             <Text style={styles.pressableText}>Program</Text>
           </Pressable>
           
-
-          
-
-
         </ScrollView>
       </View>
     </View>
@@ -40,19 +36,18 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'space-between',
-    marginTop: 40,
-    marginBottom: 20, 
-    backgroundColor: '#e0e0e0', 
-
+    paddingTop: 50,
+    backgroundColor: '#AAAABAD', 
   },
   content: {
     flex: 1,
   },
+
+
   footerContainer: {
-    height: 60, 
-    backgroundColor: '#f8f8f8',
-    borderTopWidth: 1,
-    borderColor: '#ddd',
+    height: 80, 
+    paddingBottom: 20, 
+    backgroundColor: '#040404',
   },
   footer: {
     flex: 1,
@@ -73,8 +68,15 @@ const styles = StyleSheet.create({
   pressableText: {
     marginTop: 4,
     fontSize: 12, 
-    color: '#333', 
+    color: 'white', 
   },
 });
 
 export default Layout;
+
+
+// Golden top: #d8ab4e
+
+// Golden bottom: #b48c36
+
+// Charcoal Black: #040404
