@@ -1,19 +1,37 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import { View, Text, StyleSheet, ScrollView, Pressable } from 'react-native';
 import { Icon, GlobeIcon, CalendarDaysIcon } from "@gluestack-ui/themed";
 import Notification from './Notification';
+import uuid from 'react-native-uuid';
 
 
-const Layout = ({ children, navigation, notification , setNotification}) => {
+const Layout = ({ children, navigation}) => {
+
+  const [notification, setNotification] = useState([
+    // {id: 1, type: 'warning', mes: 'warning'}, {id: 2, type: 'succes', mes:'successs'}, {id: 3, type: 'error', mes:'error'}
+  ]);
+
+  function addNotification(type, mes){
+    setNotification((prev)=>{
+      return [...prev, {id: uuid.v4().slice(0, 5), type, mes}];
+    })
+  }
 
 
+  const renderChildrenWithProps = () => {
+    return React.Children.map(children, child => {
+      return React.cloneElement(child, { notification, setNotification, addNotification });
+    });
+  };
+
+  
   return (
     <View style={styles.container}>
 
-      <Notification  notification={notification} setNotification={setNotification} />
+      <Notification  notification={notification} setNotification={setNotification}  />
 
       <View style={styles.content}>
-        {children}
+        {renderChildrenWithProps()}
       </View>
 
       <View style={styles.footerContainer}>

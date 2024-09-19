@@ -11,7 +11,6 @@ const ModalSearchDestination = (props) => {
         if(!props.inputCountry.length){return};
         props.setModalVisible({type: true, data:'country'});
 
-
         axios.post(`${address_function_fuzzy}`,
             {
                 "input" : props.inputCountry, 
@@ -23,6 +22,7 @@ const ModalSearchDestination = (props) => {
                 props.setSuggestions(list);
             }
         ).catch((err)=>{
+            console.log(err);
             props.addNotification("warning", "System error occurred. Please try again later.")
         });
     }, [props.inputCountry]);
@@ -36,7 +36,6 @@ const ModalSearchDestination = (props) => {
         if(!props.inputCity.length){return};
         props.setModalVisible({type: true, data: "city"});
 
-
         axios.post(`${address_function_fuzzy}`,
             {
                 "input" : props.inputCity, 
@@ -48,6 +47,7 @@ const ModalSearchDestination = (props) => {
                 props.setSuggestions(list);
             }
         ).catch((err)=>{
+            console.log(err);
             props.addNotification("warning", "System error occurred. Please try again later.")
         });
     }, [props.inputCity]);
@@ -72,6 +72,7 @@ const ModalSearchDestination = (props) => {
         props.setCheckBoxActivities((prev)=>{return {...prev, city: item.place}})
         return;
     }
+
 
     return (
         <View style={styles.centeredView}>
@@ -108,7 +109,7 @@ const ModalSearchDestination = (props) => {
                 
                 }
 
-                {props.suggestion?.length? 
+                {props.suggestions.length? 
                     <FlatList
                         data={props.suggestions}
                         keyExtractor={(item, index) => {

@@ -6,9 +6,10 @@ import Calendar from '../Components/Calendar';
 import {formatDateFromMilliseconds} from '../diverse';
 import CheckboxActivities from '../Components/CheckboxActivities';
 
+
 const Home = (props) => {
 
-
+  console.log(props);
 
   const [dateFrom, setDateFrom] = useState('');
   const [dateTo, setDateTo] = useState('');
@@ -39,7 +40,6 @@ const Home = (props) => {
   
   return (
     <ScrollView  >
-
 
       <Card p="$5" borderRadius="$lg"  m="$3" >
         <Heading size="md" fontFamily="$heading" mb="$4">

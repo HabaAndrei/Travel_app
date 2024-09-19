@@ -4,7 +4,6 @@ import { Alert, AlertIcon, Pressable,  AlertText, InfoIcon, Icon, CloseIcon } fr
 
 const Notification = (props) => {
 
-  //error, succes, warning
   function deleteNotification(id){
     let newAr = [];
     props.setNotification((prev)=>{
