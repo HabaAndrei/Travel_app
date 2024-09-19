@@ -1,10 +1,17 @@
 import React from 'react';
 import { View, Text, StyleSheet, ScrollView, Pressable } from 'react-native';
 import { Icon, GlobeIcon, CalendarDaysIcon } from "@gluestack-ui/themed";
+import Notification from './Notification';
 
-const Layout = ({ children, navigation }) => {
+
+const Layout = ({ children, navigation, notification , setNotification}) => {
+
+
   return (
     <View style={styles.container}>
+
+      <Notification  notification={notification} setNotification={setNotification} />
+
       <View style={styles.content}>
         {children}
       </View>

@@ -5,9 +5,10 @@ import SearchDestination from '../Components/SearchDestination';
 import Calendar from '../Components/Calendar';
 import {formatDateFromMilliseconds} from '../diverse';
 import CheckboxActivities from '../Components/CheckboxActivities';
-import Notification from '../Components/Notification.js'
 
 const Home = (props) => {
+
+
 
   const [dateFrom, setDateFrom] = useState('');
   const [dateTo, setDateTo] = useState('');
@@ -17,7 +18,15 @@ const Home = (props) => {
   const [checkbox, setCheckbox] = useState([]);
 
 
+  function verifyDestinationRequest(){
+    if(!dateFrom || !dateTo){props.addNotification("warning", "Please choose the start and end date of the trip."); return false}
+    if((new Date(dateTo)).getTime() < (new Date(dateFrom)).getTime()){props.addNotification("warning", "Please choose the start date to be smaller than the end date."); return false}
+    if(!checkBoxActivities.city || !checkBoxActivities.country){props.addNotification("warning", "Please choose the city and country where you want to travel to provide you with the best data.");return false;}
+    return true;
+  }
+
   function goToProgramPage(){
+    if(!verifyDestinationRequest())return;
     props.navigation.navigate('Program', {from: formatDateFromMilliseconds(dateFrom), to: formatDateFromMilliseconds(dateTo), 
       city: checkBoxActivities.city, country: checkBoxActivities.country, checkbox})
   }
@@ -31,14 +40,13 @@ const Home = (props) => {
   return (
     <ScrollView  >
 
-      <Notification/>
 
       <Card p="$5" borderRadius="$lg"  m="$3" >
         <Heading size="md" fontFamily="$heading" mb="$4">
           Where?
         </Heading>
         <SearchDestination
-          setCheckBoxActivities={setCheckBoxActivities}
+          setCheckBoxActivities={setCheckBoxActivities}  addNotification={props.addNotification}
           dataDestination={dataDestination} setDataDestination={setDataDestination}
         />
       </Card>
@@ -53,7 +61,7 @@ const Home = (props) => {
 
       <CheckboxActivities
         checkBoxActivities={checkBoxActivities} closeCheckbox={closeCheckbox}
-        checkbox={checkbox} setCheckbox={setCheckbox}
+        checkbox={checkbox} setCheckbox={setCheckbox}  addNotification={props.addNotification}
       /> 
 
 

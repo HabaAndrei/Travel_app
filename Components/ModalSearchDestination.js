@@ -2,6 +2,7 @@ import {FlatList, Modal, StyleSheet, Text, Pressable, View , TextInput} from 're
 import React, {useState, useEffect} from 'react';
 import axios from 'axios';
 import {address_function_fuzzy} from '../diverse';
+import { Spinner } from "@gluestack-ui/themed";
 
 const ModalSearchDestination = (props) => {
 
@@ -21,7 +22,9 @@ const ModalSearchDestination = (props) => {
                 const list = data.data?.map((country)=>{return{place: country, type: "country"}})
                 props.setSuggestions(list);
             }
-        );
+        ).catch((err)=>{
+            props.addNotification("warning", "System error occurred. Please try again later.")
+        });
     }, [props.inputCountry]);
 
 
@@ -44,7 +47,9 @@ const ModalSearchDestination = (props) => {
                 const list = data.data?.map((country)=>{return{place: country, type: "city"}})
                 props.setSuggestions(list);
             }
-        );
+        ).catch((err)=>{
+            props.addNotification("warning", "System error occurred. Please try again later.")
+        });
     }, [props.inputCity]);
 
 
@@ -103,22 +108,28 @@ const ModalSearchDestination = (props) => {
                 
                 }
 
-                <FlatList
-                    data={props.suggestions}
-                    keyExtractor={(item, index) => {
-                        return index;
-                    }}
-                    renderItem={({ item }) => (
-                        <Pressable style={styles.suggestion} 
-                        onPress={()=>selectDestination(item)}
-                        >
-                        <Text style={styles.suggestionText}>
-                            {item.place}
-                        </Text>            
-                        </Pressable>
-                    )}
-                    style={styles.suggestionsList}
-                />
+                {props.suggestion?.length? 
+                    <FlatList
+                        data={props.suggestions}
+                        keyExtractor={(item, index) => {
+                            return index;
+                        }}
+                        renderItem={({ item }) => (
+                            <Pressable style={styles.suggestion} 
+                            onPress={()=>selectDestination(item)}
+                            >
+                            <Text style={styles.suggestionText}>
+                                {item.place}
+                            </Text>            
+                            </Pressable>
+                        )}
+                        style={styles.suggestionsList}
+                    />
+                    :
+                    <View style={styles.spinnerContainer}>
+                        <Spinner color="$indigo600" />
+                    </View> 
+                }
                 <Pressable
                     style={[styles.button, styles.buttonClose]}
                     onPress={() => {
@@ -210,4 +221,9 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         letterSpacing: 1.2, 
     },
+    spinnerContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    }
 });

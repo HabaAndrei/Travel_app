@@ -1,45 +1,39 @@
 import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
-import { Alert, AlertIcon,Center,  AlertText, InfoIcon, Icon, CloseIcon } from "@gluestack-ui/themed"
+import React, {useState} from 'react'
+import { Alert, AlertIcon, Pressable,  AlertText, InfoIcon, Icon, CloseIcon } from "@gluestack-ui/themed"
 
-const Notification = () => {
+const Notification = (props) => {
+
+  //error, succes, warning
+  function deleteNotification(id){
+    let newAr = [];
+    props.setNotification((prev)=>{
+      for(let i = 0; i <prev.length; i++){
+        if(prev[i].id != id)newAr.push(prev[i]);
+      }
+      return [...newAr];
+    })
+  };
+
+
   return (
-    <View style={{position: 'absolute',  zIndex: 9999,  width: 385 }} >
+    <View style={{position: 'absolute',  zIndex: 9999,  width: 385, marginTop: 50 }} >
 
-    <Alert mx="$2.5" action="warning" variant="solid"
-     style={{margin: 10}}
-     >
-        <AlertIcon as={InfoIcon} mr="$3" />
-        <AlertText>
-            We have updated our terms of service. Please review and accept to continue
-            using our service.
-        </AlertText>
-        <Icon as={CloseIcon} m="$2" w="$4" h="$4" />
-
-    </Alert>
-
-    <Alert mx="$2.5" action="success" variant="solid" 
+    {props.notification.map((ob, index)=>{
+      return <Alert  key={index} mx="$2.5" action={ob.type} variant="solid"
       style={{margin: 10}}
-    >
+      >
         <AlertIcon as={InfoIcon} mr="$3" />
         <AlertText>
-            We have updated our terms of service. Please review and accept to continue
-            using our service.
+          {ob.mes}
         </AlertText>
-        <Icon as={CloseIcon} m="$2" w="$4" h="$4" />
+        <Pressable onPress={()=>{deleteNotification(ob.id)}} >
+          <Icon as={CloseIcon} m="$2" w="$4" h="$4" />
+        </Pressable>
 
-    </Alert>
-    <Alert mx="$2.5" action="error" variant="solid"
-      style={{margin: 10}}
-    >
-        <AlertIcon as={InfoIcon} mr="$3" />
-        <AlertText>
-            We have updated our terms of service. Please review and accept to continue
-            using our service.
-        </AlertText>
-        <Icon as={CloseIcon} m="$2" w="$4" h="$4" />
-
-    </Alert>
+      </Alert>
+    
+    })}
     
     </View>
   )

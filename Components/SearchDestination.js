@@ -28,6 +28,7 @@ const SearchDestination = (props) => {
         inputCity={inputCity} setInputCity={setInputCity}
         inputCountry={inputCountry} setInputCountry={setInputCountry}
         suggestions={suggestions} setSuggestions={setSuggestions}
+        addNotification={props.addNotification}
       />
       
       <TextInput

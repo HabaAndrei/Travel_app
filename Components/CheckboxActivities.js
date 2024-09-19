@@ -19,7 +19,9 @@ const CheckboxActivities = (props) => {
                     let word = a[0].toUpperCase() + a.slice(1, a.length);
                     return  {selected:false, category:word};
                 }));
-            })
+            }).catch((err)=>{
+                props.addNotification("warning", "System error occurred. Please try again later.")
+            });
         }
 
     }, [props.checkBoxActivities]);
