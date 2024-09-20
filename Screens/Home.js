@@ -9,7 +9,6 @@ import CheckboxActivities from '../Components/CheckboxActivities';
 
 const Home = (props) => {
 
-  console.log(props);
 
   const [dateFrom, setDateFrom] = useState('');
   const [dateTo, setDateTo] = useState('');
@@ -41,7 +40,7 @@ const Home = (props) => {
   return (
     <ScrollView  >
 
-      <Card p="$5" borderRadius="$lg"  m="$3" >
+      <Card p="$5" borderRadius="$lg"  m="$3" style={styles.shadow}>
         <Heading size="md" fontFamily="$heading" mb="$4">
           Where?
         </Heading>
@@ -66,7 +65,7 @@ const Home = (props) => {
 
 
       <View style={{alignItems: 'center'}}>
-        <Card size="md" variant="elevated" m="$3"  >
+        <Card  style={styles.shadow} size="md" variant="elevated" m="$3"  >
           <View style={styles.row}>
             <View style={styles.buttonContainer}>
               {dateFrom ? (
@@ -122,6 +121,16 @@ const Home = (props) => {
 
 const styles = StyleSheet.create({
 
+  shadow:{
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.5,
+    shadowRadius: 4,
+    elevation: 5,
+  },
   buttonGoPressAc:{
     backgroundColor: '#2196F3',
     padding: 10,

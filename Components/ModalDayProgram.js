@@ -1,34 +1,47 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {Alert, Modal, StyleSheet, Text, Pressable, View} from 'react-native';
+import {Card, Heading} from "@gluestack-ui/themed";
 
-const ModalDayProgram = () => {
-  const [modalVisible, setModalVisible] = useState(false);
+
+
+const ModalDayProgram = (props) => {
+
+
+  useEffect(()=>{
+
+    // console.log(props.modalVisible)
+  }, [props.modalVisible])
+
   return (
     <View style={styles.centeredView}>
       <Modal
         animationType="slide"
         transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => {
-          Alert.alert('Modal has been closed.');
-          setModalVisible(!modalVisible);
-        }}>
+        visible={props.modalVisible.isOpen}
+        >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <Text style={styles.modalText}>Hello World!</Text>
+            
+            <Card p="$5" borderRadius="$lg" maxWidth={360} m="$3">
+              <Heading size="md" fontFamily="$heading" mb="$4">
+                The Power of Positive Thinking
+              </Heading>
+
+              {/* aici adaug sa se vada fain pentru utilizator */}
+
+
+
+            </Card>
+            
             <Pressable
               style={[styles.button, styles.buttonClose]}
-              onPress={() => setModalVisible(!modalVisible)}>
+              onPress={() => props.setModalVisible((prev)=>{return {...prev, isOpen:false}})}>
               <Text style={styles.textStyle}>Hide Modal</Text>
             </Pressable>
           </View>
         </View>
       </Modal>
-      <Pressable
-        style={[styles.button, styles.buttonOpen]}
-        onPress={() => setModalVisible(true)}>
-        <Text style={styles.textStyle}>Show Modal</Text>
-      </Pressable>
+      
     </View>
   );
 };
@@ -61,19 +74,13 @@ const styles = StyleSheet.create({
     padding: 10,
     elevation: 2,
   },
-  buttonOpen: {
-    backgroundColor: '#F194FF',
-  },
+
   buttonClose: {
     backgroundColor: '#2196F3',
   },
   textStyle: {
     color: 'white',
     fontWeight: 'bold',
-    textAlign: 'center',
-  },
-  modalText: {
-    marginBottom: 15,
     textAlign: 'center',
   },
 });
