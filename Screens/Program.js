@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View, ScrollView } from 'react-native'
 import React, {useState, useEffect} from 'react'
-import {formatDateFromMilliseconds, address_function_program} from '../diverse.js';
+import {checkWebsites, address_function_program} from '../diverse.js';
 import { ArrowRightIcon, Spinner, Center, Card, Heading, Link, LinkText, HStack, Image, Icon } from "@gluestack-ui/themed";
 import axios from 'axios';
 import ModalDayProgram from '../Components/ModalDayProgram.js';
@@ -9,90 +9,162 @@ const Program = (props) => {
 
   const [modalVisible, setModalVisible] = useState({isOpen:false, data:{}});
 
-  const [program, setProgram] = useState([
-    // {
-    //   day: 1,
-    //   title: "Explore Skyscrapers and Modern Architecture",
-    //   date: "14-09-2024",
-    //   activities: [
-    //     {
-    //       description: "Visit the tallest building in the world and enjoy the view from the observation deck.",
-    //       info: "Purchase tickets online in advance.",
-    //       place: "Burj Khalifa",
-    //       time: "09:00"
-    //     },
-    //     {
-    //       description: "Explore one of the largest shopping malls in the world.",
-    //       info: "Free to enter, but some attractions inside may require tickets.",
-    //       place: "Dubai Mall",
-    //       time: "12:00"
-    //     },
-    //     {
-    //       description: "Walk along the marina and enjoy the stunning skyscrapers and waterfront views.",
-    //       info: "Free to visit.",
-    //       place: "Dubai Marina",
-    //       time: "15:00"
-    //     }
-    //   ]
-    // }, 
-    // {
-    //   day: 2,
-    //   title: "Enjoy Desert Safari and Camel Riding",
-    //   date: "15-09-2024",
-    //   activities: [
-    //     {
-    //       description: "Experience the thrill of dune bashing in the desert.",
-    //       info: "Book a tour package in advance.",
-    //       place: "Desert Safari",
-    //       time: "09:00"
-    //     },
-    //     {
-    //       description: "Enjoy a camel ride through the desert.",
-    //       info: "Often included in desert safari packages.",
-    //       place: "Camel Riding",
-    //       time: "12:00"
-    //     },
-    //     {
-    //       description: "Visit a traditional desert camp and enjoy activities like sandboarding and henna painting.",
-    //       info: "Book as part of a desert safari tour.",
-    //       place: "Desert Camp",
-    //       time: "15:00"
-    //     }
-    //   ]
-    // }, 
-      
-    
-    
-    
-    ]);
+  const [program, setProgram] = useState([]);
+
+  const prog = {
+    program: {
+    1: {
+      day: 1,
+      date: "20-09-2024",
+      title: "Modern Architecture & Skyscrapers",
+      activities: [
+        {
+          place: "The Shard",
+          address: "32 London Bridge St, London SE1 9SG, United Kingdom",
+          description: "A 95-storey skyscraper with a viewing gallery offering panoramic views of London.",
+          info: "Tickets can be purchased online or at the venue.",
+          link: "https://www.theviewfromtheshard.com/",
+          time: "10:00"
+        },
+        {
+          place: "Sky Garden",
+          address: "1 Sky Garden Walk, London EC3M 8AF, United Kingdom",
+          description: "A public space located at the top of the 'Walkie Talkie' building, offering 360-degree views of London.",
+          info: "Free entry but requires booking in advance.",
+          link: "https://skygarden.london/",
+          time: "13:00"
+        }
+      ]
+    },
+    2: {
+      day: 2,
+      date: "21-09-2024",
+      title: "Cultural Heritage Sites and Museums",
+      activities: [
+        {
+          place: "British Museum",
+          address: "Great Russell St, London WC1B 3DG, United Kingdom",
+          description: "A public institution dedicated to human history, art, and culture.",
+          info: "Free entry with optional donation.",
+          link: "https://www.britishmuseum.org/",
+          time: "10:00"
+        },
+        {
+          place: "Tower of London",
+          address: "St Katharine's & Wapping, London EC3N 4AB, United Kingdom",
+          description: "A historic castle located on the north bank of the River Thames in central London.",
+          info: "Tickets can be purchased online or at the venue.",
+          link: "https://www.hrp.org.uk/tower-of-london/",
+          time: "13:00"
+        }
+      ]
+    },
+    3:{
+      day: 3,
+      date: "22-09-2024",
+      title: "Nature and Outdoors",
+      activities: [
+        {
+          place: "Hyde Park",
+          address: "Hyde Park, London, United Kingdom",
+          description: "One of London's largest and most famous parks.",
+          info: "Free entry.",
+          link: "https://www.royalparks.org.uk/parks/hyde-park",
+          time: "10:00"
+        },
+        {
+          place: "Kew Gardens",
+          address: "Royal Botanic Gardens, Kew, Richmond, Surrey, TW9 3AE, United Kingdom",
+          description: "A botanical garden with the largest and most diverse botanical collections in the world.",
+          info: "Tickets can be purchased online or at the venue.",
+          link: "https://www.kew.org/",
+          time: "13:00"
+        }
+      ]
+    },
+    4:{
+      day: 4,
+      date: "23-09-2024",
+      title: "Water Sports and Activities",
+      activities: [
+        {
+          place: "WakeUp Docklands",
+          address: "Royal Victoria Beach, Western Gateway, Royal Docks, London E16 1FA, United Kingdom",
+          description: "A water sports center offering activities like wakeboarding and paddleboarding.",
+          info: "Tickets can be purchased online or at the venue.",
+          link: "https://wakeupdocklands.com/",
+          time: "10:00"
+        },
+        {
+          place: "Lee Valley White Water Centre",
+          address: "Station Road, Waltham Cross, Hertfordshire, EN9 1AB, United Kingdom",
+          description: "An outdoor center offering white water rafting and kayaking.",
+          info: "Tickets can be purchased online or at the venue.",
+          link: "https://www.visitleevalley.org.uk/en/content/cms/outdoors/white-water-centre/",
+          time: "13:00"
+        }
+      ]
+    },
+    5:{
+      day: 5,
+      date: "24-09-2024",
+      title: "Sightseeing",
+      activities: [
+        {
+          place: "Buckingham Palace",
+          address: "Westminster, London SW1A 1AA, United Kingdom",
+          description: "The London residence and administrative headquarters of the monarch of the United Kingdom.",
+          info: "Tickets can be purchased online or at the venue. Note that it is open to the public only during certain times of the year.",
+          link: "https://www.rct.uk/visit/the-state-rooms-buckingham-palace",
+          time: "10:00"
+        },
+        {
+          place: "London Eye",
+          address: "Riverside Building, County Hall, London SE1 7PB, United Kingdom",
+          description: "A large observation wheel on the South Bank of the River Thames in London.",
+          info: "Tickets can be purchased online or at the venue.",
+          link: "https://www.londoneye.com/",
+          time: "13:00"
+        }
+      ]
+    }}
+  };
+  
 
 
     
-  useEffect(()=>{
+  useEffect( ()=>{
     const from = '20-09-2024';
-    const to = '24-09-2024';
-    const city = 'Brasov';
-    const country = 'Romania';
+    const to = '21-09-2024';
+    const city = 'London';
+    const country = 'England';
     const newCheckbox = ['Explore skyscrapers and modern architecture', 'Enjoy desert safari and camel riding', 'Visit cultural heritage sites and museums', "Nature and outdoors", 'Try water sports and activities', "sightseeing"];
 
 
+    setProgram([...Object.values(prog.program)]);
+
     
     // const {from, to, city, country, checkbox} = props.route.params;
-    
     // console.log({from, to, city, country, checkbox});
 
     // let newCheckbox =[];
     // checkbox.forEach((ob)=>{if(ob.selected)newCheckbox.push(ob.category)});
 
-    axios.post(`${address_function_program}`, 
-        {  from, to, city, country, newCheckbox
-    }).then((data)=>{
-        const val = Object.values(data.data.program);
-        console.log(val);
-        setProgram(val)
-    }).catch((err)=>{
-        console.log(err);
-    })
+
+
+    // axios.post(`${address_function_program}`, 
+    //   {from, to, city, country, newCheckbox}
+    // ).then((data)=>{
+    //   if(data.data.type){
+    //     const values = Object.values(data.data.data);
+    //     setProgram([...values]);
+    //   }else{
+    //     props.addNotification("warning", "Unfortunately, we could not generate your program.")
+    //   }       
+    // }).catch((err)=>{
+    //     console.log(err);
+    // })
+
 
   }, []);
 
@@ -113,6 +185,8 @@ const Program = (props) => {
 
       <View> 
       {program.map((ob, index)=>{
+
+        console.log(ob);
         return  <Card  key={index}  p="$5" borderRadius="$lg" maxWidth={360} m="$3">
 
           <Text fontSize="$sm"  fontStyle="normal"  fontFamily="$heading"  fontWeight="$normal"  lineHeight="$sm"  mb="$2"
@@ -154,13 +228,28 @@ const styles = StyleSheet.create({
 
 
 
-// lui gpt trebuie sa ii mai cer si o adresa pentru ca nu este de ajuns titlul pentru a identifica obiectivul
-// sa ii mai cer sa imi dea un link 
-// a mai dat fail la data si mi-o dadea ca undefined
-
 
 // adaug buton de salvare sau respingere a excursiere
 // adaug buton de comentariu si sa incerce utilizatorul sa isi modifice excursia
 
 
+
+
+
+// Despre program: 
+
+// De bine:
+// imi da bine structurate pentru zona si timp 
+// mi le imparte bine pe zile
+
+
+
+// De rau:
 // daca are o locatie mica nu poate sa imi dea activitati pentru toata perioada
+// Mi-a dat activitati bune insa mi-a combinat cu orasul pe care l-am dat ca si exemplu in prompt
+// imi da link care nu merg 
+
+
+// Intrebari: 
+// Unde as putea sa adaug butonul acceptare sau refuzare a calatoriei 
+
