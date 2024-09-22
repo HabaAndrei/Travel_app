@@ -16,7 +16,7 @@ const Notification = (props) => {
 
 
   return (
-    <View style={{position: 'absolute',  zIndex: 9999,  width: 385, marginTop: 50 }} >
+    <View style={{position: 'absolute',  zIndex: 9000,  width: 385, marginTop: 50 }} >
 
     {props.notification.map((ob, index)=>{
       return <Alert  key={index} mx="$2.5" action={ob.type} variant="solid"

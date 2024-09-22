@@ -1,24 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import { Modal, StyleSheet, Pressable, View, ScrollView, Clipboard, TextInput } from 'react-native';
-import { Card, Heading, Text, LinkText, Icon, HStack, Link, ArrowRightIcon } from '@gluestack-ui/themed';
+import { Card, Heading, Text, LinkText, Icon, TrashIcon, HStack, Link, ArrowRightIcon } from '@gluestack-ui/themed';
 
 
 const ModalDayProgram = (props) => {
 
-  const [inputTest, setInputTest] = useState('');
-
-  useEffect(() => {
-    // console.log(props.modalVisible)
-  }, [props.modalVisible]);
 
   function copyInClipboard(text){
     Clipboard.setString(text);
   }
 
+
+
   return (
 
     
-    <View style={[styles.centeredView, { zIndex: 9998 }]}>
+    <View style={[styles.centeredView, { zIndex: 9000 }]}>
       <Modal
         animationType="slide"
         transparent={true}
@@ -39,7 +36,13 @@ const ModalDayProgram = (props) => {
                   return (
                     
                     <Card key={index} p="$5" borderRadius="$lg" maxWidth={360} m="$3">
-                      <Heading mb="$1" size="md">{ob.place}</Heading>
+                      <HStack justifyContent="space-between" alignItems="center">
+                        <Heading mb="$1" size="md">{ob.place}</Heading>
+                        <Pressable>
+                          <Icon as={TrashIcon} m="$2" w="$6" h="$6" />
+                        </Pressable>
+                      </HStack>
+
                       <Text  fontSize="$sm" fontStyle="normal" fontWeight="$normal" lineHeight="$sm" mb="$2" sx={{ color: "$textLight700" }}> 
                         {ob.time}
                       </Text>
@@ -68,33 +71,15 @@ const ModalDayProgram = (props) => {
               </View>
 
 
-              <TextInput
-        onChangeText={(e)=>{setInputTest(e); console.log(e)}}
-        value={inputTest}
-        placeholder="AAAAAAAAA"
-        inputMode=''
-        style={{
-          borderWidth: 1,
-          borderColor: 'gray',
-          padding: 10,
-          borderRadius: 5,
-          color: 'black',
-          backgroundColor: 'white',
-        
-   
-      }}
-      />
+              
             </ScrollView>
-            <Pressable
-              style={[styles.button, styles.buttonClose]}
+            <Pressable  style={[styles.button, styles.buttonClose]}
               onPress={() => props.setModalVisible((prev) => { return { ...prev, isOpen: false }; })}
             >
-              <Text style={styles.textStyle}>Hide Modal</Text>
+              <Text style={styles.textStyle}>Close</Text>
             </Pressable>
 
 
-
-            
           </View>
         </View>
       </Modal>

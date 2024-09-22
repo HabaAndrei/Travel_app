@@ -138,7 +138,7 @@ const ModalSearchDestination = (props) => {
                         props.setInputCity('');
                         props.setInputCountry('');
                     }}>
-                    <Text style={styles.textStyle}>Hide Modal</Text>
+                    <Text style={styles.textStyle}>Close</Text>
                 </Pressable>
             </View>
             </View>

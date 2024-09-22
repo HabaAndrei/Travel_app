@@ -1,7 +1,7 @@
-import { StyleSheet, Text, View, ScrollView, TextInput } from 'react-native'
+import { StyleSheet, View, ScrollView, TextInput, Pressable } from 'react-native'
 import React, {useState, useEffect} from 'react'
 import {address_function_api} from '../diverse.js';
-import { ArrowRightIcon, Spinner, Center, Card, Heading, Link, LinkText, HStack, Image, Icon } from "@gluestack-ui/themed";
+import { ArrowRightIcon, Spinner, Center, Card, Heading, Link, LinkText, Text, VStack, Divider, HStack, TrashIcon,RepeatIcon, CheckIcon,  Icon } from "@gluestack-ui/themed";
 import axios from 'axios';
 import ModalDayProgram from '../Components/ModalDayProgram.js';
 
@@ -194,7 +194,6 @@ const Program = (props) => {
 
     // getProgram('createProgram', from, to, city, country, newCheckbox)
 
-  
   }, []);
 
 
@@ -215,20 +214,41 @@ const Program = (props) => {
       </View> :
 
       <View> 
+        
+        <HStack h="$10" justifyContent="center" alignItems="center">
+          <HStack alignItems="center"  >
+            <Text  onPress={()=>console.log('press on delete')} >Delete</Text>
+            <Icon as={TrashIcon} m="$2" w="$6" h="$6" />
+          </HStack>
+
+         <Divider  style={{ margin: 15 }}  orientation="vertical"  mx="$2.5"  bg="$emerald500"  h={25}  $dark-bg="$emerald400" />
+
+          <HStack alignItems="center">
+            <Text onPress={()=>console.log('press on regenerate')} >Regenerate</Text>
+            <Icon as={RepeatIcon} m="$2" w="$6" h="$6" />
+          </HStack>
+
+          <Divider  style={{ margin: 15 }}  orientation="vertical"  mx="$2.5"  bg="$indigo500"  h={25}  $dark-bg="$indigo400"/>
+
+          <HStack alignItems="center">
+            <Text onPress={()=>console.log('press on save')} >Save</Text>
+            <Icon as={CheckIcon} m="$2" w="$6" h="$6" />
+          </HStack>
+      </HStack>
+
       {program.map((ob, index)=>{
 
         return  <Card  key={index}  p="$5" borderRadius="$lg" maxWidth={360} m="$3">
 
-          <Text fontSize="$sm"  fontStyle="normal"  fontFamily="$heading"  fontWeight="$normal"  lineHeight="$sm"  mb="$2"
-            sx={{
-                color: "$textLight700",
-                _dark: {
-                color: "$textDark200",
-                },
-            }}
-          >
-            {'Day' + ob.day + " | " } {ob.date}  
-          </Text>
+          <HStack justifyContent="space-between" alignItems="center">
+            <Text fontSize="$sm"  fontStyle="normal"  fontFamily="$heading"  fontWeight="$normal"  lineHeight="$sm"  mb="$2"  sx={{  color: "$textLight700" }} >
+              {'Day' + ob.day + " | " } {ob.date}  
+            </Text>
+            <Pressable>
+              <Icon as={TrashIcon} m="$2" w="$6" h="$6" />
+            </Pressable>
+          </HStack>
+          
           <Heading size="md" fontFamily="$heading" mb="$4">
             {ob.title}
           </Heading>
