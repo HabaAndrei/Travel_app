@@ -10,6 +10,28 @@ const ModalDayProgram = (props) => {
     Clipboard.setString(text);
   }
 
+  async function deleteActivity(indexActivity){
+    const response = await props.areYouSureDeleting();
+    if (response) {
+      props.setProgram((prev)=>{
+        let newProgram = [];
+        prev.forEach((day, index) => {
+          if(index === props.modalVisible.index){
+            const activities = day.activities;
+            const firstPart = activities.slice(0, indexActivity);
+            const secondPart = activities.slice(indexActivity + 1, activities.length);
+            const newActivities = firstPart.concat(secondPart);
+            day.activities = newActivities;
+            newProgram.push(day);
+          }else{
+            newProgram.push(day);
+          }
+        });
+        return [...newProgram];
+      })
+    }
+  }
+
 
 
   return (
@@ -38,7 +60,7 @@ const ModalDayProgram = (props) => {
                     <Card key={index} p="$5" borderRadius="$lg" maxWidth={360} m="$3">
                       <HStack justifyContent="space-between" alignItems="center">
                         <Heading mb="$1" size="md">{ob.place}</Heading>
-                        <Pressable>
+                        <Pressable onPress={()=>deleteActivity(index)} >
                           <Icon as={TrashIcon} m="$2" w="$6" h="$6" />
                         </Pressable>
                       </HStack>

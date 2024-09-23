@@ -2,14 +2,15 @@ import React, {useState, useEffect} from 'react';
 import { View, Text, StyleSheet, ScrollView, Pressable } from 'react-native';
 import { Icon, GlobeIcon, CalendarDaysIcon } from "@gluestack-ui/themed";
 import Notification from './Notification';
+import ModalDelete from './ModalDelete';
 import uuid from 'react-native-uuid';
 
 
 const Layout = ({ children, navigation}) => {
 
-  const [notification, setNotification] = useState([
-    // {id: 1, type: 'warning', mes: 'warning'}, {id: 2, type: 'succes', mes:'successs'}, {id: 3, type: 'error', mes:'error'}
-  ]);
+  const [modalDelete, setModalDelete] = useState(false);
+  const [notification, setNotification] = useState([]);
+  const [deletePromise, setDeletePromise] = useState(null);
 
   function addNotification(type, mes){
     setNotification((prev)=>{
@@ -18,15 +19,42 @@ const Layout = ({ children, navigation}) => {
   }
 
 
+  async function areYouSureDeleting() {
+    return new Promise((resolve) => {
+      setDeletePromise(() => resolve); 
+      setModalDelete(true); 
+    });
+  }
+
+  function handleModalResponse(response) {
+    if (deletePromise) {
+      deletePromise(response);
+      setDeletePromise(null); 
+    }
+  }
+
+
+  // async function testDeleteAction() {
+  //   const response = await areYouSureDeleting();
+  //   if (response === 'yes') {
+  //     console.log('Item deleted');
+  //   } else {
+  //     console.log('Delete cancelled');
+  //   }
+  // }
+
+
   const renderChildrenWithProps = () => {
     return React.Children.map(children, child => {
-      return React.cloneElement(child, { notification, setNotification, addNotification });
+      return React.cloneElement(child, { notification, setNotification, addNotification, areYouSureDeleting, navigation });
     });
   };
 
   
   return (
     <View style={styles.container}>
+
+      <ModalDelete   modalDelete={modalDelete} setModalDelete={setModalDelete} handleModalResponse={handleModalResponse} />
 
       <Notification  notification={notification} setNotification={setNotification}  />
 

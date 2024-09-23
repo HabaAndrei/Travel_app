@@ -1,6 +1,6 @@
 import { StyleSheet, View, ScrollView, TextInput, Pressable } from 'react-native'
 import React, {useState, useEffect} from 'react'
-import {address_function_api} from '../diverse.js';
+import {address_function_api, formatDateFromMilliseconds} from '../diverse.js';
 import { ArrowRightIcon, Spinner, Center, Card, Heading, Link, LinkText, Text, VStack, Divider, HStack, TrashIcon,RepeatIcon, CheckIcon,  Icon } from "@gluestack-ui/themed";
 import axios from 'axios';
 import ModalDayProgram from '../Components/ModalDayProgram.js';
@@ -8,16 +8,16 @@ import ModalDayProgram from '../Components/ModalDayProgram.js';
 
 const Program = (props) => {
 
- 
+  
 
-  const [modalVisible, setModalVisible] = useState({isOpen:false, data:{}});
+  const [modalVisible, setModalVisible] = useState({isOpen:false, data:{}, index: ''});
   const [program, setProgram] = useState([]);
 
   const prog = {
     program: {
     1: {
       day: 1,
-      date: "20-09-2024",
+      date: "2024-09-20",
       title: "Modern Architecture & Skyscrapers",
       activities: [
         {
@@ -40,7 +40,7 @@ const Program = (props) => {
     },
     2: {
       day: 2,
-      date: "21-09-2024",
+      date: "2024-09-21",
       title: "Cultural Heritage Sites and Museums",
       activities: [
         {
@@ -63,7 +63,7 @@ const Program = (props) => {
     },
     3:{
       day: 3,
-      date: "22-09-2024",
+      date: "2024-09-22",
       title: "Nature and Outdoors",
       activities: [
         {
@@ -86,7 +86,7 @@ const Program = (props) => {
     },
     4:{
       day: 4,
-      date: "23-09-2024",
+      date: "2024-09-23",
       title: "Water Sports and Activities",
       activities: [
         {
@@ -109,7 +109,7 @@ const Program = (props) => {
     },
     5:{
       day: 5,
-      date: "24-09-2024",
+      date: "2024-09-24",
       title: "Sightseeing",
       activities: [
         {
@@ -129,30 +129,7 @@ const Program = (props) => {
           time: "13:00"
         }
       ]
-    }, 
-    6:{
-      day: 5,
-      date: "24-09-2024",
-      title: "Sightseeing",
-      activities: [
-        {
-          place: "Buckingham Palace",
-          address: "Westminster, London SW1A 1AA, United Kingdom",
-          description: "The London residence and administrative headquarters of the monarch of the United Kingdom.",
-          info: "Tickets can be purchased online or at the venue. Note that it is open to the public only during certain times of the year.",
-          link: "https://www.rct.uk/visit/the-state-rooms-buckingham-palace",
-          time: "10:00"
-        },
-        {
-          place: "London Eye",
-          address: "Riverside Building, County Hall, London SE1 7PB, United Kingdom",
-          description: "A large observation wheel on the South Bank of the River Thames in London.",
-          info: "Tickets can be purchased online or at the venue.",
-          link: "https://www.londoneye.com/",
-          time: "13:00"
-        }
-      ]
-    }
+    },
   }};
   
 
@@ -198,12 +175,50 @@ const Program = (props) => {
 
 
 
+
+  async function deleteDayFromProgram(index) {
+    const response = await props.areYouSureDeleting();
+    if (response) {
+      setProgram((prev)=>{
+        const firstPart = prev.slice(0, index);
+        const secondPart = prev.slice(index + 1, prev.length);
+        let newProgram = firstPart.concat(secondPart);
+        let day = 0;
+        const updateDayProgram = newProgram.map((ob, index)=>{
+          ob.day = index + 1;
+          if(index === 0 ){
+            day = new Date(ob.date.replace('-', '/')).getTime();
+          }else{
+            day+=86_400_000;
+            ob.date = formatDateFromMilliseconds(day);
+          }
+          return {...ob}
+        })
+        return [...updateDayProgram];
+      })
+    }
+  }
+
+  
+  async function deleteAllProgram(){
+
+    console.log('stergem!!');
+    const response = await props.areYouSureDeleting();
+    if (response) {
+      props.navigation.navigate('Home')
+      setProgram([]);
+
+    }
+  }
+
+
+
   return (
     <ScrollView>
 
     
-      <ModalDayProgram  modalVisible={modalVisible} setModalVisible={setModalVisible} 
-        addNotification={props.addNotification}
+      <ModalDayProgram  modalVisible={modalVisible} setModalVisible={setModalVisible} areYouSureDeleting={props.areYouSureDeleting}
+        addNotification={props.addNotification}  program={program} setProgram={setProgram}
       />
 
       {!program.length ? 
@@ -217,7 +232,7 @@ const Program = (props) => {
         
         <HStack h="$10" justifyContent="center" alignItems="center">
           <HStack alignItems="center"  >
-            <Text  onPress={()=>console.log('press on delete')} >Delete</Text>
+            <Text  onPress={()=>deleteAllProgram()} >Delete</Text>
             <Icon as={TrashIcon} m="$2" w="$6" h="$6" />
           </HStack>
 
@@ -237,14 +252,12 @@ const Program = (props) => {
       </HStack>
 
       {program.map((ob, index)=>{
-
         return  <Card  key={index}  p="$5" borderRadius="$lg" maxWidth={360} m="$3">
-
           <HStack justifyContent="space-between" alignItems="center">
             <Text fontSize="$sm"  fontStyle="normal"  fontFamily="$heading"  fontWeight="$normal"  lineHeight="$sm"  mb="$2"  sx={{  color: "$textLight700" }} >
               {'Day' + ob.day + " | " } {ob.date}  
             </Text>
-            <Pressable>
+            <Pressable onPress={()=>deleteDayFromProgram(index)} >
               <Icon as={TrashIcon} m="$2" w="$6" h="$6" />
             </Pressable>
           </HStack>
@@ -252,7 +265,7 @@ const Program = (props) => {
           <Heading size="md" fontFamily="$heading" mb="$4">
             {ob.title}
           </Heading>
-          <Link onPress={()=>{setModalVisible({isOpen:true, data: ob})}}>
+          <Link onPress={()=>{setModalVisible({isOpen:true, data: ob, index})}}>
             <HStack alignItems="center">
               <LinkText    size="sm"  fontFamily="$heading"  fontWeight="$semibold"  color="$primary600"  $dark-color="$primary300"  textDecorationLine="none" >
                   See full day
