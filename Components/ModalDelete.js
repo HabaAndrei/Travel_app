@@ -5,19 +5,18 @@ const ModalDelete = (props) => {
 
 
     const closeWithResponse = (response) => {
-        props.handleModalResponse(response);
-        props.setModalDelete(false);
+      props.handleModalResponse(response);
+      props.setModalDelete(false);
     };
 
   return (
    <View>
     {props.modalDelete ? 
     
-    <View style={[styles.centeredView, { zIndex: 9999 }]}>
+      <View style={[styles.centeredView, { zIndex: 9999 }]}>
         <Modal
         animationType="slide"
         transparent={true}
-        visible={props.modalDelete}
         >
         <View style={styles.centeredView}>
             <View style={styles.modalView}>
@@ -41,7 +40,7 @@ const ModalDelete = (props) => {
             </View>
         </View>
         </Modal>
-    </View>
+      </View>
 
     :<View></View> }
    </View>

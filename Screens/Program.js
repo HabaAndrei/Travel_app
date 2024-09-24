@@ -186,14 +186,16 @@ const Program = (props) => {
         let day = 0;
         const updateDayProgram = newProgram.map((ob, index)=>{
           ob.day = index + 1;
+          console.log(day, '<,< == variabila day care este iterata ', new Date("2024-09-20").getTime(), ob.date);
           if(index === 0 ){
-            day = new Date(ob.date.replace('-', '/')).getTime();
+            day = new Date(ob.date).getTime();
           }else{
-            day+=86_400_000;
+            day+=86400000;
             ob.date = formatDateFromMilliseconds(day);
           }
           return {...ob}
         })
+        console.log(updateDayProgram);
         return [...updateDayProgram];
       })
     }
@@ -202,7 +204,7 @@ const Program = (props) => {
   
   async function deleteAllProgram(){
 
-    console.log('stergem!!');
+    console.log('am apasat pe stergem tot programul');
     const response = await props.areYouSureDeleting();
     if (response) {
       props.navigation.navigate('Home')

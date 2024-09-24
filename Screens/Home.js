@@ -18,10 +18,25 @@ const Home = (props) => {
   const [checkbox, setCheckbox] = useState([]);
 
 
+  useEffect(()=>{
+    if(!dataDestination.country)return;
+    if(checkbox.length)setCheckbox([]);
+  }, [dataDestination]);
+
+
   function verifyDestinationRequest(){
-    if(!dateFrom || !dateTo){props.addNotification("warning", "Please choose the start and end date of the trip."); return false}
-    if((new Date(dateTo)).getTime() < (new Date(dateFrom)).getTime()){props.addNotification("warning", "Please choose the start date to be smaller than the end date."); return false}
-    if(!checkBoxActivities.city || !checkBoxActivities.country){props.addNotification("warning", "Please choose the city and country where you want to travel to provide you with the best data.");return false;}
+    if(!dateFrom || !dateTo){
+      props.addNotification("warning", "Please choose the start and end date of the trip."); 
+      return false
+    }
+    if((new Date(dateTo)).getTime() < (new Date(dateFrom)).getTime()){
+      props.addNotification("warning", "Please choose the start date to be smaller than the end date."); 
+      return false
+    }
+    if(!checkBoxActivities.city || !checkBoxActivities.country){
+      props.addNotification("warning", "Please choose the city and country where you want to travel to provide you with the best data.");
+      return false;
+    }
     return true;
   }
 
@@ -32,7 +47,17 @@ const Home = (props) => {
   }
 
   function closeCheckbox(){
-    setCheckBoxActivities((prev)=>{return {...prev, isOpen:false}})
+    setCheckBoxActivities((prev)=>{return {isOpen:false}})
+  }
+
+
+  function openModalActivities(){
+    console.log(checkBoxActivities);
+    if(dataDestination.city && dataDestination.country){
+      setCheckBoxActivities((prev)=>{return{isOpen:true}})
+    }else{
+      props.addNotification("warning", "Please choose the city and country where you want to travel to provide you with the best data.");
+    }
   }
   
 
@@ -52,13 +77,13 @@ const Home = (props) => {
 
       <View style={styles.buttonGo} >
         <Pressable  style={styles.buttonGoPressAc}
-          onPress={()=>{setCheckBoxActivities((prev)=>{return{...prev, isOpen:true}})}} > 
+          onPress={()=>openModalActivities()} > 
           <Text style={styles.text} >Choose activities</Text>
         </Pressable>
       </View>
       
 
-      <CheckboxActivities
+      <CheckboxActivities dataDestination={dataDestination} 
         checkBoxActivities={checkBoxActivities} closeCheckbox={closeCheckbox}
         checkbox={checkbox} setCheckbox={setCheckbox}  addNotification={props.addNotification}
       /> 

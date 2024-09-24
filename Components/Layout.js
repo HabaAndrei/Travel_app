@@ -12,6 +12,11 @@ const Layout = ({ children, navigation}) => {
   const [notification, setNotification] = useState([]);
   const [deletePromise, setDeletePromise] = useState(null);
 
+
+  useEffect(()=>{
+    console.log(modalDelete, '<<== modal delete');
+  }, [modalDelete]);
+
   function addNotification(type, mes){
     setNotification((prev)=>{
       return [...prev, {id: uuid.v4().slice(0, 5), type, mes}];
@@ -21,6 +26,7 @@ const Layout = ({ children, navigation}) => {
 
   async function areYouSureDeleting() {
     return new Promise((resolve) => {
+      console.log(resolve, '  <<<== functie din promise || modalDelete =>> ', modalDelete );
       setDeletePromise(() => resolve); 
       setModalDelete(true); 
     });
@@ -28,6 +34,7 @@ const Layout = ({ children, navigation}) => {
 
   function handleModalResponse(response) {
     if (deletePromise) {
+      console.log('este deletePromise', deletePromise);
       deletePromise(response);
       setDeletePromise(null); 
     }
