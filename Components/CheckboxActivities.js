@@ -11,8 +11,8 @@ const CheckboxActivities = (props) => {
         const { isOpen } = props.checkBoxActivities;
         if (isOpen) {
             if (props.checkbox.length) return;
-
-            axios.post(`${address_function_api}`, 
+            console.log(address_function_api);
+            axios.post(`https://functionsazurea.azurewebsites.net/api/createProgram?code=jJ26TI4h-NL6UAutVCkiGZ7JEcrC5MvW4aSx3TByVFTbAzFuR6eiVA%3D%3D`, 
                 { method: 'createActivities', city, country }
             ).then((data) => {
                 if (data.data.type) {

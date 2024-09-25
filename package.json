@@ -22,7 +22,7 @@
     "axios": "^1.7.7",
     "babel-plugin-inline-dotenv": "^1.7.0",
     "babel-preset-expo": "^11.0.14",
-    "expo": "~51.0.28",
+    "expo": "^51.0.34",
     "expo-file-system": "~17.0.1",
     "expo-status-bar": "~1.12.1",
     "firebase": "^10.13.1",

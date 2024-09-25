@@ -6,16 +6,14 @@ import ModalDelete from './ModalDelete';
 import uuid from 'react-native-uuid';
 
 
-const Layout = ({ children, navigation}) => {
+const Layout = ({ children, navigation, route}) => {
 
   const [modalDelete, setModalDelete] = useState(false);
   const [notification, setNotification] = useState([]);
   const [deletePromise, setDeletePromise] = useState(null);
+  const [program, setProgram] = useState([]);
 
-
-  useEffect(()=>{
-    console.log(modalDelete, '<<== modal delete');
-  }, [modalDelete]);
+  
 
   function addNotification(type, mes){
     setNotification((prev)=>{
@@ -26,7 +24,6 @@ const Layout = ({ children, navigation}) => {
 
   async function areYouSureDeleting() {
     return new Promise((resolve) => {
-      console.log(resolve, '  <<<== functie din promise || modalDelete =>> ', modalDelete );
       setDeletePromise(() => resolve); 
       setModalDelete(true); 
     });
@@ -34,7 +31,6 @@ const Layout = ({ children, navigation}) => {
 
   function handleModalResponse(response) {
     if (deletePromise) {
-      console.log('este deletePromise', deletePromise);
       deletePromise(response);
       setDeletePromise(null); 
     }
@@ -53,7 +49,10 @@ const Layout = ({ children, navigation}) => {
 
   const renderChildrenWithProps = () => {
     return React.Children.map(children, child => {
-      return React.cloneElement(child, { notification, setNotification, addNotification, areYouSureDeleting, navigation });
+      return React.cloneElement(child, { 
+        route, notification, setNotification, addNotification, areYouSureDeleting, navigation, 
+        program, setProgram
+      });
     });
   };
 

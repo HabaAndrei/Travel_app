@@ -9,9 +9,29 @@ import ModalDayProgram from '../Components/ModalDayProgram.js';
 const Program = (props) => {
 
   
-
   const [modalVisible, setModalVisible] = useState({isOpen:false, data:{}, index: ''});
-  const [program, setProgram] = useState([]);
+
+
+  useEffect(()=>{
+    // const from = '20-09-2024';
+    // const to = '21-09-2024';
+    // const city = 'London';
+    // const country = 'England';
+    // const newCheckbox = ['Explore skyscrapers and modern architecture', 'Enjoy desert safari and camel riding', 'Visit cultural heritage sites and museums', "Nature and outdoors", 'Try water sports and activities', "sightseeing"];
+    
+    // const {from, to, city, country, checkbox} = props?.route?.params;
+    // console.log({from, to, city, country, checkbox});
+
+    // let newCheckbox =[];
+    // checkbox.forEach((ob)=>{if(ob.selected)newCheckbox.push(ob.category)});
+    // getProgram('createProgram', from, to, city, country, newCheckbox)
+
+
+    props.setProgram([...Object.values(prog.program)]);
+
+
+
+  }, []);
 
   const prog = {
     program: {
@@ -136,12 +156,13 @@ const Program = (props) => {
 
 
   async function getProgram( method, from, to, city, country, newCheckbox){
-    axios.post(`${address_function_api}`, 
+    console.log(address_function_api);
+    axios.post(`https://functionsazurea.azurewebsites.net/api/createProgram?code=jJ26TI4h-NL6UAutVCkiGZ7JEcrC5MvW4aSx3TByVFTbAzFuR6eiVA%3D%3D`, 
       {from, to, city, country, newCheckbox, method}
     ).then((data)=>{
       if(data.data.type){
         const values = Object.values(data.data.data);
-        setProgram([...values]);
+        props.setProgram([...values]);
       }else{
         props.addNotification("warning", "Unfortunately, we could not generate your program.")
       }       
@@ -152,41 +173,17 @@ const Program = (props) => {
   
 
 
-    
-  useEffect(()=>{
-    const from = '20-09-2024';
-    const to = '21-09-2024';
-    const city = 'London';
-    const country = 'England';
-    const newCheckbox = ['Explore skyscrapers and modern architecture', 'Enjoy desert safari and camel riding', 'Visit cultural heritage sites and museums', "Nature and outdoors", 'Try water sports and activities', "sightseeing"];
-
-    // const {from, to, city, country, checkbox} = props.route.params;
-    // console.log({from, to, city, country, checkbox});
-
-    // let newCheckbox =[];
-    // checkbox.forEach((ob)=>{if(ob.selected)newCheckbox.push(ob.category)});
-
-    setProgram([...Object.values(prog.program)]);
-
-
-    // getProgram('createProgram', from, to, city, country, newCheckbox)
-
-  }, []);
-
-
-
 
   async function deleteDayFromProgram(index) {
     const response = await props.areYouSureDeleting();
     if (response) {
-      setProgram((prev)=>{
+      props.setProgram((prev)=>{
         const firstPart = prev.slice(0, index);
         const secondPart = prev.slice(index + 1, prev.length);
         let newProgram = firstPart.concat(secondPart);
         let day = 0;
         const updateDayProgram = newProgram.map((ob, index)=>{
           ob.day = index + 1;
-          console.log(day, '<,< == variabila day care este iterata ', new Date("2024-09-20").getTime(), ob.date);
           if(index === 0 ){
             day = new Date(ob.date).getTime();
           }else{
@@ -195,7 +192,6 @@ const Program = (props) => {
           }
           return {...ob}
         })
-        console.log(updateDayProgram);
         return [...updateDayProgram];
       })
     }
@@ -208,9 +204,16 @@ const Program = (props) => {
     const response = await props.areYouSureDeleting();
     if (response) {
       props.navigation.navigate('Home')
-      setProgram([]);
+      props.setProgram([]);
 
     }
+  }
+
+
+  function goToDailyProgram(obiect){
+    // setModalVisible(obiect);
+    props.navigation.navigate('DailyProgram', {data: obiect.data, index: obiect.index})
+  
   }
 
 
@@ -220,10 +223,10 @@ const Program = (props) => {
 
     
       <ModalDayProgram  modalVisible={modalVisible} setModalVisible={setModalVisible} areYouSureDeleting={props.areYouSureDeleting}
-        addNotification={props.addNotification}  program={program} setProgram={setProgram}
+        addNotification={props.addNotification}  program={props.program} setProgram={props.setProgram}
       />
 
-      {!program.length ? 
+      {!props?.program.length ? 
       <View style={styles.container} >
         <Center  >
           <Spinner color="$indigo600" />
@@ -253,7 +256,7 @@ const Program = (props) => {
           </HStack>
       </HStack>
 
-      {program.map((ob, index)=>{
+      {props?.program?.map((ob, index)=>{
         return  <Card  key={index}  p="$5" borderRadius="$lg" maxWidth={360} m="$3">
           <HStack justifyContent="space-between" alignItems="center">
             <Text fontSize="$sm"  fontStyle="normal"  fontFamily="$heading"  fontWeight="$normal"  lineHeight="$sm"  mb="$2"  sx={{  color: "$textLight700" }} >
@@ -267,7 +270,7 @@ const Program = (props) => {
           <Heading size="md" fontFamily="$heading" mb="$4">
             {ob.title}
           </Heading>
-          <Link onPress={()=>{setModalVisible({isOpen:true, data: ob, index})}}>
+          <Link onPress={()=>{goToDailyProgram({isOpen:true, data: ob, index})}}>
             <HStack alignItems="center">
               <LinkText    size="sm"  fontFamily="$heading"  fontWeight="$semibold"  color="$primary600"  $dark-color="$primary300"  textDecorationLine="none" >
                   See full day
@@ -287,6 +290,7 @@ const Program = (props) => {
   )
 }
 
+
 export default Program
 
 const styles = StyleSheet.create({
@@ -299,7 +303,7 @@ const styles = StyleSheet.create({
 
 
 // adaug buton de salvare sau respingere a excursiere
-// adaug buton de comentariu si sa incerce utilizatorul sa isi modifice excursia
+
 
 
 

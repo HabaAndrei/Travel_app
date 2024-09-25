@@ -33,7 +33,7 @@ const Home = (props) => {
       props.addNotification("warning", "Please choose the start date to be smaller than the end date."); 
       return false
     }
-    if(!checkBoxActivities.city || !checkBoxActivities.country){
+    if(!dataDestination.city || !dataDestination.country){
       props.addNotification("warning", "Please choose the city and country where you want to travel to provide you with the best data.");
       return false;
     }
@@ -43,7 +43,7 @@ const Home = (props) => {
   function goToProgramPage(){
     if(!verifyDestinationRequest())return;
     props.navigation.navigate('Program', {from: formatDateFromMilliseconds(dateFrom), to: formatDateFromMilliseconds(dateTo), 
-      city: checkBoxActivities.city, country: checkBoxActivities.country, checkbox})
+      city: dataDestination.city, country: dataDestination.country, checkbox})
   }
 
   function closeCheckbox(){
@@ -52,7 +52,6 @@ const Home = (props) => {
 
 
   function openModalActivities(){
-    console.log(checkBoxActivities);
     if(dataDestination.city && dataDestination.country){
       setCheckBoxActivities((prev)=>{return{isOpen:true}})
     }else{
