@@ -156,8 +156,7 @@ const Program = (props) => {
 
 
   async function getProgram( method, from, to, city, country, newCheckbox){
-    console.log(address_function_api);
-    axios.post(`https://functionsazurea.azurewebsites.net/api/createProgram?code=jJ26TI4h-NL6UAutVCkiGZ7JEcrC5MvW4aSx3TByVFTbAzFuR6eiVA%3D%3D`, 
+    axios.post(`${address_function_api}`, 
       {from, to, city, country, newCheckbox, method}
     ).then((data)=>{
       if(data.data.type){
