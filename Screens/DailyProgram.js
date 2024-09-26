@@ -1,17 +1,25 @@
 import React, { useEffect, useState } from 'react';
 import { ScrollView, Pressable, View, Clipboard, StyleSheet } from 'react-native';
-import { Card, Heading, Text, LinkText, Icon, TrashIcon, HStack, Link, ArrowRightIcon } from '@gluestack-ui/themed';
+import { ArrowRightIcon, CloseIcon, Card, Heading, Link, LinkText, Text, VStack, Divider, HStack, TrashIcon,RepeatIcon, CheckIcon,  Icon } from "@gluestack-ui/themed";
+import {addDataToAsyncStorage, getDataFromAsyncStorage} from '../diverse.js';
+
 
 const ModalDayProgram = (props) => {
   
-  const [dailyProgram, setDailyProgram] = useState({data: {}, index: '',});
+  const [dailyProgram, setDailyProgram] = useState({data: {}, index: ''});
 
-  useEffect(() => {
-    const { data, index } = props.route.params;
+  useEffect( () => {
+    const { data, index, apeleaza } = props.route.params;
     // console.log(data, index);
-    // console.log(props);
+    console.log(props, apeleaza);
     setDailyProgram({ data, index });
+    // seeProg()
   }, []);
+
+  // async function seeProg(){
+  //   const pro = await getDataFromAsyncStorage("travelProgram");
+  //   console.log(pro);
+  // }
 
   const copyInClipboard = (text) => {
     Clipboard.setString(text);
@@ -20,22 +28,39 @@ const ModalDayProgram = (props) => {
   async function  deleteActivity(indexActivity){
     const response = await props.areYouSureDeleting();
     if (response) {
-      // props.setProgram((prev) => {
-      //   let newProgram = [];
-      //   prev.forEach((day, index) => {
-      //     if (index === dailyProgram.index) {
-      //       const activities = day.activities;
-      //       const newActivities = activities.filter((_, i) => i !== indexActivity);
-      //       day.activities = newActivities;
-      //       newProgram.push(day);
-      //     } else {
-      //       newProgram.push(day);
-      //     }
-      //   });
-      //   return [...newProgram];
-      // });
+      setDailyProgram((obiectDailyProgram)=>{
+        const {activities} = obiectDailyProgram.data;
+        const firstPart = activities.slice(0, indexActivity);
+        const secondPart = activities.slice(indexActivity + 1, activities.length);
+        const newActivities = firstPart.concat(secondPart);
+        const newData = {...obiectDailyProgram.data, activities: newActivities}
+        return {...obiectDailyProgram, data: newData};
+      })
     }
   };
+
+
+  async function pressOnSave(){
+
+    const fullProgram = await getDataFromAsyncStorage("travelProgram");
+    if(JSON.stringify(dailyProgram.data) === JSON.stringify(fullProgram?.data?.[dailyProgram.index])){
+      props.navigation.navigate('Program');
+    }else{
+      const actualProgram = fullProgram.data;
+      let  firstPart = actualProgram.slice(0, dailyProgram.index );
+      const midPartOb = dailyProgram.data;
+      const secondPart = actualProgram.slice(dailyProgram.index + 1, actualProgram.length);
+      firstPart.push(midPartOb);
+      const newProgram = firstPart.concat(secondPart);
+      await addDataToAsyncStorage("travelProgram", newProgram);
+      props.navigation.navigate('Program', {type: true});
+    }
+
+  }
+
+  function pressOnCancel(){
+    props.navigation.navigate('Program', {type: false});
+  }
 
   return (
     <ScrollView contentContainerStyle={styles.scrollViewContent}>
@@ -88,6 +113,27 @@ const ModalDayProgram = (props) => {
             )}
           </Card>
         ))}
+      </View>
+
+
+
+      <View> 
+        
+        <HStack h="$10" justifyContent="center" alignItems="center">
+          <HStack alignItems="center"  >
+            <Text  onPress={()=>pressOnCancel()} >Cancel</Text>
+            <Icon as={CloseIcon} m="$2" w="$6" h="$6" />
+          </HStack>
+
+         
+
+          <Divider  style={{ margin: 15 }}  orientation="vertical"  mx="$2.5"  bg="$indigo500"  h={25}  $dark-bg="$indigo400"/>
+
+          <HStack alignItems="center">
+            <Text onPress={()=>pressOnSave()} >Save</Text>
+            <Icon as={CheckIcon} m="$2" w="$6" h="$6" />
+          </HStack>
+        </HStack>
       </View>
     </ScrollView>
   );

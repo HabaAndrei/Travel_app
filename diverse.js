@@ -23,8 +23,9 @@ function formatDateFromMilliseconds(milliseconds) {
 async function getDataFromAsyncStorage(key){
     let rezFinal = {type: false, err:''};
     try {
-        const storedTasks = await AsyncStorage.getItem(`${key}`);
-        rezFinal = {type: true, data: JSON.parse(storedTasks)}
+        const storedTasks = await AsyncStorage.getItem(key);
+        const dataParse = JSON.parse(storedTasks);
+        rezFinal = {type: true, data: dataParse}
     } catch (error) {
         rezFinal = {type: false, err: error};
     }
@@ -38,7 +39,7 @@ async function addDataToAsyncStorage(key, data){
     if(typeof(key) != "string"){ keyString = JSON.stringify(key)}else{ keyString = key}
     if(typeof(data) != "string"){dataString = JSON.stringify(data)}else{dataString = data}
     try {
-      await AsyncStorage.setItem('tasks', JSON.stringify({keyString: dataString}));
+      await AsyncStorage.setItem(keyString, dataString);
       rezFinal = {type: true};
     } catch (error) {
         rezFinal = {type: false, err: error};
@@ -49,7 +50,7 @@ async function addDataToAsyncStorage(key, data){
 async function removeItemFromAsyncStorage(key){
     let rezFinal = {type: false, err:''};
     try {
-        const removeData = await AsyncStorage.removeItem(`${key}`);
+        const removeData = await AsyncStorage.removeItem(key);
         rezFinal = {type: true}
     } catch (error) {
         rezFinal = {type: false, err: error};

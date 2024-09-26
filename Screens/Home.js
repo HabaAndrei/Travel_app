@@ -40,6 +40,7 @@ const Home = (props) => {
     return true;
   }
 
+  
   function goToProgramPage(){
     if(!verifyDestinationRequest())return;
     props.navigation.navigate('Program', {from: formatDateFromMilliseconds(dateFrom), to: formatDateFromMilliseconds(dateTo), 

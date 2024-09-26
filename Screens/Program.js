@@ -1,13 +1,14 @@
 import { StyleSheet, View, ScrollView, TextInput, Pressable } from 'react-native'
 import React, {useState, useEffect} from 'react'
-import {address_function_api, formatDateFromMilliseconds, removeItemFromAsyncStorage, multiSetFromAsyncStorage, getAllKeysFromAsyncStorage, multiGetFromAsyncStorage} from '../diverse.js';
+import {address_function_api, formatDateFromMilliseconds, removeItemFromAsyncStorage, addDataToAsyncStorage} from '../diverse.js';
 import { ArrowRightIcon, Spinner, Center, Card, Heading, Link, LinkText, Text, VStack, Divider, HStack, TrashIcon,RepeatIcon, CheckIcon,  Icon } from "@gluestack-ui/themed";
+import { useIsFocused } from '@react-navigation/native';
 import axios from 'axios';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 const Program = (props) => {
 
+  const isFocused = useIsFocused();
   const [program, setProgram] = useState([]);
 
 
@@ -28,10 +29,28 @@ const Program = (props) => {
 
 
     setProgram([...Object.values(prog.program)]);
+    // test()
 
+    console.log(props?.route, 'use effect simplu')
 
 
   }, []);
+
+
+  useEffect(()=>{
+
+    if(isFocused){
+      console.log(props?.route.params, "al doilea use effect")
+    }
+
+  }, [isFocused])
+
+
+
+
+  async function test(){
+    const ok = await addDataToAsyncStorage('travelProgram', [...Object.values(prog.program)])
+  }
 
   const prog = {
     program: {
@@ -162,6 +181,8 @@ const Program = (props) => {
       if(data.data.type){
         const values = Object.values(data.data.data);
         setProgram([...values]);
+        addDataToAsyncStorage('travelProgram', [...values]);
+
       }else{
         props.addNotification("warning", "Unfortunately, we could not generate your program.")
       }       
@@ -210,32 +231,15 @@ const Program = (props) => {
 
 
   function goToDailyProgram(obiect){
-    // console.log(obiect);
-    // setModalVisible(obiect);
+
     props.navigation.navigate('DailyProgram', {data: obiect.data, index: obiect.index})
-  
+
   }
 
 
-  async function getDataFromAsyncStorage(){
-    try {
-      const storedTasks = await AsyncStorage.getItem('tasks');
-      if (storedTasks !== null) {
-        console.log(JSON.parse(storedTasks))
-      }
-    } catch (error) {
-      console.error('Error fetching tasks', error);
-    }
-  };
 
-  async function addDataToAsyncStorage(){
-    try {
-      await AsyncStorage.setItem('tasks3', JSON.stringify({'data': "taskul suprascris =))"}));
-      console.log('s-a adaugat cu succes!!')
-    } catch (error) {
-      console.error('Error adding task', error);
-    }
-  }
+
+
 
 
   return (
@@ -260,14 +264,14 @@ const Program = (props) => {
          <Divider  style={{ margin: 15 }}  orientation="vertical"  mx="$2.5"  bg="$emerald500"  h={25}  $dark-bg="$emerald400" />
 
           <HStack alignItems="center">
-            <Text onPress={()=>multiGetFromAsyncStorage(["k1", "k2"])} >Regenerate</Text>
+            <Text onPress={()=>console.log('am apasat pe regenerate')} >Regenerate</Text>
             <Icon as={RepeatIcon} m="$2" w="$6" h="$6" />
           </HStack>
 
           <Divider  style={{ margin: 15 }}  orientation="vertical"  mx="$2.5"  bg="$indigo500"  h={25}  $dark-bg="$indigo400"/>
 
           <HStack alignItems="center">
-            <Text onPress={()=>multiSetFromAsyncStorage([['k1', 'val1'], ['k2', 'val2']])} >Save</Text>
+            <Text onPress={()=>console.log('Am apasat pe save')} >Save</Text>
             <Icon as={CheckIcon} m="$2" w="$6" h="$6" />
           </HStack>
       </HStack>
@@ -286,7 +290,7 @@ const Program = (props) => {
           <Heading size="md" fontFamily="$heading" mb="$4">
             {ob.title}
           </Heading>
-          <Link onPress={()=>{goToDailyProgram({isOpen:true, data: ob, index})}}>
+          <Link onPress={()=>{goToDailyProgram({data: ob, index})}}>
             <HStack alignItems="center">
               <LinkText    size="sm"  fontFamily="$heading"  fontWeight="$semibold"  color="$primary600"  $dark-color="$primary300"  textDecorationLine="none" >
                   See full day
