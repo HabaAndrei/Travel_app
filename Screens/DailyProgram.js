@@ -3,12 +3,13 @@ import { ScrollView, Pressable, View, Clipboard, StyleSheet } from 'react-native
 import { Card, Heading, Text, LinkText, Icon, TrashIcon, HStack, Link, ArrowRightIcon } from '@gluestack-ui/themed';
 
 const ModalDayProgram = (props) => {
+  
   const [dailyProgram, setDailyProgram] = useState({data: {}, index: '',});
 
   useEffect(() => {
     const { data, index } = props.route.params;
-    console.log(data, index);
-    console.log(props);
+    // console.log(data, index);
+    // console.log(props);
     setDailyProgram({ data, index });
   }, []);
 
@@ -19,20 +20,20 @@ const ModalDayProgram = (props) => {
   async function  deleteActivity(indexActivity){
     const response = await props.areYouSureDeleting();
     if (response) {
-      props.setProgram((prev) => {
-        let newProgram = [];
-        prev.forEach((day, index) => {
-          if (index === dailyProgram.index) {
-            const activities = day.activities;
-            const newActivities = activities.filter((_, i) => i !== indexActivity);
-            day.activities = newActivities;
-            newProgram.push(day);
-          } else {
-            newProgram.push(day);
-          }
-        });
-        return [...newProgram];
-      });
+      // props.setProgram((prev) => {
+      //   let newProgram = [];
+      //   prev.forEach((day, index) => {
+      //     if (index === dailyProgram.index) {
+      //       const activities = day.activities;
+      //       const newActivities = activities.filter((_, i) => i !== indexActivity);
+      //       day.activities = newActivities;
+      //       newProgram.push(day);
+      //     } else {
+      //       newProgram.push(day);
+      //     }
+      //   });
+      //   return [...newProgram];
+      // });
     }
   };
 

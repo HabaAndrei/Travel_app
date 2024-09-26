@@ -11,7 +11,6 @@ const Layout = ({ children, navigation, route}) => {
   const [modalDelete, setModalDelete] = useState(false);
   const [notification, setNotification] = useState([]);
   const [deletePromise, setDeletePromise] = useState(null);
-  const [program, setProgram] = useState([]);
 
   
 
@@ -37,21 +36,12 @@ const Layout = ({ children, navigation, route}) => {
   }
 
 
-  // async function testDeleteAction() {
-  //   const response = await areYouSureDeleting();
-  //   if (response === 'yes') {
-  //     console.log('Item deleted');
-  //   } else {
-  //     console.log('Delete cancelled');
-  //   }
-  // }
 
 
   const renderChildrenWithProps = () => {
     return React.Children.map(children, child => {
       return React.cloneElement(child, { 
         route, notification, setNotification, addNotification, areYouSureDeleting, navigation, 
-        program, setProgram
       });
     });
   };
@@ -65,6 +55,7 @@ const Layout = ({ children, navigation, route}) => {
       <Notification  notification={notification} setNotification={setNotification}  />
 
       <View style={styles.content}>
+    
         {renderChildrenWithProps()}
       </View>
 

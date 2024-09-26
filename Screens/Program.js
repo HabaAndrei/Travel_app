@@ -1,15 +1,15 @@
 import { StyleSheet, View, ScrollView, TextInput, Pressable } from 'react-native'
 import React, {useState, useEffect} from 'react'
-import {address_function_api, formatDateFromMilliseconds} from '../diverse.js';
+import {address_function_api, formatDateFromMilliseconds, removeItemFromAsyncStorage, multiSetFromAsyncStorage, getAllKeysFromAsyncStorage, multiGetFromAsyncStorage} from '../diverse.js';
 import { ArrowRightIcon, Spinner, Center, Card, Heading, Link, LinkText, Text, VStack, Divider, HStack, TrashIcon,RepeatIcon, CheckIcon,  Icon } from "@gluestack-ui/themed";
 import axios from 'axios';
-import ModalDayProgram from '../Components/ModalDayProgram.js';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 const Program = (props) => {
 
-  
-  const [modalVisible, setModalVisible] = useState({isOpen:false, data:{}, index: ''});
+  const [program, setProgram] = useState([]);
+
 
 
   useEffect(()=>{
@@ -27,7 +27,7 @@ const Program = (props) => {
     // getProgram('createProgram', from, to, city, country, newCheckbox)
 
 
-    props.setProgram([...Object.values(prog.program)]);
+    setProgram([...Object.values(prog.program)]);
 
 
 
@@ -161,7 +161,7 @@ const Program = (props) => {
     ).then((data)=>{
       if(data.data.type){
         const values = Object.values(data.data.data);
-        props.setProgram([...values]);
+        setProgram([...values]);
       }else{
         props.addNotification("warning", "Unfortunately, we could not generate your program.")
       }       
@@ -176,7 +176,7 @@ const Program = (props) => {
   async function deleteDayFromProgram(index) {
     const response = await props.areYouSureDeleting();
     if (response) {
-      props.setProgram((prev)=>{
+      setProgram((prev)=>{
         const firstPart = prev.slice(0, index);
         const secondPart = prev.slice(index + 1, prev.length);
         let newProgram = firstPart.concat(secondPart);
@@ -203,29 +203,46 @@ const Program = (props) => {
     const response = await props.areYouSureDeleting();
     if (response) {
       props.navigation.navigate('Home')
-      props.setProgram([]);
+      setProgram([]);
 
     }
   }
 
 
   function goToDailyProgram(obiect){
+    // console.log(obiect);
     // setModalVisible(obiect);
     props.navigation.navigate('DailyProgram', {data: obiect.data, index: obiect.index})
   
   }
 
 
+  async function getDataFromAsyncStorage(){
+    try {
+      const storedTasks = await AsyncStorage.getItem('tasks');
+      if (storedTasks !== null) {
+        console.log(JSON.parse(storedTasks))
+      }
+    } catch (error) {
+      console.error('Error fetching tasks', error);
+    }
+  };
+
+  async function addDataToAsyncStorage(){
+    try {
+      await AsyncStorage.setItem('tasks3', JSON.stringify({'data': "taskul suprascris =))"}));
+      console.log('s-a adaugat cu succes!!')
+    } catch (error) {
+      console.error('Error adding task', error);
+    }
+  }
+
 
   return (
     <ScrollView>
 
-    
-      <ModalDayProgram  modalVisible={modalVisible} setModalVisible={setModalVisible} areYouSureDeleting={props.areYouSureDeleting}
-        addNotification={props.addNotification}  program={props.program} setProgram={props.setProgram}
-      />
 
-      {!props?.program.length ? 
+      {!program?.length ? 
       <View style={styles.container} >
         <Center  >
           <Spinner color="$indigo600" />
@@ -243,19 +260,19 @@ const Program = (props) => {
          <Divider  style={{ margin: 15 }}  orientation="vertical"  mx="$2.5"  bg="$emerald500"  h={25}  $dark-bg="$emerald400" />
 
           <HStack alignItems="center">
-            <Text onPress={()=>console.log('press on regenerate')} >Regenerate</Text>
+            <Text onPress={()=>multiGetFromAsyncStorage(["k1", "k2"])} >Regenerate</Text>
             <Icon as={RepeatIcon} m="$2" w="$6" h="$6" />
           </HStack>
 
           <Divider  style={{ margin: 15 }}  orientation="vertical"  mx="$2.5"  bg="$indigo500"  h={25}  $dark-bg="$indigo400"/>
 
           <HStack alignItems="center">
-            <Text onPress={()=>console.log('press on save')} >Save</Text>
+            <Text onPress={()=>multiSetFromAsyncStorage([['k1', 'val1'], ['k2', 'val2']])} >Save</Text>
             <Icon as={CheckIcon} m="$2" w="$6" h="$6" />
           </HStack>
       </HStack>
 
-      {props?.program?.map((ob, index)=>{
+      {program?.map((ob, index)=>{
         return  <Card  key={index}  p="$5" borderRadius="$lg" maxWidth={360} m="$3">
           <HStack justifyContent="space-between" alignItems="center">
             <Text fontSize="$sm"  fontStyle="normal"  fontFamily="$heading"  fontWeight="$normal"  lineHeight="$sm"  mb="$2"  sx={{  color: "$textLight700" }} >

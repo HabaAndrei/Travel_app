@@ -58,6 +58,8 @@ const Home = (props) => {
       props.addNotification("warning", "Please choose the city and country where you want to travel to provide you with the best data.");
     }
   }
+
+
   
 
   
