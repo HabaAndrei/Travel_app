@@ -10,78 +10,77 @@ const Program = (props) => {
 
   // createProgram => creez date din azure
   // getProgramAsync => iau date din async storage 
-  // keepProgram
+  // keepProgram => pastram programul din useState
 
   const isFocused = useIsFocused();
   const [program, setProgram] = useState([]);
+  const [buttonHomePage, setButtonHomePage] = useState(false);
 
 
 
   useEffect(()=>{
+
+    if(!isFocused)return 
+   
     // const from = '20-09-2024';
     // const to = '21-09-2024';
     // const city = 'London';
     // const country = 'England';
     // const newCheckbox = ['Explore skyscrapers and modern architecture', 'Enjoy desert safari and camel riding', 'Visit cultural heritage sites and museums', "Nature and outdoors", 'Try water sports and activities', "sightseeing"];
     
-    // const {from, to, city, country, checkbox} = props?.route?.params;
-    // console.log({from, to, city, country, checkbox});
-
-    // let newCheckbox =[];
-    // checkbox.forEach((ob)=>{if(ob.selected)newCheckbox.push(ob.category)});
-    // getProgram('createProgram', from, to, city, country, newCheckbox)
-
-
- 
-    
-
-    if(!isFocused)return 
-
-
     // if(!props?.route?.params)return;
 
-    // const {type, from, to, city, country, checkbox} = props?.route?.params;
-
-
-    
-    
     if(!props?.route?.params?.type){
-      console.log("il adaug ca nu exista type", props?.route?.params?.type)
-      addProgramToAsyncStorage();
-    }
-
-    
-    if(props?.route?.params?.type === "keepProgram"){
-      console.log('Acesta este typeul => keepProgram')
-      return
+      getProgramFromAsyncStorage();
+      return;
     };
 
-    // if(type === "createProgram"){
-    //   getProgram('createProgram', from, to, city, country, newCheckbox)
+    const {from, to, city, country, checkbox, type} = props?.route?.params;
+
+
+    
+    // if(!props?.route?.params?.type){
+    //   console.log("il adaug ca nu exista type", props?.route?.params?.type)
+    //   addProgramToAsyncStorage();
     // }
+
+
+    
+    if(props?.route?.params?.type === "keepProgram")return;
+
+
+    if(type === "createProgram"){
+      console.log('A intrat sa se creeze program')
+      let newCheckbox =[];
+      checkbox.forEach((ob)=>{if(ob.selected)newCheckbox.push(ob.category)});  
+      getProgram('createProgram', from, to, city, country, newCheckbox)
+    }
     
     if( props?.route?.params?.type === "getProgramAsync"){
       getProgramFromAsyncStorage();
     }
 
 
-    setProgram([...Object.values(prog.program)]);
+    // setProgram([...Object.values(prog.program)]);
 
   }, [isFocused]);
 
 
-  async function addProgramToAsyncStorage(){
-    const data = await addDataToAsyncStorage('travelProgram', [...Object.values(prog.program)]);
-    console.log(data);
-  }
+  // async function addProgramToAsyncStorage(){
+  //   const data = await addDataToAsyncStorage('travelProgram', [...Object.values(prog.program)]);
+  //   console.log(data);
+  // }
 
   async function getProgramFromAsyncStorage(){
     const program = await getDataFromAsyncStorage("travelProgram");
-    if(program.type){
-      console.log(program.data, 'asa il primesc ');
-
-      setProgram([...program.data]);
+    if(!program.type){console.log('aici trebuie sa bag un mesaj de eroare')}
+    if(program?.data?.length){
+      setProgram([...program.data])
+    }else{
+      console.log('trebuie sa adaug eu butonul');
+      setButtonHomePage(true);
     }
+    
   }
 
 
@@ -212,16 +211,18 @@ const Program = (props) => {
     axios.post(`${address_function_api}`, 
       {from, to, city, country, newCheckbox, method}
     ).then((data)=>{
+
       if(data.data.type){
         const values = Object.values(data.data.data);
         setProgram([...values]);
         addDataToAsyncStorage('travelProgram', [...values]);
-
       }else{
+        console.log(data.data);
         props.addNotification("warning", "Unfortunately, we could not generate your program.")
       }       
     }).catch((err)=>{
-      console.log(err);
+      props.addNotification("error", "Unfortunately, we could not generate program")
+      console.log('eroare de la getProgram',err);
     })
   }
   
@@ -254,9 +255,10 @@ const Program = (props) => {
   
   async function deleteAllProgram(){
 
-    console.log('am apasat pe stergem tot programul');
     const response = await props.areYouSureDeleting();
     if (response) {
+      const rez = await removeItemFromAsyncStorage('travelProgram');
+      if(!rez.type)return;
       props.navigation.navigate('Home')
       setProgram([]);
 
@@ -277,70 +279,79 @@ const Program = (props) => {
 
 
   return (
-    <ScrollView>
-
-
-      {!program?.length ? 
-      <View style={styles.container} >
-        <Center  >
-          <Spinner color="$indigo600" />
-        </Center>
+    <View>
+      {buttonHomePage ? 
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+        <Pressable style={{  backgroundColor: '#007BFF',  paddingVertical: 10,  paddingHorizontal: 20,  borderRadius: 5, marginTop: 200 }}>
+          <Text style={{ color: '#fff', fontSize: 16, fontWeight: 'bold'}}
+          onPress={()=>{props.navigation.navigate('Home'); setButtonHomePage(false)}}
+          >
+            Aici sa am eu butonul
+          </Text>
+        </Pressable>
       </View> :
+      <ScrollView>
 
-      <View> 
-        
-        <HStack h="$10" justifyContent="center" alignItems="center">
-          <HStack alignItems="center"  >
-            <Text  onPress={()=>deleteAllProgram()} >Delete</Text>
-            <Icon as={TrashIcon} m="$2" w="$6" h="$6" />
-          </HStack>
 
-         <Divider  style={{ margin: 15 }}  orientation="vertical"  mx="$2.5"  bg="$emerald500"  h={25}  $dark-bg="$emerald400" />
+        {!program?.length ? 
+        <View style={styles.container} >
+          <Center  >
+            <Spinner color="$indigo600" />
+          </Center>
+        </View> :
 
-          <HStack alignItems="center">
-            <Text onPress={()=>console.log('am apasat pe regenerate')} >Regenerate</Text>
-            <Icon as={RepeatIcon} m="$2" w="$6" h="$6" />
-          </HStack>
-
-          <Divider  style={{ margin: 15 }}  orientation="vertical"  mx="$2.5"  bg="$indigo500"  h={25}  $dark-bg="$indigo400"/>
-
-          <HStack alignItems="center">
-            <Text onPress={()=>console.log('Am apasat pe save')} >Save</Text>
-            <Icon as={CheckIcon} m="$2" w="$6" h="$6" />
-          </HStack>
-      </HStack>
-
-      {program?.map((ob, index)=>{
-        return  <Card  key={index}  p="$5" borderRadius="$lg" maxWidth={360} m="$3">
-          <HStack justifyContent="space-between" alignItems="center">
-            <Text fontSize="$sm"  fontStyle="normal"  fontFamily="$heading"  fontWeight="$normal"  lineHeight="$sm"  mb="$2"  sx={{  color: "$textLight700" }} >
-              {'Day' + ob.day + " | " } {ob.date}  
-            </Text>
-            <Pressable onPress={()=>deleteDayFromProgram(index)} >
-              <Icon as={TrashIcon} m="$2" w="$6" h="$6" />
-            </Pressable>
-          </HStack>
+        <View> 
           
-          <Heading size="md" fontFamily="$heading" mb="$4">
-            {ob.title}
-          </Heading>
-          <Link onPress={()=>{goToDailyProgram({data: ob, index})}}>
-            <HStack alignItems="center">
-              <LinkText    size="sm"  fontFamily="$heading"  fontWeight="$semibold"  color="$primary600"  $dark-color="$primary300"  textDecorationLine="none" >
-                  See full day
-              </LinkText>
-              <Icon as={ArrowRightIcon}  size="sm"  color="$primary600"  mt="$0.5"  ml="$0.5"  $dark-color="$primary300"/>
+          <HStack h="$10" justifyContent="center" alignItems="center">
+            <HStack alignItems="center"  >
+              <Text  onPress={()=>deleteAllProgram()} >Delete</Text>
+              <Icon as={TrashIcon} m="$2" w="$6" h="$6" />
             </HStack>
-          </Link>
-        </Card>   
-      })}
-      </View>}
 
+            <Divider  style={{ margin: 15 }}  orientation="vertical"  mx="$2.5"  bg="$emerald500"  h={25}  $dark-bg="$emerald400" />
 
+            <HStack alignItems="center">
+              <Text onPress={()=>console.log('am apasat pe regenerate')} >Regenerate</Text>
+              <Icon as={RepeatIcon} m="$2" w="$6" h="$6" />
+            </HStack>
 
+            <Divider  style={{ margin: 15 }}  orientation="vertical"  mx="$2.5"  bg="$indigo500"  h={25}  $dark-bg="$indigo400"/>
 
+            <HStack alignItems="center">
+              <Text onPress={()=>console.log('Am apasat pe save')} >Save</Text>
+              <Icon as={CheckIcon} m="$2" w="$6" h="$6" />
+            </HStack>
+          </HStack>
 
-    </ScrollView>
+        {program?.map((ob, index)=>{
+          return  <Card  key={index}  p="$5" borderRadius="$lg" maxWidth={360} m="$3">
+            <HStack justifyContent="space-between" alignItems="center">
+              <Text fontSize="$sm"  fontStyle="normal"  fontFamily="$heading"  fontWeight="$normal"  lineHeight="$sm"  mb="$2"  sx={{  color: "$textLight700" }} >
+                {'Day' + ob.day + " | " } {ob.date}  
+              </Text>
+              <Pressable onPress={()=>deleteDayFromProgram(index)} >
+                <Icon as={TrashIcon} m="$2" w="$6" h="$6" />
+              </Pressable>
+            </HStack>
+            
+            <Heading size="md" fontFamily="$heading" mb="$4">
+              {ob.title}
+            </Heading>
+            <Link onPress={()=>{goToDailyProgram({data: ob, index})}}>
+              <HStack alignItems="center">
+                <LinkText    size="sm"  fontFamily="$heading"  fontWeight="$semibold"  color="$primary600"  $dark-color="$primary300"  textDecorationLine="none" >
+                    See full day
+                </LinkText>
+                <Icon as={ArrowRightIcon}  size="sm"  color="$primary600"  mt="$0.5"  ml="$0.5"  $dark-color="$primary300"/>
+              </HStack>
+            </Link>
+          </Card>   
+        })}
+        </View>}
+
+      </ScrollView>
+      }
+    </View>
   )
 }
 

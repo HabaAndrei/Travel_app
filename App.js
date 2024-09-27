@@ -40,28 +40,25 @@ const App = () => {
   return (
 
     <GluestackUIProvider config={config}>
-    <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen
-          name="Program"
-          component={ProgramScreen}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name="DailyProgram"
-          component={DailyProgramScreen}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name="Home"
-          component={HomeScreen}
-          options={{headerShown: false}}
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
-
-
-   
+      <NavigationContainer>
+        <Stack.Navigator>
+          <Stack.Screen
+            name="Home"
+            component={HomeScreen}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="Program"
+            component={ProgramScreen}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="DailyProgram"
+            component={DailyProgramScreen}
+            options={{headerShown: false}}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
     </GluestackUIProvider>
 
 

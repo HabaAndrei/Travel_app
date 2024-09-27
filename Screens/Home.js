@@ -24,6 +24,8 @@ const Home = (props) => {
   }, [dataDestination]);
 
 
+
+
   function verifyDestinationRequest(){
     if(!dateFrom || !dateTo){
       props.addNotification("warning", "Please choose the start and end date of the trip."); 
@@ -42,9 +44,23 @@ const Home = (props) => {
 
   
   function goToProgramPage(){
-    if(!verifyDestinationRequest())return;
-    props.navigation.navigate('Program', {type: 'createProgram' ,from: formatDateFromMilliseconds(dateFrom), to: formatDateFromMilliseconds(dateTo), 
-      city: dataDestination.city, country: dataDestination.country, checkbox})
+    // if(!verifyDestinationRequest())return;
+    // props.navigation.navigate('Program', {type: 'createProgram' ,from: formatDateFromMilliseconds(dateFrom), to: formatDateFromMilliseconds(dateTo), 
+    //   city: dataDestination.city, country: dataDestination.country, checkbox})
+
+    ///////////////////////////////////////////////////////////
+    const from = '20-09-2024';
+    const to = '21-09-2024';
+    const city = 'London';
+    const country = 'England';
+    const activities =  [
+      { category: "Cultural exploration", selected: true },
+      { category: "Historical tours", selected: true },
+      { category: "Outdoor activities", selected: true },
+    ]
+
+    props.navigation.navigate('Program', {type: 'createProgram' ,from, to,  country, city, checkbox: activities})
+
   }
 
   function closeCheckbox(){
