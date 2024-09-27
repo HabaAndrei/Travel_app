@@ -1,12 +1,16 @@
 import { StyleSheet, View, ScrollView, TextInput, Pressable } from 'react-native'
 import React, {useState, useEffect} from 'react'
-import {address_function_api, formatDateFromMilliseconds, removeItemFromAsyncStorage, addDataToAsyncStorage} from '../diverse.js';
+import {address_function_api, formatDateFromMilliseconds, removeItemFromAsyncStorage, addDataToAsyncStorage, getDataFromAsyncStorage} from '../diverse.js';
 import { ArrowRightIcon, Spinner, Center, Card, Heading, Link, LinkText, Text, VStack, Divider, HStack, TrashIcon,RepeatIcon, CheckIcon,  Icon } from "@gluestack-ui/themed";
 import { useIsFocused } from '@react-navigation/native';
 import axios from 'axios';
 
 
 const Program = (props) => {
+
+  // createProgram => creez date din azure
+  // getProgramAsync => iau date din async storage 
+  // keepProgram
 
   const isFocused = useIsFocused();
   const [program, setProgram] = useState([]);
@@ -28,29 +32,59 @@ const Program = (props) => {
     // getProgram('createProgram', from, to, city, country, newCheckbox)
 
 
-    setProgram([...Object.values(prog.program)]);
-    // test()
+ 
+    
 
-    console.log(props?.route, 'use effect simplu')
-
-
-  }, []);
+    if(!isFocused)return 
 
 
-  useEffect(()=>{
+    // if(!props?.route?.params)return;
 
-    if(isFocused){
-      console.log(props?.route.params, "al doilea use effect")
+    // const {type, from, to, city, country, checkbox} = props?.route?.params;
+
+
+    
+    
+    if(!props?.route?.params?.type){
+      console.log("il adaug ca nu exista type", props?.route?.params?.type)
+      addProgramToAsyncStorage();
     }
 
-  }, [isFocused])
+    
+    if(props?.route?.params?.type === "keepProgram"){
+      console.log('Acesta este typeul => keepProgram')
+      return
+    };
+
+    // if(type === "createProgram"){
+    //   getProgram('createProgram', from, to, city, country, newCheckbox)
+    // }
+    
+    if( props?.route?.params?.type === "getProgramAsync"){
+      getProgramFromAsyncStorage();
+    }
 
 
+    setProgram([...Object.values(prog.program)]);
+
+  }, [isFocused]);
 
 
-  async function test(){
-    const ok = await addDataToAsyncStorage('travelProgram', [...Object.values(prog.program)])
+  async function addProgramToAsyncStorage(){
+    const data = await addDataToAsyncStorage('travelProgram', [...Object.values(prog.program)]);
+    console.log(data);
   }
+
+  async function getProgramFromAsyncStorage(){
+    const program = await getDataFromAsyncStorage("travelProgram");
+    if(program.type){
+      console.log(program.data, 'asa il primesc ');
+
+      setProgram([...program.data]);
+    }
+  }
+
+
 
   const prog = {
     program: {

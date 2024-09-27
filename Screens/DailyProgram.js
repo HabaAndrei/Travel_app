@@ -10,8 +10,6 @@ const ModalDayProgram = (props) => {
 
   useEffect( () => {
     const { data, index, apeleaza } = props.route.params;
-    // console.log(data, index);
-    console.log(props, apeleaza);
     setDailyProgram({ data, index });
     // seeProg()
   }, []);
@@ -44,22 +42,24 @@ const ModalDayProgram = (props) => {
 
     const fullProgram = await getDataFromAsyncStorage("travelProgram");
     if(JSON.stringify(dailyProgram.data) === JSON.stringify(fullProgram?.data?.[dailyProgram.index])){
-      props.navigation.navigate('Program');
+      console.log('nu vede schimbarile si doar il trimite pe pagina')
+      props.navigation.navigate('Program', {type: "keepProgram"});
     }else{
       const actualProgram = fullProgram.data;
-      let  firstPart = actualProgram.slice(0, dailyProgram.index );
-      const midPartOb = dailyProgram.data;
-      const secondPart = actualProgram.slice(dailyProgram.index + 1, actualProgram.length);
-      firstPart.push(midPartOb);
-      const newProgram = firstPart.concat(secondPart);
-      await addDataToAsyncStorage("travelProgram", newProgram);
-      props.navigation.navigate('Program', {type: true});
+      let  firstPart = actualProgram?.slice(0, dailyProgram.index );
+      const midPartOb = dailyProgram?.data;
+      const secondPart = actualProgram?.slice(dailyProgram.index + 1, actualProgram.length);
+      firstPart?.push(midPartOb);
+      const newProgram = firstPart?.concat(secondPart);
+      const rez = await addDataToAsyncStorage("travelProgram", newProgram);
+      console.log(newProgram, 'asa il adaug ', rez)
+      props.navigation.navigate('Program', {type: "getProgramAsync"});
     }
 
   }
 
   function pressOnCancel(){
-    props.navigation.navigate('Program', {type: false});
+    props.navigation.navigate('Program', {type: "keepProgram"});
   }
 
   return (

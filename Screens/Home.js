@@ -43,7 +43,7 @@ const Home = (props) => {
   
   function goToProgramPage(){
     if(!verifyDestinationRequest())return;
-    props.navigation.navigate('Program', {from: formatDateFromMilliseconds(dateFrom), to: formatDateFromMilliseconds(dateTo), 
+    props.navigation.navigate('Program', {type: 'createProgram' ,from: formatDateFromMilliseconds(dateFrom), to: formatDateFromMilliseconds(dateTo), 
       city: dataDestination.city, country: dataDestination.country, checkbox})
   }
 
