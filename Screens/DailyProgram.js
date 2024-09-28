@@ -11,13 +11,9 @@ const ModalDayProgram = (props) => {
   useEffect( () => {
     const { data, index, apeleaza } = props.route.params;
     setDailyProgram({ data, index });
-    // seeProg()
   }, []);
 
-  // async function seeProg(){
-  //   const pro = await getDataFromAsyncStorage("travelProgram");
-  //   console.log(pro);
-  // }
+
 
   const copyInClipboard = (text) => {
     Clipboard.setString(text);
@@ -42,7 +38,6 @@ const ModalDayProgram = (props) => {
 
     const fullProgram = await getDataFromAsyncStorage("travelProgram");
     if(JSON.stringify(dailyProgram.data) === JSON.stringify(fullProgram?.data?.[dailyProgram.index])){
-      console.log('nu vede schimbarile si doar il trimite pe pagina')
       props.navigation.navigate('Program', {type: "keepProgram"});
     }else{
       const actualProgram = fullProgram.data;
@@ -52,7 +47,6 @@ const ModalDayProgram = (props) => {
       firstPart?.push(midPartOb);
       const newProgram = firstPart?.concat(secondPart);
       const rez = await addDataToAsyncStorage("travelProgram", newProgram);
-      console.log(newProgram, 'asa il adaug ', rez)
       props.navigation.navigate('Program', {type: "getProgramAsync"});
     }
 

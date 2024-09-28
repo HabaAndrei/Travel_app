@@ -5,10 +5,14 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Home from './Screens/Home.js';
 import Program from './Screens/Program.js';
 import DailyProgram from './Screens/DailyProgram.js';
-import {db} from './Firebase.js';
+import UserSettings from './Screens/UserSettings.js';
+import {db, auth} from './firebase.js';
 import { GluestackUIProvider } from "@gluestack-ui/themed"
 import { config } from "@gluestack-ui/config"
 import Layout from './Components/Layout.js';
+import { getRedirectResult, onAuthStateChanged } from 'firebase/auth';
+
+
 
 
 const Stack = createNativeStackNavigator();
@@ -18,8 +22,48 @@ const Stack = createNativeStackNavigator();
 const App = () => {
 
 
-  const HomeScreen = ({ navigation, route }) => (
+
+
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      
+      const uid = user.uid;
+      console.log('Avem user conectat cu uid: ' , uid);
+    } else {
+      console.log('nu avem user conectat')
+    }
+  });
+
+
+  getRedirectResult(auth)
+  .then((result) => {
     
+    // This gives you a Google Access Token. You can use it to access Google APIs.
+    const credential = GoogleAuthProvider.credentialFromResult(result);
+    
+    console.log({result, credential}, "raspuns get redirect result")
+    
+    if(!result)return;
+    const token = credential.accessToken;
+
+    // The signed-in user info.
+    const user = result.user;
+    // IdP data available using getAdditionalUserInfo(result)
+    // ...
+  }).catch((error) => {
+    console.log(error, " eroare la get redirect result")
+    // Handle Errors here.
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    // The email of the user's account used.
+    const email = error.customData.email;
+    // The AuthCredential type that was used.
+    const credential = GoogleAuthProvider.credentialFromError(error);
+    // ...
+  });
+
+
+  const HomeScreen = ({ navigation, route }) => (
     <Layout  navigation={navigation} route={route}>
       <Home/>
     </Layout>
@@ -36,6 +80,12 @@ const App = () => {
     </Layout>
   );
 
+  const UserSettingsScreen = ({ navigation, route }) => (
+    <Layout  navigation={navigation} route={route} >
+      <UserSettings/>
+    </Layout>
+  );
+
 
   return (
 
@@ -45,6 +95,11 @@ const App = () => {
           <Stack.Screen
             name="Home"
             component={HomeScreen}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="UserSettings"
+            component={UserSettingsScreen}
             options={{headerShown: false}}
           />
           <Stack.Screen

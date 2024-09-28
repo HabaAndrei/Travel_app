@@ -1,22 +1,131 @@
 import { initializeApp } from "firebase/app";
-import { getFirestore, collection, addDoc, doc, getDoc, query, where, getDocs } from "firebase/firestore";
+import { getFirestore, collection, addDoc, doc,  getDoc, query, where, getDocs } from "firebase/firestore";
 import {MEASUREMENT_ID, APIKEY, AUTH_DOMAIN, PROJECT_ID, STORAGE_BUCKET, MESSAGING_SENDER_ID, APP_ID} from '@env';
+import { signInWithRedirect, getRedirectResult, GoogleAuthProvider, getAuth, 
+  signInWithPopup, initializeAuth, createUserWithEmailAndPassword, onAuthStateChanged, sendEmailVerification  } from "firebase/auth";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { getReactNativePersistence } from '@firebase/auth/dist/rn/index.js';
+
+
 
 const firebaseConfig = {
-    apiKey: APIKEY,
-    authDomain: AUTH_DOMAIN,
-    projectId: PROJECT_ID,
-    storageBucket: STORAGE_BUCKET,
-    messagingSenderId: MESSAGING_SENDER_ID,
-    appId: APP_ID,
-    measurementId: MEASUREMENT_ID
+  apiKey: APIKEY,
+  authDomain: AUTH_DOMAIN,
+  projectId: PROJECT_ID,
+  storageBucket: STORAGE_BUCKET,
+  messagingSenderId: MESSAGING_SENDER_ID,
+  appId: APP_ID,
+  measurementId: MEASUREMENT_ID
+
+  
 };
+
+
+
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+const provider = new GoogleAuthProvider();
 
 
-export {db};
+const auth = getAuth(app);
+
+auth.setPersistence(getReactNativePersistence(AsyncStorage));
+
+
+
+
+function connectWithGoogle(){
+
+
+  signInWithRedirect(auth, provider)
+  .then((result) => {
+    console.log(result, " raspuns de succes!!!");
+  }).catch((error) => {
+    console.log("eroare de la google ", error, {auth, provider});
+  });
+
+
+  console.log('Am ajuns la final de functie ')
+
+
+  // createUserWithEmailAndPassword(auth, "okoo@ok.com", "password82347")
+  // .then((userCredential) => {
+  //   // Signed up 
+  //   const user = userCredential.user;
+  //   console.log(user, "acesta este userul");
+  // })
+  // .catch((error) => {
+  //   const errorCode = error.code;
+  //   const errorMessage = error.message;
+  //   console.log(error);
+  // });
+
+
+}
+
+
+// const auth = initializeAuth(app, {
+//   persistence: getReactNativePersistence(AsyncStorage),
+// });
+
+
+// function connectWithGoogle(){
+//   signInWithPopup(auth, provider)
+//   .then((result) => {
+//     console.log(result);
+//     const credential = GoogleAuthProvider.credentialFromResult(result);
+//     const token = credential.accessToken;
+//     const user = result.user;
+    
+//   }).catch((error) => {
+//     console.log("eroare de la google ", error, {auth, provider});
+//   });
+// }
+
+///////////////////////////////////////////////////////////////////////////////
+
+
+function createUserEmailPassword(){
+
+  createUserWithEmailAndPassword(auth, "habaconstantin45@gmail.com", "password82347")
+  .then((userCredential) => {
+    // Signed up 
+    const user = userCredential.user;
+    console.log(user, "acesta este userul");
+  })
+  .catch((error) => {
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    console.log(error);
+  });
+
+}
+
+
+function verifyEmail(){
+  sendEmailVerification(auth.currentUser)
+  .then(() => {
+    console.log('email-ul a fost trimis');
+  });
+}
+
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    
+    const uid = user.uid;
+    console.log('Avem user conectat cu uid: ' , uid);
+  } else {
+    console.log('nu avem user conectat')
+  }
+});
+
+
+
+
+///////////////////////////////////////////////////////////////////////////////
+
+export {db, auth,  connectWithGoogle, createUserEmailPassword, verifyEmail};
 
 
 /////////////////////////////////////////////////

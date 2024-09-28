@@ -279,18 +279,23 @@ const Program = (props) => {
 
 
   return (
-    <View>
-      {buttonHomePage ? 
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-        <Pressable style={{  backgroundColor: '#007BFF',  paddingVertical: 10,  paddingHorizontal: 20,  borderRadius: 5, marginTop: 200 }}>
-          <Text style={{ color: '#fff', fontSize: 16, fontWeight: 'bold'}}
-          onPress={()=>{props.navigation.navigate('Home'); setButtonHomePage(false)}}
-          >
-            Aici sa am eu butonul
-          </Text>
-        </Pressable>
+    <ScrollView>
+      {buttonHomePage ?
+      
+      
+
+      
+
+      <View>
+        
+        <View style={styles.buttonView} >
+          <Pressable  style={styles.buttonPress}  > 
+            <Text style={styles.text} onPress={()=>{props.navigation.navigate('Home'); setButtonHomePage(false)}}>
+              Create program</Text>
+          </Pressable>
+        </View>
       </View> :
-      <ScrollView>
+      <View>
 
 
         {!program?.length ? 
@@ -349,9 +354,9 @@ const Program = (props) => {
         })}
         </View>}
 
-      </ScrollView>
+      </View>
       }
-    </View>
+    </ScrollView>
   )
 }
 
@@ -361,7 +366,26 @@ export default Program
 const styles = StyleSheet.create({
   container: {
     marginTop: 300
-  }
+  }, 
+  buttonPress:{
+    backgroundColor: '#2196F3',
+    padding: 10,
+    borderRadius: 5,
+    height: 40,
+    width: 160,
+    marginBottom: 30
+  },
+  text: {
+    color: 'white',
+    textAlign: 'center',
+  },
+  buttonView: {
+    marginTop: 200,
+    flex: 1, 
+    alignItems: 'center',
+    justifyContent: 'center',
+    
+  }, 
 })
 
 
