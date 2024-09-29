@@ -10,8 +10,7 @@ import {db, auth} from './firebase.js';
 import { GluestackUIProvider } from "@gluestack-ui/themed"
 import { config } from "@gluestack-ui/config"
 import Layout from './Components/Layout.js';
-import { getRedirectResult, onAuthStateChanged } from 'firebase/auth';
-
+import {onAuthStateChanged} from 'firebase/auth';
 
 
 
@@ -21,45 +20,13 @@ const Stack = createNativeStackNavigator();
 
 const App = () => {
 
-
-
-
   onAuthStateChanged(auth, (user) => {
     if (user) {
-      
       const uid = user.uid;
       console.log('Avem user conectat cu uid: ' , uid);
     } else {
       console.log('nu avem user conectat')
     }
-  });
-
-
-  getRedirectResult(auth)
-  .then((result) => {
-    
-    // This gives you a Google Access Token. You can use it to access Google APIs.
-    const credential = GoogleAuthProvider.credentialFromResult(result);
-    
-    console.log({result, credential}, "raspuns get redirect result")
-    
-    if(!result)return;
-    const token = credential.accessToken;
-
-    // The signed-in user info.
-    const user = result.user;
-    // IdP data available using getAdditionalUserInfo(result)
-    // ...
-  }).catch((error) => {
-    console.log(error, " eroare la get redirect result")
-    // Handle Errors here.
-    const errorCode = error.code;
-    const errorMessage = error.message;
-    // The email of the user's account used.
-    const email = error.customData.email;
-    // The AuthCredential type that was used.
-    const credential = GoogleAuthProvider.credentialFromError(error);
-    // ...
   });
 
 
@@ -93,13 +60,13 @@ const App = () => {
       <NavigationContainer>
         <Stack.Navigator>
           <Stack.Screen
-            name="Home"
-            component={HomeScreen}
+            name="UserSettings"
+            component={UserSettingsScreen}
             options={{headerShown: false}}
           />
           <Stack.Screen
-            name="UserSettings"
-            component={UserSettingsScreen}
+            name="Home"
+            component={HomeScreen}
             options={{headerShown: false}}
           />
           <Stack.Screen
@@ -129,6 +96,5 @@ const styles = StyleSheet.create({})
 
 
 // iau pachet care ia detalii despre telefonul utilizatorului
-// adaug un buton care o sa ia de la inceput toata operatiunea de programare a vacantei
-// adaug un buton sa se regenereze programul de la open ai, si daca il vrea si il accepta atunci il bag in baza de date !!
+
 
