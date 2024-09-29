@@ -1,10 +1,11 @@
 import { initializeApp } from "firebase/app";
-import { getFirestore, collection, addDoc, doc,  getDoc, query, where, getDocs } from "firebase/firestore";
+import { getFirestore, collection, addDoc, doc, setDoc ,getDoc, query, where, getDocs } from "firebase/firestore";
 import {MEASUREMENT_ID, APIKEY, AUTH_DOMAIN, PROJECT_ID, STORAGE_BUCKET, MESSAGING_SENDER_ID, APP_ID} from '@env';
-import { getAuth, deleteUser, initializeAuth, createUserWithEmailAndPassword, onAuthStateChanged,
-   sendEmailVerification  } from "firebase/auth";
+import { getAuth, signOut,  deleteUser, initializeAuth, createUserWithEmailAndPassword, onAuthStateChanged,
+   sendEmailVerification, signInWithEmailAndPassword  } from "firebase/auth";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getReactNativePersistence } from '@firebase/auth/dist/rn/index.js';
+import { create } from "twrnc";
 
 
 
@@ -16,11 +17,7 @@ const firebaseConfig = {
   messagingSenderId: MESSAGING_SENDER_ID,
   appId: APP_ID,
   measurementId: MEASUREMENT_ID
-
-  
 };
-
-
 
 
 const app = initializeApp(firebaseConfig);
@@ -32,51 +29,88 @@ const auth = initializeAuth(app, {
 });
 
 
-
-
-function createUserEmailPassword(email, password){
+async function createUserEmailPassword(email, password, firstName, secondName){
 
   let rezFin = {};
-  createUserWithEmailAndPassword(auth, email, password)
-  .then((userCredential) => {
-    rezFin = {type: true, data: userCredential};
-  })
-  .catch((error) => {
-    rezFin = {type: false, err: error};
-  });
+  try{
+    const rez = await createUserWithEmailAndPassword(auth, email, password);
+    
+    const {uid, emailVerified} = rez.user;
+    const {createdAt} = rez.user.metadata;
+
+    // await addUserIntoDb(uid, emailVerified, createdAt, email, password, firstName, secondName);
+    
+    rezFin = {type: true, data: rez};
+  }catch(err){
+    rezFin = {type: false, err};
+  }
   return rezFin;
+}
 
+async function signInUserEmailPassword(email, password){
+  let rezFin = {};
+  try{
+    const rez = await signInWithEmailAndPassword(auth, email, password)
+    rezFin = {type: true, data: rez};
+  }catch(err){
+    rezFin = {type: false, err};
+  }
+  return rezFin; 
 }
 
 
-function deleteUser(){
+async function deleteTheUser(){
   const user = auth.currentUser;
+  let rezFin = {};
+  try{
+    const rez = await deleteUser(user);
+    rezFin = {type: true};
+  }catch(err){
+    rezFin = {type: false, err};
+  }
+  return rezFin;
+}
 
-  deleteUser(user).then(() => {
-    // User deleted.
-  }).catch((error) => {
-    // An error ocurred
-    // ...
-  });
-
+async function signOutUser(){
+  let rezFin = {};
+  
+  try{
+    const rez = await signOut(auth);
+    rezFin = {type: true};
+  }catch(err){
+    rezFin = {type: false, err};
+  }
+  return rezFin;
 }
 
 
-function verifyEmail(){
+async function verifyEmail(){
   sendEmailVerification(auth.currentUser)
   .then(() => {
     console.log('email-ul a fost trimis');
   });
 }
-
-
-
-
-
-
 ///////////////////////////////////////////////////////////////////////////////
 
-export {db, auth, createUserEmailPassword, verifyEmail};
+async function addUserIntoDb(uid, emailVerified, createdAt, email, password, firstName, secondName){
+
+  console.log({uid, emailVerified, createdAt, email, password, firstName, secondName});
+  try{
+    await setDoc(doc(db, "users", uid), {
+      uid, email, firstName, secondName, password, emailVerified, createdAt
+    });
+  }catch(err){
+    console.log(err, 'nu s a introdus nimic in baza de date')
+  }
+
+}
+
+
+
+
+
+
+export {db, auth, signOutUser, deleteTheUser, createUserEmailPassword, verifyEmail, signInUserEmailPassword};
 
 
 /////////////////////////////////////////////////

@@ -18,6 +18,10 @@ function formatDateFromMilliseconds(milliseconds) {
     return `${year}-${month}-${day}`;
 }
 
+function isValidEmail(email) {
+    const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    return emailPattern.test(email);
+}
 
 ////////////////////////////
 async function getDataFromAsyncStorage(key){
@@ -109,6 +113,6 @@ async function multiRemoveFromAsyncStorage(arrayOfKeys){
     return rezFinal;
 }
 
-export {removeItemFromAsyncStorage, getDataFromAsyncStorage, addDataToAsyncStorage,    multiRemoveFromAsyncStorage, multiSetFromAsyncStorage, 
+export {isValidEmail, removeItemFromAsyncStorage, getDataFromAsyncStorage, addDataToAsyncStorage,    multiRemoveFromAsyncStorage, multiSetFromAsyncStorage, 
     getAllKeysFromAsyncStorage, multiGetFromAsyncStorage,  formatDateFromMilliseconds,  address_function_api, address_function_fuzzy, 
     address_function_checkbox }

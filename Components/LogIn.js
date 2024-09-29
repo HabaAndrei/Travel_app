@@ -1,6 +1,9 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React, {useState, useEffect } from 'react'
-import { Input, InputField, InputIcon, InputSlot, VStack, Button, FormControl, Heading, EyeIcon, ButtonText, EyeOffIcon } from '@gluestack-ui/themed'
+import { Input, InputField, InputIcon, InputSlot, VStack, Button, FormControl, Heading, EyeIcon, ButtonText, 
+    EyeOffIcon } from '@gluestack-ui/themed'
+import {createUserEmailPassword, signInUserEmailPassword} from '../firebase.js'
+import {isValidEmail} from "../diverse.js"
 
 
 const LogIn = (props) => {
@@ -13,27 +16,38 @@ const LogIn = (props) => {
 
 
 
-    useEffect(()=>{
-        console.log(props.signInOrUp);
-    }, [props.signInOrUp])
-
-
-
-
-    function createAccout(){
-        if(!inputEmail || !inputPassword || !inputFirstName || !inputSecondName){
+    async function createAccout(){
+        if(!inputEmail || !inputPassword.input || !inputFirstName || !inputSecondName){
             props.addNotification('warning', "Please complete all inputs");
             return;
         }
 
-        
+        const rez = await createUserEmailPassword(inputEmail, inputPassword.input, inputFirstName, inputSecondName);
+        if(rez.type){
+            const user = rez.data;
+            console.log(user);
+        }else{
+            props.addNotification('error', "Unfortunately I could not create the account because: ");
+            console.log(rez.err);
+
+        }
     }
 
-    function logIn(){
-        if(!inputEmail || !inputPassword){
+    async function logIn(){
+        if(!inputEmail || !inputPassword.input){
             props.addNotification('warning', "Please complete all inputs");
             return;
         }
+
+        const rez = await signInUserEmailPassword(inputEmail, inputPassword.input);
+        if(rez.type){
+            const user = rez.data;
+        }else{
+            props.addNotification('error', "Unfortunately I could not log in  the account because: ");
+            console.log(rez.err);
+
+        }
+        
     }
 
   return (

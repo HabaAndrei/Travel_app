@@ -1,5 +1,5 @@
 import { StyleSheet} from 'react-native'
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Home from './Screens/Home.js';
@@ -20,35 +20,43 @@ const Stack = createNativeStackNavigator();
 
 const App = () => {
 
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      const uid = user.uid;
-      console.log('Avem user conectat cu uid: ' , uid);
-    } else {
-      console.log('nu avem user conectat')
-    }
-  });
+  const [user, setUser] = useState(false);
+
+  useEffect(()=>{
+
+    onAuthStateChanged(auth, (us) => {
+      if (us) {
+        setUser(us);
+        const uid = us.uid;
+        console.log('Avem user conectat cu uid: ' , uid);
+      } else {
+        setUser(false);
+        console.log('nu avem user conectat')
+      }
+    });
+
+  }, []);
 
 
   const HomeScreen = ({ navigation, route }) => (
-    <Layout  navigation={navigation} route={route}>
+    <Layout  navigation={navigation} route={route} user={user} setUser={setUser} >
       <Home/>
     </Layout>
   );
   
   const ProgramScreen = ({ navigation, route }) => (
-    <Layout  navigation={navigation} route={route} >
+    <Layout  navigation={navigation} route={route}  user={user} setUser={setUser}  >
       <Program/>
     </Layout>
   );
   const DailyProgramScreen = ({ navigation, route }) => (
-    <Layout  navigation={navigation} route={route} >
+    <Layout  navigation={navigation} route={route}  user={user} setUser={setUser}  >
       <DailyProgram/>
     </Layout>
   );
 
   const UserSettingsScreen = ({ navigation, route }) => (
-    <Layout  navigation={navigation} route={route} >
+    <Layout  navigation={navigation} route={route} user={user} setUser={setUser} >
       <UserSettings/>
     </Layout>
   );
@@ -90,8 +98,6 @@ const App = () => {
 export default App
 
 const styles = StyleSheet.create({})
-
-
 
 
 

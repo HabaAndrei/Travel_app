@@ -6,7 +6,7 @@ import ModalDelete from './ModalDelete';
 import uuid from 'react-native-uuid';
 
 
-const Layout = ({ children, navigation, route}) => {
+const Layout = ({ children, navigation, route, user, setUser}) => {
 
   const [modalDelete, setModalDelete] = useState(false);
   const [notification, setNotification] = useState([]);
@@ -42,6 +42,7 @@ const Layout = ({ children, navigation, route}) => {
     return React.Children.map(children, child => {
       return React.cloneElement(child, { 
         route, notification, setNotification, addNotification, areYouSureDeleting, navigation, 
+        user, setUser
       });
     });
   };
