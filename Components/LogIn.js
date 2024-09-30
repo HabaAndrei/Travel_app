@@ -1,9 +1,9 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React, {useState, useEffect } from 'react'
 import { Input, InputField, InputIcon, InputSlot, VStack, Button, FormControl, Heading, EyeIcon, ButtonText, 
-    EyeOffIcon } from '@gluestack-ui/themed'
+    EyeOffIcon, Card } from '@gluestack-ui/themed'
 import {createUserEmailPassword, signInUserEmailPassword} from '../firebase.js'
-import {isValidEmail} from "../diverse.js"
+import {isValidEmail, isValidPassword} from "../diverse.js"
 
 
 const LogIn = (props) => {
@@ -22,14 +22,22 @@ const LogIn = (props) => {
             return;
         }
 
+        if(!isValidEmail(inputEmail)){
+            props.addNotification('error', "The email address is not valid");
+            return;
+        }
+
+        if(!isValidPassword(inputPassword.input)){
+            props.addNotification('error', "The password must have at least seven characters, two of which must be numbers");
+            return;
+        }
+
         const rez = await createUserEmailPassword(inputEmail, inputPassword.input, inputFirstName, inputSecondName);
         if(rez.type){
             const user = rez.data;
-            console.log(user);
         }else{
             props.addNotification('error', "Unfortunately I could not create the account because: ");
             console.log(rez.err);
-
         }
     }
 
@@ -39,11 +47,16 @@ const LogIn = (props) => {
             return;
         }
 
+        if(!isValidEmail(inputEmail)){
+            props.addNotification('error', "The email address is not valid");
+            return;
+        }
+
         const rez = await signInUserEmailPassword(inputEmail, inputPassword.input);
         if(rez.type){
             const user = rez.data;
         }else{
-            props.addNotification('error', "Unfortunately I could not log in  the account because: ");
+            props.addNotification('error', "The email address or password is not visible");
             console.log(rez.err);
 
         }
@@ -51,10 +64,10 @@ const LogIn = (props) => {
     }
 
   return (
-    <View>
+    <View >
         {props.signInOrUp ? 
-        <View>
-            <FormControl  p="$4"  borderWidth="$1"  borderRadius="$lg"  borderColor="$borderLight300"  $dark-borderWidth="$1"   $dark-borderRadius="$lg"   $dark-borderColor="$borderDark800">
+        <View  style={{marginBottom: 50, margin: 20}} >
+            <Card p="$5" borderRadius="$lg"  m="$3" style={styles.shadow}>
                 <VStack space="xl">
                     <Heading color="$text900" lineHeight="$md">
                         {props.signInOrUp === "signup" ? "Create accout" :  "Log in"  }
@@ -104,8 +117,9 @@ const LogIn = (props) => {
                     </VStack>
 
                     <VStack space="xs">
-                        <Text color="$text500" lineHeight="$xs">
-                            Password
+                        <Text color="$text500" lineHeight="$xs"> 
+                            Password - 
+                            {props.signInOrUp === "signup" ? "The password must have at least seven characters, two of which must be numbers" : ""}
                         </Text>
                         <Input textAlign="center">
                             <InputField
@@ -135,7 +149,7 @@ const LogIn = (props) => {
                     
 
                 </VStack>
-            </FormControl>
+            </Card>
         </View>
 
         :<View></View>
@@ -146,4 +160,15 @@ const LogIn = (props) => {
 
 export default LogIn
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+    shadow:{
+        shadowColor: '#000',
+        shadowOffset: {
+          width: 0,
+          height: 2,
+        },
+        shadowOpacity: 0.5,
+        shadowRadius: 4,
+        elevation: 5,
+    },
+})

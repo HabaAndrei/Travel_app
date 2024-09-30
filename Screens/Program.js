@@ -1,6 +1,7 @@
 import { StyleSheet, View, ScrollView, TextInput, Pressable } from 'react-native'
 import React, {useState, useEffect} from 'react'
-import {address_function_api, formatDateFromMilliseconds, removeItemFromAsyncStorage, addDataToAsyncStorage, getDataFromAsyncStorage} from '../diverse.js';
+import {address_function_api, formatDateFromMilliseconds, removeItemFromAsyncStorage, addDataToAsyncStorage,
+  multiSetFromAsyncStorage, getDataFromAsyncStorage} from '../diverse.js';
 import { ArrowRightIcon, Spinner, Center, Card, Heading, Link, LinkText, Text, VStack, Divider, HStack, TrashIcon,RepeatIcon, CheckIcon,  Icon } from "@gluestack-ui/themed";
 import { useIsFocused } from '@react-navigation/native';
 import axios from 'axios';
@@ -30,19 +31,14 @@ const Program = (props) => {
     
     // if(!props?.route?.params)return;
 
+
+
     if(!props?.route?.params?.type){
       getProgramFromAsyncStorage();
       return;
     };
 
     const {from, to, city, country, checkbox, type} = props?.route?.params;
-
-
-    
-    // if(!props?.route?.params?.type){
-    //   console.log("il adaug ca nu exista type", props?.route?.params?.type)
-    //   addProgramToAsyncStorage();
-    // }
 
 
     
@@ -59,7 +55,6 @@ const Program = (props) => {
     if( props?.route?.params?.type === "getProgramAsync"){
       getProgramFromAsyncStorage();
     }
-
 
     // setProgram([...Object.values(prog.program)]);
 
@@ -205,9 +200,20 @@ const Program = (props) => {
   }};
   
 
+  async function regenerateProgram(){
+    
+    const rez = await getDataFromAsyncStorage("travelParameter");
+    if(!rez.type)return
+    let {method, from, to, city, country, newCheckbox} = rez.data;
+    setProgram([]);
+    getProgram( method, from, to, city, country, newCheckbox)
+
+  }
+
 
 
   async function getProgram( method, from, to, city, country, newCheckbox){
+    setButtonHomePage(false);
     axios.post(`${address_function_api}`, 
       {from, to, city, country, newCheckbox, method}
     ).then((data)=>{
@@ -215,7 +221,9 @@ const Program = (props) => {
       if(data.data.type){
         const values = Object.values(data.data.data);
         setProgram([...values]);
-        addDataToAsyncStorage('travelProgram', [...values]);
+        multiSetFromAsyncStorage([['travelProgram', [...values]], 
+          ["travelParameter", {method, from, to, city, country, newCheckbox}]]);
+        
       }else{
         console.log(data.data);
         props.addNotification("warning", "Unfortunately, we could not generate your program.")
@@ -247,6 +255,9 @@ const Program = (props) => {
           }
           return {...ob}
         })
+
+        addDataToAsyncStorage('travelProgram', updateDayProgram);
+      
         return [...updateDayProgram];
       })
     }
@@ -316,7 +327,7 @@ const Program = (props) => {
             <Divider  style={{ margin: 15 }}  orientation="vertical"  mx="$2.5"  bg="$emerald500"  h={25}  $dark-bg="$emerald400" />
 
             <HStack alignItems="center">
-              <Text onPress={()=>console.log('am apasat pe regenerate')} >Regenerate</Text>
+              <Text onPress={()=>regenerateProgram()} >Regenerate</Text>
               <Icon as={RepeatIcon} m="$2" w="$6" h="$6" />
             </HStack>
 
@@ -390,9 +401,7 @@ const styles = StyleSheet.create({
 
 
 
-
-// adaug buton de salvare sau respingere a excursiere
-
+// Salvez excursia in baza de date !!!
 
 
 

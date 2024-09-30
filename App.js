@@ -28,7 +28,6 @@ const App = () => {
       if (us) {
         setUser(us);
         const uid = us.uid;
-        console.log('Avem user conectat cu uid: ' , uid);
       } else {
         setUser(false);
         console.log('nu avem user conectat')
@@ -68,6 +67,11 @@ const App = () => {
       <NavigationContainer>
         <Stack.Navigator>
           <Stack.Screen
+            name="Program"
+            component={ProgramScreen}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
             name="UserSettings"
             component={UserSettingsScreen}
             options={{headerShown: false}}
@@ -75,11 +79,6 @@ const App = () => {
           <Stack.Screen
             name="Home"
             component={HomeScreen}
-            options={{headerShown: false}}
-          />
-          <Stack.Screen
-            name="Program"
-            component={ProgramScreen}
             options={{headerShown: false}}
           />
           <Stack.Screen
@@ -104,3 +103,10 @@ const styles = StyleSheet.create({})
 // iau pachet care ia detalii despre telefonul utilizatorului
 
 
+
+
+//Lucruri de imbunatati cu ai:
+
+//Nu este atent daca obiectivul functioneaza la orele pe care el mi le da
+//Imi alege obiective care sunt indepartate si nu are un tarseu benefic pentru utilizator 
+// Nu imi genereaza adresa exacta

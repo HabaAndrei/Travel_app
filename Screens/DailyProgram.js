@@ -79,13 +79,15 @@ const ModalDayProgram = (props) => {
             <Text fontSize="$sm" fontStyle="normal" fontWeight="$normal" lineHeight="$sm" mb="$2" sx={{ color: "$textLight700" }}>
               {ob.time}
             </Text>
-            <Text size="m" style={{ marginTop: 10 }}>
-              <Text bold={true}>Address: </Text> {ob.address}
-              <Text style={styles.buttonText} onPress={() => copyInClipboard(`${ob.address}`)}>
-                {' '}
-                Copy
-              </Text>
-            </Text>
+            {ob.address ? 
+              <Text size="m" style={{ marginTop: 10 }}>
+                <Text bold={true}>Address: </Text> {ob.address}
+                <Text style={styles.buttonText} onPress={() => copyInClipboard(`${ob.address}`)}>
+                  {' '}
+                  Copy
+                </Text>
+              </Text> : <Text></Text>
+            }
             <Text size="m" style={{ marginTop: 10 }}>
               <Text bold={true}>Info:</Text> {ob.info}
             </Text>

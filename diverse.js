@@ -23,6 +23,16 @@ function isValidEmail(email) {
     return emailPattern.test(email);
 }
 
+function isValidPassword(password) {
+    if (password.length < 7) {
+      return false;
+    }
+  
+    // Folosim o expresie regulată pentru a găsi toate cifrele din parolă
+    const digitCount = (password.match(/\d/g) || []).length;
+    return digitCount >= 2;
+  }
+
 ////////////////////////////
 async function getDataFromAsyncStorage(key){
     let rezFinal = {type: false, err:''};
@@ -48,6 +58,7 @@ async function addDataToAsyncStorage(key, data){
     } catch (error) {
         rezFinal = {type: false, err: error};
     }
+
     return rezFinal;
 }
 
@@ -90,13 +101,18 @@ async function multiGetFromAsyncStorage(arrayOfKeys){
 
 async function multiSetFromAsyncStorage(arrayOfArrays){
     // [['k1', 'val1'], ['k2', 'val2']]
+
+    const serializedArray = arrayOfArrays.map(([key, value]) => [key, JSON.stringify(value)]);
+
     let rezFinal = {type: false, err:''};
+    console.log(arrayOfArrays);
     try {
-        const data = await AsyncStorage.multiSet(arrayOfArrays);
+        const data = await AsyncStorage.multiSet(serializedArray);
         rezFinal = {type: true, data: data}
     } catch (error) {
         rezFinal = {type: false, err: error};
     }
+    console.log(rezFinal);
     return rezFinal;
 }
 
@@ -113,6 +129,6 @@ async function multiRemoveFromAsyncStorage(arrayOfKeys){
     return rezFinal;
 }
 
-export {isValidEmail, removeItemFromAsyncStorage, getDataFromAsyncStorage, addDataToAsyncStorage,    multiRemoveFromAsyncStorage, multiSetFromAsyncStorage, 
+export {isValidPassword, isValidEmail, removeItemFromAsyncStorage, getDataFromAsyncStorage, addDataToAsyncStorage,    multiRemoveFromAsyncStorage, multiSetFromAsyncStorage, 
     getAllKeysFromAsyncStorage, multiGetFromAsyncStorage,  formatDateFromMilliseconds,  address_function_api, address_function_fuzzy, 
     address_function_checkbox }
