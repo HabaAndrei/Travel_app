@@ -10,11 +10,8 @@ const Plans = (props) => {
     const [plans, setPlans] = useState([]);
 
     useEffect(()=>{
-        if(!isFocused)return;
-        console.log('se randeaza pagina', props.user.uid);
-
-        if(props.user.uid)getPlansFromDb(props.user.uid);
-
+        if(!isFocused || !props.user.uid)return;
+        getPlansFromDb(props.user.uid);
     }, [isFocused])
 
 
@@ -67,7 +64,7 @@ const Plans = (props) => {
                         <Divider orientation='vertical' bg='$trueGray300'/>
 
                         <Text size='xs' style={{ fontWeight: 'bold'}}>
-                            See full day
+                            See all trip
                         </Text>
                     </HStack>
 

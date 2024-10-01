@@ -48,10 +48,10 @@ const Home = (props) => {
     //   city: dataDestination.city, country: dataDestination.country, checkbox})
 
     ///////////////////////////////////////////////////////////
-    const from = '20-09-2024';
-    const to = '21-09-2024';
-    const city = 'Duabi';
-    const country = 'Emirates';
+    const from = '25-09-2024';
+    const to = '26-09-2024';
+    const city = 'Paris';
+    const country = 'France';
     const activities =  [
       { category: "Cultural exploration", selected: true },
       { category: "Historical tours", selected: true },
