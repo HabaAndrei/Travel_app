@@ -1,9 +1,10 @@
 import { StyleSheet, View, ScrollView, TextInput, Pressable } from 'react-native'
 import React, {useState, useEffect} from 'react'
 import {address_function_api, formatDateFromMilliseconds, removeItemFromAsyncStorage, addDataToAsyncStorage,
-  multiSetFromAsyncStorage, getDataFromAsyncStorage} from '../diverse.js';
+  multiSetFromAsyncStorage, getDataFromAsyncStorage, multiGetFromAsyncStorage, multiRemoveFromAsyncStorage} from '../diverse.js';
 import { ArrowRightIcon, Spinner, Center, Card, Heading, Link, LinkText, Text, VStack, Divider, HStack, TrashIcon,RepeatIcon, CheckIcon,  Icon } from "@gluestack-ui/themed";
-import { useIsFocused } from '@react-navigation/native';
+import { useIsFocused } from '@react-navigation/native'; 
+import {addProgramIntoDb} from '../firebase.js';
 import axios from 'axios';
 
 
@@ -16,7 +17,6 @@ const Program = (props) => {
   const isFocused = useIsFocused();
   const [program, setProgram] = useState([]);
   const [buttonHomePage, setButtonHomePage] = useState(false);
-
 
 
   useEffect(()=>{
@@ -41,6 +41,7 @@ const Program = (props) => {
     const {from, to, city, country, checkbox, type} = props?.route?.params;
 
 
+
     
     if(props?.route?.params?.type === "keepProgram")return;
 
@@ -61,10 +62,6 @@ const Program = (props) => {
   }, [isFocused]);
 
 
-  // async function addProgramToAsyncStorage(){
-  //   const data = await addDataToAsyncStorage('travelProgram', [...Object.values(prog.program)]);
-  //   console.log(data);
-  // }
 
   async function getProgramFromAsyncStorage(){
     const program = await getDataFromAsyncStorage("travelProgram");
@@ -75,7 +72,6 @@ const Program = (props) => {
       console.log('trebuie sa adaug eu butonul');
       setButtonHomePage(true);
     }
-    
   }
 
 
@@ -278,13 +274,42 @@ const Program = (props) => {
 
 
   function goToDailyProgram(obiect){
-
     props.navigation.navigate('DailyProgram', {data: obiect.data, index: obiect.index})
-
   }
 
 
 
+  async function saveProgramInDb(){
+    if(!props.user){
+      props.addNotification("error", "You must be logged in as a user to be able to save.");
+      return;
+    }
+    const rez = await multiGetFromAsyncStorage(["travelProgram", "travelParameter"]);
+    if(!rez.type){
+      props.addNotification("error", "Unfortunately we could not save the program for you")
+      console.log(rez.err);
+      return;
+    }
+    const travelProgram =   JSON.parse(rez.data[0][1]);
+    const travelParameter = JSON.parse(rez.data[1][1]);
+    const {city, country } = travelParameter;
+    const from = travelProgram[0].date;
+    const to = travelProgram[travelProgram.length - 1].date;
+    const programDaysString = JSON.stringify(travelProgram);
+    const uid = props.user.uid;
+    const rezAddInDb = await addProgramIntoDb(city, country, from , to, programDaysString, uid)
+    if(!rezAddInDb.type){
+      props.addNotification("error", "Unfortunately we could not save the program for you")
+      console.log(rezAddInDb.err);
+      return;
+    }
+
+    const rezDeleteAsyncStorage = await multiRemoveFromAsyncStorage(["travelProgram", "travelParameter"])
+    if(!rezDeleteAsyncStorage.type)return;
+    setProgram([]);
+    setButtonHomePage(true);
+    props.navigation.navigate('Plans');
+  }
 
 
 
@@ -334,7 +359,7 @@ const Program = (props) => {
             <Divider  style={{ margin: 15 }}  orientation="vertical"  mx="$2.5"  bg="$indigo500"  h={25}  $dark-bg="$indigo400"/>
 
             <HStack alignItems="center">
-              <Text onPress={()=>console.log('Am apasat pe save')} >Save</Text>
+              <Text onPress={()=>saveProgramInDb()} >Save</Text>
               <Icon as={CheckIcon} m="$2" w="$6" h="$6" />
             </HStack>
           </HStack>
@@ -401,8 +426,7 @@ const styles = StyleSheet.create({
 
 
 
-// Salvez excursia in baza de date !!!
-
+// DE VERIFICAT CE SE INTAMPLA CU PROGRAMUL CARE VINE DAR EU NU MAI SUNT PE PAGINA 
 
 
 

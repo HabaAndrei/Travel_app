@@ -38,7 +38,7 @@ async function createUserEmailPassword(email, password, firstName, secondName){
     const {uid, emailVerified} = rez.user;
     const {createdAt} = rez.user.metadata;
 
-    // await addUserIntoDb(uid, emailVerified, createdAt, email, password, firstName, secondName);
+    await addUserIntoDb(uid, emailVerified, createdAt, email, password, firstName, secondName);
     
     rezFin = {type: true, data: rez};
   }catch(err){
@@ -90,11 +90,10 @@ async function verifyEmail(){
     console.log('email-ul a fost trimis');
   });
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 
 async function addUserIntoDb(uid, emailVerified, createdAt, email, password, firstName, secondName){
-
-  console.log({uid, emailVerified, createdAt, email, password, firstName, secondName});
   try{
     await setDoc(doc(db, "users", uid), {
       uid, email, firstName, secondName, password, emailVerified, createdAt
@@ -102,52 +101,52 @@ async function addUserIntoDb(uid, emailVerified, createdAt, email, password, fir
   }catch(err){
     console.log(err, 'nu s a introdus nimic in baza de date')
   }
+}
+
+
+async function addProgramIntoDb(city, country, from , to, programDaysString, uid){
+
+  let rezFin = {type: true};
+  try{
+    await addDoc(collection(db, "programs"), {city, country, from , to, programDaysString, uid});
+  }catch(err){
+    rezFin = {type: false, err}
+  }
+  return rezFin;
+}
+
+async function getPlansFromDbWithUid(uid){
+
+  let rezFin = {type: true};
+  try{
+    const q = query(collection(db, "programs"), where("uid", "==", uid));
+    const querySnapshot = await getDocs(q);
+    let programs = [];
+    querySnapshot.forEach((doc) => {
+      programs.push(doc.data());
+    });
+    rezFin = {type:true, data: programs};
+  }catch(err){
+    rezFin = {type: false, err}
+  }
+  return rezFin;
 
 }
 
 
 
+export {db, auth, signOutUser, deleteTheUser, addProgramIntoDb, createUserEmailPassword, verifyEmail, signInUserEmailPassword, 
+  getPlansFromDbWithUid
+};
 
 
 
-export {db, auth, signOutUser, deleteTheUser, createUserEmailPassword, verifyEmail, signInUserEmailPassword};
-
-
-/////////////////////////////////////////////////
-
-  
-  // async function makeAction(){
-  //   console.log('se executa!!!!!!!')
-
-  //   for(let i = 0 ; i <countries.length; i++){
-  //     let ob = countries[i];
-  //     let name = ob['name'];
-  //     let capital = ob['capital'];
-  //     try{
-  //         const docRef = await addDoc(collection(db, "travel_destinations"), {
-  //           country: name , capital
-  //         });
-  //         console.log(ob.id);
-  //       }catch(err){
-  //         console.log(err);
-  //       }
-
-  //   }
-    // try{
-    //   const docRef = await addDoc(collection(db, "test"), {
-    //     first: "Ada",
-    //   });
-    //   console.log(docRef);
-    // }catch(err){
-    //   console.log(err);
-    // }
-    
-  // }
 
 
   async function getData(){
     // const docRef = doc(db, "travel_destinations", '1GTlNqmma2kgfSuaN3B1');
     // const docSnap = await getDoc(docRef);
+    
     
     // if (docSnap.exists()) {
     //   console.log("Document data:", docSnap.data());

@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import { View, Text, StyleSheet, ScrollView, Pressable } from 'react-native';
-import { Icon, GlobeIcon, CalendarDaysIcon, SettingsIcon } from "@gluestack-ui/themed";
+import { Icon, GlobeIcon, CalendarDaysIcon, SettingsIcon, MenuIcon } from "@gluestack-ui/themed";
 import Notification from './Notification';
 import ModalDelete from './ModalDelete';
 import uuid from 'react-native-uuid';
@@ -82,6 +82,11 @@ const Layout = ({ children, navigation, route, user, setUser}) => {
             <Text style={styles.pressableText}>Settings</Text>
           </Pressable>
          
+          <Pressable style={styles.pressable} onPress={() => navigation.navigate('Plans')} >
+            <Icon as={MenuIcon} m="$2" w="$5" h="$5" color="white" />
+            <Text style={styles.pressableText}>Plans</Text>
+          </Pressable>
+
         </ScrollView>
       </View>
     </View>

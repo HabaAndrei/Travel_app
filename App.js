@@ -6,6 +6,7 @@ import Home from './Screens/Home.js';
 import Program from './Screens/Program.js';
 import DailyProgram from './Screens/DailyProgram.js';
 import UserSettings from './Screens/UserSettings.js';
+import Plans from './Screens/Plans.js';
 import {db, auth} from './firebase.js';
 import { GluestackUIProvider } from "@gluestack-ui/themed"
 import { config } from "@gluestack-ui/config"
@@ -60,12 +61,23 @@ const App = () => {
     </Layout>
   );
 
+  const PlansScreen = ({ navigation, route }) => (
+    <Layout  navigation={navigation} route={route} user={user} setUser={setUser} >
+      <Plans/>
+    </Layout>
+  );
+
 
   return (
 
     <GluestackUIProvider config={config}>
       <NavigationContainer>
         <Stack.Navigator>
+          <Stack.Screen
+            name="Plans"
+            component={PlansScreen}
+            options={{headerShown: false}}
+          />
           <Stack.Screen
             name="Program"
             component={ProgramScreen}
@@ -110,3 +122,7 @@ const styles = StyleSheet.create({})
 //Nu este atent daca obiectivul functioneaza la orele pe care el mi le da
 //Imi alege obiective care sunt indepartate si nu are un tarseu benefic pentru utilizator 
 // Nu imi genereaza adresa exacta
+
+
+
+
