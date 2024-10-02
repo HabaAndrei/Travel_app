@@ -1,8 +1,8 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, View, Pressable } from 'react-native'
 import React, {useState, useEffect } from 'react'
 import { Input, InputField, InputIcon, InputSlot, VStack, Button, FormControl, Heading, EyeIcon, ButtonText, 
     EyeOffIcon, Card } from '@gluestack-ui/themed'
-import {createUserEmailPassword, signInUserEmailPassword} from '../firebase.js'
+import {createUserEmailPassword, signInUserEmailPassword, forgotPassword} from '../firebase.js'
 import {isValidEmail, isValidPassword} from "../diverse.js"
 
 
@@ -12,7 +12,6 @@ const LogIn = (props) => {
     const [inputPassword, setInputPassword] = useState({ input: '', showState: false });
     const [inputFirstName, setInputFirstName] = useState('');
     const [inputSecondName, setInputSecondName] = useState('');
-
 
 
 
@@ -36,7 +35,11 @@ const LogIn = (props) => {
         if(rez.type){
             const user = rez.data;
         }else{
-            props.addNotification('error', "Unfortunately I could not create the account because: ");
+            if(rez.err?.message?.includes("auth/email-already-in-use")){
+                props.addNotification('error',"This email address is already in use");
+            }else{
+                props.addNotification('error', "Unfortunately I could not create the account ");
+            }
             console.log(rez.err);
         }
     }
@@ -60,7 +63,22 @@ const LogIn = (props) => {
             console.log(rez.err);
 
         }
-        
+    }
+
+    
+    async function forgotThePassword(){
+        if(!isValidEmail(inputEmail)){
+            props.addNotification('error', "The email address is not valid");
+            return;
+        }
+
+        const rez = await forgotPassword(inputEmail);
+        if(rez.type){
+            props.addNotification('success', "Password reset email has been sent");
+        }else{
+            props.addNotification('error', "Sending the password reset email did not work");
+            console.log(rez.err);
+        }
     }
 
   return (
@@ -68,6 +86,27 @@ const LogIn = (props) => {
         {props.signInOrUp ? 
         <View  style={{marginBottom: 50, margin: 20}} >
             <Card p="$5" borderRadius="$lg"  m="$3" style={styles.shadow}>
+
+                {props.isForgotPassword ? 
+                <VStack space="xs">
+    
+                    <Text color="$text500" lineHeight="$xs">
+                        Write the email to which you want to reset the password
+                    </Text>
+                    <Input>
+                        <InputField
+                        type="text"
+                        value={inputEmail}
+                        onChangeText={(text) => setInputEmail(text)}
+                        />
+                    </Input>
+
+                    <Button ml="auto" >
+                        <ButtonText color="$white" onPress={forgotThePassword} >Send email</ButtonText>
+                    </Button>
+                </VStack>
+
+                :    
                 <VStack space="xl">
                     <Heading color="$text900" lineHeight="$md">
                         {props.signInOrUp === "signup" ? "Create accout" :  "Log in"  }
@@ -137,18 +176,21 @@ const LogIn = (props) => {
                     </VStack>
 
                     
-                    {props.signInOrUp === "signup" ?
-                    <Button ml="auto" >
-                        <ButtonText color="$white" onPress={createAccout} > Create</ButtonText>
+                    <Pressable onPress={()=>props.setIsForgotPassword(true)}>
+                        <Text style={{ color: 'blue', textDecorationLine: 'underline', marginTop: 10 }}>
+                            Forgot your password? Click here
+                        </Text>
+                    </Pressable>
+
+                    <Button ml="auto">
+                        <ButtonText color="$white" onPress={props.signInOrUp === "signup" ? createAccout : logIn}>
+                            {props.signInOrUp === "signup" ? "Create" : "Log in"}
+                        </ButtonText>
                     </Button>
-                    :
-                    <Button ml="auto" >
-                        <ButtonText color="$white" onPress={logIn} >Log in</ButtonText>
-                    </Button>
-                    }
                     
 
                 </VStack>
+                }
             </Card>
         </View>
 

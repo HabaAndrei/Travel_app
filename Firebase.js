@@ -2,7 +2,7 @@ import { initializeApp } from "firebase/app";
 import { getFirestore, collection, addDoc, doc, setDoc ,getDoc, query, where, getDocs } from "firebase/firestore";
 import {MEASUREMENT_ID, APIKEY, AUTH_DOMAIN, PROJECT_ID, STORAGE_BUCKET, MESSAGING_SENDER_ID, APP_ID} from '@env';
 import { getAuth, signOut,  deleteUser, initializeAuth, createUserWithEmailAndPassword, onAuthStateChanged,
-   sendEmailVerification, signInWithEmailAndPassword  } from "firebase/auth";
+   sendEmailVerification, signInWithEmailAndPassword, sendPasswordResetEmail  } from "firebase/auth";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getReactNativePersistence } from '@firebase/auth/dist/rn/index.js';
 import { create } from "twrnc";
@@ -84,6 +84,18 @@ async function signOutUser(){
 }
 
 
+async function forgotPassword(email){
+  let rezFin = {};
+  try{
+    const rez = await sendPasswordResetEmail(auth, email)
+    rezFin = {type:true};
+  }catch(err){
+    rezFin = {type: false, err};
+  }
+  return rezFin; 
+}
+
+
 async function verifyEmail(){
   sendEmailVerification(auth.currentUser)
   .then(() => {
@@ -96,7 +108,7 @@ async function verifyEmail(){
 async function addUserIntoDb(uid, emailVerified, createdAt, email, password, firstName, secondName){
   try{
     await setDoc(doc(db, "users", uid), {
-      uid, email, firstName, secondName, password, emailVerified, createdAt
+      uid, email, firstName, secondName, password, emailVerified, createdAt, plan: "standard"
     });
   }catch(err){
     console.log(err, 'nu s a introdus nimic in baza de date')
@@ -136,7 +148,7 @@ async function getPlansFromDbWithUid(uid){
 
 
 export {db, auth, signOutUser, deleteTheUser, addProgramIntoDb, createUserEmailPassword, verifyEmail, signInUserEmailPassword, 
-  getPlansFromDbWithUid
+  getPlansFromDbWithUid, forgotPassword
 };
 
 

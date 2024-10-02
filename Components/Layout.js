@@ -82,10 +82,12 @@ const Layout = ({ children, navigation, route, user, setUser}) => {
             <Text style={styles.pressableText}>Settings</Text>
           </Pressable>
          
+          {user ?
           <Pressable style={styles.pressable} onPress={() => navigation.navigate('Plans')} >
             <Icon as={MenuIcon} m="$2" w="$5" h="$5" color="white" />
             <Text style={styles.pressableText}>Plans</Text>
-          </Pressable>
+          </Pressable> : <Text></Text>
+          }
 
         </ScrollView>
       </View>

@@ -7,6 +7,7 @@ import {signOutUser, deleteTheUser} from '../firebase.js';
 const UserSettings = (props) => {
 
   const [signInOrUp, setSignInOrUp] = useState('');
+  const [isForgotPassword, setIsForgotPassword] = useState(false);
 
   
   async function signOut(){
@@ -33,15 +34,15 @@ const UserSettings = (props) => {
       props.addNotification('error', "Unfortunately, we could not delete the account");
       return;
     }
-
   }
+
  
   return (
     <ScrollView style={{marginTop: 20}} >
 
 
       <LogIn addNotification={props.addNotification} signInOrUp={signInOrUp} setSignInOrUp={setSignInOrUp} 
-        user={props.user} setUser={props.setUser}
+        user={props.user} setUser={props.setUser} isForgotPassword={isForgotPassword} setIsForgotPassword={setIsForgotPassword}
       />
     
       
@@ -50,11 +51,11 @@ const UserSettings = (props) => {
         !props.user ?
         <VStack space="2xl">  
           <HStack  px="$3"  h="$8"  rounded="$sm"  borderWidth="$2"  borderColor="$backgroundLight300"  alignItems="center"  justifyContent="center"   $dark-borderColor="$backgroundDark700"  >
-            <Button onPress={()=>setSignInOrUp("signup")} variant="link" size="xl">
+            <Button onPress={()=>{setSignInOrUp("signup"); setIsForgotPassword(false);}} variant="link" size="xl">
               <ButtonText>Create accout</ButtonText>
             </Button>
             <Divider orientation="vertical" h="50%" mx="$2.5" style={{margin: 20}} />
-            <Button  onPress={()=>setSignInOrUp("signin")} variant="link" size="xl">
+            <Button  onPress={()=>{setSignInOrUp("signin"); setIsForgotPassword(false)}} variant="link" size="xl">
               <ButtonText>Log in</ButtonText>
             </Button>          
           </HStack>
@@ -74,6 +75,8 @@ const UserSettings = (props) => {
         }
 
       </View>
+
+
 
 
     </ScrollView>
