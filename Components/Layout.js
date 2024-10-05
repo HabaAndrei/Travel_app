@@ -4,9 +4,11 @@ import { Icon, GlobeIcon, CalendarDaysIcon, SettingsIcon, MenuIcon } from "@glue
 import Notification from './Notification';
 import ModalDelete from './ModalDelete';
 import uuid from 'react-native-uuid';
+import LogIn from '../Screens/LogIn.js';
+import * as Updates from 'expo-updates';
 
 
-const Layout = ({ children, navigation, route, user, setUser}) => {
+const Layout = ({ children, navigation, route, user, setUser, setRefreshUser}) => {
 
   const [modalDelete, setModalDelete] = useState(false);
   const [notification, setNotification] = useState([]);
@@ -19,6 +21,14 @@ const Layout = ({ children, navigation, route, user, setUser}) => {
       return [...prev, {id: uuid.v4().slice(0, 5), type, mes}];
     })
   }
+
+  async function refreshApp(){
+    try {
+      await Updates.reloadAsync(); 
+    } catch (err) {
+      console.log('Eroare la reincarcarea aplicatiei: ', err);
+    }
+  };
 
 
   async function areYouSureDeleting() {
@@ -42,7 +52,7 @@ const Layout = ({ children, navigation, route, user, setUser}) => {
     return React.Children.map(children, child => {
       return React.cloneElement(child, { 
         route, notification, setNotification, addNotification, areYouSureDeleting, navigation, 
-        user, setUser
+        user, setUser, setRefreshUser
       });
     });
   };
@@ -55,11 +65,20 @@ const Layout = ({ children, navigation, route, user, setUser}) => {
 
       <Notification  notification={notification} setNotification={setNotification}  />
 
-      <View style={styles.content}>
-    
-        {renderChildrenWithProps()}
-      </View>
+      {user?.emailVerified ? 
+      
+        <View style={styles.content}>
+      
+          {renderChildrenWithProps()}
+        </View> 
+        : 
+        <LogIn   user={user} setUser={setUser} addNotification={addNotification} 
+          areYouSureDeleting={areYouSureDeleting}  setRefreshUser={setRefreshUser} />
+      }
 
+
+     {user?.emailVerified ?  
+          
       <View style={styles.footerContainer}>
         <ScrollView 
           horizontal={true} 
@@ -82,15 +101,14 @@ const Layout = ({ children, navigation, route, user, setUser}) => {
             <Text style={styles.pressableText}>Settings</Text>
           </Pressable>
          
-          {user ?
           <Pressable style={styles.pressable} onPress={() => navigation.navigate('Plans')} >
             <Icon as={MenuIcon} m="$2" w="$5" h="$5" color="white" />
             <Text style={styles.pressableText}>Plans</Text>
-          </Pressable> : <Text></Text>
-          }
+          </Pressable> 
 
         </ScrollView>
-      </View>
+      </View> : <View/> 
+      }
     </View>
   );
 };

@@ -85,13 +85,24 @@ async function getAllKeysFromAsyncStorage(){
 }
 
 
+
+async function deleteAllFromAsyncStorage(){
+    let rezFinal = {type: false, err:''};
+    try {
+        await AsyncStorage.clear();
+        rezFinal = {type: true}
+    } catch (error) {
+        rezFinal = {type: false, err: error};
+    }
+    return rezFinal;
+}
+
+
 async function multiGetFromAsyncStorage(arrayOfKeys){
     let rezFinal = {type: false, err:''};
     try {
         const data = await AsyncStorage.multiGet(arrayOfKeys);
         rezFinal = {type: true, data: data}
-        console.log(rezFinal)
-
     } catch (error) {
         rezFinal = {type: false, err: error};
     }
@@ -105,14 +116,12 @@ async function multiSetFromAsyncStorage(arrayOfArrays){
     const serializedArray = arrayOfArrays.map(([key, value]) => [key, JSON.stringify(value)]);
 
     let rezFinal = {type: false, err:''};
-    console.log(arrayOfArrays);
     try {
         const data = await AsyncStorage.multiSet(serializedArray);
         rezFinal = {type: true, data: data}
     } catch (error) {
         rezFinal = {type: false, err: error};
     }
-    console.log(rezFinal);
     return rezFinal;
 }
 
@@ -130,5 +139,5 @@ async function multiRemoveFromAsyncStorage(arrayOfKeys){
 }
 
 export {isValidPassword, isValidEmail, removeItemFromAsyncStorage, getDataFromAsyncStorage, addDataToAsyncStorage,    multiRemoveFromAsyncStorage, multiSetFromAsyncStorage, 
-    getAllKeysFromAsyncStorage, multiGetFromAsyncStorage,  formatDateFromMilliseconds,  address_function_api, address_function_fuzzy, 
+    getAllKeysFromAsyncStorage, multiGetFromAsyncStorage,  formatDateFromMilliseconds,  deleteAllFromAsyncStorage, address_function_api, address_function_fuzzy, 
     address_function_checkbox }

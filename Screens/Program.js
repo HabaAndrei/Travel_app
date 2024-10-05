@@ -85,7 +85,7 @@ const Program = (props) => {
           ["travelParameter", {method, from, to, city, country, newCheckbox}]]);
         
       }else{
-        console.log("eroare la functia ", data.data);
+        console.log("eroare la functia getProgram ", data.data);
         props.addNotification("warning", "Unfortunately, we could not generate your program.")
       }       
     }).catch((err)=>{
@@ -181,9 +181,6 @@ const Program = (props) => {
   return (
     <ScrollView>
       {buttonHomePage ?
-      
-      
-
       
 
       <View>

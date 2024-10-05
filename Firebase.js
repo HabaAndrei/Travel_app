@@ -5,7 +5,6 @@ import { getAuth, signOut,  deleteUser, initializeAuth, createUserWithEmailAndPa
    sendEmailVerification, signInWithEmailAndPassword, sendPasswordResetEmail  } from "firebase/auth";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getReactNativePersistence } from '@firebase/auth/dist/rn/index.js';
-import { create } from "twrnc";
 
 
 
@@ -35,11 +34,11 @@ async function createUserEmailPassword(email, password, firstName, secondName){
   try{
     const rez = await createUserWithEmailAndPassword(auth, email, password);
     
-    const {uid, emailVerified} = rez.user;
+    const {uid} = rez.user;
     const {createdAt} = rez.user.metadata;
 
-    await addUserIntoDb(uid, emailVerified, createdAt, email, password, firstName, secondName);
-    
+    await addUserIntoDb(uid, createdAt, email, password, firstName, secondName);
+
     rezFin = {type: true, data: rez};
   }catch(err){
     rezFin = {type: false, err};
@@ -97,18 +96,24 @@ async function forgotPassword(email){
 
 
 async function verifyEmail(){
-  sendEmailVerification(auth.currentUser)
-  .then(() => {
-    console.log('email-ul a fost trimis');
-  });
+  let rezFin = {};
+  try{
+    await sendEmailVerification(auth.currentUser);
+    rezFin = {type:true};
+  }catch(err){
+    rezFin = {type:false, err}
+  }
+  return rezFin;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
-async function addUserIntoDb(uid, emailVerified, createdAt, email, password, firstName, secondName){
+async function addUserIntoDb(uid, createdAt, email, password, firstName, secondName){
+  
+  console.log({uid, createdAt, email, password, firstName, secondName});
   try{
     await setDoc(doc(db, "users", uid), {
-      uid, email, firstName, secondName, password, emailVerified, createdAt, plan: "standard"
+      uid, email, firstName, secondName, password, createdAt, plan: "standard"
     });
   }catch(err){
     console.log(err, 'nu s a introdus nimic in baza de date')

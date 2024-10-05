@@ -27,6 +27,7 @@
     "expo": "^51.0.34",
     "expo-file-system": "~17.0.1",
     "expo-status-bar": "~1.12.1",
+    "expo-updates": "^0.25.26",
     "firebase": "^10.3.0",
     "fuse.js": "^7.0.0",
     "metro-react-native-babel-preset": "^0.77.0",
