@@ -37,6 +37,8 @@ const LogIn = (props) => {
         const rez = await createUserEmailPassword(inputEmail, inputPassword.input, inputFirstName, inputSecondName);
         if(rez.type){
             const user = rez.data;
+            sendEmailVerification();
+            
         }else{
             if(rez.err?.message?.includes("auth/email-already-in-use")){
                 props.addNotification('error',"This email address is already in use");
@@ -86,9 +88,11 @@ const LogIn = (props) => {
 
 
     async function sendEmailVerification(){
-        if(!props.user)return;
+        console.log('s a apelat functia ca s-a trimis email')
         const rez = await verifyEmail();
+        console.log(rez, '    oare s a trimis emai-ul de confimare, de ce nu apare pe pagina');
         if(rez.type){
+            console.log('a intrat aici in if si se afiseaza notificarea')
           props.addNotification("success" , "Confirm on the email address that this account is valid");
         }else{
           console.log(rez.err)
@@ -127,11 +131,7 @@ const LogIn = (props) => {
     <ScrollView>
         {props.user ? 
         <View>
-            <Button  onPress={sendEmailVerification}>
-                <ButtonText>
-                    Email verify
-                </ButtonText>
-            </Button>
+            
 
             <Button  onPress={()=>{
                 console.log('se face reload la user');

@@ -39,7 +39,7 @@ const Plans = (props) => {
   return (
     <ScrollView>
       {
-        plans.length ? 
+        !plans.length ? 
         <View>
 
             <VStack space='lg' p='$12' >
@@ -105,7 +105,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#2196F3',
         padding: 10,
         borderRadius: 5,
-        height: 40,
+        height: 50,
         width: 160,
         marginBottom: 30
     },

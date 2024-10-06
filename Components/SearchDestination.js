@@ -44,7 +44,7 @@ const SearchDestination = (props) => {
       
       <Image 
       style={{height: 150, width: 320, marginTop:10, marginBottom:10}}
-      source={require('../img/europa.png')}      
+        source={require('../img/europa.png')} 
       />
 
       <TextInput

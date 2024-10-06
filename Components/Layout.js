@@ -17,6 +17,7 @@ const Layout = ({ children, navigation, route, user, setUser, setRefreshUser}) =
   
 
   function addNotification(type, mes){
+    console.log('se apeleaza si functia mama din layout de notificare')
     setNotification((prev)=>{
       return [...prev, {id: uuid.v4().slice(0, 5), type, mes}];
     })

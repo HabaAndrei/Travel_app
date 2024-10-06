@@ -206,7 +206,7 @@ const Program = (props) => {
           
           <HStack h="$10" justifyContent="center" alignItems="center">
             <HStack alignItems="center"  >
-              <Text  onPress={()=>deleteAllProgram()} >Delete</Text>
+              <Text  onPress={()=>{deleteAllProgram()}} >Delete</Text>
               <Icon as={TrashIcon} m="$2" w="$6" h="$6" />
             </HStack>
 
@@ -231,7 +231,7 @@ const Program = (props) => {
               <Text fontSize="$sm"  fontStyle="normal"  fontFamily="$heading"  fontWeight="$normal"  lineHeight="$sm"  mb="$2"  sx={{  color: "$textLight700" }} >
                 {'Day' + ob.day + " | " } {ob.date}  
               </Text>
-              <Pressable onPress={()=>deleteDayFromProgram(index)} >
+              <Pressable onPress={()=>{deleteDayFromProgram(index)}} >
                 <Icon as={TrashIcon} m="$2" w="$6" h="$6" />
               </Pressable>
             </HStack>

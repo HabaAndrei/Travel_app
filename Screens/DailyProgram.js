@@ -49,7 +49,6 @@ const ModalDayProgram = (props) => {
       const rez = await addDataToAsyncStorage("travelProgram", newProgram);
       props.navigation.navigate('Program', {type: "getProgramAsync"});
     }
-
   }
 
   function pressOnCancel(){
@@ -71,7 +70,7 @@ const ModalDayProgram = (props) => {
               <Heading mb="$1" size="md">
                 {ob.place}
               </Heading>
-              <Pressable onPress={() => deleteActivity(index)}>
+              <Pressable onPress={() => {deleteActivity(index)}}>
                 <Icon as={TrashIcon} m="$2" w="$6" h="$6" />
               </Pressable>
             </HStack>

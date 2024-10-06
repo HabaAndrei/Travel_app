@@ -42,6 +42,10 @@ const App = () => {
   }
 
 
+  useEffect(()=>{
+    reloadUser();
+  }, [refreshUser])
+
   const HomeScreen = ({ navigation, route }) => (
     <Layout  navigation={navigation} route={route} user={user} setUser={setUser}  setRefreshUser={setRefreshUser} >
       <Home/>
