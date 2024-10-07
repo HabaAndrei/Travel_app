@@ -152,7 +152,7 @@ const LogIn = (props) => {
         <View >
             {signInOrUp ? 
             <View  style={{marginBottom: 50, margin: 20}} >
-                <Card p="$5" borderRadius="$lg"  m="$3" style={styles.shadow}>
+                <Card p="$5" borderRadius="$lg"  m="$3" style={styles.shadow} maxWidth={400} >
 
                     {isForgotPassword ? 
                 

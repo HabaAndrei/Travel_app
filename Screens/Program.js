@@ -14,6 +14,7 @@ const Program = (props) => {
   // getProgramAsync => iau date din async storage 
   // keepProgram => pastram programul din useState
 
+  
   const isFocused = useIsFocused();
   const [program, setProgram] = useState([]);
   const [buttonHomePage, setButtonHomePage] = useState(false);
@@ -191,7 +192,8 @@ const Program = (props) => {
               Create program</Text>
           </Pressable>
         </View>
-      </View> :
+      </View> 
+      :
       <View>
 
 
@@ -226,7 +228,7 @@ const Program = (props) => {
           </HStack>
 
         {program?.map((ob, index)=>{
-          return  <Card  key={index}  p="$5" borderRadius="$lg" maxWidth={360} m="$3">
+          return  <Card  key={index}  p="$5" borderRadius="$lg" maxWidth={400} m="$3">
             <HStack justifyContent="space-between" alignItems="center">
               <Text fontSize="$sm"  fontStyle="normal"  fontFamily="$heading"  fontWeight="$normal"  lineHeight="$sm"  mb="$2"  sx={{  color: "$textLight700" }} >
                 {'Day' + ob.day + " | " } {ob.date}  

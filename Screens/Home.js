@@ -82,7 +82,7 @@ const Home = (props) => {
   return (
     <ScrollView  >
 
-      <Card p="$5" borderRadius="$lg"  m="$3" style={styles.shadow}>
+      <Card p="$5" borderRadius="$lg"  m="$3" maxWidth={400} style={styles.shadow}>
         <Heading size="md" fontFamily="$heading" mb="$4">
           Where?
         </Heading>
@@ -107,7 +107,7 @@ const Home = (props) => {
 
 
       <View style={{alignItems: 'center'}}>
-        <Card  style={styles.shadow} size="md" variant="elevated" m="$3"  >
+        <Card  style={styles.shadow} size="md" variant="elevated" m="$3" maxWidth={400} >
           <View style={styles.row}>
             <View style={styles.buttonContainer}>
               {dateFrom ? (

@@ -65,7 +65,7 @@ const ModalDayProgram = (props) => {
         </View>
 
         {dailyProgram?.data?.activities?.map((ob, index) => (
-          <Card key={index} p="$5" borderRadius="$lg" maxWidth={360} m="$3">
+          <Card key={index} p="$5" borderRadius="$lg" maxWidth={400} m="$3">
             <HStack justifyContent="space-between" alignItems="center">
               <Heading mb="$1" size="md">
                 {ob.place}
