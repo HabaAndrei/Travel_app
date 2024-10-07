@@ -3,6 +3,7 @@ import React, {useState, useEffect} from 'react'
 import { useIsFocused } from '@react-navigation/native'; 
 import {address_function_api, getDataFromAsyncStorage, addDataToAsyncStorage, multiSetFromAsyncStorage} from '../diverse';
 import axios from 'axios';
+import { Card, HStack, Heading, Image, Link, Divider, LinkText, Box, VStack } from '@gluestack-ui/themed';
 
 
 const Locations = (props) => {
@@ -74,21 +75,35 @@ const Locations = (props) => {
       <ScrollView>
         {locations.map((location, index)=>{
           return <Card  key={index}  p="$5" borderRadius="$lg" maxWidth={360} m="$3">
-            <HStack justifyContent="space-between" alignItems="center">
-        
-              <Pressable onPress={()=>{console.log('Am selectat indexul', index)}} >
-                Aici o sa am o iconita in care accepta sau nu excursia 
-              </Pressable>
-            </HStack>
             
             <Heading size="md" fontFamily="$heading" mb="$4">
               {location.name}
             </Heading>
             
-            AICI SA LINK-URILE LOR DAR SI POZELE 
-
-            {/* DUPA ASTA FAC CUMVA SA LE ADAUG IN BAZA DE DATE =>> LOCATIILE  */}
-
+ 
+            <VStack  space="md"  justifyContent='center'  alignItems='center' >
+              <HStack  h='$10'  justifyContent='center'  alignItems='center' >
+                <Link href={location.website} isExternal>
+                  <HStack alignItems="center">
+                    <LinkText  size="sm"  fontFamily="$heading"  fontWeight="$semibold"  color="$primary600"  $dark-color="$primary300"  textDecorationLine="none" >
+                      Visit their website
+                    </LinkText>
+                  </HStack>
+                </Link>
+               
+                <Divider orientation="vertical" mx='$2.5' bg='$emerald500' h={15} $dark-bg="$emerald400"/>
+               
+                <Link href={location.urlLocation} isExternal>
+                  <HStack alignItems="center">
+                    <LinkText  size="sm"  fontFamily="$heading"  fontWeight="$semibold"  color="$primary600"  $dark-color="$primary300"  textDecorationLine="none" >
+                      Google location
+                    </LinkText>
+                  </HStack>
+                </Link>
+                
+              </HStack>
+            </VStack>
+     
           </Card>  
         })}
       </ScrollView>
