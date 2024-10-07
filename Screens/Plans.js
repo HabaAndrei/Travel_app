@@ -39,7 +39,7 @@ const Plans = (props) => {
   return (
     <ScrollView>
       {
-        !plans.length ? 
+        plans.length ? 
         <View>
 
             <VStack space='lg' p='$12' >

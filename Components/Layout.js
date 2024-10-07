@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import { View, Text, StyleSheet, ScrollView, Pressable } from 'react-native';
-import { Icon, GlobeIcon, CalendarDaysIcon, SettingsIcon, MenuIcon } from "@gluestack-ui/themed";
+import { Icon, GlobeIcon, CalendarDaysIcon, SettingsIcon, MenuIcon, CheckCircleIcon } from "@gluestack-ui/themed";
 import Notification from './Notification';
 import ModalDelete from './ModalDelete';
 import uuid from 'react-native-uuid';
@@ -8,7 +8,7 @@ import LogIn from '../Screens/LogIn.js';
 import * as Updates from 'expo-updates';
 
 
-const Layout = ({ children, navigation, route, user, setUser, setRefreshUser}) => {
+const Layout = ({ children, navigation, route, user, setUser}) => {
 
   const [modalDelete, setModalDelete] = useState(false);
   const [notification, setNotification] = useState([]);
@@ -53,7 +53,7 @@ const Layout = ({ children, navigation, route, user, setUser, setRefreshUser}) =
     return React.Children.map(children, child => {
       return React.cloneElement(child, { 
         route, notification, setNotification, addNotification, areYouSureDeleting, navigation, 
-        user, setUser, setRefreshUser
+        user, setUser
       });
     });
   };
@@ -74,7 +74,7 @@ const Layout = ({ children, navigation, route, user, setUser, setRefreshUser}) =
         </View> 
         : 
         <LogIn   user={user} setUser={setUser} addNotification={addNotification} 
-          areYouSureDeleting={areYouSureDeleting}  setRefreshUser={setRefreshUser} />
+          areYouSureDeleting={areYouSureDeleting} />
       }
 
 
@@ -91,6 +91,11 @@ const Layout = ({ children, navigation, route, user, setUser, setRefreshUser}) =
             <Icon as={GlobeIcon} m="$2" w="$5" h="$5"  color="white"/>
             <Text style={styles.pressableText}>Home</Text>
           </Pressable>
+          
+          <Pressable style={styles.pressable} onPress={() => navigation.navigate('Locations')} >
+            <Icon as={CheckCircleIcon} m="$2" w="$5" h="$5" color="white" />
+            <Text style={styles.pressableText}>Locations</Text>
+          </Pressable> 
 
           <Pressable style={styles.pressable} onPress={() => navigation.navigate('Program')} >
             <Icon as={CalendarDaysIcon} m="$2" w="$5" h="$5" color="white" />
@@ -106,6 +111,7 @@ const Layout = ({ children, navigation, route, user, setUser, setRefreshUser}) =
             <Icon as={MenuIcon} m="$2" w="$5" h="$5" color="white" />
             <Text style={styles.pressableText}>Plans</Text>
           </Pressable> 
+
 
         </ScrollView>
       </View> : <View/> 

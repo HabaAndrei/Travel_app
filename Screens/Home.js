@@ -58,7 +58,7 @@ const Home = (props) => {
       { category: "Outdoor activities", selected: true },
     ]
 
-    props.navigation.navigate('Program', {type: 'createProgram' ,from, to,  country, city, checkbox: activities})
+    props.navigation.navigate('Locations', {type: 'getAllDataAboutLocations' ,from, to,  country, city, checkbox: activities})
 
   }
 

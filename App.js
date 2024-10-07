@@ -7,6 +7,7 @@ import Program from './Screens/Program.js';
 import DailyProgram from './Screens/DailyProgram.js';
 import UserSettings from './Screens/UserSettings.js';
 import Plans from './Screens/Plans.js';
+import Locations from './Screens/Locations.js';
 import {db, auth} from './firebase.js';
 import { GluestackUIProvider } from "@gluestack-ui/themed"
 import { config } from "@gluestack-ui/config"
@@ -21,11 +22,11 @@ const Stack = createNativeStackNavigator();
 const App = () => {
 
   const [user, setUser] = useState(false);
-  const [refreshUser, setRefreshUser] = useState(false)
+ 
 
   useEffect(()=>{
     reloadUser();
-  }, []);
+  }, [])
 
 
   function reloadUser(){
@@ -42,36 +43,38 @@ const App = () => {
   }
 
 
-  useEffect(()=>{
-    reloadUser();
-  }, [refreshUser])
-
   const HomeScreen = ({ navigation, route }) => (
-    <Layout  navigation={navigation} route={route} user={user} setUser={setUser}  setRefreshUser={setRefreshUser} >
+    <Layout  navigation={navigation} route={route} user={user} setUser={setUser}   >
       <Home/>
     </Layout>
   );
   
   const ProgramScreen = ({ navigation, route }) => (
-    <Layout  navigation={navigation} route={route}  user={user} setUser={setUser} setRefreshUser={setRefreshUser}  >
+    <Layout  navigation={navigation} route={route}  user={user} setUser={setUser}   >
       <Program/>
     </Layout>
   );
   const DailyProgramScreen = ({ navigation, route }) => (
-    <Layout  navigation={navigation} route={route}  user={user} setUser={setUser} setRefreshUser={setRefreshUser}  >
+    <Layout  navigation={navigation} route={route}  user={user} setUser={setUser}   >
       <DailyProgram/>
     </Layout>
   );
 
   const UserSettingsScreen = ({ navigation, route }) => (
-    <Layout  navigation={navigation} route={route} user={user} setUser={setUser} setRefreshUser={setRefreshUser} >
+    <Layout  navigation={navigation} route={route} user={user} setUser={setUser}  >
       <UserSettings/>
     </Layout>
   );
 
   const PlansScreen = ({ navigation, route }) => (
-    <Layout  navigation={navigation} route={route} user={user} setUser={setUser} setRefreshUser={setRefreshUser} >
+    <Layout  navigation={navigation} route={route} user={user} setUser={setUser}  >
       <Plans/>
+    </Layout>
+  );
+
+  const LocationsScreen = ({ navigation, route }) => (
+    <Layout  navigation={navigation} route={route} user={user} setUser={setUser}   >
+      <Locations/>
     </Layout>
   );
 
@@ -85,6 +88,11 @@ const App = () => {
           <Stack.Screen
             name="Home"
             component={HomeScreen}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="Locations"
+            component={LocationsScreen}
             options={{headerShown: false}}
           />
           <Stack.Screen

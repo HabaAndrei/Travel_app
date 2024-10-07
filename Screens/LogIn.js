@@ -64,7 +64,7 @@ const LogIn = (props) => {
         if(rez.type){
             const user = rez.data;
         }else{
-            props.addNotification('error', "The email address or password is not visible");
+            props.addNotification('error', "Invalid login credentials");
             console.log(rez.err);
 
         }
@@ -133,14 +133,7 @@ const LogIn = (props) => {
         <View>
             
 
-            <Button  onPress={()=>{
-                console.log('se face reload la user');
-                props.setRefreshUser((prev)=>{return !prev});
-            }}>
-                <ButtonText>
-                    Refresh
-                </ButtonText>
-            </Button>
+        
             
             <VStack space="2xl">  
                 <HStack  px="$3"  h="$8"  rounded="$sm"  borderWidth="$2"  borderColor="$backgroundLight300"  alignItems="center"  justifyContent="center"   $dark-borderColor="$backgroundDark700"  >
@@ -306,3 +299,10 @@ const styles = StyleSheet.create({
         elevation: 5,
     },
 })
+
+
+
+
+// rezolv partea de autentificare poate cu google poate fara
+// daca nu merge cu notificare adaug eu un div pe pagina care sa tina cont de cele scrise
+// vezi daca partea de auth cu user si parola e aceiasi cu react native firebase

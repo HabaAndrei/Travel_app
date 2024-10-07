@@ -34,7 +34,7 @@ const Program = (props) => {
     if(props?.route?.params?.type === "keepProgram")return;
 
     if(type === "createProgram"){
-      let newCheckbox =[];
+      let newCheckbox = [];
       checkbox.forEach((ob)=>{if(ob.selected)newCheckbox.push(ob.category)});  
       getProgram('createProgram', from, to, city, country, newCheckbox)
     }
