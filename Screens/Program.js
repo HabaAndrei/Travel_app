@@ -14,13 +14,14 @@ const Program = (props) => {
   // getProgramAsync => iau date din async storage 
   // keepProgram => pastram programul din useState
 
-  
+
   const isFocused = useIsFocused();
   const [program, setProgram] = useState([]);
   const [buttonHomePage, setButtonHomePage] = useState(false);
 
 
   useEffect(()=>{
+
 
     if(!isFocused)return 
    
@@ -30,11 +31,17 @@ const Program = (props) => {
       return;
     };
 
-    const {from, to, city, country, checkbox, type} = props?.route?.params;
+    // VERIFIC CE DATE MAI PRIMESC AICI SI SA TRIMIT DATELE IN SERVER SA CREEZ NOUL PROGRAM CU DATELE NOI 
+    const {from, to, city, country} = props?.route?.params?.locationParam;
+    const {locations, type} = props?.route?.params;
     
     if(props?.route?.params?.type === "keepProgram")return;
 
     if(type === "createProgram"){
+      console.log('creez program, aici intru', {from, to, city, country, checkbox, type, locations});
+      return;
+      
+      
       let newCheckbox = [];
       checkbox.forEach((ob)=>{if(ob.selected)newCheckbox.push(ob.category)});  
       getProgram('createProgram', from, to, city, country, newCheckbox)
@@ -49,6 +56,7 @@ const Program = (props) => {
 
 
   async function getProgramFromAsyncStorage(){
+    console.log('A intrat sa ia programul din async storage')
     const program = await getDataFromAsyncStorage("travelProgram");
     if(!program.type){console.log('aici trebuie sa bag un mesaj de eroare')}
     if(program?.data?.length){

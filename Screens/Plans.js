@@ -85,7 +85,7 @@ const Plans = (props) => {
         <View>
              <View style={styles.buttonView} >
                 <Pressable  style={styles.buttonPress}  > 
-                    <Text style={styles.text} onPress={()=>{props.navigation.navigate('Home'); setButtonHomePage(false)}}>
+                    <Text style={styles.text} onPress={()=>{props.navigation.navigate('Home')}}>
                     Schedule trip
                     </Text>
                 </Pressable>

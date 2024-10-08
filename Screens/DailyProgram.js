@@ -120,8 +120,6 @@ const ModalDayProgram = (props) => {
             <Icon as={CloseIcon} m="$2" w="$6" h="$6" />
           </HStack>
 
-         
-
           <Divider  style={{ margin: 15 }}  orientation="vertical"  mx="$2.5"  bg="$indigo500"  h={25}  $dark-bg="$indigo400"/>
 
           <HStack alignItems="center">
