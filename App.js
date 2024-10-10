@@ -18,7 +18,6 @@ import {onAuthStateChanged} from 'firebase/auth';
 
 const Stack = createNativeStackNavigator();
 
-
 const App = () => {
 
   const [user, setUser] = useState(false);
@@ -86,6 +85,11 @@ const App = () => {
       <NavigationContainer>
         <Stack.Navigator>
           <Stack.Screen
+            name="Program"
+            component={ProgramScreen}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
             name="Locations"
             component={LocationsScreen}
             options={{headerShown: false}}
@@ -98,11 +102,6 @@ const App = () => {
           <Stack.Screen
             name="Plans"
             component={PlansScreen}
-            options={{headerShown: false}}
-          />
-          <Stack.Screen
-            name="Program"
-            component={ProgramScreen}
             options={{headerShown: false}}
           />
           <Stack.Screen
@@ -148,3 +147,11 @@ const styles = StyleSheet.create({})
 // Navigare si integrare cu transportul
 // Optimizare in functie de mijlocul de transport ales 
 // Api de imagini la obiective
+
+
+
+
+// LLM : 
+
+// nu tine cont 100% de programul obiectivelor
+// nu lasa destul timp intre obiective desi ele sunt departe una fata de cealalta 

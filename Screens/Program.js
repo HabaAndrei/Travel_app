@@ -15,140 +15,6 @@ const Program = (props) => {
   // keepProgram => pastram programul din useState
 
 
-  const locationsUp = [
-    {
-      name: "The Louvre Museum",
-      address: "75001 Paris, Franța",
-      place_id: "ChIJD3uTd9hx5kcR1IQvGfr8dbk",
-      selected: true,
-      urlLocation: "https://maps.google.com/?cid=13363865620386383060",
-      website: "https://www.louvre.fr/",
-      arrayProgramPlace: [
-        "Monday: 9:00 AM – 6:00 PM",
-        "Tuesday: Closed",
-        "Wednesday: 9:00 AM – 9:00 PM",
-        "Thursday: 9:00 AM – 6:00 PM",
-        "Friday: 9:00 AM – 9:00 PM",
-        "Saturday: 9:00 AM – 6:00 PM",
-        "Sunday: 9:00 AM – 6:00 PM"
-      ],
-      arrayWithLinkImages: [
-        "https://lh3.googleusercontent.com/places/ANXAkqEZBQsOWSQbmwD0hTnLgabUhTqLByZW33HYcyVJHMikqeNZPtbllfR1767KwRxdwYzPBb0g9pN-pUvETxvBtWMJWyW2vGUQyxk=s1600-w3000",
-        "https://lh3.googleusercontent.com/places/ANXAkqHrGBb9mLUp7NNw2p4536bCpYV3PRvC52KxMytmiwhcgts4fmNLnzDpalRxZsWgwhL-aADT-fK45g8WmYDPSnFaQp7khGLVHuY=s1600-w1970",
-      ]
-    },
-    {
-      name: "Eiffel Tower",
-      address: "Av. Gustave Eiffel, 75007 Paris, Franța",
-      place_id: "ChIJLU7jZClu5kcR4PcOOO6p3I0",
-      selected: true,
-      urlLocation: "https://maps.google.com/?cid=10222232094831998944",
-      website: "https://www.toureiffel.paris/fr",
-      arrayProgramPlace: [
-        "Monday: 9:00 AM – 12:00 AM",
-        "Tuesday: 9:00 AM – 12:00 AM",
-        "Wednesday: 9:00 AM – 12:00 AM",
-        "Thursday: 9:00 AM – 12:00 AM",
-        "Friday: 9:00 AM – 12:00 AM",
-        "Saturday: 9:00 AM – 12:00 AM",
-        "Sunday: 9:00 AM – 12:00 AM"
-      ],
-      arrayWithLinkImages: [
-        "https://lh3.googleusercontent.com/places/ANXAkqH7VLb8DF2L93W-Df2qJWzPN1a2wC4zm698fmCI8fXibr6CE84bgtqwUbqB-2UbqVDhXayV7797Au-T9M7Jd3-Hx3nm7h8SwXQ=s1600-w3000",
-        "https://lh3.googleusercontent.com/places/ANXAkqHkAzWYXf87zHMciS06s_2Y5a6rd49RGhI_7LtUkzEnJEC70mTqH6cei0SQCAU4ItumP8uGuAMiiZ-CKwfsigoFbhgw1Z4MIoo=s1600-w1200",
-      ]
-    },
-    {
-      name: "Notre-Dame Cathedral",
-      address: "6 Parvis Notre-Dame - Pl. Jean-Paul II, 75004 Paris, Franța",
-      place_id: "ChIJATr1n-Fx5kcRjQb6q6cdQDY",
-      selected: true,
-      urlLocation: "https://maps.google.com/?cid=3909157082539624077",
-      website: "https://www.notredamedeparis.fr/",
-      arrayProgramPlace: [],
-      arrayWithLinkImages: [
-        "https://lh3.googleusercontent.com/places/ANXAkqEPWX4Nv7mO93Q3MnaDjCmjFF-gtWGBRws4rYuM18m_tmA9oD7mqF44nsG_AMJzL6rSaecKQDvycwbPOXOvvqFz5HaYZ5V-XA4=s1600-w3000",
-        "https://lh3.googleusercontent.com/places/ANXAkqE0qec1mq4OlJXtHnCFCML6dt2tQG4PTfsENZ7hsxa-AMphIMlIh8iNiBts7CG2p6BaVe8opmf3RsywhyQUUzVji09G-GE88Dw=s1600-w998",
-      ]
-    },
-    {
-      address: "Montmartre, 75018 Paris, Franţa",
-      arrayProgramPlace: [],
-      arrayWithLinkImages: [
-        "https://lh3.googleusercontent.com/places/ANXAkqHLC2-x8aKexAqP-bUI8rQUjFAO3xYAxlJxQ6xLpnNpwGF3ncreL9I3_0XFfp2GOsfZzK09gh__bN25VGaoO2F4bBGD6Euv1ag=s1600-w3000",
-        "https://lh3.googleusercontent.com/places/ANXAkqFgn4rFmlAPYP5TVzonhkim0mTZTo44APZrQxdzBZX50kS5C-8vloMyGlYjm_upHKIF2KJYCjf3yydbK666hDNeQ3UOfF36Ryo=s1600-w3000"
-      ],
-      name: "Montmartre",
-      place_id: "ChIJ1fXA1ERu5kcRcIbgA4VK1H0",
-      selected: true,
-      urlLocation: "https://maps.google.com/?q=Montmartre,+75018+Paris,+France&ftid=0x47e66e44d4c0f5d5:0x7dd44a8503e08670",
-      website: ""
-    },
-    {
-      address: "Place d'Armes, 78000 Versailles, Franța",
-      arrayProgramPlace: [
-        "Monday: Closed",
-        "Tuesday: 9:00 AM – 6:30 PM",
-        "Wednesday: 9:00 AM – 6:30 PM",
-        "Thursday: 9:00 AM – 6:30 PM",
-        "Friday: 9:00 AM – 6:30 PM",
-        "Saturday: 9:00 AM – 6:30 PM",
-        "Sunday: 9:00 AM – 6:30 PM"
-      ],
-      arrayWithLinkImages: [
-        "https://lh3.googleusercontent.com/places/ANXAkqFg45byLl6k1OVu1_jTQnDZraX-ZhEcxSMXAXlb-Fi7AcexbIJrq3Vj2epO86Tg60h6J7onZDVo3AyWjSir8Qy3UuJEA49BtKo=s1600-w3000",
-        "https://lh3.googleusercontent.com/places/ANXAkqHr3IOViA1c1SbAZh6LndAhMJpiJCzxiOr_ssd5FVt4c18UwRqffWRWuKjtPIqwt7YccQegQUzgPqVhXhQDnoZViaPxUzc2W0Y=s1600-w3000"
-      ],
-      name: "Palatul Versailles",
-      place_id: "ChIJxRRWgBVu5kcR-JNrrCk0a6s",
-      selected: false,
-      urlLocation: "https://maps.google.com/?q=Place+d%27Armes,+78000+Versailles,+France&ftid=0x47e67b6be97ac27b:0x99bb5cb41ae1044c",
-      website: "http://www.chateauversailles.fr/"
-    },
-    {
-      address: "Rue de Rivoli, 75001 Paris, Franţa",
-      arrayProgramPlace: [
-        "Monday: 9:00 AM – 6:00 PM",
-        "Tuesday: 9:00 AM – 6:00 PM",
-        "Wednesday: Closed",
-        "Thursday: 9:00 AM – 6:00 PM",
-        "Friday: 9:00 AM – 6:00 PM",
-        "Saturday: 9:00 AM – 6:00 PM",
-        "Sunday: 9:00 AM – 6:00 PM"
-      ],
-      arrayWithLinkImages: [
-        "https://lh3.googleusercontent.com/places/ANXAkqGo7FJccnpfKl_0CDrztuXY3FD4BAnPckNzOhB9xXY_KgVGcKe8u7ltgD4gYcWZFYg9whRLtPjWQGeWjVHJKaLbN2i_dOzvjXg=s1600-w3000",
-        "https://lh3.googleusercontent.com/places/ANXAkqFcXJY0B12_tjCmlo8b8q9OBnF4zrMkRFw5ATYb9O8LO13MGcFwx9lZhP_bsmwWE9MAoOfm2eI5Vh0tBdDrTniNEytD7TUkEUk=s1600-w3000"
-      ],
-      name: "Luvru",
-      place_id: "ChIJ2eUgeAKdwokRM8S6dBMsKCs",
-      selected: false,
-      urlLocation: "https://maps.google.com/?q=Rue+de+Rivoli,+75001+Paris,+France&ftid=0x47e671d877d3d2f1:0x214c0fcb9871d6b8",
-      website: "https://www.louvre.fr/en"
-    },
-    {
-      address: "5 Avenue Anatole, 75007 Paris, Franţa",
-      arrayProgramPlace: [
-        "Monday: 9:30 AM – 11:45 PM",
-        "Tuesday: 9:30 AM – 11:45 PM",
-        "Wednesday: 9:30 AM – 11:45 PM",
-        "Thursday: 9:30 AM – 11:45 PM",
-        "Friday: 9:30 AM – 11:45 PM",
-        "Saturday: 9:30 AM – 11:45 PM",
-        "Sunday: 9:30 AM – 11:45 PM"
-      ],
-      arrayWithLinkImages: [
-        "https://lh3.googleusercontent.com/places/ANXAkqHRGIGukzmJ0n4SwXehyy7-f_JE7u1cO4CEVf5fOgV5bCUthdC0RmOIrWlyWxUeb8Lg8fT9A8j0ycj_VsFdqRmIkhEBHljw=s1600-w3000",
-        "https://lh3.googleusercontent.com/places/ANXAkqFPxb8Z4ITSD4Ch4m8Zh4o9eTxklzkIeyyQFPY3dsj9nVoHgYeLntL1_SkRZFA7U2rUyqGmRyNMLMIyArfYkx8yOeNcCOdLBz8=s1600-w3000"
-      ],
-      name: "Turnul Eiffel",
-      place_id: "ChIJLU7jZClu5kcR4PcOOO6p3I0",
-      selected: true,
-      urlLocation: "https://maps.google.com/?q=5+Avenue+Anatole,+75007+Paris,+France&ftid=0x47e66f9b15ecf1a3:0xc22ecfdc2e3f1f3",
-      website: "https://www.toureiffel.paris/en"
-    }
-  ]
-
 
   const isFocused = useIsFocused();
   const [program, setProgram] = useState([]);
@@ -157,35 +23,30 @@ const Program = (props) => {
 
   useEffect(()=>{
 
-
     if(!isFocused)return 
    
-
-    if(!props?.route?.params?.type){
+    if(!props?.route?.params?.type || props?.route?.params?.type === "getProgramAsync"){
       getProgramFromAsyncStorage();
       return;
     };
 
-
-    const {from, to, city, country, newCheckbox} = props?.route?.params?.locationParam;
-    const {locations, type} = props?.route?.params;
-    console.log(locations);
     if(props?.route?.params?.type === "keepProgram")return;
+
+    
+
+    const {from, to, city, country} = props?.route?.params?.locationParam;
+    const {locations, type} = props?.route?.params;
 
     if(type === "createProgram"){
       getProgram('createProgram', from, to, city, country, locations);
     }
     
-    if( props?.route?.params?.type === "getProgramAsync"){
-      getProgramFromAsyncStorage();
-    }
 
   }, [isFocused]);
 
 
 
   async function getProgramFromAsyncStorage(){
-    console.log('A intrat sa ia programul din async storage')
     const program = await getDataFromAsyncStorage("travelProgram");
     if(!program.type){console.log('aici trebuie sa bag un mesaj de eroare')}
     if(program?.data?.length){
@@ -203,9 +64,9 @@ const Program = (props) => {
     
     const rez = await getDataFromAsyncStorage("travelParameter");
     if(!rez.type)return
-    let {method, from, to, city, country, newCheckbox} = rez.data;
+    let {method, from, to, city, country, locations} = rez.data;
     setProgram([]);
-    getProgram( method, from, to, city, country, newCheckbox)
+    getProgram( method, from, to, city, country, locations)
 
   }
 
@@ -218,28 +79,23 @@ const Program = (props) => {
       {method, from, to, city, country, locations}
     ).then((data)=>{
 
-      console.log(data.data);
-      // if(data.data.type){
-      //   const values = Object.values(data.data.data);
-      //   setProgram([...values]);
-      //   multiSetFromAsyncStorage([['travelProgram', [...values]], 
-      //     ["travelParameter", {method, from, to, city, country, newCheckbox}]]);
+      if(data.data.type){
+        const values = Object.values(data.data.data);
+        setProgram([...values]);
+        multiSetFromAsyncStorage([['travelProgram', [...values]], 
+          ["travelParameter", {method, from, to, city, country, locations}]]);
         
-      // }else{
-      //   console.log("eroare la functia getProgram ", data.data);
-      //   props.addNotification("warning", "Unfortunately, we could not generate your program.")
-      // }       
+      }else{
+        console.log("eroare la functia getProgram ", data.data);
+        props.addNotification("warning", "Unfortunately, we could not generate your program.")
+      }       
     }).catch((err)=>{
       props.addNotification("error", "Unfortunately, we could not generate program")
       console.log('eroare de la getProgram',err);
     })
   }
 
-  
-  // setTimeout(()=>{
-  //   getProgram('createProgram', '25-10-2024', '28-10-2024', 'Paris', 'France', locationsUp )
-  //   console.log('se executa!!')
-  // }, 10000);  
+
 
 
 
@@ -300,6 +156,7 @@ const Program = (props) => {
       console.log(rez.err);
       return;
     }
+
     const travelProgram =   JSON.parse(rez.data[0][1]);
     const travelParameter = JSON.parse(rez.data[1][1]);
     const {city, country } = travelParameter;

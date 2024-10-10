@@ -67,7 +67,6 @@ const Locations = (props) => {
     if(locations.length)return;
     const places = await getDataFromAsyncStorage("arrayLocationsToTravel");
     if(places?.data?.length ){
-      console.log(places.data)
       setLocations([...places.data])
     }else{
       setButtonHomePage(true);

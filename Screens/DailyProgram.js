@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { ScrollView, Pressable, View, Clipboard, StyleSheet } from 'react-native';
-import { ArrowRightIcon, CloseIcon, Card, Heading, Link, LinkText, Text, VStack, Divider, HStack, TrashIcon,RepeatIcon, CheckIcon,  Icon } from "@gluestack-ui/themed";
+import { ArrowRightIcon, CloseIcon, Card, Heading, Link, Image, LinkText, Text, VStack, Divider, HStack, TrashIcon,RepeatIcon, CheckIcon,  Icon } from "@gluestack-ui/themed";
 import {addDataToAsyncStorage, getDataFromAsyncStorage} from '../diverse.js';
 
 
@@ -9,7 +9,7 @@ const ModalDayProgram = (props) => {
   const [dailyProgram, setDailyProgram] = useState({data: {}, index: ''});
 
   useEffect( () => {
-    const { data, index, apeleaza } = props.route.params;
+    const { data, index } = props.route.params;
     setDailyProgram({ data, index });
   }, []);
 
@@ -64,11 +64,13 @@ const ModalDayProgram = (props) => {
           <Text style={styles.dayText}>Day {dailyProgram.data.day}</Text>
         </View>
 
-        {dailyProgram?.data?.activities?.map((ob, index) => (
-          <Card key={index} p="$5" borderRadius="$lg" maxWidth={400} m="$3">
+      
+        {dailyProgram?.data?.activities?.map((ob, index) => {
+          console.log(ob);
+          return <Card key={index} p="$5" borderRadius="$lg" maxWidth={400} m="$3">
             <HStack justifyContent="space-between" alignItems="center">
               <Heading mb="$1" size="md">
-                {ob.place}
+                {ob.name}
               </Heading>
               <Pressable onPress={() => {deleteActivity(index)}}>
                 <Icon as={TrashIcon} m="$2" w="$6" h="$6" />
@@ -94,20 +96,39 @@ const ModalDayProgram = (props) => {
               <Text bold={true}>Description: </Text>
               {ob.description}
             </Text>
-            {ob.link ? (
-              <Link href={ob.link} isExternal style={{ marginTop: 20 }}>
-                <HStack alignItems="center">
-                  <LinkText size="sm" fontWeight="$semibold" color="$primary600" textDecorationLine="none">
-                    More details
-                  </LinkText>
-                  <Icon as={ArrowRightIcon} size="sm" color="$primary600" mt="$0.5" ml="$0.5" />
-                </HStack>
-              </Link>
-            ) : (
-              <Text></Text>
-            )}
+
+            <View style={{ flex: 1, marginTop: 20 }}>
+              <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                {ob.arrayWithLinkImages.map((image, idx) => (
+                  <Image alt={idx} key={idx} source={{ uri: image }} style={styles.image} />
+                ))}
+              </ScrollView>
+            </View>
+
+            <VStack space="md" justifyContent='center' alignItems='center'>
+              <HStack h='$10' justifyContent='center' alignItems='center'>
+                <Link href={ob.website ? ob.website : ''} isExternal>
+                  <HStack alignItems="center">
+                    <LinkText size="sm" fontFamily="$heading" fontWeight="$semibold" color="$primary600" textDecorationLine="none">
+                      {ob.website ? 'Visit their website' : '' }
+                    </LinkText>
+                  </HStack>
+                </Link>
+                {ob.urlLocation && ob.website ? 
+                <Divider orientation="vertical" mx='$2.5' bg='$emerald500' h={15} />:
+                <View></View>
+                }
+                <Link href={ob.urlLocation ? ob.urlLocation : ''} isExternal>
+                  <HStack alignItems="center">
+                    <LinkText size="sm" fontFamily="$heading" fontWeight="$semibold" color="$primary600" textDecorationLine="none">
+                      {ob.urlLocation ? 'Google location' : ''}
+                    </LinkText>
+                  </HStack>
+                </Link>
+              </HStack>
+            </VStack>
           </Card>
-        ))}
+          })}
       </View>
 
 
@@ -161,6 +182,12 @@ const styles = StyleSheet.create({
   scrollViewContent: {
     flexGrow: 1,
     paddingBottom: 20, // added padding for extra scrolling space
+  },
+  image: {
+    width: 200,
+    height: 200,
+    marginRight: 10,
+    borderRadius: 10,
   },
 });
 
