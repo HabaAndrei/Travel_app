@@ -1,8 +1,8 @@
 import React, {useState, useEffect} from 'react';
-import { View, Text, StyleSheet, Center } from 'react-native';
+import { View, Text, StyleSheet} from 'react-native';
 import { Card, Pressable, Heading, ScrollView } from '@gluestack-ui/themed';
 import SearchDestination from '../Components/SearchDestination';
-import Calendar from '../Components/Calendar';
+import DatePicker from '../Components/DatePicker';
 import {formatDateFromMilliseconds} from '../diverse';
 import CheckboxActivities from '../Components/CheckboxActivities';
 
@@ -74,10 +74,6 @@ const Home = (props) => {
       props.addNotification("warning", "Please choose the city and country where you want to travel to provide you with the best data.");
     }
   }
-
-
-  
-
   
   return (
     <ScrollView  >
@@ -117,7 +113,7 @@ const Home = (props) => {
               ) : (
                 <Text></Text>
               )}
-              <Calendar
+              <DatePicker
                 how={"from"}
                 showDatePicker={() =>
                   setDatePickerVisibility({ type: true, data: "from", func: setDateFrom })
@@ -135,7 +131,7 @@ const Home = (props) => {
               ) : (
                 <Text></Text>
               )}
-              <Calendar
+              <DatePicker
                 how={"to"}
                 showDatePicker={() =>
                   setDatePickerVisibility({ type: true, data: "to", func: setDateTo })
@@ -147,8 +143,6 @@ const Home = (props) => {
           </View>
         </Card>
       </View>
-
-
 
       <View style={styles.buttonGo} >
         <Pressable  style={styles.buttonGoPressAc}

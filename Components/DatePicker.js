@@ -3,8 +3,8 @@ import React from 'react'
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 
-const Calendar = (props) => {
-
+const DatePicker = (props) => {
+  
     const hideDatePicker = () => {
       props.setDatePickerVisibility({type: false});
     };
@@ -36,6 +36,6 @@ const Calendar = (props) => {
   )
 }
 
-export default Calendar
+export default DatePicker
 
 const styles = StyleSheet.create({})

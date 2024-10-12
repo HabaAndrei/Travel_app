@@ -54,6 +54,15 @@ const UserSettings = (props) => {
             </Button>          
           </HStack>
         </VStack>
+
+
+        <View  >
+          <Pressable onPress={()=>deleteAllFromAsyncStorage()} >
+            <Text style={{margin: 50, backgroundColor: 'blue'}}  >
+              Delete all from Async Storage
+            </Text>
+          </Pressable>
+        </View>
       </View>
 
     </ScrollView>

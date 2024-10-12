@@ -31,9 +31,9 @@ const App = () => {
   function reloadUser(){
     onAuthStateChanged(auth, (us) => {
       if (us) {
-        console.log(us);
         setUser(us);
         const uid = us.uid;
+        console.log('Avem uid deci avem user => ', uid)
       } else {
         setUser(false);
         console.log('nu avem user conectat')

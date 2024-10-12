@@ -140,3 +140,17 @@ async function multiRemoveFromAsyncStorage(arrayOfKeys){
 
 export {isValidPassword, isValidEmail, removeItemFromAsyncStorage, getDataFromAsyncStorage, addDataToAsyncStorage,    multiRemoveFromAsyncStorage, multiSetFromAsyncStorage, 
     getAllKeysFromAsyncStorage, multiGetFromAsyncStorage,  formatDateFromMilliseconds,  deleteAllFromAsyncStorage, address_function_api, address_function_fuzzy }
+
+
+
+
+// import {KeyboardAvoidingView, Platform, TextInput  } from 'react-native';
+// <KeyboardAvoidingView style={{ flex: 1, paddingBottom: Platform.OS === 'ios' ? 50 : 0}} behavior="position">
+// <TextInput
+//     style={{borderWidth: 1,  borderColor: 'gray',  padding: 12,  borderRadius: 8,  fontSize: 16,  color: 'black',  backgroundColor: 'white'}}
+//     placeholder={'hahhaha'}
+//     value={inputCity}
+//     onChangeText={(text) => { setInputCity(text)}}
+//     placeholderTextColor="gray"
+// />
+// </KeyboardAvoidingView>

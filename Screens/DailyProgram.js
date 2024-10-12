@@ -2,11 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { ScrollView, Pressable, View, Clipboard, StyleSheet } from 'react-native';
 import { ArrowRightIcon, CloseIcon, Card, Heading, Link, Image, LinkText, Text, VStack, Divider, HStack, TrashIcon,RepeatIcon, CheckIcon,  Icon } from "@gluestack-ui/themed";
 import {addDataToAsyncStorage, getDataFromAsyncStorage} from '../diverse.js';
-
+import {TimePicker} from '../Components/TimePicker.js';
 
 const ModalDayProgram = (props) => {
   
   const [dailyProgram, setDailyProgram] = useState({data: {}, index: ''});
+  const [inputCity, setInputCity] = useState('');
 
   useEffect( () => {
     const { data, index } = props.route.params;
@@ -76,6 +77,8 @@ const ModalDayProgram = (props) => {
                 <Icon as={TrashIcon} m="$2" w="$6" h="$6" />
               </Pressable>
             </HStack>
+
+            {/* <TimePicker/> */}
 
             <Text fontSize="$sm" fontStyle="normal" fontWeight="$normal" lineHeight="$sm" mb="$2" sx={{ color: "$textLight700" }}>
               {ob.time}
