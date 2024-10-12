@@ -3,7 +3,9 @@ import React, {useState, useEffect} from 'react'
 import { useIsFocused } from '@react-navigation/native'; 
 import {address_function_api, getDataFromAsyncStorage, addDataToAsyncStorage, multiSetFromAsyncStorage} from '../diverse';
 import axios from 'axios';
-import { Card, HStack, Heading,Center, Image, Link, Divider, LinkText, Spinner, VStack, CloseIcon, CheckIcon, Icon } from '@gluestack-ui/themed';
+import { Card, HStack, Heading, Center, Image, Link, Divider, LinkText, Spinner, VStack, CloseIcon, CheckIcon, Icon,
+  ArrowLeftIcon, ArrowRigthIcon
+} from '@gluestack-ui/themed';
 
 
 const Locations = (props) => {
@@ -27,7 +29,6 @@ const Locations = (props) => {
   
     const {from, to, city, country, checkbox, type} = props?.route?.params;
     
-
     if(type === "getAllDataAboutLocations"){
       let newCheckbox = [];
       checkbox.forEach((ob)=>{if(ob.selected)newCheckbox.push(ob.category)});  
@@ -41,15 +42,14 @@ const Locations = (props) => {
   async function getLocations( method, from, to, city, country, newCheckbox){
     setLocations([]);
     setButtonHomePage(false)
-    console.log('parametrii: ', {method, from, to, city, country, newCheckbox})
+    console.log({method, from, to, city, country, newCheckbox, address_function_api});
     axios.post(`${address_function_api}`, 
       {from, to, city, country, newCheckbox, method}
     ).then((data)=>{
-
+      console.log('Asta este raspunsul', data);
       if(data.data.type){
         const arrayWithLocations = data.data.data;
         const arraySelected = arrayWithLocations.map((ob)=>{return {...ob, selected: false}});
-        console.log(arraySelected);
         setLocations(arraySelected)
         multiSetFromAsyncStorage([['arrayLocationsToTravel', [...arraySelected]], 
           ["locationsParameter", {from, to, city, country, newCheckbox}]]);
@@ -157,26 +157,37 @@ const Locations = (props) => {
                   {location.name}
                 </Heading>
                 <View style={{ flex: 1 }}>
-                  <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                
+                  <Pressable>
+                    <Icon as={ArrowLeftIcon} m="$2" w="$6" h="$6" />
+                  </Pressable>
+                  <Image source={{ uri: location.arrayWithLinkImages[0] }} style={styles.image} />
+                  <Pressable>
+                    <Icon as={ArrowLeftIcon} m="$2" w="$6" h="$6" />
+                  </Pressable>
+                  {/* <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                     {location.arrayWithLinkImages.map((image, idx) => (
-                      <Image alt={idx} key={idx} source={{ uri: image }} style={styles.image} />
+                      <Image key={idx} source={{ uri: image }} style={styles.image} />
                     ))}
-                  </ScrollView>
+                  </ScrollView> */}
                 </View>
                 <VStack space="md" justifyContent='center' alignItems='center'>
                   <HStack h='$10' justifyContent='center' alignItems='center'>
-                    <Link href={location.website} isExternal>
+                    <Link href={location.website ? location.website : ''} isExternal>
                       <HStack alignItems="center">
                         <LinkText size="sm" fontFamily="$heading" fontWeight="$semibold" color="$primary600" textDecorationLine="none">
-                          Visit their website
+                          {location.website ? 'Visit their website' : '' }
                         </LinkText>
                       </HStack>
                     </Link>
-                    <Divider orientation="vertical" mx='$2.5' bg='$emerald500' h={15} />
-                    <Link href={location.urlLocation} isExternal>
+                    {location.urlLocation && location.website ? 
+                    <Divider orientation="vertical" mx='$2.5' bg='$emerald500' h={15} />:
+                    <View></View>
+                    }
+                    <Link href={location.urlLocation ? location.urlLocation : ''} isExternal>
                       <HStack alignItems="center">
                         <LinkText size="sm" fontFamily="$heading" fontWeight="$semibold" color="$primary600" textDecorationLine="none">
-                          Google location
+                          {location.urlLocation ? 'Google location' : ''}
                         </LinkText>
                       </HStack>
                     </Link>
@@ -186,10 +197,8 @@ const Locations = (props) => {
             </Pressable>
           ))
           }
-          
-
+      
             <View> 
-          
               <HStack h="$10" justifyContent="center" alignItems="center">
                 <HStack alignItems="center"  >
                   <Text  onPress={()=>pressOnCancel()} >Cancel</Text>

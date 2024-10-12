@@ -85,11 +85,6 @@ const App = () => {
       <NavigationContainer>
         <Stack.Navigator>
           <Stack.Screen
-            name="Program"
-            component={ProgramScreen}
-            options={{headerShown: false}}
-          />
-          <Stack.Screen
             name="Locations"
             component={LocationsScreen}
             options={{headerShown: false}}
@@ -97,6 +92,11 @@ const App = () => {
           <Stack.Screen
             name="Home"
             component={HomeScreen}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="Program"
+            component={ProgramScreen}
             options={{headerShown: false}}
           />
           <Stack.Screen
@@ -155,3 +155,13 @@ const styles = StyleSheet.create({})
 
 // nu tine cont 100% de programul obiectivelor
 // nu lasa destul timp intre obiective desi ele sunt departe una fata de cealalta 
+
+
+
+
+// Bine de facut : 
+
+// inserarea datelor de la google in baza de date 
+// rezolv partea de autentificare
+// migrarea intre pagini care nu au continut
+// ce date trebuie sa stochez in async storage ?
