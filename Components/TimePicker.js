@@ -5,27 +5,18 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 const TimePicker = (props) => {
 
-    const [timePickerVisibility, setTimePickerVisibility] = useState(false);
-  
-    const hideTimePicker = () => {setTimePickerVisibility(false)};
-    
-    const handleConfirm = (time) => {
-      console.log(time)
-    };
-
   return (
     <View>
-      <Button 
-      title={ 'Pick the time'}
-      onPress={()=>setTimePickerVisibility(true)} />
-        <DateTimePickerModal
-            isVisible={timePickerVisibility}
-            mode="time"
-            onConfirm={handleConfirm}
-            onCancel={hideTimePicker}
-        />
+      <Button title="Change time" onPress={props.showDatePicker} />
+      <DateTimePickerModal
+        isVisible={props.isTimePickerVisible}
+        mode="time"
+        onConfirm={props.handleConfirm}
+        onCancel={props.hideDatePicker}
+      />
     </View>
-  )
+  );
+
 }
 
 export default TimePicker

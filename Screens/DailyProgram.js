@@ -2,13 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { ScrollView, Pressable, View, Clipboard, StyleSheet } from 'react-native';
 import { ArrowRightIcon, CloseIcon, Card, Heading, Link, Image, LinkText, Text, VStack, Divider, HStack, TrashIcon,RepeatIcon, CheckIcon,  Icon } from "@gluestack-ui/themed";
 import {addDataToAsyncStorage, getDataFromAsyncStorage} from '../diverse.js';
-import {TimePicker} from '../Components/TimePicker.js';
+import TimePicker from '../Components/TimePicker.js';
 
-const ModalDayProgram = (props) => {
+const DailyProgram = (props) => {
   
   const [dailyProgram, setDailyProgram] = useState({data: {}, index: ''});
-  const [inputCity, setInputCity] = useState('');
-
+  const [isTimePickerVisible, setTimePickerVisibility] = useState(false);
+  
   useEffect( () => {
     const { data, index } = props.route.params;
     setDailyProgram({ data, index });
@@ -56,8 +56,28 @@ const ModalDayProgram = (props) => {
     props.navigation.navigate('Program', {type: "keepProgram"});
   }
 
+
+  const showDatePicker = () => {
+    setTimePickerVisibility(true);
+  };
+
+  const hideDatePicker = () => {
+    setTimePickerVisibility(false);
+  };
+
+  const handleConfirm = (time) => {
+    const timestamp = new Date(time).getTime();
+    const hour = new Date(timestamp).getHours();
+    const minutes = new Date(timestamp).getMinutes();
+
+    props.addNotification('succes', `${hour}:${minutes} `);
+    hideDatePicker();
+  };
+
+  
   return (
     <ScrollView contentContainerStyle={styles.scrollViewContent}>
+        
       <View>
         <Text style={styles.title}>{dailyProgram.data.title}</Text>
         <View style={styles.detailsContainer}>
@@ -67,7 +87,6 @@ const ModalDayProgram = (props) => {
 
       
         {dailyProgram?.data?.activities?.map((ob, index) => {
-          console.log(ob);
           return <Card key={index} p="$5" borderRadius="$lg" maxWidth={400} m="$3">
             <HStack justifyContent="space-between" alignItems="center">
               <Heading mb="$1" size="md">
@@ -78,11 +97,15 @@ const ModalDayProgram = (props) => {
               </Pressable>
             </HStack>
 
-            {/* <TimePicker/> */}
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <Text  style={{marginRight: 30}} fontSize="$sm" fontStyle="normal" fontWeight="$normal" lineHeight="$sm" mb="$2" sx={{ color: "$textLight700" }}>
+                {ob.time}
+              </Text>
+              <TimePicker isTimePickerVisible={isTimePickerVisible} setTimePickerVisibility={setTimePickerVisibility} 
+                showDatePicker={showDatePicker} hideDatePicker={hideDatePicker} handleConfirm={handleConfirm}
+              />
+            </View>
 
-            <Text fontSize="$sm" fontStyle="normal" fontWeight="$normal" lineHeight="$sm" mb="$2" sx={{ color: "$textLight700" }}>
-              {ob.time}
-            </Text>
             {ob.address ? 
               <Text size="m" style={{ marginTop: 10 }}>
                 <Text bold={true}>Address: </Text> {ob.address}
@@ -102,9 +125,9 @@ const ModalDayProgram = (props) => {
 
             <View style={{ flex: 1, marginTop: 20 }}>
               <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                {ob.arrayWithLinkImages.map((image, idx) => (
-                  <Image alt={idx} key={idx} source={{ uri: image }} style={styles.image} />
-                ))}
+                {ob.arrayWithLinkImages.map((image, idx) => {
+                  return <Image alt={idx} key={idx} source={{ uri: image }} style={styles.image} />
+                })}
               </ScrollView>
             </View>
 
@@ -194,4 +217,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ModalDayProgram;
+export default DailyProgram;

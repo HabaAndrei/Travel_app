@@ -15,7 +15,6 @@ const Locations = (props) => {
   const [buttonHomePage, setButtonHomePage] = useState(false);
 
 
-
   useEffect(()=>{
 
     if(!isFocused)return;
@@ -143,59 +142,56 @@ const Locations = (props) => {
               </Heading>
             </Center>
           
-          {locations.map((location, index) => (
-            <Pressable 
-              key={index} 
-              onPress={() => pressOnLocations(index)} 
-              style={[
-                styles.cardPressable,
-                location.selected && styles.selectedCard
-              ]}
-            >
-              <Card p="$5" borderRadius="$lg" maxWidth={400} m="$3">
-                <Heading size="md" fontFamily="$heading" mb="$4">
-                  {location.name}
-                </Heading>
-                <View style={{ flex: 1 }}>
-                
-                  <Pressable>
-                    <Icon as={ArrowLeftIcon} m="$2" w="$6" h="$6" />
-                  </Pressable>
-                  <Image source={{ uri: location.arrayWithLinkImages[0] }} style={styles.image} />
-                  <Pressable>
-                    <Icon as={ArrowLeftIcon} m="$2" w="$6" h="$6" />
-                  </Pressable>
-                  {/* <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                    {location.arrayWithLinkImages.map((image, idx) => (
-                      <Image key={idx} source={{ uri: image }} style={styles.image} />
-                    ))}
-                  </ScrollView> */}
-                </View>
-                <VStack space="md" justifyContent='center' alignItems='center'>
-                  <HStack h='$10' justifyContent='center' alignItems='center'>
-                    <Link href={location.website ? location.website : ''} isExternal>
-                      <HStack alignItems="center">
-                        <LinkText size="sm" fontFamily="$heading" fontWeight="$semibold" color="$primary600" textDecorationLine="none">
-                          {location.website ? 'Visit their website' : '' }
-                        </LinkText>
-                      </HStack>
-                    </Link>
-                    {location.urlLocation && location.website ? 
-                    <Divider orientation="vertical" mx='$2.5' bg='$emerald500' h={15} />:
-                    <View></View>
-                    }
-                    <Link href={location.urlLocation ? location.urlLocation : ''} isExternal>
-                      <HStack alignItems="center">
-                        <LinkText size="sm" fontFamily="$heading" fontWeight="$semibold" color="$primary600" textDecorationLine="none">
-                          {location.urlLocation ? 'Google location' : ''}
-                        </LinkText>
-                      </HStack>
-                    </Link>
-                  </HStack>
-                </VStack>
-              </Card>
-            </Pressable>
-          ))
+          {locations.map((location, index) =>{
+            
+            return <Card key={index} p="$5" borderRadius="$lg" maxWidth={400} m="$3"
+            style={[ styles.cardPressable, location.selected && styles.selectedCard ]} >
+              <Heading size="md" fontFamily="$heading" mb="$4">
+                {location.name}
+              </Heading>
+
+              
+              
+              <View style={{ flex: 1, marginTop: 20 }}>
+                <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                  {location.arrayWithLinkImages.map((image, idx) => (
+                    <Image alt={idx} key={idx} source={{ uri: image }} style={styles.image} />
+                  ))}
+                </ScrollView>
+              </View>
+
+              <VStack space="md" justifyContent='center' alignItems='center'>
+                <HStack h='$10' justifyContent='center' alignItems='center'>
+                  <Link href={location.website ? location.website : ''} isExternal>
+                    <HStack alignItems="center">
+                      <LinkText size="sm" fontFamily="$heading" fontWeight="$semibold" color="$primary600" textDecorationLine="none">
+                        {location.website ? 'Visit their website' : '' }
+                      </LinkText>
+                    </HStack>
+                  </Link>
+                  {location.urlLocation && location.website ? 
+                  <Divider orientation="vertical" mx='$2.5' bg='$emerald500' h={15} />:
+                  <View></View>
+                  }
+                  <Link href={location.urlLocation ? location.urlLocation : ''} isExternal>
+                    <HStack alignItems="center">
+                      <LinkText size="sm" fontFamily="$heading" fontWeight="$semibold" color="$primary600" textDecorationLine="none">
+                        {location.urlLocation ? 'Google location' : ''}
+                      </LinkText>
+                    </HStack>
+                  </Link>
+                </HStack>
+              </VStack>
+
+              <Center>
+                <Pressable style={styles.buttonPress} onPress={() => pressOnLocations(index)} >
+                  <Text style={styles.text} >
+                    {location.selected ? 'Deselect location' : 'Select location'}
+                  </Text>
+                </Pressable>
+              </Center>
+            </Card>
+          })
           }
       
             <View> 
@@ -214,7 +210,7 @@ const Locations = (props) => {
               </HStack>
             </View>
           
-          
+      
           </View>
         )}
       </ScrollView>
