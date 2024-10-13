@@ -37,12 +37,11 @@ const Locations = (props) => {
     
   }, [isFocused]);
 
-
   async function getLocations( method, from, to, city, country, newCheckbox){
     setLocations([]);
     setButtonHomePage(false)
     console.log({method, from, to, city, country, newCheckbox, address_function_api});
-    axios.post(`http://localhost:5050/apiCallAi`, 
+    axios.post(`${address_function_api}`, 
       {from, to, city, country, newCheckbox, method}
     ).then((data)=>{
       console.log('Asta este raspunsul', data);

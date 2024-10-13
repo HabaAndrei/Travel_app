@@ -50,6 +50,7 @@ const Program = (props) => {
     const program = await getDataFromAsyncStorage("travelProgram");
     if(!program.type){console.log('aici trebuie sa bag un mesaj de eroare')}
     if(program?.data?.length){
+      console.log(program.data);
       setProgram([...program.data])
     }else{
       setButtonHomePage(true);

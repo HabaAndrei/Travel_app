@@ -128,14 +128,6 @@ const styles = StyleSheet.create({})
 
 
 
-// iau pachet care ia detalii despre telefonul utilizatorului
-
-
-
-
-
-
-
 // Plan standard:
 // il las e utilizator sa isi creeze un program si sa isi editeze el orele
 
@@ -151,17 +143,10 @@ const styles = StyleSheet.create({})
 
 
 
-// LLM : 
-
-// nu tine cont 100% de programul obiectivelor
-// nu lasa destul timp intre obiective desi ele sunt departe una fata de cealalta 
-
-
 
 
 // Bine de facut : 
 
-// inserarea datelor de la google in baza de date 
 // rezolv partea de autentificare / email / domeniu / firebase
 // migrarea intre pagini care nu au continut
 // ce date trebuie sa stochez in async storage ?

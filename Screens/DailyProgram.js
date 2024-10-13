@@ -95,7 +95,7 @@ const DailyProgram = (props) => {
           return <Card key={index} p="$5" borderRadius="$lg" maxWidth={400} m="$3">
             <HStack justifyContent="space-between" alignItems="center">
               <Heading mb="$1" size="md">
-                {ob.name}
+                {ob.place}
               </Heading>
               <Pressable onPress={() => {deleteActivity(index)}}>
                 <Icon as={TrashIcon} m="$2" w="$6" h="$6" />
@@ -131,7 +131,7 @@ const DailyProgram = (props) => {
             <View style={{ flex: 1, marginTop: 20 }}>
               <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                 {ob.arrayWithLinkImages.map((image, idx) => {
-                  return <Image alt={idx} key={idx} source={{ uri: image }} style={styles.image} />
+                  return <Image alt={idx + 'Images'} key={idx} source={{ uri: image }} style={styles.image} />
                 })}
               </ScrollView>
             </View>
