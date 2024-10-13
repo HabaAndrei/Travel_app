@@ -6,15 +6,13 @@ import { ArrowRightIcon, Spinner, Center, Card, Heading, Link, LinkText, Text, V
 import { useIsFocused } from '@react-navigation/native'; 
 import {addProgramIntoDb} from '../firebase.js';
 import axios from 'axios';
-
+import NavbarProgram from '../Components/NavbarProgram.js';
 
 const Program = (props) => {
 
   // createProgram => creez date din azure
   // getProgramAsync => iau date din async storage 
   // keepProgram => pastram programul din useState
-
-
 
   const isFocused = useIsFocused();
   const [program, setProgram] = useState([]);
@@ -32,8 +30,6 @@ const Program = (props) => {
 
     if(props?.route?.params?.type === "keepProgram")return;
 
-    
-
     const {from, to, city, country} = props?.route?.params?.locationParam;
     const {locations, type} = props?.route?.params;
 
@@ -50,7 +46,6 @@ const Program = (props) => {
     const program = await getDataFromAsyncStorage("travelProgram");
     if(!program.type){console.log('aici trebuie sa bag un mesaj de eroare')}
     if(program?.data?.length){
-      console.log(program.data);
       setProgram([...program.data])
     }else{
       setButtonHomePage(true);
@@ -199,6 +194,8 @@ const Program = (props) => {
       :
       <View>
 
+        <NavbarProgram name={props.route.name} navigation={props.navigation} />
+
 
         {!program?.length ? 
         <View style={styles.container} >
@@ -209,6 +206,33 @@ const Program = (props) => {
 
         <View> 
           
+          
+
+          {program?.map((ob, index)=>{
+            return  <Card  key={index}  p="$5" borderRadius="$lg" maxWidth={400} m="$3">
+              <HStack justifyContent="space-between" alignItems="center">
+                <Text fontSize="$sm"  fontStyle="normal"  fontFamily="$heading"  fontWeight="$normal"  lineHeight="$sm"  mb="$2"  sx={{  color: "$textLight700" }} >
+                  {'Day' + ob.day + " | " } {ob.date}  
+                </Text>
+                <Pressable onPress={()=>{deleteDayFromProgram(index)}} >
+                  <Icon as={TrashIcon} m="$2" w="$6" h="$6" />
+                </Pressable>
+              </HStack>
+              
+              <Heading size="md" fontFamily="$heading" mb="$4">
+                {ob.title}
+              </Heading>
+              <Link onPress={()=>{goToDailyProgram({data: ob, index})}}>
+                <HStack alignItems="center">
+                  <LinkText    size="sm"  fontFamily="$heading"  fontWeight="$semibold"  color="$primary600"  $dark-color="$primary300"  textDecorationLine="none" >
+                      See full day
+                  </LinkText>
+                  <Icon as={ArrowRightIcon}  size="sm"  color="$primary600"  mt="$0.5"  ml="$0.5"  $dark-color="$primary300"/>
+                </HStack>
+              </Link>
+            </Card>   
+          })}
+
           <HStack h="$10" justifyContent="center" alignItems="center">
             <HStack alignItems="center"  >
               <Text  onPress={()=>{deleteAllProgram()}} >Delete</Text>
@@ -230,31 +254,8 @@ const Program = (props) => {
             </HStack>
           </HStack>
 
-        {program?.map((ob, index)=>{
-          return  <Card  key={index}  p="$5" borderRadius="$lg" maxWidth={400} m="$3">
-            <HStack justifyContent="space-between" alignItems="center">
-              <Text fontSize="$sm"  fontStyle="normal"  fontFamily="$heading"  fontWeight="$normal"  lineHeight="$sm"  mb="$2"  sx={{  color: "$textLight700" }} >
-                {'Day' + ob.day + " | " } {ob.date}  
-              </Text>
-              <Pressable onPress={()=>{deleteDayFromProgram(index)}} >
-                <Icon as={TrashIcon} m="$2" w="$6" h="$6" />
-              </Pressable>
-            </HStack>
-            
-            <Heading size="md" fontFamily="$heading" mb="$4">
-              {ob.title}
-            </Heading>
-            <Link onPress={()=>{goToDailyProgram({data: ob, index})}}>
-              <HStack alignItems="center">
-                <LinkText    size="sm"  fontFamily="$heading"  fontWeight="$semibold"  color="$primary600"  $dark-color="$primary300"  textDecorationLine="none" >
-                    See full day
-                </LinkText>
-                <Icon as={ArrowRightIcon}  size="sm"  color="$primary600"  mt="$0.5"  ml="$0.5"  $dark-color="$primary300"/>
-              </HStack>
-            </Link>
-          </Card>   
-        })}
-        </View>}
+        </View>
+        }
 
       </View>
       }

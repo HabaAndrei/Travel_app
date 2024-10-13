@@ -6,7 +6,7 @@ import axios from 'axios';
 import { Card, HStack, Heading, Center, Image, Link, Divider, LinkText, Spinner, VStack, CloseIcon, CheckIcon, Icon,
   ArrowLeftIcon, ArrowRigthIcon
 } from '@gluestack-ui/themed';
-
+import NavbarProgram from '../Components/NavbarProgram';
 
 const Locations = (props) => {
 
@@ -92,7 +92,7 @@ const Locations = (props) => {
   }
 
 
-  async function pressOnSave(){    
+  async function goToCreateProgram(){    
     const selectedLocations = locations.filter((place)=>place.selected)
     if(!selectedLocations.length){
       props.addNotification('warning', 'You do not have any location selected to make the trip');
@@ -125,6 +125,9 @@ const Locations = (props) => {
       </View>
     ) : (
       <ScrollView contentContainerStyle={styles.scrollViewContent}>
+
+      <NavbarProgram name={props.route.name} navigation={props.navigation} />
+
         {!locations?.length ? (
           <View style={{ marginTop: 300 }}>
             <Center  >
@@ -203,7 +206,7 @@ const Locations = (props) => {
                 <Divider  style={{ margin: 15 }}  orientation="vertical"  mx="$2.5"  bg="$indigo500"  h={25}  $dark-bg="$indigo400"/>
 
                 <HStack alignItems="center">
-                  <Text onPress={()=>pressOnSave()} >Save</Text>
+                  <Text onPress={()=>goToCreateProgram()} >Create program</Text>
                   <Icon as={CheckIcon} m="$2" w="$6" h="$6" />
                 </HStack>
               </HStack>
