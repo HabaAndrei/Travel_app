@@ -7,7 +7,7 @@ import TimePicker from '../Components/TimePicker.js';
 const DailyProgram = (props) => {
   
   const [dailyProgram, setDailyProgram] = useState({data: {}, index: ''});
-  const [isTimePickerVisible, setTimePickerVisibility] = useState(false);
+  const [isTimePickerVisible, setTimePickerVisibility] = useState({type:false, index: ''});
   
   useEffect( () => {
     const { data, index } = props.route.params;
@@ -57,20 +57,25 @@ const DailyProgram = (props) => {
   }
 
 
-  const showDatePicker = () => {
-    setTimePickerVisibility(true);
-  };
-
   const hideDatePicker = () => {
-    setTimePickerVisibility(false);
+    setTimePickerVisibility({type: false, index: ''});
   };
 
   const handleConfirm = (time) => {
     const timestamp = new Date(time).getTime();
     const hour = new Date(timestamp).getHours();
     const minutes = new Date(timestamp).getMinutes();
-
-    props.addNotification('succes', `${hour}:${minutes} `);
+    const {index} = isTimePickerVisible;
+    setDailyProgram((prev)=>{
+      const activities = prev.data?.activities;
+      let newAr = activities.map((ob, i)=>{
+        if(i === index)ob.time = `${hour}:${minutes}`;
+        return ob;
+      })
+      prev.data.activities = [...newAr];
+      return prev;
+    })
+    props.addNotification('succes', `${hour}:${minutes} =>> index ${index}`);
     hideDatePicker();
   };
 
@@ -102,7 +107,7 @@ const DailyProgram = (props) => {
                 {ob.time}
               </Text>
               <TimePicker isTimePickerVisible={isTimePickerVisible} setTimePickerVisibility={setTimePickerVisibility} 
-                showDatePicker={showDatePicker} hideDatePicker={hideDatePicker} handleConfirm={handleConfirm}
+                showDatePicker={()=>setTimePickerVisibility({type: true, index})} hideDatePicker={hideDatePicker} handleConfirm={handleConfirm}
               />
             </View>
 

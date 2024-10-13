@@ -42,7 +42,7 @@ const Locations = (props) => {
     setLocations([]);
     setButtonHomePage(false)
     console.log({method, from, to, city, country, newCheckbox, address_function_api});
-    axios.post(`${address_function_api}`, 
+    axios.post(`http://localhost:5050/apiCallAi`, 
       {from, to, city, country, newCheckbox, method}
     ).then((data)=>{
       console.log('Asta este raspunsul', data);
@@ -155,7 +155,7 @@ const Locations = (props) => {
               <View style={{ flex: 1, marginTop: 20 }}>
                 <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                   {location.arrayWithLinkImages.map((image, idx) => (
-                    <Image alt={idx} key={idx} source={{ uri: image }} style={styles.image} />
+                    <Image alt={idx + "Image"} key={idx} source={{ uri: image }} style={styles.image} />
                   ))}
                 </ScrollView>
               </View>

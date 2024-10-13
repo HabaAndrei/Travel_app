@@ -162,6 +162,6 @@ const styles = StyleSheet.create({})
 // Bine de facut : 
 
 // inserarea datelor de la google in baza de date 
-// rezolv partea de autentificare
+// rezolv partea de autentificare / email / domeniu / firebase
 // migrarea intre pagini care nu au continut
 // ce date trebuie sa stochez in async storage ?

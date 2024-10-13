@@ -9,7 +9,7 @@ const TimePicker = (props) => {
     <View>
       <Button title="Change time" onPress={props.showDatePicker} />
       <DateTimePickerModal
-        isVisible={props.isTimePickerVisible}
+        isVisible={props.isTimePickerVisible.type}
         mode="time"
         onConfirm={props.handleConfirm}
         onCancel={props.hideDatePicker}
