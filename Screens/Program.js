@@ -7,7 +7,7 @@ import { useIsFocused } from '@react-navigation/native';
 import {addProgramIntoDb} from '../firebase.js';
 import axios from 'axios';
 import NavbarProgram from '../Components/NavbarProgram.js';
-import CarouselComponent from '../Components/CarouselComponent.js';
+
 const Program = (props) => {
 
   // createProgram => creez date din azure
@@ -180,10 +180,9 @@ const Program = (props) => {
   return (
     <ScrollView>
 
-      <CarouselComponent/>
+
       {buttonHomePage ?
       
-
       <View>
         
         <View style={styles.buttonView} >
