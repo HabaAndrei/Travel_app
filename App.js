@@ -7,12 +7,14 @@ import Program from './Screens/Program.js';
 import DailyProgram from './Screens/DailyProgram.js';
 import UserSettings from './Screens/UserSettings.js';
 import Plans from './Screens/Plans.js';
-import Locations from './Screens/Locations.js';
+// import Locations from './Screens/Locations.js';
 import {db, auth} from './firebase.js';
 import { GluestackUIProvider } from "@gluestack-ui/themed"
 import { config } from "@gluestack-ui/config"
 import Layout from './Components/Layout.js';
 import {onAuthStateChanged} from 'firebase/auth';
+
+const LocationsLazy = React.lazy(() => import('./Screens/Locations.js'));
 
 
 
@@ -73,7 +75,7 @@ const App = () => {
 
   const LocationsScreen = ({ navigation, route }) => (
     <Layout  navigation={navigation} route={route} user={user} setUser={setUser}   >
-      <Locations/>
+      <LocationsLazy/>
     </Layout>
   );
 
