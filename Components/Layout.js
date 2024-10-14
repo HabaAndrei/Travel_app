@@ -91,11 +91,6 @@ const Layout = ({ children, navigation, route, user, setUser}) => {
             <Icon as={GlobeIcon} m="$2" w="$5" h="$5"  color="white"/>
             <Text style={styles.pressableText}>Home</Text>
           </Pressable>
-          
-          {/* <Pressable style={styles.pressable} onPress={() => navigation.navigate('Locations')} >
-            <Icon as={CheckCircleIcon} m="$2" w="$5" h="$5" color="white" />
-            <Text style={styles.pressableText}>Locations</Text>
-          </Pressable>  */}
 
           <Pressable style={styles.pressable} onPress={() => navigation.navigate('Program')} >
             <Icon as={CalendarDaysIcon} m="$2" w="$5" h="$5" color="white" />

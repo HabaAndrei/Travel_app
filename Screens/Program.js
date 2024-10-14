@@ -7,6 +7,8 @@ import { useIsFocused } from '@react-navigation/native';
 import {addProgramIntoDb} from '../firebase.js';
 import axios from 'axios';
 import NavbarProgram from '../Components/NavbarProgram.js';
+import PageView from '../Components/PageView.js';
+
 
 const Program = (props) => {
 
@@ -253,6 +255,8 @@ const Program = (props) => {
               <Icon as={CheckIcon} m="$2" w="$6" h="$6" />
             </HStack>
           </HStack>
+
+          <PageView/>
 
         </View>
         }
