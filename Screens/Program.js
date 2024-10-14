@@ -7,7 +7,7 @@ import { useIsFocused } from '@react-navigation/native';
 import {addProgramIntoDb} from '../firebase.js';
 import axios from 'axios';
 import NavbarProgram from '../Components/NavbarProgram.js';
-
+import ImageCarousel from '../Components/ImageCarousel.js';
 
 const Program = (props) => {
 
@@ -180,6 +180,8 @@ const Program = (props) => {
 
   return (
     <ScrollView>
+
+      <ImageCarousel/>
       {buttonHomePage ?
       
 
