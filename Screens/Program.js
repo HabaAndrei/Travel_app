@@ -8,6 +8,7 @@ import {addProgramIntoDb} from '../firebase.js';
 import axios from 'axios';
 import NavbarProgram from '../Components/NavbarProgram.js';
 
+
 const Program = (props) => {
 
   // createProgram => creez date din azure
@@ -52,9 +53,7 @@ const Program = (props) => {
     }
   }
 
-  
-
-  
+ 
 
   async function regenerateProgram(){
     
@@ -63,7 +62,6 @@ const Program = (props) => {
     let {method, from, to, city, country, locations} = rez.data;
     setProgram([]);
     getProgram( method, from, to, city, country, locations)
-
   }
 
 
@@ -80,7 +78,6 @@ const Program = (props) => {
         setProgram([...values]);
         multiSetFromAsyncStorage([['travelProgram', [...values]], 
           ["travelParameter", {method, from, to, city, country, locations}]]);
-        
       }else{
         console.log("eroare la functia getProgram ", data.data);
         props.addNotification("warning", "Unfortunately, we could not generate your program.")
@@ -90,9 +87,6 @@ const Program = (props) => {
       console.log('eroare de la getProgram',err);
     })
   }
-
-
-
 
 
   async function deleteDayFromProgram(index) {
@@ -179,7 +173,6 @@ const Program = (props) => {
 
   return (
     <ScrollView>
-
 
       {buttonHomePage ?
       

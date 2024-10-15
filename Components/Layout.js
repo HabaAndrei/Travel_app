@@ -1,11 +1,10 @@
 import React, {useState, useEffect} from 'react';
 import { View, Text, StyleSheet, ScrollView, Pressable } from 'react-native';
-import { Icon, GlobeIcon, CalendarDaysIcon, SettingsIcon, MenuIcon, CheckCircleIcon } from "@gluestack-ui/themed";
+import { Icon, GlobeIcon, CalendarDaysIcon, SettingsIcon, MenuIcon } from "@gluestack-ui/themed";
 import Notification from './Notification';
 import ModalDelete from './ModalDelete';
 import uuid from 'react-native-uuid';
 import LogIn from '../Screens/LogIn.js';
-import * as Updates from 'expo-updates';
 
 
 const Layout = ({ children, navigation, route, user, setUser}) => {
@@ -15,22 +14,11 @@ const Layout = ({ children, navigation, route, user, setUser}) => {
   const [deletePromise, setDeletePromise] = useState(null);
 
   
-
   function addNotification(type, mes){
-    console.log('se apeleaza si functia mama din layout de notificare')
     setNotification((prev)=>{
       return [...prev, {id: uuid.v4().slice(0, 5), type, mes}];
     })
   }
-
-  async function refreshApp(){
-    try {
-      await Updates.reloadAsync(); 
-    } catch (err) {
-      console.log('Eroare la reincarcarea aplicatiei: ', err);
-    }
-  };
-
 
   async function areYouSureDeleting() {
     return new Promise((resolve) => {
@@ -45,9 +33,6 @@ const Layout = ({ children, navigation, route, user, setUser}) => {
       setDeletePromise(null); 
     }
   }
-
-
-
 
   const renderChildrenWithProps = () => {
     return React.Children.map(children, child => {

@@ -7,6 +7,8 @@ import { Card, HStack, Heading, Center, Image, Link, Divider, LinkText, Spinner,
   ArrowLeftIcon, ArrowRigthIcon
 } from '@gluestack-ui/themed';
 import NavbarProgram from '../Components/NavbarProgram';
+import ImageCarousel from '../Components/ImageCarousel';
+
 
 const Locations = (props) => {
 
@@ -152,14 +154,11 @@ const Locations = (props) => {
                 {location.name}
               </Heading>
 
-              
-              
               <View style={{ flex: 1, marginTop: 20 }}>
-                <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                  {location.arrayWithLinkImages.map((image, idx) => (
-                    <Image alt={idx + "Image"} key={idx} source={{ uri: image }} style={styles.image} />
-                  ))}
-                </ScrollView>
+                {location.arrayWithLinkImages.length ? 
+                <ImageCarousel  imageUrls={location.arrayWithLinkImages}/>:
+                <View></View>
+                }
               </View>
 
               <VStack space="md" justifyContent='center' alignItems='center'>
@@ -230,12 +229,6 @@ const styles = StyleSheet.create({
   },
   scrollViewContent: {
     paddingVertical: 20,
-  },
-  image: {
-    width: 200,
-    height: 200,
-    marginRight: 10,
-    borderRadius: 10,
   },
   buttonPress: {
     backgroundColor: '#2196F3',

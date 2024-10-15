@@ -3,6 +3,8 @@ import { ScrollView, Pressable, View, Clipboard, StyleSheet } from 'react-native
 import { ArrowRightIcon, CloseIcon, Card, Heading, Link, Image, LinkText, Text, VStack, Divider, HStack, TrashIcon,RepeatIcon, CheckIcon,  Icon } from "@gluestack-ui/themed";
 import {addDataToAsyncStorage, getDataFromAsyncStorage} from '../diverse.js';
 import TimePicker from '../Components/TimePicker.js';
+import ImageCarousel from '../Components/ImageCarousel.js';
+
 
 const DailyProgram = (props) => {
   
@@ -129,11 +131,10 @@ const DailyProgram = (props) => {
             </Text>
 
             <View style={{ flex: 1, marginTop: 20 }}>
-              <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                {ob.arrayWithLinkImages.map((image, idx) => {
-                  return <Image alt={idx + 'Images'} key={idx} source={{ uri: image }} style={styles.image} />
-                })}
-              </ScrollView>
+              {ob.arrayWithLinkImages.length ? 
+              <ImageCarousel   imageUrls={ob.arrayWithLinkImages }/> : 
+              <View></View>
+              }
             </View>
 
             <VStack space="md" justifyContent='center' alignItems='center'>
@@ -214,12 +215,7 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     paddingBottom: 20, // added padding for extra scrolling space
   },
-  image: {
-    width: 200,
-    height: 200,
-    marginRight: 10,
-    borderRadius: 10,
-  },
+
 });
 
 export default DailyProgram;
