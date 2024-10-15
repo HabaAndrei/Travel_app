@@ -13,7 +13,7 @@ import { GluestackUIProvider } from "@gluestack-ui/themed"
 import { config } from "@gluestack-ui/config"
 import Layout from './Components/Layout.js';
 import {onAuthStateChanged} from 'firebase/auth';
-
+import Trip from './Screens/Trip.js';
 
 
 const Stack = createNativeStackNavigator();
@@ -77,7 +77,11 @@ const App = () => {
     </Layout>
   );
 
-
+  const TripScreen = ({ navigation, route }) => (
+    <Layout  navigation={navigation} route={route} user={user} setUser={setUser}   >
+      <Trip/>
+    </Layout>
+  );
 
   return (
 
@@ -87,6 +91,11 @@ const App = () => {
           <Stack.Screen
             name="Plans"
             component={PlansScreen}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="Trip"
+            component={TripScreen}
             options={{headerShown: false}}
           />
           <Stack.Screen

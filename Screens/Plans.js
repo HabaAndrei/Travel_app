@@ -44,7 +44,6 @@ const Plans = (props) => {
 
             {plans.map((obiect, index)=>{
                 console.log(obiect);
-
                 return <Card key={index}   p="$5" borderRadius="$lg" maxWidth={360} m="$3">
 
                     <Heading size="md" fontFamily="$heading" mb="$4">
@@ -62,7 +61,6 @@ const Plans = (props) => {
                         </Text>
                     </HStack>
 
-
                     <HStack alignItems="center" justifyContent="flex-end">
                         <Link onPress={() => { console.log('ok') }}>
                             <HStack alignItems="center">
@@ -74,16 +72,10 @@ const Plans = (props) => {
                         </Link>
                     </HStack>
 
-
                 </Card>
 
             })}
     
-      
-            
-            
-      
-
         </View>
         :
         <View>
