@@ -2,7 +2,7 @@ import { StyleSheet, View, ScrollView, Pressable } from 'react-native'
 import React, {useState, useEffect} from 'react'
 import { useIsFocused } from '@react-navigation/native';   
 import {getPlansFromDbWithUid} from '../firebase.js';
-import {  Box, Divider, Text, HStack , Heading, VStack, Button, ButtonText} from '@gluestack-ui/themed' ;
+import {  Card, Divider, Text, HStack , Heading, Link, LinkText, Icon, ArrowRightIcon, VStack, Button, ButtonText} from '@gluestack-ui/themed' ;
 
 const Plans = (props) => {
 
@@ -42,17 +42,16 @@ const Plans = (props) => {
         plans.length ? 
         <View>
 
-            <VStack space='lg' p='$12' >
             {plans.map((obiect, index)=>{
+                console.log(obiect);
 
-                return  <Box key={index} >
-                    <Text size='xs' color='$darkBlue600' fontWeight='$bold'>
-                        {obiect.country}
-                    </Text>
-                    <Heading>
-                        {obiect.city}
+                return <Card key={index}   p="$5" borderRadius="$lg" maxWidth={360} m="$3">
+
+                    <Heading size="md" fontFamily="$heading" mb="$4">
+                        {obiect.country} - {obiect.city}
                     </Heading>
-                    
+
+
                     <HStack space='sm' mt='$3' h='$5'>
                         <Text size='xs'>
                             From {obiect.from}
@@ -61,20 +60,25 @@ const Plans = (props) => {
                         <Text size='xs'>
                             To {obiect.to}
                         </Text>
-                        <Divider orientation='vertical' bg='$trueGray300'/>
-
-                        <Text size='xs' style={{ fontWeight: 'bold'}}>
-                            See all trip
-                        </Text>
                     </HStack>
 
-                    <Divider style={{marginTop: 10}} bg="$trueGray300" $dark-bg="$backgroundDark700" />
 
-                </Box>
+                    <HStack alignItems="center" justifyContent="flex-end">
+                        <Link onPress={() => { console.log('ok') }}>
+                            <HStack alignItems="center">
+                                <LinkText  size="sm"  fontFamily="$heading"  fontWeight="$semibold"  color="$primary600"  $dark-color="$primary300"  textDecorationLine="none"  >
+                                    See the travel
+                                </LinkText>
+                                <Icon as={ArrowRightIcon}    size="sm"    color="$primary600"    mt="$0.5"    ml="$0.5" $dark-color="$primary300" />
+                            </HStack>
+                        </Link>
+                    </HStack>
+
+
+                </Card>
 
             })}
     
-            </VStack>
       
             
             
