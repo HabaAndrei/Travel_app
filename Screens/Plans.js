@@ -43,7 +43,6 @@ const Plans = (props) => {
         <View>
 
             {plans.map((obiect, index)=>{
-                console.log(obiect);
                 return <Card key={index}   p="$5" borderRadius="$lg" maxWidth={360} m="$3">
 
                     <Heading size="md" fontFamily="$heading" mb="$4">
@@ -62,7 +61,7 @@ const Plans = (props) => {
                     </HStack>
 
                     <HStack alignItems="center" justifyContent="flex-end">
-                        <Link onPress={() => { console.log('ok') }}>
+                        <Link onPress={() => { props.navigation.navigate('Trip', {from: obiect.from, to: obiect.to, city: obiect.city, country: obiect.country, program: obiect.programDaysString}) }}>
                             <HStack alignItems="center">
                                 <LinkText  size="sm"  fontFamily="$heading"  fontWeight="$semibold"  color="$primary600"  $dark-color="$primary300"  textDecorationLine="none"  >
                                     See the travel
@@ -71,7 +70,6 @@ const Plans = (props) => {
                             </HStack>
                         </Link>
                     </HStack>
-
                 </Card>
 
             })}
