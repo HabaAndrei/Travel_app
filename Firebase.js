@@ -140,7 +140,10 @@ async function getPlansFromDbWithUid(uid){
     const querySnapshot = await getDocs(q);
     let programs = [];
     querySnapshot.forEach((doc) => {
-      programs.push(doc.data());
+      const {id} = doc;
+      let data = doc.data();
+      data.id = id;
+      programs.push(data);
     });
     rezFin = {type:true, data: programs};
   }catch(err){
@@ -160,29 +163,29 @@ export {db, auth, signOutUser, deleteTheUser, addProgramIntoDb, createUserEmailP
 
 
 
-  async function getData(){
-    // const docRef = doc(db, "travel_destinations", '1GTlNqmma2kgfSuaN3B1');
-    // const docSnap = await getDoc(docRef);
-    
-    
-    // if (docSnap.exists()) {
-    //   console.log("Document data:", docSnap.data());
-    // } else {
-    //   console.log("No such document!");
-    // }
+async function getData(){
+  // const docRef = doc(db, "travel_destinations", '1GTlNqmma2kgfSuaN3B1');
+  // const docSnap = await getDoc(docRef);
+  
+  
+  // if (docSnap.exists()) {
+  //   console.log("Document data:", docSnap.data());
+  // } else {
+  //   console.log("No such document!");
+  // }
 
-    try{
-      console.log('se executa!!!')
-      const q = query(collection(db, "travel_destinations"), where("capital", ">=", 'Buc'), where("capital", "<=", 'Buc'));
-      console.log(q);
-      const querySnapshot = await getDocs(q);
-      console.log(querySnapshot);
-      querySnapshot.forEach((doc) => {
-        // doc.data() is never undefined for query doc snapshots
-        console.log(doc.data());
-      });
-    }catch(err){
-      console.log('err=>', err);
-    }
-
+  try{
+    console.log('se executa!!!')
+    const q = query(collection(db, "travel_destinations"), where("capital", ">=", 'Buc'), where("capital", "<=", 'Buc'));
+    console.log(q);
+    const querySnapshot = await getDocs(q);
+    console.log(querySnapshot);
+    querySnapshot.forEach((doc) => {
+      // doc.data() is never undefined for query doc snapshots
+      console.log(doc.data());
+    });
+  }catch(err){
+    console.log('err=>', err);
   }
+
+}

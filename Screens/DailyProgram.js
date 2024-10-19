@@ -24,21 +24,19 @@ const DailyProgram = (props) => {
 
   async function  deleteActivity(indexActivity){
     const response = await props.areYouSureDeleting();
-    if (response) {
-      setDailyProgram((obiectDailyProgram)=>{
-        const {activities} = obiectDailyProgram.data;
-        const firstPart = activities.slice(0, indexActivity);
-        const secondPart = activities.slice(indexActivity + 1, activities.length);
-        const newActivities = firstPart.concat(secondPart);
-        const newData = {...obiectDailyProgram.data, activities: newActivities}
-        return {...obiectDailyProgram, data: newData};
-      })
-    }
+    if (!response)return
+    setDailyProgram((obiectDailyProgram)=>{
+      const {activities} = obiectDailyProgram.data;
+      const firstPart = activities.slice(0, indexActivity);
+      const secondPart = activities.slice(indexActivity + 1, activities.length);
+      const newActivities = firstPart.concat(secondPart);
+      const newData = {...obiectDailyProgram.data, activities: newActivities}
+      return {...obiectDailyProgram, data: newData};
+    })
   };
 
 
   async function pressOnSave(){
-
     const fullProgram = await getDataFromAsyncStorage("travelProgram");
     if(JSON.stringify(dailyProgram.data) === JSON.stringify(fullProgram?.data?.[dailyProgram.index])){
       props.navigation.navigate('Program', {type: "keepProgram"});
@@ -163,10 +161,7 @@ const DailyProgram = (props) => {
           })}
       </View>
 
-
-
       <View> 
-        
         <HStack h="$10" justifyContent="center" alignItems="center">
           <HStack alignItems="center"  >
             <Text  onPress={()=>pressOnCancel()} >Cancel</Text>

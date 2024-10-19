@@ -16,7 +16,6 @@ const Trip = (props) => {
     useEffect(() => {
         if (!isFocused) return;
         let { city, country, from, to, program } = props.route.params;
-        // aici sa nu mai primesc programul string si sa il iau eu din baza de date parametrilor 
         if (typeof program === 'string') program = JSON.parse(program);
         setTripProgram(program);
     }, [isFocused]);
@@ -25,13 +24,30 @@ const Trip = (props) => {
         Clipboard.setString(text);
     };
 
+    async function deleteActivity(index, indexActivity){
+        const response = await props.areYouSureDeleting();
+        if(!response)return;
+        let newProgram = [...tripProgram];
+        let activities = newProgram[index].activities;
+        const firstPart = activities.slice(0, indexActivity);
+        const secondPart = activities.slice(indexActivity + 1, activities.length);
+        const newActivities = firstPart.concat(secondPart);
+        newProgram[index].activities = newActivities;
+
+        
+        setTripProgram((prev)=>{            
+            return [...newProgram];
+        })
+        
+    }
+
     return (
-        <ScrollView >
-            <Accordion  width="100%" maxWidth={900} >
+        <ScrollView  >
+            <Accordion  width="100%" maxWidth={900}  shadowColor="transparent" >
                 {tripProgram.map((dayProgram, index)=>{
-                return <AccordionItem key={index} value={'item-' + (index + 1)} style={{marginBottom: 10}} >
+                return <AccordionItem key={index} value={'item-' + (index + 1)} style={{marginBottom: 10, marginTop: 10}} >
                     <AccordionHeader  >
-                        <AccordionTrigger style={{backgroundColor: '#C0C0C0', borderRadius: 10}} >
+                        <AccordionTrigger style={{backgroundColor: '#D3D3D3', borderRadius: 10}} >
                             {({ isExpanded }) => {
                                 return (   
                                     <>
@@ -49,13 +65,13 @@ const Trip = (props) => {
                         </AccordionTrigger>
                     </AccordionHeader>
                     <AccordionContent >
-                        {dayProgram.activities.map((obActivity, index)=>{
-                            return <Card key={index}  maxWidth={800} style={styles.card} >
+                        {dayProgram.activities.map((obActivity, indexActivity)=>{
+                            return <Card key={indexActivity}  maxWidth={800} style={{marginBottom: 15}}>
                                 <HStack justifyContent="space-between" alignItems="center">
                                     <Heading mb="$1" size="md">
                                         {obActivity.name}
                                     </Heading>
-                                    <Pressable onPress={() => {console.log('vrem sa stergem acivitatea')}}>
+                                    <Pressable onPress={() => {deleteActivity(index, indexActivity)}}>
                                         <Icon as={TrashIcon} m="$2" w="$6" h="$6" />
                                     </Pressable> 
                                 </HStack>
@@ -131,5 +147,9 @@ const Trip = (props) => {
 export default Trip;
 
 const styles = StyleSheet.create({
-
+    buttonText: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        marginTop: 10,
+    },
 });

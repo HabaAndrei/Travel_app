@@ -53,8 +53,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   image: {
-    width: 300,
-    height: 300,
+    width: 315,
+    height: 450,
   },
   dotsContainer: {
     flexDirection: 'row',

@@ -17,6 +17,7 @@ const Plans = (props) => {
 
     async function getPlansFromDb(uid){
         const rezQuery = await getPlansFromDbWithUid(uid);
+        console.log(rezQuery);
         if(!rezQuery.type){
             props.addNotification("error", "Unfortunately, there was a problem when taking the program")
             return;
