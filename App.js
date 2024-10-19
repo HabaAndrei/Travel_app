@@ -151,11 +151,3 @@ const styles = StyleSheet.create({})
 
 
 
-
-
-
-// Bine de facut : 
-
-// rezolv partea de autentificare / email / domeniu / firebase
-// migrarea intre pagini care nu au continut
-// ce date trebuie sa stochez in async storage ?

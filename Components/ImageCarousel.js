@@ -14,7 +14,7 @@ const ImageCarousel = (props) => {
           const endX = evt.nativeEvent.pageX;
           if (startX - endX > 20) {
             setImageNumber((number)=>{
-                if(number >= props.imageUrls.length )return number;
+                if(number >= props.imageUrls.length - 1 )return number;
                 else return number +=1;
             })
           } else if (endX - startX > 20) {
