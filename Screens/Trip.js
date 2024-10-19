@@ -1,8 +1,8 @@
 import { StyleSheet, View, Pressable, ScrollView, Clipboard } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { useIsFocused } from '@react-navigation/native'; 
-import {  AccordionIcon, Text, AccordionTitleText,  AccordionTrigger,  AccordionHeader, AccordionContent,
-    AccordionItem, Accordion, AddIcon, AccordionContentText, Card, Heading, 
+import { Text, AccordionTitleText,  AccordionTrigger,  AccordionHeader, AccordionContent,
+    AccordionItem, Accordion, AddIcon, Card, Heading, 
     Icon, TrashIcon, HStack, VStack, LinkText, Link, Divider, RemoveIcon
 } from '@gluestack-ui/themed';
 import ImageCarousel from '../Components/ImageCarousel.js';
@@ -15,7 +15,6 @@ const Trip = (props) => {
 
     useEffect(() => {
         if (!isFocused) return;
-        console.log(props);
         let { city, country, from, to, id, program } = props.route.params;
         if (typeof program === 'string') program = JSON.parse(program);
         setTripProgram(program);
@@ -47,11 +46,20 @@ const Trip = (props) => {
         }else{
             props.addNotification('error', 'There is a problem deleting the activity')
         }
-        
     }
 
     return (
         <ScrollView  >
+
+            <View style={styles.container}>
+                <Text style={styles.title}>
+                    {props.route.params.country} - {props.route.params.city}
+                </Text>
+                <Text style={styles.subtitle}>
+                    {props.route.params.from} - {props.route.params.to}
+                </Text>
+            </View>
+
             <Accordion  width="100%" maxWidth={900}  shadowColor="transparent" >
                 {tripProgram.map((dayProgram, index)=>{
                 return <AccordionItem key={index} value={'item-' + (index + 1)} style={{marginBottom: 10, marginTop: 10}} >
@@ -160,5 +168,20 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontWeight: 'bold',
         marginTop: 10,
+    },
+    container: {
+        padding: 10,           
+        alignItems: 'center',   
+        backgroundColor: '#f0f0f0',  
+    },
+    title: {
+        fontSize: 18,          
+        fontWeight: 'bold',    
+        color: '#333',         
+    },
+    subtitle: {
+        fontSize: 16,         
+        color: '#555',       
+        marginTop: 5,        
     },
 });
