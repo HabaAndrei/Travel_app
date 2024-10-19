@@ -41,15 +41,11 @@ const Plans = (props) => {
       {
         plans.length ? 
         <View>
-
             {plans.map((obiect, index)=>{
-                return <Card key={index}   p="$5" borderRadius="$lg" maxWidth={360} m="$3">
-
+                return <Card key={index}   p="$5" borderRadius="$lg" maxWidth={600} m="$3">
                     <Heading size="md" fontFamily="$heading" mb="$4">
                         {obiect.country} - {obiect.city}
                     </Heading>
-
-
                     <HStack space='sm' mt='$3' h='$5'>
                         <Text size='xs'>
                             From {obiect.from}
@@ -59,7 +55,6 @@ const Plans = (props) => {
                             To {obiect.to}
                         </Text>
                     </HStack>
-
                     <HStack alignItems="center" justifyContent="flex-end">
                         <Link onPress={() => { props.navigation.navigate('Trip', {from: obiect.from, to: obiect.to, city: obiect.city, country: obiect.country, program: obiect.programDaysString, id: obiect.id}) }}>
                             <HStack alignItems="center">
@@ -71,9 +66,7 @@ const Plans = (props) => {
                         </Link>
                     </HStack>
                 </Card>
-
             })}
-    
         </View>
         :
         <View>
@@ -85,8 +78,6 @@ const Plans = (props) => {
                 </Pressable>
             </View>
         </View>
-
-
       }
     </ScrollView>
   )

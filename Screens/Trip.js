@@ -7,10 +7,12 @@ import { Text, AccordionTitleText,  AccordionTrigger,  AccordionHeader, Accordio
 } from '@gluestack-ui/themed';
 import ImageCarousel from '../Components/ImageCarousel.js';
 import {updateProgramActivities} from '../firebase.js';
+import TimePicker from '../Components/TimePicker.js';
 
 const Trip = (props) => {
     const isFocused = useIsFocused();
     const [tripProgram, setTripProgram] = useState([]);
+    const [isTimePickerVisible, setTimePickerVisibility] = useState({type:false, index: '', indexActivity: ''});
 
 
     useEffect(() => {
@@ -47,6 +49,35 @@ const Trip = (props) => {
             props.addNotification('error', 'There is a problem deleting the activity')
         }
     }
+
+    const hideDatePicker = () => {
+        setTimePickerVisibility({type:false, index: '', indexActivity: ''});
+    };
+    
+    async function handleConfirm(time){
+        const timestamp = new Date(time).getTime();
+        const hour = new Date(timestamp).getHours();
+        const minutes = new Date(timestamp).getMinutes();
+        const {index, indexActivity} = isTimePickerVisible;
+        let program = [...tripProgram];
+        program[index].activities[indexActivity].time = `${hour}:${minutes}`;
+        const id = props.route.params.id;
+        if(!id){
+            props.addNotification('error', 'There is a problem when updating the time')
+            return;
+        }
+        hideDatePicker();
+        const rez = await updateProgramActivities(id, [...program]);
+        if(rez.type){
+            setTripProgram((prev)=>{
+                return [...program];
+            })
+        }else{
+            props.addNotification('error', 'There is a problem when updating the time')
+        }
+    };
+
+
 
     return (
         <ScrollView  >
@@ -97,9 +128,9 @@ const Trip = (props) => {
                                     <Text  style={{marginRight: 30}} fontSize="$sm" fontStyle="normal" fontWeight="$normal" lineHeight="$sm" mb="$2" sx={{ color: "$textLight700" }}>
                                         {obActivity.time}
                                     </Text>
-                                    {/* <TimePicker isTimePickerVisible={isTimePickerVisible} setTimePickerVisibility={setTimePickerVisibility} 
-                                        showDatePicker={()=>setTimePickerVisibility({type: true, index})} hideDatePicker={hideDatePicker} handleConfirm={handleConfirm}
-                                    /> */}
+                                    <TimePicker isTimePickerVisible={isTimePickerVisible} setTimePickerVisibility={setTimePickerVisibility} 
+                                        showDatePicker={()=>setTimePickerVisibility({type: true, index, indexActivity})} hideDatePicker={hideDatePicker} handleConfirm={handleConfirm}
+                                    />
                                 </View>
 
                                 {obActivity.address ? 
