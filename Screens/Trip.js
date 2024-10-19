@@ -6,7 +6,7 @@ import {  AccordionIcon, Text, AccordionTitleText,  AccordionTrigger,  Accordion
     Icon, TrashIcon, HStack, VStack, LinkText, Link, Divider, RemoveIcon
 } from '@gluestack-ui/themed';
 import ImageCarousel from '../Components/ImageCarousel.js';
-
+import {updateProgramActivities} from '../firebase.js';
 
 const Trip = (props) => {
     const isFocused = useIsFocused();
@@ -15,7 +15,8 @@ const Trip = (props) => {
 
     useEffect(() => {
         if (!isFocused) return;
-        let { city, country, from, to, program } = props.route.params;
+        console.log(props);
+        let { city, country, from, to, id, program } = props.route.params;
         if (typeof program === 'string') program = JSON.parse(program);
         setTripProgram(program);
     }, [isFocused]);
@@ -28,16 +29,24 @@ const Trip = (props) => {
         const response = await props.areYouSureDeleting();
         if(!response)return;
         let newProgram = [...tripProgram];
-        let activities = newProgram[index].activities;
+        let {activities} = newProgram[index];
         const firstPart = activities.slice(0, indexActivity);
         const secondPart = activities.slice(indexActivity + 1, activities.length);
         const newActivities = firstPart.concat(secondPart);
         newProgram[index].activities = newActivities;
-
-        
-        setTripProgram((prev)=>{            
-            return [...newProgram];
-        })
+        const id = props.route.params.id;
+        if(!id){
+            props.addNotification('error', 'There is a problem deleting the activity')
+            return;
+        }
+        const rez = await updateProgramActivities(id, [...newProgram]);
+        if(rez.type){
+            setTripProgram((prev)=>{            
+                return [...newProgram];
+            })
+        }else{
+            props.addNotification('error', 'There is a problem deleting the activity')
+        }
         
     }
 

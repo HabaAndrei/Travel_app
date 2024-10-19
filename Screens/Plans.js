@@ -62,7 +62,7 @@ const Plans = (props) => {
                     </HStack>
 
                     <HStack alignItems="center" justifyContent="flex-end">
-                        <Link onPress={() => { props.navigation.navigate('Trip', {from: obiect.from, to: obiect.to, city: obiect.city, country: obiect.country, program: obiect.programDaysString}) }}>
+                        <Link onPress={() => { props.navigation.navigate('Trip', {from: obiect.from, to: obiect.to, city: obiect.city, country: obiect.country, program: obiect.programDaysString, id: obiect.id}) }}>
                             <HStack alignItems="center">
                                 <LinkText  size="sm"  fontFamily="$heading"  fontWeight="$semibold"  color="$primary600"  $dark-color="$primary300"  textDecorationLine="none"  >
                                     See the travel

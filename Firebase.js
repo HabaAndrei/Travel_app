@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getFirestore, collection, addDoc, doc, setDoc ,getDoc, query, where, getDocs } from "firebase/firestore";
+import { getFirestore, collection, addDoc, doc, setDoc ,updateDoc, query, where, getDocs } from "firebase/firestore";
 import {MEASUREMENT_ID, APIKEY, AUTH_DOMAIN, PROJECT_ID, STORAGE_BUCKET, MESSAGING_SENDER_ID, APP_ID} from '@env';
 import { getAuth, signOut,  deleteUser, initializeAuth, createUserWithEmailAndPassword, onAuthStateChanged,
    sendEmailVerification, signInWithEmailAndPassword, sendPasswordResetEmail  } from "firebase/auth";
@@ -133,7 +133,6 @@ async function addProgramIntoDb(city, country, from , to, programDaysString, uid
 }
 
 async function getPlansFromDbWithUid(uid){
-
   let rezFin = {type: true};
   try{
     const q = query(collection(db, "programs"), where("uid", "==", uid));
@@ -150,13 +149,24 @@ async function getPlansFromDbWithUid(uid){
     rezFin = {type: false, err}
   }
   return rezFin;
+}
 
+async function updateProgramActivities(id, program){
+  let rezFin = {type: true};
+  try{
+    if(typeof(program) != 'string') program = JSON.stringify(program);
+    const ref = doc(db, 'programs', id);
+    const rez = await updateDoc(ref, {programDaysString: program});
+  }catch(err){
+    rezFin = {type: false, err};
+  }
+  return rezFin;
 }
 
 
 
 export {db, auth, signOutUser, deleteTheUser, addProgramIntoDb, createUserEmailPassword, verifyEmail, signInUserEmailPassword, 
-  getPlansFromDbWithUid, forgotPassword
+  getPlansFromDbWithUid, forgotPassword, updateProgramActivities
 };
 
 
