@@ -56,8 +56,10 @@ const Trip = (props) => {
     
     async function handleConfirm(time){
         const timestamp = new Date(time).getTime();
-        const hour = new Date(timestamp).getHours();
-        const minutes = new Date(timestamp).getMinutes();
+        let hour = new Date(timestamp).getHours();
+        let minutes = new Date(timestamp).getMinutes();
+        if(JSON.stringify(minutes).length < 2)minutes = "0" + JSON.stringify(minutes);
+        if(JSON.stringify(hour).length < 2)hour = "0" + JSON.stringify(hour);
         const {index, indexActivity} = isTimePickerVisible;
         let program = [...tripProgram];
         program[index].activities[indexActivity].time = `${hour}:${minutes}`;
@@ -73,6 +75,7 @@ const Trip = (props) => {
                 return [...program];
             })
         }else{
+            console.log(rez.err);
             props.addNotification('error', 'There is a problem when updating the time')
         }
     };
@@ -145,10 +148,12 @@ const Trip = (props) => {
 
 
                                 <Text size="m" style={{ marginTop: 10 }}>
-                                <Text bold={true}>Info:</Text> {obActivity.info}
+                                    <Text bold={true}>Info:</Text> 
+                                    {obActivity.info}
                                 </Text>
+
                                 <Text size="m" style={{ marginTop: 10 }}>
-                                <Text bold={true}>Description: </Text>
+                                    <Text bold={true}>Description: </Text>
                                     {obActivity.description}
                                 </Text>
 
@@ -158,7 +163,6 @@ const Trip = (props) => {
                                     <View></View>
                                     }
                                 </View>
-
 
                                 <VStack space="md" justifyContent='center' alignItems='center'>
                                     <HStack h='$10' justifyContent='center' alignItems='center'>

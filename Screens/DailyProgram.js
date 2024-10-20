@@ -63,8 +63,10 @@ const DailyProgram = (props) => {
 
   const handleConfirm = (time) => {
     const timestamp = new Date(time).getTime();
-    const hour = new Date(timestamp).getHours();
-    const minutes = new Date(timestamp).getMinutes();
+    let hour = new Date(timestamp).getHours();
+    let minutes = new Date(timestamp).getMinutes();
+    if(JSON.stringify(minutes).length < 2)minutes = "0" + JSON.stringify(minutes);
+    if(JSON.stringify(hour).length < 2)hour = "0" + JSON.stringify(hour);
     const {index} = isTimePickerVisible;
     setDailyProgram((prev)=>{
       const activities = prev.data?.activities;

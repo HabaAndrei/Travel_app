@@ -26,7 +26,6 @@ const Plans = (props) => {
 
         const arIndexSort = sortArrayDate(arWitProgram.map((ob)=>ob.from));
         let arraySort =  arIndexSort.map((index) => {return arWitProgram[index]});
-        console.log(arraySort);
         setPlans(arraySort);
     }
 
