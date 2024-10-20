@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { ScrollView, Pressable, View, Clipboard, StyleSheet } from 'react-native';
-import { ArrowRightIcon, CloseIcon, Card, Heading, Link, Image, LinkText, Text, VStack, Divider, HStack, TrashIcon,RepeatIcon, CheckIcon,  Icon } from "@gluestack-ui/themed";
+import { ArrowLeftIcon, CloseIcon, Card, Heading, Link, Image, LinkText, Text, VStack, Divider, HStack, TrashIcon,RepeatIcon, CheckIcon,  Icon } from "@gluestack-ui/themed";
 import {addDataToAsyncStorage, getDataFromAsyncStorage} from '../diverse.js';
 import TimePicker from '../Components/TimePicker.js';
 import ImageCarousel from '../Components/ImageCarousel.js';
@@ -15,7 +15,6 @@ const DailyProgram = (props) => {
     const { data, index } = props.route.params;
     setDailyProgram({ data, index });
   }, []);
-
 
 
   const copyInClipboard = (text) => {
@@ -165,14 +164,14 @@ const DailyProgram = (props) => {
       <View> 
         <HStack h="$10" justifyContent="center" alignItems="center">
           <HStack alignItems="center"  >
-            <Text  onPress={()=>pressOnCancel()} >Cancel</Text>
-            <Icon as={CloseIcon} m="$2" w="$6" h="$6" />
+            <Icon as={ArrowLeftIcon} m="$2" w="$6" h="$6" />
+            <Text bold={true} onPress={()=>pressOnCancel()} >Go back</Text>
           </HStack>
 
           <Divider  style={{ margin: 15 }}  orientation="vertical"  mx="$2.5"  bg="$indigo500"  h={25}  $dark-bg="$indigo400"/>
 
           <HStack alignItems="center">
-            <Text onPress={()=>pressOnSave()} >Save</Text>
+            <Text bold={true} onPress={()=>pressOnSave()} >Save changes</Text>
             <Icon as={CheckIcon} m="$2" w="$6" h="$6" />
           </HStack>
         </HStack>

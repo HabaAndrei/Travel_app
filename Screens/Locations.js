@@ -101,7 +101,8 @@ const Locations = (props) => {
 
 
   async function goToCreateProgram(){    
-    const selectedLocations = locations.filter((place)=>place.selected)
+    addDataToAsyncStorage('arrayLocationsToTravel', locations)
+    const selectedLocations = locations.filter((place)=>place.selected);
     if(!selectedLocations.length){
       props.addNotification('warning', 'You do not have any location selected to make the trip');
       return;

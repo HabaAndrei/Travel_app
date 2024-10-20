@@ -3,16 +3,20 @@ import React, { useEffect, useState } from 'react';
 import { useIsFocused } from '@react-navigation/native'; 
 import { Text, AccordionTitleText,  AccordionTrigger,  AccordionHeader, AccordionContent,
     AccordionItem, Accordion, AddIcon, Card, Heading, 
-    Icon, TrashIcon, HStack, VStack, LinkText, Link, Divider, RemoveIcon
+    Icon, TrashIcon, HStack, VStack, LinkText, Link, Divider, Center, RemoveIcon
 } from '@gluestack-ui/themed';
 import ImageCarousel from '../Components/ImageCarousel.js';
 import {updateProgramActivities} from '../firebase.js';
 import TimePicker from '../Components/TimePicker.js';
+import DatePicker from '../Components/DatePicker';
+import {formatDateFromMilliseconds} from '../diverse';
 
 const Trip = (props) => {
+
     const isFocused = useIsFocused();
     const [tripProgram, setTripProgram] = useState([]);
     const [isTimePickerVisible, setTimePickerVisibility] = useState({type:false, index: '', indexActivity: ''});
+    const [datePickerVisibility, setDatePickerVisibility] = useState({type: false, index:''});
 
 
     useEffect(() => {
@@ -81,16 +85,32 @@ const Trip = (props) => {
     };
 
 
+    async function confimNewDate(date){
+        const data = formatDateFromMilliseconds(date);
+        const newProgram = [...tripProgram];
+        newProgram[datePickerVisibility.index].date = data;
+        const id = props.route.params.id;
+        if(!id){
+            props.addNotification('error', 'There is a problem when updating the date')
+            return;
+        }
+
+        const rez = await updateProgramActivities(id, [...newProgram]);
+        if(rez.type){
+            setTripProgram((prev)=>{
+                return [...newProgram];
+            })
+        }else{
+            console.log(rez.err);
+            props.addNotification('error', 'There is a problem when updating the date')
+        }
+    }
 
     return (
         <ScrollView  >
-
             <View style={styles.container}>
                 <Text style={styles.title}>
                     {props.route.params.country} - {props.route.params.city}
-                </Text>
-                <Text style={styles.subtitle}>
-                    {new Date(props.route.params.from).toString().slice(0, 15)} - {new Date(props.route.params.to).toString().slice(0, 15)} 
                 </Text>
             </View>
 
@@ -116,6 +136,19 @@ const Trip = (props) => {
                         </AccordionTrigger>
                     </AccordionHeader>
                     <AccordionContent >
+                       
+                        <Center>
+                        <Heading>
+                                {new Date(dayProgram.date).toString().slice(0, 15)}
+                            </Heading>
+                        </Center>
+                        <DatePicker
+                            showDatePicker={() => setDatePickerVisibility({ type: true, index })}
+                            datePickerVisibility={datePickerVisibility}
+                            setDatePickerVisibility={setDatePickerVisibility}
+                            confimNewDate={confimNewDate}
+                        />
+
                         {dayProgram.activities.map((obActivity, indexActivity)=>{
                             return <Card key={indexActivity}  maxWidth={800} style={{marginBottom: 15}}>
                                 <HStack justifyContent="space-between" alignItems="center">

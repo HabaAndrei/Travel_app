@@ -14,6 +14,8 @@ const DatePicker = (props) => {
         props.datePickerVisibility.func(new Date(date).getTime());
       }else if(props.datePickerVisibility.data === "to"){
         props.datePickerVisibility.func(new Date(date).getTime());
+      }else{
+        props.confimNewDate(new Date(date).getTime());
       }
       hideDatePicker();
     };
@@ -21,10 +23,15 @@ const DatePicker = (props) => {
   return (
     <View>
       <Button 
-      title={
-        props.how == "from" ? "Select start date" : 
-        "Select end date"
-      }
+
+        title={
+          props.how? 
+          (props.how == "from" ? "Select start date" : 
+          "Select end date" ) : 
+          "Change the date"
+        }
+
+      
       onPress={props.showDatePicker} />
         <DateTimePickerModal
             isVisible={props.datePickerVisibility.type}

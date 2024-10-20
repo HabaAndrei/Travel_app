@@ -35,7 +35,7 @@ const Program = (props) => {
     const {locations, type} = props?.route?.params;
 
     if(type === "createProgram"){
-      getProgram('createProgram', from, to, city, country, locations);
+      createProgramAi('createProgram', from, to, city, country, locations);
     }
     
 
@@ -61,12 +61,12 @@ const Program = (props) => {
     if(!rez.type)return
     let {method, from, to, city, country, locations} = rez.data;
     setProgram([]);
-    getProgram( method, from, to, city, country, locations)
+    createProgramAi( method, from, to, city, country, locations)
   }
 
 
 
-  async function getProgram(method, from, to, city, country, locations){
+  async function createProgramAi(method, from, to, city, country, locations){
     setButtonHomePage(false);
     setProgram([]);
     axios.post(`${address_function_api}`, 
@@ -188,8 +188,14 @@ const Program = (props) => {
       :
       <View>
 
+        
         <NavbarProgram name={props.route.name} navigation={props.navigation} />
 
+        <Center>
+          <Heading>
+            The generated program
+          </Heading>
+        </Center>
 
         {!program?.length ? 
         <View style={styles.container} >
@@ -229,21 +235,21 @@ const Program = (props) => {
 
           <HStack h="$10" justifyContent="center" alignItems="center">
             <HStack alignItems="center"  >
-              <Text  onPress={()=>{deleteAllProgram()}} >Delete</Text>
+              <Text bold={true} onPress={()=>{deleteAllProgram()}} >Delete</Text>
               <Icon as={TrashIcon} m="$2" w="$6" h="$6" />
             </HStack>
 
             <Divider  style={{ margin: 15 }}  orientation="vertical"  mx="$2.5"  bg="$emerald500"  h={25}  $dark-bg="$emerald400" />
 
             <HStack alignItems="center">
-              <Text onPress={()=>regenerateProgram()} >Regenerate</Text>
+              <Text bold={true} onPress={()=>regenerateProgram()} >Regenerate</Text>
               <Icon as={RepeatIcon} m="$2" w="$6" h="$6" />
             </HStack>
 
             <Divider  style={{ margin: 15 }}  orientation="vertical"  mx="$2.5"  bg="$indigo500"  h={25}  $dark-bg="$indigo400"/>
 
             <HStack alignItems="center">
-              <Text onPress={()=>saveProgramInDb()} >Save</Text>
+              <Text bold={true} onPress={()=>saveProgramInDb()} >Save</Text>
               <Icon as={CheckIcon} m="$2" w="$6" h="$6" />
             </HStack>
           </HStack>
