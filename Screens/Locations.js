@@ -3,8 +3,7 @@ import React, {useState, useEffect} from 'react'
 import { useIsFocused } from '@react-navigation/native'; 
 import {address_function_api, getDataFromAsyncStorage, addDataToAsyncStorage, multiSetFromAsyncStorage} from '../diverse';
 import axios from 'axios';
-import { Card, HStack, Heading, Center, Image, Link, Divider, LinkText, Spinner, VStack, CloseIcon, CheckIcon, Icon,
-  ArrowLeftIcon, ArrowRigthIcon
+import { Card, HStack, Heading, Center, Switch, Link, Divider, LinkText, Spinner, VStack, CloseIcon, CheckIcon, Icon,
 } from '@gluestack-ui/themed';
 import NavbarProgram from '../Components/NavbarProgram';
 import ImageCarousel from '../Components/ImageCarousel';
@@ -49,7 +48,14 @@ const Locations = (props) => {
       console.log('Asta este raspunsul', data);
       if(data.data.type){
         const arrayWithLocations = data.data.data;
-        const arraySelected = arrayWithLocations.map((ob)=>{return {...ob, selected: false}});
+        const arraySelected = arrayWithLocations.map((ob)=>{
+          console.log(ob);
+          if(!ob.full_tour){
+            return {...ob, selected: false, selected_full_tour: false}
+          }else{
+            return {...ob, selected: false }
+          }
+        });
         setLocations(arraySelected)
         multiSetFromAsyncStorage([['arrayLocationsToTravel', [...arraySelected]], 
           ["locationsParameter", {from, to, city, country, newCheckbox}]]);
@@ -110,6 +116,13 @@ const Locations = (props) => {
 
   }
 
+  function selectFullTour(index){
+    setLocations((prev)=>{
+      let data = [...prev];
+      data[index].selected_full_tour = !data[index].selected_full_tour;
+      return [...prev];
+    })
+  }
 
 
   return (
@@ -139,7 +152,6 @@ const Locations = (props) => {
         ) : (
 
           <View>
-
             <Center>
               <Heading size="md" fontFamily="$heading" mb="$4">
                 Select the locations you would like to visit
@@ -147,7 +159,6 @@ const Locations = (props) => {
             </Center>
           
           {locations.map((location, index) =>{
-            
             return <Card key={index} p="$5" borderRadius="$lg" maxWidth={400} m="$3"
             style={[ styles.cardPressable, location.selected && styles.selectedCard ]} >
               <Heading size="md" fontFamily="$heading" mb="$4">
@@ -185,11 +196,27 @@ const Locations = (props) => {
               </VStack>
 
               <Center>
-                <Pressable style={styles.buttonPress} onPress={() => pressOnLocations(index)} >
-                  <Text style={styles.text} >
-                    {location.selected ? 'Deselect location' : 'Select location'}
-                  </Text>
-                </Pressable>
+                {location.hasOwnProperty('selected_full_tour') ? 
+                  <View  style={styles.viewButtons}>
+                    {location.selected ? 
+                    <Pressable onPress={() => selectFullTour(index)} style={styles.fullTourPress}>
+                      <Text style={styles.fullTourText}>Choose to explore the entire location</Text>
+                      <Switch value={location.selected_full_tour} />
+                    </Pressable> : <Text></Text>
+                    }
+                    <Pressable style={styles.buttonPress} onPress={() => pressOnLocations(index)} >
+                      <Text style={styles.text} >
+                        {location.selected ? 'Remove location from your visit' : 'Pick location for your visit'}
+                      </Text>
+                    </Pressable>
+                  </View>
+                  :
+                  <Pressable style={styles.buttonPress} onPress={() => pressOnLocations(index)} >
+                    <Text style={styles.text} >
+                      {location.selected ? 'Remove location from your visit' : 'Pick location for your visit'}
+                    </Text>
+                  </Pressable>
+                }
               </Center>
             </Card>
           })
@@ -230,16 +257,34 @@ const styles = StyleSheet.create({
   scrollViewContent: {
     paddingVertical: 20,
   },
+  viewButtons: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 20,
+  },
+  fullTourPress: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  fullTourText: {
+    marginRight: 10,
+    fontSize: 16,
+    color: '#333',
+  },
   buttonPress: {
     backgroundColor: '#2196F3',
     padding: 10,
     borderRadius: 5,
     height: 40,
-    width: 160,
-    marginBottom: 30,
+    width: 200,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 20,
   },
   text: {
     color: 'white',
+    fontSize: 16,
     textAlign: 'center',
   },
   buttonView: {

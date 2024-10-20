@@ -77,7 +77,6 @@ const DailyProgram = (props) => {
       prev.data.activities = [...newAr];
       return prev;
     })
-    props.addNotification('succes', `${hour}:${minutes} =>> index ${index}`);
     hideDatePicker();
   };
 
