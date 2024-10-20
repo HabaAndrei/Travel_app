@@ -90,7 +90,7 @@ const Trip = (props) => {
                     {props.route.params.country} - {props.route.params.city}
                 </Text>
                 <Text style={styles.subtitle}>
-                    {props.route.params.from} - {props.route.params.to}
+                    {new Date(props.route.params.from).toString().slice(0, 15)} - {new Date(props.route.params.to).toString().slice(0, 15)} 
                 </Text>
             </View>
 

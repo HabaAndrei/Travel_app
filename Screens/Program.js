@@ -206,7 +206,7 @@ const Program = (props) => {
             return  <Card  key={index}  p="$5" borderRadius="$lg" maxWidth={400} m="$3">
               <HStack justifyContent="space-between" alignItems="center">
                 <Text fontSize="$sm"  fontStyle="normal"  fontFamily="$heading"  fontWeight="$normal"  lineHeight="$sm"  mb="$2"  sx={{  color: "$textLight700" }} >
-                  {'Day' + ob.day + " | " } {ob.date}  
+                  {'Day' + ob.day + " | " } {new Date(ob.date).toString().slice(0, 15)}   
                 </Text>
                 <Pressable onPress={()=>{deleteDayFromProgram(index)}} >
                   <Icon as={TrashIcon} m="$2" w="$6" h="$6" />

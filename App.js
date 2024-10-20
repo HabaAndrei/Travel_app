@@ -23,6 +23,7 @@ const App = () => {
   const [user, setUser] = useState(false);
  
 
+  
   useEffect(()=>{
     reloadUser();
   }, [])
@@ -152,7 +153,7 @@ const styles = StyleSheet.create({})
 
 
 // De facut: 
-// rezolv bug ul cu alesul de timp
 // adaug ca clientul sa isi poata schimba data de tarvel pe zile
 // styling sa fie pe centru speener-ele 
 // partea de autentificare nodemailer 
+

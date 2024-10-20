@@ -88,7 +88,7 @@ const DailyProgram = (props) => {
       <View>
         <Text style={styles.title}>{dailyProgram.data.title}</Text>
         <View style={styles.detailsContainer}>
-          <Text style={styles.date}>{dailyProgram.data.date}</Text>
+          <Text style={styles.date}>{new Date(dailyProgram.data.date).toString().slice(0, 15)} </Text>
           <Text style={styles.dayText}>Day {dailyProgram.data.day}</Text>
         </View>
 

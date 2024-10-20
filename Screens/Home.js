@@ -108,7 +108,7 @@ const Home = (props) => {
             <View style={styles.buttonContainer}>
               {dateFrom ? (
                 <Text style={styles.centeredBoldText}>
-                  From {formatDateFromMilliseconds(dateFrom)}
+                  From: {new Date(formatDateFromMilliseconds(dateFrom)).toString().slice(0, 15)}
                 </Text>
               ) : (
                 <Text></Text>
@@ -126,7 +126,7 @@ const Home = (props) => {
             <View style={styles.buttonContainer}>
               {dateTo ? (
                 <Text style={styles.centeredBoldText}>
-                  To {formatDateFromMilliseconds(dateTo)}
+                  To: {new Date(formatDateFromMilliseconds(dateTo)).toString().slice(0, 15)}
                 </Text>
               ) : (
                 <Text></Text>
