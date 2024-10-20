@@ -1,4 +1,4 @@
-import { StyleSheet, View, ScrollView, Pressable } from 'react-native'
+import { StyleSheet, View, ScrollView, Pressable, SafeAreaView } from 'react-native'
 import React, {useState, useEffect} from 'react'
 import { useIsFocused } from '@react-navigation/native';   
 import {getPlansFromDbWithUid} from '../firebase.js';
@@ -36,10 +36,16 @@ const Plans = (props) => {
     }   
 
   return (
-    <ScrollView>
-      {
-        plans.length ? 
-        <View>
+    <SafeAreaView style={{flex: 1}}>
+      {!plans.length ? 
+        <View style={styles.buttonView} >
+            <Pressable  style={styles.buttonPress}  > 
+            <Text style={styles.text} onPress={()=>{props.navigation.navigate('Home')}}>
+                Create program</Text>
+            </Pressable>
+        </View>
+        :
+        <ScrollView style={{ flex: 1 }} >
             {plans.map((obiect, index)=>{
                 return <Card key={index}   p="$5" borderRadius="$lg" maxWidth={600} m="$3">
                     <Heading size="md" fontFamily="$heading" mb="$4">
@@ -65,43 +71,34 @@ const Plans = (props) => {
                         </Link>
                     </HStack>
                 </Card>
-            })}
-        </View>
-        :
-        <View>
-             <View style={styles.buttonView} >
-                <Pressable  style={styles.buttonPress}  > 
-                    <Text style={styles.text} onPress={()=>{props.navigation.navigate('Home')}}>
-                    Schedule trip
-                    </Text>
-                </Pressable>
-            </View>
-        </View>
+            })}            
+        </ScrollView>
       }
-    </ScrollView>
+    </SafeAreaView>
   )
 }
 
 export default Plans
 
 const styles = StyleSheet.create({
-    buttonPress:{
+    buttonPress: {
         backgroundColor: '#2196F3',
         padding: 10,
         borderRadius: 5,
-        height: 50,
-        width: 160,
-        marginBottom: 30
+        height: 40,
+        width: 200,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginBottom: 20,
     },
     text: {
         color: 'white',
+        fontSize: 16,
         textAlign: 'center',
     },
     buttonView: {
-        marginTop: 200,
-        flex: 1, 
+        flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
-        
     }, 
 })

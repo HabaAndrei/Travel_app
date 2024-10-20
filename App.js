@@ -152,7 +152,8 @@ const styles = StyleSheet.create({})
 
 
 
+
 // De facut: 
-// styling sa fie pe centru speener-ele 
+// CAND CLIENTUL SCHIMBA DATA SI ESTE MAI MICA / MAI MARE DECAT INTERVALUL INITIAL IL MODIFIC SI EU 
 // partea de autentificare nodemailer 
 

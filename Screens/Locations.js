@@ -1,9 +1,9 @@
-import { StyleSheet,SafeAreaView, Text, View, ScrollView, Pressable } from 'react-native'
+import { StyleSheet,SafeAreaView, View, ScrollView, Pressable, Dimensions } from 'react-native'
 import React, {useState, useEffect} from 'react'
 import { useIsFocused } from '@react-navigation/native'; 
 import {address_function_api, getDataFromAsyncStorage, addDataToAsyncStorage, multiSetFromAsyncStorage} from '../diverse';
 import axios from 'axios';
-import { Card, HStack, Heading, Center, Switch, Link, Divider, LinkText, Spinner, VStack, CloseIcon, CheckIcon, Icon,
+import { Card, HStack, Heading, Center, Text, Switch, Link, Divider, LinkText, Spinner, VStack, ArrowLeftIcon, CheckIcon, Icon,
 } from '@gluestack-ui/themed';
 import NavbarProgram from '../Components/NavbarProgram';
 import ImageCarousel from '../Components/ImageCarousel';
@@ -15,6 +15,7 @@ const Locations = (props) => {
   const [locations, setLocations] = useState([]);
   const [buttonHomePage, setButtonHomePage] = useState(false);
 
+  const screenHeight = Dimensions.get('window').height;
 
   useEffect(()=>{
 
@@ -127,25 +128,21 @@ const Locations = (props) => {
 
 
   return (
-  <SafeAreaView style={styles.container}>
+  <SafeAreaView style={{flex: 1}}>
     {buttonHomePage ? (
-      <View style={styles.buttonView}>
-        <Pressable style={styles.buttonPress}>
-          <Text style={styles.text} onPress={() => {
-            props.navigation.navigate('Home');
-            setButtonHomePage(false);
-          }}>
-            Create program
-          </Text>
+      <View style={styles.buttonView} >
+        <Pressable  style={styles.buttonPress}  > 
+          <Text style={styles.text} onPress={()=>{props.navigation.navigate('Home'); setButtonHomePage(false)}}>
+            Create program</Text>
         </Pressable>
       </View>
     ) : (
-      <ScrollView contentContainerStyle={styles.scrollViewContent}>
+      <ScrollView style={{flex: 1}} >
 
-      <NavbarProgram name={props.route.name} navigation={props.navigation} />
+        <NavbarProgram name={props.route.name} navigation={props.navigation} />
 
         {!locations?.length ? (
-          <View style={{ marginTop: 300 }}>
+          <View style={{ marginTop: screenHeight / 3, }}>
             <Center  >
               <Spinner color="$indigo600" />
             </Center>
@@ -226,14 +223,14 @@ const Locations = (props) => {
             <View> 
               <HStack h="$10" justifyContent="center" alignItems="center">
                 <HStack alignItems="center"  >
-                  <Text  onPress={()=>pressOnCancel()} >Cancel</Text>
-                  <Icon as={CloseIcon} m="$2" w="$6" h="$6" />
+                  <Icon as={ArrowLeftIcon} m="$2" w="$6" h="$6" />
+                  <Text bold={true} onPress={()=>pressOnCancel()} >Go Home</Text>
                 </HStack>
                 
                 <Divider  style={{ margin: 15 }}  orientation="vertical"  mx="$2.5"  bg="$indigo500"  h={25}  $dark-bg="$indigo400"/>
 
                 <HStack alignItems="center">
-                  <Text onPress={()=>goToCreateProgram()} >Create program</Text>
+                  <Text bold={true} onPress={()=>goToCreateProgram()} >Create program</Text>
                   <Icon as={CheckIcon} m="$2" w="$6" h="$6" />
                 </HStack>
               </HStack>
@@ -252,12 +249,7 @@ const Locations = (props) => {
 export default Locations
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  scrollViewContent: {
-    paddingVertical: 20,
-  },
+
   viewButtons: {
     alignItems: 'center',
     justifyContent: 'center',
@@ -292,7 +284,6 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 200,
   },
   cardPressable: {
     borderRadius: 10,

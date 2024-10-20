@@ -1,4 +1,4 @@
-import { StyleSheet, View, ScrollView, TextInput, Pressable } from 'react-native'
+import { StyleSheet, View, ScrollView, Dimensions, Pressable, SafeAreaView } from 'react-native'
 import React, {useState, useEffect} from 'react'
 import {address_function_api, formatDateFromMilliseconds, removeItemFromAsyncStorage, addDataToAsyncStorage,
   multiSetFromAsyncStorage, getDataFromAsyncStorage, multiGetFromAsyncStorage, multiRemoveFromAsyncStorage} from '../diverse.js';
@@ -18,6 +18,8 @@ const Program = (props) => {
   const isFocused = useIsFocused();
   const [program, setProgram] = useState([]);
   const [buttonHomePage, setButtonHomePage] = useState(false);
+
+  const screenHeight = Dimensions.get('window').height;
 
 
   useEffect(()=>{
@@ -172,33 +174,25 @@ const Program = (props) => {
 
 
   return (
-    <ScrollView>
+    <SafeAreaView style={{flex: 1}}>
 
       {buttonHomePage ?
       
-      <View>
-        
         <View style={styles.buttonView} >
           <Pressable  style={styles.buttonPress}  > 
             <Text style={styles.text} onPress={()=>{props.navigation.navigate('Home'); setButtonHomePage(false)}}>
               Create program</Text>
           </Pressable>
         </View>
-      </View> 
       :
-      <View>
+      <ScrollView style={{flex:1}}>
 
         
         <NavbarProgram name={props.route.name} navigation={props.navigation} />
 
-        <Center>
-          <Heading>
-            The generated program
-          </Heading>
-        </Center>
 
         {!program?.length ? 
-        <View style={styles.container} >
+        <View  style={{ marginTop: screenHeight / 3 }} >
           <Center  >
             <Spinner color="$indigo600" />
           </Center>
@@ -206,7 +200,11 @@ const Program = (props) => {
 
         <View> 
           
-          
+          <Center>
+            <Heading>
+              The generated program
+            </Heading>
+          </Center>
 
           {program?.map((ob, index)=>{
             return  <Card  key={index}  p="$5" borderRadius="$lg" maxWidth={400} m="$3">
@@ -254,13 +252,12 @@ const Program = (props) => {
             </HStack>
           </HStack>
 
-
         </View>
         }
 
-      </View>
+      </ScrollView>
       }
-    </ScrollView>
+    </SafeAreaView>
   )
 }
 
@@ -268,27 +265,25 @@ const Program = (props) => {
 export default Program
 
 const styles = StyleSheet.create({
-  container: {
-    marginTop: 300
-  }, 
-  buttonPress:{
+  buttonPress: {
     backgroundColor: '#2196F3',
     padding: 10,
     borderRadius: 5,
     height: 40,
-    width: 160,
-    marginBottom: 30
+    width: 200,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 20,
   },
   text: {
     color: 'white',
+    fontSize: 16,
     textAlign: 'center',
   },
   buttonView: {
-    marginTop: 200,
-    flex: 1, 
+    flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    
   }, 
 })
 
