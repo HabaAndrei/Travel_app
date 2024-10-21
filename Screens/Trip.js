@@ -10,6 +10,7 @@ import {updateProgramActivities} from '../firebase.js';
 import TimePicker from '../Components/TimePicker.js';
 import DatePicker from '../Components/DatePicker';
 import {formatDateFromMilliseconds} from '../diverse';
+import MenuTrip from '../Components/MenuTrip.js';
 
 const Trip = (props) => {
 
@@ -58,7 +59,7 @@ const Trip = (props) => {
         setTimePickerVisibility({type:false, index: '', indexActivity: ''});
     };
     
-    async function handleConfirm(time){
+    async function handleConfirmTime(time){
         const timestamp = new Date(time).getTime();
         let hour = new Date(timestamp).getHours();
         let minutes = new Date(timestamp).getMinutes();
@@ -94,8 +95,24 @@ const Trip = (props) => {
             props.addNotification('error', 'There is a problem when updating the date')
             return;
         }
+        console.log('data aleasa', data);
+        // datePickerVisibility.index
+        let requireChanges = '';
+        console.log(props.route.params.to, props.route.params.from)
+        if(new Date(data).getTime() > new Date(props.route.params.to).getTime()){
+            props.route.params.to = date;
+            requireChanges = 'to';
+        }else if(new Date(data).getTime() < new Date(props.route.params.from).getTime()){
+            props.route.params.from = date;
+            requireChanges = 'from';
+        }
 
-        const rez = await updateProgramActivities(id, [...newProgram]);
+        let rez = '';
+        if(requireChanges){
+            rez = await updateProgramActivities(id, [...newProgram], requireChanges, date);
+        }else{
+            rez = await updateProgramActivities(id, [...newProgram]);
+        }
         if(rez.type){
             setTripProgram((prev)=>{
                 return [...newProgram];
@@ -112,6 +129,10 @@ const Trip = (props) => {
                 <Text style={styles.title}>
                     {props.route.params.country} - {props.route.params.city}
                 </Text>
+            </View>
+
+            <View>
+                <MenuTrip/>
             </View>
 
             <Accordion  width="100%" maxWidth={900}  shadowColor="transparent" >
@@ -165,7 +186,8 @@ const Trip = (props) => {
                                         {obActivity.time}
                                     </Text>
                                     <TimePicker isTimePickerVisible={isTimePickerVisible} setTimePickerVisibility={setTimePickerVisibility} 
-                                        showDatePicker={()=>setTimePickerVisibility({type: true, index, indexActivity})} hideDatePicker={hideDatePicker} handleConfirm={handleConfirm}
+                                        showDatePicker={()=>setTimePickerVisibility({type: true, index, indexActivity})} hideDatePicker={hideDatePicker} 
+                                        handleConfirm={handleConfirmTime}
                                     />
                                 </View>
 

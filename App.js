@@ -89,14 +89,14 @@ const App = () => {
     <GluestackUIProvider config={config}>
       <NavigationContainer>
         <Stack.Navigator>
+        <Stack.Screen
+          name="Plans"
+          component={PlansScreen}
+          options={{headerShown: false}}
+        />
           <Stack.Screen
             name="Locations"
             component={LocationsScreen}
-            options={{headerShown: false}}
-          />
-          <Stack.Screen
-            name="Plans"
-            component={PlansScreen}
             options={{headerShown: false}}
           />
           <Stack.Screen
@@ -148,12 +148,12 @@ const styles = StyleSheet.create({})
 // Oferte si reduceri 
 // Navigare si integrare cu transportul
 // Optimizare in functie de mijlocul de transport ales 
-// Api de imagini la obiective
 
 
 
 
 // De facut: 
-// CAND CLIENTUL SCHIMBA DATA SI ESTE MAI MICA / MAI MARE DECAT INTERVALUL INITIAL IL MODIFIC SI EU 
+// DUPA CE CLINETUL A SCHIMBAR ORA DE MERS LA LOCATIE, SORTEZ LOCATILE DUPA ORA , SA FIE IN ORDINE CRESCATOARE
+// CLIENTUL SA ISI ADAUGE SINGUR O LOCATIE
 // partea de autentificare nodemailer 
 

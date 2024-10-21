@@ -151,12 +151,23 @@ async function getPlansFromDbWithUid(uid){
   return rezFin;
 }
 
-async function updateProgramActivities(id, program){
+async function updateProgramActivities(id, program, methodDate = '', date){
   let rezFin = {type: true};
   try{
     if(typeof(program) != 'string') program = JSON.stringify(program);
+    
     const ref = doc(db, 'programs', id);
-    const rez = await updateDoc(ref, {programDaysString: program});
+    if(methodDate === 'from'){
+      const rez = await updateDoc(ref, {
+        from: date,
+        programDaysString: program
+      });
+    }else if(methodDate === 'to'){
+      const rez = await updateDoc(ref, {
+        to: date,
+        programDaysString: program
+      });
+    }
   }catch(err){
     rezFin = {type: false, err};
   }

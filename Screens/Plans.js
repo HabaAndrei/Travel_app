@@ -57,7 +57,7 @@ const Plans = (props) => {
                         </Text>
                         <Divider orientation='vertical' bg='$trueGray300'/>
                         <Text size='xs'>
-                            To:s {new Date(obiect.to).toString().slice(0, 15)}
+                            To: {new Date(obiect.to).toString().slice(0, 15)}
                         </Text>
                     </HStack>
                     <HStack alignItems="center" justifyContent="flex-end">
