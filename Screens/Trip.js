@@ -10,7 +10,7 @@ import {updateProgramActivities} from '../firebase.js';
 import TimePicker from '../Components/TimePicker.js';
 import DatePicker from '../Components/DatePicker';
 import {formatDateFromMilliseconds} from '../diverse';
-import MenuTrip from '../Components/MenuTrip.js';
+import ModalAddNewDay from '../Components/ModalAddNewDay.js';
 
 const Trip = (props) => {
 
@@ -125,14 +125,14 @@ const Trip = (props) => {
 
     return (
         <ScrollView  >
+
+
+            <ModalAddNewDay/>
+
             <View style={styles.container}>
                 <Text style={styles.title}>
                     {props.route.params.country} - {props.route.params.city}
                 </Text>
-            </View>
-
-            <View>
-                <MenuTrip/>
             </View>
 
             <Accordion  width="100%" maxWidth={900}  shadowColor="transparent" >
