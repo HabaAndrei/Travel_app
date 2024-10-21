@@ -7,7 +7,7 @@ const TimePicker = (props) => {
 
   return (
     <View>
-      <Button title="Change time" onPress={props.showDatePicker} />
+      <Button title={props?.title ? props?.title : 'Change time'} time onPress={props.showDatePicker} />
       <DateTimePickerModal
         isVisible={props.isTimePickerVisible.type}
         mode="time"
