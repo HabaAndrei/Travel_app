@@ -6,7 +6,7 @@ import { Text, AccordionTitleText,  AccordionTrigger,  AccordionHeader, Accordio
     Icon, TrashIcon, HStack, VStack, LinkText, Link, Divider, Center, RemoveIcon
 } from '@gluestack-ui/themed';
 import ImageCarousel from '../Components/ImageCarousel.js';
-import {updateProgramActivities} from '../firebase.js';
+import {updateProgram} from '../firebase.js';
 import TimePicker from '../Components/TimePicker.js';
 import DatePicker from '../Components/DatePicker';
 import {formatDateFromMilliseconds} from '../diverse';
@@ -45,14 +45,12 @@ const Trip = (props) => {
             props.addNotification('error', 'There is a problem deleting the activity')
             return;
         }
-        const rez = await updateProgramActivities(id, [...newProgram]);
-        if(rez.type){
-            setTripProgram((prev)=>{            
-                return [...newProgram];
-            })
-        }else{
-            props.addNotification('error', 'There is a problem deleting the activity')
-        }
+
+        saveProgramIntoDB(id, newProgram);
+        setTripProgram((prev)=>{            
+            return [...newProgram];
+        })
+     
     }
 
     const hideDatePicker = () => {
@@ -74,15 +72,13 @@ const Trip = (props) => {
             return;
         }
         hideDatePicker();
-        const rez = await updateProgramActivities(id, [...program]);
-        if(rez.type){
-            setTripProgram((prev)=>{
-                return [...program];
-            })
-        }else{
-            console.log(rez.err);
-            props.addNotification('error', 'There is a problem when updating the time')
-        }
+        
+        saveProgramIntoDB(id, program);
+
+        setTripProgram((prev)=>{
+            return [...program];
+        })
+
     };
 
 
@@ -95,41 +91,17 @@ const Trip = (props) => {
             props.addNotification('error', 'There is a problem when updating the date')
             return;
         }
-        console.log('data aleasa', data);
-        // datePickerVisibility.index
-        let requireChanges = '';
-        console.log(props.route.params.to, props.route.params.from)
-        if(new Date(data).getTime() > new Date(props.route.params.to).getTime()){
-            props.route.params.to = date;
-            requireChanges = 'to';
-        }else if(new Date(data).getTime() < new Date(props.route.params.from).getTime()){
-            props.route.params.from = date;
-            requireChanges = 'from';
-        }
+        saveProgramIntoDB(id, newProgram);
+        setTripProgram((prev)=>{
+            return [...newProgram];
+        })
 
-        let rez = '';
-        if(requireChanges){
-            rez = await updateProgramActivities(id, [...newProgram], requireChanges, date);
-        }else{
-            rez = await updateProgramActivities(id, [...newProgram]);
-        }
-        if(rez.type){
-            setTripProgram((prev)=>{
-                return [...newProgram];
-            })
-        }else{
-            console.log(rez.err);
-            props.addNotification('error', 'There is a problem when updating the date')
-        }
     }
 
     function saveNewLocation(name, address, info, description, time){
         console.log({name, address, info, description, time})
         const index = isModalVisible.index;
         let program = [...tripProgram];
-        console.log(program[index]);
-        // aici adaug locatia si le ordonez inainte 
-        // merge asta console.log('10:11' > '20:00');
         program[index].activities.push({
             name: name ? name: '',
             address: address ? address : '',
@@ -137,11 +109,52 @@ const Trip = (props) => {
             description : description ? description : '',
             time : time ? time : '',
         })
-        program[index].activities.sort((a, b)=>a.time - b.time);
-        setTripProgram(program);
-        
+        program[index].activities.sort((a, b)=>{
+            if (a.time > b.time) {
+                return 1;
+            } else if (a.time < b.time) {
+                return -1;
+            } else {
+                return 0;
+            }
+        });
+        setTripProgram(program);        
         setModalVisible({type: false})
-    
+    }
+
+    async function saveProgramIntoDB(idProgramIntoDb, program){
+        program.sort((a, b)=>{
+            if (a.date > b.date) {
+                return 1;
+            } else if (a.date < b.date) {
+                return -1;
+            } else {
+                return 0;
+            }
+        })
+
+        program = program.map((obDay, index)=>{
+            obDay.day = index + 1;
+            const activitiesSorted = obDay.activities.sort((a, b)=>{
+                if (a.time > b.time) {
+                    return 1;
+                } else if (a.time < b.time) {
+                    return -1;
+                } else {
+                    return 0;
+                }
+            });
+            obDay.activities = activitiesSorted;
+            return obDay;
+        })
+
+        const from = new Date(program[0].date).getTime();
+        const to = new Date(program[program.length - 1].date).getTime();
+        
+        const rez = await updateProgram(idProgramIntoDb, from, to, program);
+        if(!rez.type){
+            console.log('avem eroare la functia saveProgramIntoDB', rez.err);
+        }
     }
 
     return (

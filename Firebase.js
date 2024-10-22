@@ -151,23 +151,17 @@ async function getPlansFromDbWithUid(uid){
   return rezFin;
 }
 
-async function updateProgramActivities(id, program, methodDate = '', date){
+async function updateProgram(id, from, to, program){
   let rezFin = {type: true};
+
   try{
-    if(typeof(program) != 'string') program = JSON.stringify(program);
-    
+    if(typeof(program) != 'string')program = JSON.stringify(program);
     const ref = doc(db, 'programs', id);
-    if(methodDate === 'from'){
-      const rez = await updateDoc(ref, {
-        from: date,
-        programDaysString: program
-      });
-    }else if(methodDate === 'to'){
-      const rez = await updateDoc(ref, {
-        to: date,
-        programDaysString: program
-      });
-    }
+    const rez = await updateDoc(ref, {
+      from: from,
+      to: to,
+      programDaysString: program
+    });
   }catch(err){
     rezFin = {type: false, err};
   }
@@ -175,9 +169,8 @@ async function updateProgramActivities(id, program, methodDate = '', date){
 }
 
 
-
 export {db, auth, signOutUser, deleteTheUser, addProgramIntoDb, createUserEmailPassword, verifyEmail, signInUserEmailPassword, 
-  getPlansFromDbWithUid, forgotPassword, updateProgramActivities
+  getPlansFromDbWithUid, forgotPassword, updateProgram
 };
 
 
