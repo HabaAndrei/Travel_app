@@ -2,7 +2,7 @@ import { StyleSheet, View, Pressable, ScrollView, Clipboard } from 'react-native
 import React, { useEffect, useState } from 'react';
 import { useIsFocused } from '@react-navigation/native'; 
 import { Text, AccordionTitleText,  AccordionTrigger,  AccordionHeader, AccordionContent,
-    AccordionItem, Accordion, AddIcon, Card, Heading, 
+    AccordionItem, Accordion, AddIcon, Card, Heading, ButtonText, Button, ButtonIcon,
     Icon, TrashIcon, HStack, VStack, LinkText, Link, Divider, Center, RemoveIcon
 } from '@gluestack-ui/themed';
 import ImageCarousel from '../Components/ImageCarousel.js';
@@ -99,7 +99,6 @@ const Trip = (props) => {
     }
 
     function saveNewLocation(name, address, info, description, time){
-        console.log({name, address, info, description, time})
         const index = isModalVisible.index;
         let program = [...tripProgram];
         program[index].activities.push({
@@ -194,22 +193,25 @@ const Trip = (props) => {
                     <AccordionContent >
                        
                         <Center>
-                        <Heading>
+                            <Heading>
                                 {new Date(dayProgram.date).toString().slice(0, 15)}
                             </Heading>
                         </Center>
-                        <DatePicker
-                            showDatePicker={() => setDatePickerVisibility({ type: true, index })}
-                            datePickerVisibility={datePickerVisibility}
-                            setDatePickerVisibility={setDatePickerVisibility}
-                            confimNewDate={confimNewDate}
-                        />
 
-                        <Pressable onPress={()=>{setModalVisible({type: true, index})}} >
-                            <Text>
-                                Add new Location
-                            </Text>
-                        </Pressable>
+                        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: 10, marginBottom: 20 }}>
+                            <DatePicker
+                                showDatePicker={() => setDatePickerVisibility({ type: true, index })}
+                                datePickerVisibility={datePickerVisibility}
+                                setDatePickerVisibility={setDatePickerVisibility}
+                                confimNewDate={confimNewDate}
+                            />
+
+                            <Button variant="solid" mt="$2" onPress={() => { setModalVisible({ type: true, index }) }}>
+                                <ButtonText>Add new Location</ButtonText>
+                                <ButtonIcon as={AddIcon} m="$2" w="$4" h="$4"/>
+                            </Button>
+                        </View>
+
 
                         {dayProgram.activities.map((obActivity, indexActivity)=>{
                             return <Card key={indexActivity}  maxWidth={800} style={{marginBottom: 15}}>

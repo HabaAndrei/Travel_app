@@ -149,11 +149,3 @@ const styles = StyleSheet.create({})
 // Navigare si integrare cu transportul
 // Optimizare in functie de mijlocul de transport ales 
 
-
-
-
-// De facut: 
-// DUPA CE CLINETUL A SCHIMBAT ORA DE MERS LA LOCATIE, SORTEZ LOCATILE DUPA ORA , SA FIE IN ORDINE CRESCATOARE
-// CLIENTUL SA ISI ADAUGE SINGUR O LOCATIE
-// partea de autentificare nodemailer 
-

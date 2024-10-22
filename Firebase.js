@@ -110,7 +110,6 @@ async function verifyEmail(){
 
 async function addUserIntoDb(uid, createdAt, email, password, firstName, secondName){
   
-  console.log({uid, createdAt, email, password, firstName, secondName});
   try{
     await setDoc(doc(db, "users", uid), {
       uid, email, firstName, secondName, password, createdAt, plan: "standard"

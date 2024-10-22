@@ -30,7 +30,6 @@ const ModalAddNewDay = (props) => {
 
     function pressOnSave(){
         if(!name.length || !hour){
-            console.log('nu poti salva asa ceva');
             props.addNotification('error', 'You need to add the name of the location and the time to proceed further')
             return;
         }
