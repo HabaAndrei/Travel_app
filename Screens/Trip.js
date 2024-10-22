@@ -18,7 +18,7 @@ const Trip = (props) => {
     const [tripProgram, setTripProgram] = useState([]);
     const [isTimePickerVisible, setTimePickerVisibility] = useState({type:false, index: '', indexActivity: ''});
     const [datePickerVisibility, setDatePickerVisibility] = useState({type: false, index:''});
-
+    const [isModalVisible, setModalVisible] = useState({type: false});
 
     useEffect(() => {
         if (!isFocused) return;
@@ -123,11 +123,33 @@ const Trip = (props) => {
         }
     }
 
+    function saveNewLocation(name, address, info, description, time){
+        console.log({name, address, info, description, time})
+        const index = isModalVisible.index;
+        let program = [...tripProgram];
+        console.log(program[index]);
+        // aici adaug locatia si le ordonez inainte 
+        // merge asta console.log('10:11' > '20:00');
+        program[index].activities.push({
+            name: name ? name: '',
+            address: address ? address : '',
+            info: info ? info : '',
+            description : description ? description : '',
+            time : time ? time : '',
+        })
+        program[index].activities.sort((a, b)=>a.time - b.time);
+        setTripProgram(program);
+        
+        setModalVisible({type: false})
+    
+    }
+
     return (
         <ScrollView  >
 
 
-            <ModalAddNewDay/>
+            <ModalAddNewDay saveNewLocation={saveNewLocation} addNotification={props.addNotification} 
+            isModalVisible={isModalVisible}  setModalVisible={setModalVisible} />
 
             <View style={styles.container}>
                 <Text style={styles.title}>
@@ -170,6 +192,12 @@ const Trip = (props) => {
                             confimNewDate={confimNewDate}
                         />
 
+                        <Pressable onPress={()=>{setModalVisible({type: true, index})}} >
+                            <Text>
+                                Add new Location
+                            </Text>
+                        </Pressable>
+
                         {dayProgram.activities.map((obActivity, indexActivity)=>{
                             return <Card key={indexActivity}  maxWidth={800} style={{marginBottom: 15}}>
                                 <HStack justifyContent="space-between" alignItems="center">
@@ -191,7 +219,7 @@ const Trip = (props) => {
                                     />
                                 </View>
 
-                                {obActivity.address ? 
+                                {obActivity?.address ? 
                                 <Text size="m" style={{ marginTop: 10 }}>
                                     <Text bold={true}>Address: </Text> {obActivity.address}
                                     <Text style={styles.buttonText} onPress={() => copyInClipboard(`${obActivity.address}`)}>
@@ -201,19 +229,22 @@ const Trip = (props) => {
                                 </Text> : <Text></Text>
                                 }
 
-
+                                {obActivity.info ? 
                                 <Text size="m" style={{ marginTop: 10 }}>
                                     <Text bold={true}>Info:</Text> 
                                     {obActivity.info}
-                                </Text>
+                                </Text> : <Text></Text>
+                                }
 
+                                {obActivity.description ? 
                                 <Text size="m" style={{ marginTop: 10 }}>
                                     <Text bold={true}>Description: </Text>
                                     {obActivity.description}
-                                </Text>
+                                </Text> : <Text></Text>
+                                }
 
                                 <View style={{ flex: 1, marginTop: 20 }}>
-                                    {obActivity.arrayWithLinkImages.length ? 
+                                    {obActivity?.arrayWithLinkImages?.length ? 
                                     <ImageCarousel   imageUrls={obActivity.arrayWithLinkImages }/> : 
                                     <View></View>
                                     }
@@ -228,11 +259,11 @@ const Trip = (props) => {
                                             </LinkText>
                                         </HStack>
                                         </Link>
-                                        {obActivity.urlLocation && obActivity.website ? 
+                                        {obActivity?.urlLocation && obActivity?.website ? 
                                         <Divider orientation="vertical" mx='$2.5' bg='$emerald500' h={15} />:
                                         <View></View>
                                         }
-                                        <Link href={obActivity.urlLocation ? obActivity.urlLocation : ''} isExternal>
+                                        <Link href={obActivity?.urlLocation ? obActivity.urlLocation : ''} isExternal>
                                         <HStack alignItems="center">
                                             <LinkText size="sm" fontFamily="$heading" fontWeight="$semibold" color="$primary600" textDecorationLine="none">
                                             {obActivity.urlLocation ? 'Google location' : ''}

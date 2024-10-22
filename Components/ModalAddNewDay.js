@@ -4,14 +4,14 @@ import React, {useState} from 'react';
 import TimePicker from './TimePicker.js';
 import { Center } from '@gluestack-ui/themed';
 
-const ModalAddNewDay = () => {
+const ModalAddNewDay = (props) => {
 
-    const [isModalVisible, setModalVisible] = useState(true);
+    
     const [name, setName] = useState('');
     const [address, setAddress] = useState('');
     const [info, setInfo] = useState('');
     const [description, setDescription] = useState('');
-    const [hour, setHour] = useState('');
+    const [hour, setHour] = useState('12:12');
     const [isTimePickerVisible, setTimePickerVisibility] = useState({type:false});
   
     function handleConfirmTime(time){
@@ -21,20 +21,34 @@ const ModalAddNewDay = () => {
         if(JSON.stringify(minutes).length < 2)minutes = "0" + JSON.stringify(minutes);
         if(JSON.stringify(hour).length < 2)hour = "0" + JSON.stringify(hour);
         setHour(`${hour}:${minutes}`);
-        hideDatePicker()
+        hideDatePicker();
     }
 
     function hideDatePicker(){
         setTimePickerVisibility({type:false});
     };
 
+    function pressOnSave(){
+        if(!name.length || !hour){
+            console.log('nu poti salva asa ceva');
+            props.addNotification('error', 'You need to add the name of the location and the time to proceed further')
+            return;
+        }
+        props.saveNewLocation(name, address, info, description, hour);
+        setName('');
+        setAddress('');
+        setInfo('');
+        setDescription('');
+        setHour('');
+    }
+
     return (
     <View style={styles.centeredView}>
         <Modal
           animationType="slide"
           transparent={true}
-          visible={isModalVisible}
-          onRequestClose={() => { setModalVisible(false);}}>
+          visible={props.isModalVisible.type}
+          onRequestClose={() => { props.setModalVisible({type: false});}}>
             <View style={styles.centeredView}>
                 <View style={styles.modalView}>
 
@@ -77,21 +91,15 @@ const ModalAddNewDay = () => {
                 </ScrollView>
 
                 
-                    <Pressable
-                        style={[styles.button, styles.buttonClose]}
-                        onPress={() => {setModalVisible(false)}}>
-                        <Text style={styles.textStyle}>Close</Text>
-                    </Pressable>
-
                     <View style={styles.buttonContainer}>
                         <Pressable
                             style={[styles.button, styles.buttonNo]}
-                            onPress={() =>setModalVisible(false)}>
+                            onPress={() =>props.setModalVisible({type: false})}>
                             <Text style={styles.textStyle}>Cancel</Text>
                         </Pressable>
                         <Pressable
                             style={[styles.button, styles.buttonYes]}
-                            onPress={() => closeWithResponse(true)}
+                            onPress={pressOnSave}
                         >
                             <Text style={styles.textStyle}>Save</Text>
                         </Pressable>
@@ -124,18 +132,12 @@ const styles = StyleSheet.create({
       alignItems: 'center',
       shadowColor: '#000',
       shadowOffset: {
-      width: 0,
-      height: 2,
-      
+        width: 0,
+        height: 2,
       },
       shadowOpacity: 0.25,
       shadowRadius: 4,
       elevation: 5,
-    },
-    textStyle: {
-        color: 'white',
-        fontWeight: 'bold',
-        textAlign: 'center',
     },
     input: {
         borderWidth: 1,  
@@ -150,18 +152,26 @@ const styles = StyleSheet.create({
     },
     buttonContainer: {
         flexDirection: 'row',
+        justifyContent: 'space-between',
+        width: '100%',
+        marginTop: 20
     },
       button: {
         borderRadius: 20,
         padding: 10,
         elevation: 2,
-        width: '40%', 
+        width: '40%',  
     },
     buttonYes: {
         backgroundColor: '#4CAF50',
     },
     buttonNo: {
         backgroundColor: '#F44336', 
+    },
+    textStyle: {
+        color: 'white',
+        fontWeight: 'bold',
+        textAlign: 'center',
     },
      
 });
