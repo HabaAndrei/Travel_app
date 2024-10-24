@@ -51,7 +51,7 @@ const Layout = ({ children, navigation, route, user, setUser}) => {
 
       <Notification  notification={notification} setNotification={setNotification}  />
 
-      {user?.emailVerified ? 
+      {user?.emailVerified_code ? 
       
         <View style={styles.content}>
       
@@ -63,7 +63,7 @@ const Layout = ({ children, navigation, route, user, setUser}) => {
       }
 
 
-     {user?.emailVerified ?  
+     {user?.emailVerified_code ?  
           
       <View style={styles.footerContainer}>
         <ScrollView 

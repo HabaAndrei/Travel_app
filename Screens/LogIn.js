@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View, Pressable, ScrollView } from 'react-native'
 import React, {useState, useEffect } from 'react'
-import { Input, InputField, InputIcon, InputSlot, VStack, HStack, Divider, Button, FormControl, Heading, EyeIcon, ButtonText, 
+import { Input, InputField, InputIcon, InputSlot, VStack, HStack, Divider, Button, Center, Heading, EyeIcon, ButtonText, 
     EyeOffIcon, Card } from '@gluestack-ui/themed'
 import {createUserEmailPassword,verifyEmail,  signInUserEmailPassword, forgotPassword, signOutUser, deleteTheUser} from '../firebase.js'
 import {isValidEmail, isValidPassword, deleteAllFromAsyncStorage} from "../diverse.js"
@@ -14,7 +14,7 @@ const LogIn = (props) => {
     const [inputSecondName, setInputSecondName] = useState('');
     const [signInOrUp, setSignInOrUp] = useState('');
     const [isForgotPassword, setIsForgotPassword] = useState('');
-
+    const [codeVerify, setCodeVerify] = useState('');
 
 
     async function createAccout(){
@@ -127,25 +127,70 @@ const LogIn = (props) => {
         }
     }
 
+    async function sendCodeToEmail(){
+        console.log('send email ')
+    }
+
+    async function verifyCode(){
+        console.log('verifyCode');
+    }
+
   return (
     <ScrollView>
         {props.user ? 
         <View>
             
-
-        
+    
+            {!props.user?.emailVerified_code ? 
             
-            <VStack space="2xl">  
-                <HStack  px="$3"  h="$8"  rounded="$sm"  borderWidth="$2"  borderColor="$backgroundLight300"  alignItems="center"  justifyContent="center"   $dark-borderColor="$backgroundDark700"  >
-                    <Button onPress={()=>signOut()} variant="link" size="xl">
-                    <ButtonText>Log out</ButtonText>
-                    </Button>
-                    <Divider orientation="vertical" h="50%" mx="$2.5" style={{margin: 20}} />
-                    <Button  onPress={()=>deleteUser()} variant="link" size="xl">
-                    <ButtonText>Delete accout</ButtonText>
-                    </Button>          
-                </HStack>
-            </VStack>
+            <View>
+                
+                <Center>
+                    <Heading color="$text900" lineHeight="$md">
+                        The next step is to verify your 
+                    </Heading>
+                    <Heading>
+                        email address.
+                    </Heading>
+                </Center>
+
+                <Button onPress={sendCodeToEmail} size="xl" style={{margin: 20}} >
+                    <ButtonText>Send code to email</ButtonText>
+                </Button>
+
+                <VStack space="xs" style={{margin: 20}} >
+                    <Text color="$text500" lineHeight="$xs">
+                        Enter the code received via email
+                    </Text>
+                    <Input >
+                        <InputField
+                        type="text"
+                        value={codeVerify}
+                        onChangeText={(text) => setCodeVerify(text)}
+                        />
+                    </Input>
+                </VStack>
+
+                <Button onPress={verifyCode} size="xl" style={{margin: 20}} >
+                    <ButtonText>Verify code</ButtonText>
+                </Button>
+            
+                <VStack space="2xl">  
+                    <HStack  px="$3"  h="$8"  rounded="$sm"  borderWidth="$2"  borderColor="$backgroundLight300"  alignItems="center"  justifyContent="center"   $dark-borderColor="$backgroundDark700"  >
+                        <Button onPress={()=>signOut()} variant="link" size="xl">
+                            <ButtonText>Log out</ButtonText>
+                        </Button>
+                        <Divider orientation="vertical" h="50%" mx="$2.5" style={{margin: 20}} />
+                        <Button  onPress={()=>deleteUser()} variant="link" size="xl">
+                            <ButtonText>Delete accout</ButtonText>
+                        </Button>          
+                    </HStack>
+                </VStack>
+            </View>  
+            : 
+            <View></View>
+            }
+            
         
         </View>
         :
@@ -255,8 +300,6 @@ const LogIn = (props) => {
                                 {signInOrUp === "signup" ? "Create" : "Log in"}
                             </ButtonText>
                         </Button>
-                        
-
                     </VStack>
                     }
                 </Card>
@@ -269,11 +312,11 @@ const LogIn = (props) => {
                 <VStack space="2xl">  
                 <HStack  px="$3"  h="$8"  rounded="$sm"  borderWidth="$2"  borderColor="$backgroundLight300"  alignItems="center"  justifyContent="center"   $dark-borderColor="$backgroundDark700"  >
                     <Button onPress={()=>{setSignInOrUp("signup"); setIsForgotPassword(false);}} variant="link" size="xl">
-                    <ButtonText>Create accout</ButtonText>
+                        <ButtonText>Create accout</ButtonText>
                     </Button>
                     <Divider orientation="vertical" h="50%" mx="$2.5" style={{margin: 20}} />
                     <Button  onPress={()=>{setSignInOrUp("signin"); setIsForgotPassword(false)}} variant="link" size="xl">
-                    <ButtonText>Log in</ButtonText>
+                        <ButtonText>Log in</ButtonText>
                     </Button>          
                 </HStack>
                 </VStack> 

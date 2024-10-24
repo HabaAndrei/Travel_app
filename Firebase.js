@@ -112,7 +112,7 @@ async function addUserIntoDb(uid, createdAt, email, password, firstName, secondN
   
   try{
     await setDoc(doc(db, "users", uid), {
-      uid, email, firstName, secondName, password, createdAt, plan: "standard"
+      uid, email, firstName, secondName, password, createdAt, plan: "standard", email_verified: 'false'
     });
   }catch(err){
     console.log(err, 'nu s a introdus nimic in baza de date')
