@@ -2,7 +2,7 @@ import { initializeApp } from "firebase/app";
 import { getFirestore, collection, addDoc, doc, setDoc ,updateDoc, query, where, getDocs, getDoc } from "firebase/firestore";
 import {MEASUREMENT_ID, APIKEY, AUTH_DOMAIN, PROJECT_ID, STORAGE_BUCKET, MESSAGING_SENDER_ID, APP_ID} from '@env';
 import { getAuth, signOut,  deleteUser, initializeAuth, createUserWithEmailAndPassword, onAuthStateChanged,
-   sendEmailVerification, signInWithEmailAndPassword, sendPasswordResetEmail  } from "firebase/auth";
+   sendEmailVerification, signInWithEmailAndPassword, sendPasswordResetEmail, reauthenticateWithCredential, EmailAuthProvider  } from "firebase/auth";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getReactNativePersistence } from '@firebase/auth/dist/rn/index.js';
 
@@ -57,10 +57,31 @@ async function signInUserEmailPassword(email, password){
   return rezFin; 
 }
 
+async function reAuth(uid){
+  let rezFin = {type:true};
+  try{
+    const docRef = doc(db, "users", uid);
+    const userDB = await getDoc(docRef);
+    const {password, email} = userDB.data();
+    const user = auth.currentUser;
+    const credential = EmailAuthProvider.credential(email, password)
+    await reauthenticateWithCredential(user, credential);
+  }catch(err){
+    rezFin = {type: false, err};
+  }
+  return rezFin;
+}
 
 async function deleteTheUser(){
-  const user = auth.currentUser;
   let rezFin = {};
+  const user = auth.currentUser;
+  
+  const rezReAuth = await reAuth(user.uid);
+  if(!rezReAuth.type){
+    rezFin = {type: false, err: rezReAuth.err};
+    return;
+  }
+
   try{
     const rez = await deleteUser(user);
     rezFin = {type: true};
@@ -72,7 +93,6 @@ async function deleteTheUser(){
 
 async function signOutUser(){
   let rezFin = {};
-  
   try{
     const rez = await signOut(auth);
     rezFin = {type: true};
@@ -222,7 +242,8 @@ async function verifyEmailVerifiedDB(uid){
 }
 
 export {db, auth, signOutUser, deleteTheUser, addProgramIntoDb, createUserEmailPassword, verifyEmail, signInUserEmailPassword, 
-  getPlansFromDbWithUid, forgotPassword, updateProgram, storeCodeAndEmail, verifyCodeDB, updateEmailVerificationDB, verifyEmailVerifiedDB
+  getPlansFromDbWithUid, forgotPassword, updateProgram, storeCodeAndEmail, verifyCodeDB, updateEmailVerificationDB, 
+  verifyEmailVerifiedDB
 };
 
 

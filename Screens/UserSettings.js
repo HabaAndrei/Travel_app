@@ -36,10 +36,8 @@ const UserSettings = (props) => {
     }
   }
 
- 
   return (
     <ScrollView style={{marginTop: 20}} >
-
 
       
       <View style={{ alignItems: 'center' }}>

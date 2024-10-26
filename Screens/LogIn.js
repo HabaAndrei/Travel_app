@@ -91,11 +91,8 @@ const LogIn = (props) => {
 
 
     async function sendEmailVerification(){
-        console.log('s a apelat functia ca s-a trimis email')
         const rez = await verifyEmail();
-        console.log(rez, '    oare s a trimis emai-ul de confimare, de ce nu apare pe pagina');
         if(rez.type){
-            console.log('a intrat aici in if si se afiseaza notificarea')
           props.addNotification("success" , "Confirm on the email address that this account is valid");
         }else{
           console.log(rez.err)
@@ -139,7 +136,7 @@ const LogIn = (props) => {
             props.addNotification('error', "There was a problem sending the code by email");
             return;
         }
-        const rezSend = await axios.post(`${address_function_send_code_verification}`, {code, email});
+        const rezSend = await axios.post(address_function_send_code_verification, {code, email});
         if(!rezSend.data.type){
             console.log(rezSend.data.err);
             props.addNotification('error', "There was a problem sending the code by email");
@@ -172,10 +169,6 @@ const LogIn = (props) => {
         });
 
         props.navigation.navigate('Home');
-
-        
-        // editez emailul si fac sa apar totul mai frumos 
-
     }
 
   return (

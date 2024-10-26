@@ -22,28 +22,23 @@ const App = () => {
 
   const [user, setUser] = useState(false);
  
-
-  
   useEffect(()=>{
     reloadUser();
   }, [])
 
-
   function reloadUser(){
     onAuthStateChanged(auth, async (us) => {
+      console.log('se executa functia onAuthStateChanged')
       if (us) {
+        console.log(us);
         const uid = us.uid;
         const rezEmailVerified = await verifyEmailVerifiedDB(uid);
         if(rezEmailVerified.type){
-          console.log('punem userul cu true');
           setUser({...us, email_verified: true});
         }else if(!rezEmailVerified.type && !rezEmailVerified.err){
-          console.log('punem userul normal unu');
           setUser(us);
         }else if(!rezEmailVerified.type && rezEmailVerified.err){
-          console.log('punem userul normal doi');
           setUser(us);
-          console.log('avem o eroare cand se ia userul din db la verify email');
         }
         console.log('Avem uid deci avem user => ', uid)
       } else {
@@ -100,11 +95,16 @@ const App = () => {
     <GluestackUIProvider config={config}>
       <NavigationContainer>
         <Stack.Navigator>
-        <Stack.Screen
-          name="Plans"
-          component={PlansScreen}
-          options={{headerShown: false}}
-        />
+          <Stack.Screen
+            name="UserSettings"
+            component={UserSettingsScreen}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="Plans"
+            component={PlansScreen}
+            options={{headerShown: false}}
+          />
           <Stack.Screen
             name="Locations"
             component={LocationsScreen}
@@ -123,11 +123,6 @@ const App = () => {
           <Stack.Screen
             name="Home"
             component={HomeScreen}
-            options={{headerShown: false}}
-          />
-          <Stack.Screen
-            name="UserSettings"
-            component={UserSettingsScreen}
             options={{headerShown: false}}
           />
           <Stack.Screen
