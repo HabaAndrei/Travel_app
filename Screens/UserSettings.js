@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View, Pressable, ScrollView } from 'react-native'
 import React, { useState } from 'react';
 import {VStack, HStack, Button, ButtonText, Divider} from '@gluestack-ui/themed'
-import {signOutUser, deleteTheUser} from '../firebase.js';
+import {signOutUser, deleteTheUser, } from '../firebase.js';
 import {deleteAllFromAsyncStorage} from '../diverse.js';
 
 
@@ -39,7 +39,6 @@ const UserSettings = (props) => {
   return (
     <ScrollView style={{marginTop: 20}} >
 
-      
       <View style={{ alignItems: 'center' }}>
         <VStack space="2xl">  
           <HStack  px="$3"  h="$8"  rounded="$sm"  borderWidth="$2"  borderColor="$backgroundLight300"  alignItems="center"  justifyContent="center"   $dark-borderColor="$backgroundDark700"  >

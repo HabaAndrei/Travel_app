@@ -306,7 +306,7 @@ const LogIn = (props) => {
 
                         <VStack space="xs">
                             <Text color="$text500" lineHeight="$xs"> 
-                                Password - 
+                                Password 
                                 {signInOrUp === "signup" ? "The password must have at least seven characters, two of which must be numbers" : ""}
                             </Text>
                             <Input textAlign="center">
@@ -378,10 +378,3 @@ const styles = StyleSheet.create({
         elevation: 5,
     },
 })
-
-
-
-
-// rezolv partea de autentificare poate cu google poate fara
-// daca nu merge cu notificare adaug eu un div pe pagina care sa tina cont de cele scrise
-// vezi daca partea de auth cu user si parola e aceiasi cu react native firebase
