@@ -8,7 +8,7 @@ import DailyProgram from './Screens/DailyProgram.js';
 import UserSettings from './Screens/UserSettings.js';
 import Plans from './Screens/Plans.js';
 import Locations from './Screens/Locations.js';
-import {db, auth} from './firebase.js';
+import {db, auth, verifyEmailVerifiedDB} from './firebase.js';
 import { GluestackUIProvider } from "@gluestack-ui/themed"
 import { config } from "@gluestack-ui/config"
 import Layout from './Components/Layout.js';
@@ -30,10 +30,21 @@ const App = () => {
 
 
   function reloadUser(){
-    onAuthStateChanged(auth, (us) => {
+    onAuthStateChanged(auth, async (us) => {
       if (us) {
-        setUser(us);
         const uid = us.uid;
+        const rezEmailVerified = await verifyEmailVerifiedDB(uid);
+        if(rezEmailVerified.type){
+          console.log('punem userul cu true');
+          setUser({...us, email_verified: true});
+        }else if(!rezEmailVerified.type && !rezEmailVerified.err){
+          console.log('punem userul normal unu');
+          setUser(us);
+        }else if(!rezEmailVerified.type && rezEmailVerified.err){
+          console.log('punem userul normal doi');
+          setUser(us);
+          console.log('avem o eroare cand se ia userul din db la verify email');
+        }
         console.log('Avem uid deci avem user => ', uid)
       } else {
         setUser(false);

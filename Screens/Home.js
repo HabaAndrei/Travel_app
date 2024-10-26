@@ -8,7 +8,6 @@ import CheckboxActivities from '../Components/CheckboxActivities';
 
 const Home = (props) => {
 
-
   const [dateFrom, setDateFrom] = useState('');
   const [dateTo, setDateTo] = useState('');
   const [datePickerVisibility, setDatePickerVisibility] = useState({type: false, date:''});
@@ -21,8 +20,6 @@ const Home = (props) => {
     if(!dataDestination.country)return;
     if(checkbox.length)setCheckbox([]);
   }, [dataDestination]);
-
-
 
 
   function verifyDestinationRequest(){

@@ -3,7 +3,7 @@ import React, {useState, useEffect } from 'react'
 import { Input, InputField, InputIcon, InputSlot, VStack, HStack, Divider, Button, Center, Heading, EyeIcon, ButtonText, 
     EyeOffIcon, Card } from '@gluestack-ui/themed'
 import {createUserEmailPassword,verifyEmail,  signInUserEmailPassword, forgotPassword, signOutUser, deleteTheUser, 
-    storeCodeAndEmail, verifyCodeDB,
+    storeCodeAndEmail, verifyCodeDB, updateEmailVerificationDB
 } from '../firebase.js'
 import {isValidEmail, isValidPassword, deleteAllFromAsyncStorage, address_function_send_code_verification} from "../diverse.js"
 import uuid from 'react-native-uuid';
@@ -156,13 +156,24 @@ const LogIn = (props) => {
         const rezDB = await verifyCodeDB(codeVerify, props.user.email);
         if(!rezDB.type){
             props.addNotification('error', 'There was a problem verifying the code');
+            return
         }else if(rezDB.type && rezDB.mes){
             props.addNotification('error', rezDB.mes);
+            return;
         }
 
-        // aici ca a fost verificat cu succes adaug in baza de date ca totul e ok 
-        // dupa adaug mereu si in obiectul user ca are contul verificat , adaug eu o proprietate noua
-        // il trimit in pagina de home
+        const rezUpdateDB = await updateEmailVerificationDB(props.user.uid);
+        if(!rezUpdateDB.type){
+            props.addNotification('error', 'Please retry the operation and generate a new code');
+            return;
+        }
+        props.setUser((prev)=>{
+            return {...prev, email_verified: true};
+        });
+
+        props.navigation.navigate('Home');
+
+        
         // editez emailul si fac sa apar totul mai frumos 
 
     }

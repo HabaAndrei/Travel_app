@@ -112,7 +112,7 @@ async function addUserIntoDb(uid, createdAt, email, password, firstName, secondN
   
   try{
     await setDoc(doc(db, "users", uid), {
-      uid, email, firstName, secondName, password, createdAt, plan: "standard", email_verified: 'false'
+      uid, email, firstName, secondName, password, createdAt, plan: "standard", email_verified: false
     });
   }catch(err){
     console.log(err, 'nu s a introdus nimic in baza de date')
@@ -193,9 +193,36 @@ async function verifyCodeDB(codeInput, email){
 
 }
 
+async function updateEmailVerificationDB(uid){
+  let rezFin = {type: true}; 
+  try{
+    const ref = doc(db, "users", uid);
+    await updateDoc(ref, {
+      email_verified: true
+    });
+  }catch(err){
+    rezFin = {type: false, err};
+  }
+  return rezFin;
+}
+
+async function verifyEmailVerifiedDB(uid){
+  let rezFin = {type: true}; 
+  try{
+    const docRef = doc(db, "users", uid);
+    const dataFromDB = await getDoc(docRef);
+    const data = dataFromDB.data();
+    if(data.email_verified != true){
+      rezFin = {type: false};
+    }    
+  }catch(err){
+    rezFin = {type: false, err};
+  }
+  return rezFin;
+}
 
 export {db, auth, signOutUser, deleteTheUser, addProgramIntoDb, createUserEmailPassword, verifyEmail, signInUserEmailPassword, 
-  getPlansFromDbWithUid, forgotPassword, updateProgram, storeCodeAndEmail, verifyCodeDB
+  getPlansFromDbWithUid, forgotPassword, updateProgram, storeCodeAndEmail, verifyCodeDB, updateEmailVerificationDB, verifyEmailVerifiedDB
 };
 
 
