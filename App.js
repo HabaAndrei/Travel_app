@@ -143,6 +143,7 @@ export default App
 const styles = StyleSheet.create({})
 
 
+// Fac cumva sa pot sa prind parola cand o schimba userul
 
 // Plan standard:
 // il las e utilizator sa isi creeze un program si sa isi editeze el orele
