@@ -1,4 +1,4 @@
-import {ADDRESS_FUNCTION_API, ADDRESS_FUNCTION_FUZZY} from '@env';
+import {ADDRESS_FUNCTION_API, ADDRESS_FUNCTION_FUZZY, ADDRESS_FUNCTION_SEND_CODE_VERIFICATION} from '@env';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
@@ -6,7 +6,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const address_function_api = ADDRESS_FUNCTION_API
 const address_function_fuzzy = ADDRESS_FUNCTION_FUZZY;
-
+const address_function_send_code_verification = ADDRESS_FUNCTION_SEND_CODE_VERIFICATION
 
 
 
@@ -139,7 +139,9 @@ async function multiRemoveFromAsyncStorage(arrayOfKeys){
 }
 
 export {isValidPassword, isValidEmail, removeItemFromAsyncStorage, getDataFromAsyncStorage, addDataToAsyncStorage,    multiRemoveFromAsyncStorage, multiSetFromAsyncStorage, 
-    getAllKeysFromAsyncStorage, multiGetFromAsyncStorage,  formatDateFromMilliseconds,  deleteAllFromAsyncStorage, address_function_api, address_function_fuzzy }
+    getAllKeysFromAsyncStorage, multiGetFromAsyncStorage,  formatDateFromMilliseconds,  deleteAllFromAsyncStorage, address_function_api, address_function_fuzzy, 
+    address_function_send_code_verification
+}
 
 
 

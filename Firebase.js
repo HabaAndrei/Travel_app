@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getFirestore, collection, addDoc, doc, setDoc ,updateDoc, query, where, getDocs } from "firebase/firestore";
+import { getFirestore, collection, addDoc, doc, setDoc ,updateDoc, query, where, getDocs, getDoc } from "firebase/firestore";
 import {MEASUREMENT_ID, APIKEY, AUTH_DOMAIN, PROJECT_ID, STORAGE_BUCKET, MESSAGING_SENDER_ID, APP_ID} from '@env';
 import { getAuth, signOut,  deleteUser, initializeAuth, createUserWithEmailAndPassword, onAuthStateChanged,
    sendEmailVerification, signInWithEmailAndPassword, sendPasswordResetEmail  } from "firebase/auth";
@@ -167,9 +167,35 @@ async function updateProgram(id, from, to, program){
   return rezFin;
 }
 
+async function storeCodeAndEmail(code, email){
+  let rezFin = {type: true};
+  try{
+    await setDoc(doc(db, "code_verification", email), {code});
+  }catch(err){
+    rezFin = {type: false, err};
+  }
+  return rezFin; 
+}
+
+async function verifyCodeDB(codeInput, email){
+  let rezFin = {type: true}; 
+  try{
+    const docRef = doc(db, "code_verification", email);
+    const dataFromDB = await getDoc(docRef);
+    const {code} = dataFromDB.data();
+    if(code != codeInput){
+      rezFin = {type: true, mes: 'The code does not correspond to the code sent by e-mail last time'}
+    }
+  }catch(err){
+    rezFin = {type: false, err};
+  }
+  return rezFin;
+
+}
+
 
 export {db, auth, signOutUser, deleteTheUser, addProgramIntoDb, createUserEmailPassword, verifyEmail, signInUserEmailPassword, 
-  getPlansFromDbWithUid, forgotPassword, updateProgram
+  getPlansFromDbWithUid, forgotPassword, updateProgram, storeCodeAndEmail, verifyCodeDB
 };
 
 

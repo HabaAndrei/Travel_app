@@ -2,9 +2,12 @@ import { StyleSheet, Text, View, Pressable, ScrollView } from 'react-native'
 import React, {useState, useEffect } from 'react'
 import { Input, InputField, InputIcon, InputSlot, VStack, HStack, Divider, Button, Center, Heading, EyeIcon, ButtonText, 
     EyeOffIcon, Card } from '@gluestack-ui/themed'
-import {createUserEmailPassword,verifyEmail,  signInUserEmailPassword, forgotPassword, signOutUser, deleteTheUser} from '../firebase.js'
-import {isValidEmail, isValidPassword, deleteAllFromAsyncStorage} from "../diverse.js"
-
+import {createUserEmailPassword,verifyEmail,  signInUserEmailPassword, forgotPassword, signOutUser, deleteTheUser, 
+    storeCodeAndEmail, verifyCodeDB,
+} from '../firebase.js'
+import {isValidEmail, isValidPassword, deleteAllFromAsyncStorage, address_function_send_code_verification} from "../diverse.js"
+import uuid from 'react-native-uuid';
+import axios from 'axios';
 
 const LogIn = (props) => {
 
@@ -128,11 +131,40 @@ const LogIn = (props) => {
     }
 
     async function sendCodeToEmail(){
-        console.log('send email ')
+        const code = uuid.v4().slice(0, 6);
+        const email = props.user.email;
+        const rezStore = await storeCodeAndEmail(code, email);
+        if(!rezStore.type){
+            console.log(rezStore);
+            props.addNotification('error', "There was a problem sending the code by email");
+            return;
+        }
+        const rezSend = await axios.post(`${address_function_send_code_verification}`, {code, email});
+        if(!rezSend.data.type){
+            console.log(rezSend.data.err);
+            props.addNotification('error', "There was a problem sending the code by email");
+            return;
+        }
+        props.addNotification('success', "The email was successful. Please enter the code received on the email address in the input");
     }
 
     async function verifyCode(){
-        console.log('verifyCode');
+        if(codeVerify.length != 6){
+            props.addNotification('error', 'The code must have 6 characters, without spaces');
+            return;
+        }        
+        const rezDB = await verifyCodeDB(codeVerify, props.user.email);
+        if(!rezDB.type){
+            props.addNotification('error', 'There was a problem verifying the code');
+        }else if(rezDB.type && rezDB.mes){
+            props.addNotification('error', rezDB.mes);
+        }
+
+        // aici ca a fost verificat cu succes adaug in baza de date ca totul e ok 
+        // dupa adaug mereu si in obiectul user ca are contul verificat , adaug eu o proprietate noua
+        // il trimit in pagina de home
+        // editez emailul si fac sa apar totul mai frumos 
+
     }
 
   return (
