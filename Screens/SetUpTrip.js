@@ -102,9 +102,8 @@ const SetUpTrip = (props) => {
         checkbox={checkbox} setCheckbox={setCheckbox}  addNotification={props.addNotification}
       /> 
 
-
-      <View style={{alignItems: 'center'}}>
-        <Card  style={styles.shadow} size="md" variant="elevated" m="$3" maxWidth={400} >
+      <View style={{ alignItems: 'center' }}>
+        <Card style={styles.shadow} size="md" variant="elevated" m="$3" maxWidth={600}>
           <View style={styles.row}>
             <View style={styles.buttonContainer}>
               {dateFrom ? (
@@ -145,6 +144,7 @@ const SetUpTrip = (props) => {
         </Card>
       </View>
 
+
       <View style={styles.buttonGo} >
         <Pressable  style={styles.buttonGoPressAc}
           onPress={goToProgramPage}> 
@@ -157,7 +157,6 @@ const SetUpTrip = (props) => {
 };
 
 const styles = StyleSheet.create({
-
   shadow:{
     shadowColor: '#000',
     shadowOffset: {
@@ -185,21 +184,26 @@ const styles = StyleSheet.create({
     flex: 1, 
     alignItems: 'center',
     justifyContent: 'center',
-    
   },  
   row: {
     flexDirection: 'row',
     justifyContent: 'space-between', 
   },
+  row: {
+    flexDirection: 'row',
+    justifyContent: 'space-around', 
+    alignItems: 'center',
+    width: '100%', 
+  },
   buttonContainer: {
     alignItems: 'center',
-    marginHorizontal: 20,
+    flex: 1,
+    width: 150
   },
   centeredBoldText: {
     fontWeight: 'bold',
     marginBottom: 8, 
   },
-
 });
 
 export default SetUpTrip;

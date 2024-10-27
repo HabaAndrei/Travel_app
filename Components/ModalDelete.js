@@ -13,7 +13,7 @@ const ModalDelete = (props) => {
    <View>
     {props.modalDelete ? 
     
-      <View style={[styles.centeredView, { zIndex: 9999 }]}>
+      <View style={styles.centeredView}>
         <Modal
         animationType="slide"
         transparent={true}
@@ -56,15 +56,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   modalView: {
-    width: '80%', 
+    margin: 30,
+    marginTop: 90,
     backgroundColor: 'white',
     borderRadius: 20,
-    padding: 20,
+    padding: 35,
     alignItems: 'center',
     shadowColor: '#000',
     shadowOffset: {
-      width: 0,
-      height: 2,
+    width: 0,
+    height: 2,
     },
     shadowOpacity: 0.25,
     shadowRadius: 4,

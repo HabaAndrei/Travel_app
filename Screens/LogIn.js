@@ -44,11 +44,13 @@ const LogIn = (props) => {
         if(!rez.type){
             if(rez.err?.message?.includes("auth/email-already-in-use")){
                 props.addNotification('error',"This email address is already in use");
+                return;
             }else{
                 props.addNotification('error', "Unfortunately I could not create the account ");
+                return;
             }
-            console.log(rez.err);
         }
+        props.navigation.navigate('SetUpTrip');
     }
 
     async function logIn(){
@@ -65,6 +67,7 @@ const LogIn = (props) => {
         const rez = await signInUserEmailPassword(inputEmail, inputPassword.input);
         if(rez.type){
             const user = rez.data;
+            props.navigation.navigate('SetUpTrip');
         }else{
             props.addNotification('error', "Invalid login credentials");
             console.log(rez.err);

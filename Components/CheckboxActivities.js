@@ -41,50 +41,55 @@ const CheckboxActivities = (props) => {
     }
 
     return (
-        <View style={styles.centeredView}>
-            <Modal
-                animationType="slide"
-                transparent={true}
-                visible={props.checkBoxActivities.isOpen}
-            >
-                {props.checkbox.length ? 
-                    <View style={styles.modalView}>
-                        <ScrollView contentContainerStyle={styles.scrollViewContent}>
-                            {props.checkbox.map((item, index) => {
-                                return (
-                                    <Pressable
-                                        key={index}
-                                        style={[
-                                            styles.pressable, 
-                                            item.selected && styles.pressableSelected
-                                        ]}
-                                        onPress={() => pressOnOption(index)}
-                                    >
-                                        <Text style={styles.text}>
-                                            {item.category}
-                                        </Text>
-                                        {item.selected ? 
-                                            <Icon as={CheckIcon} style={styles.icon} />
-                                            :
-                                            <View style={styles.iconPlaceholder}></View>
-                                        }
-                                    </Pressable>
-                                );
-                            })}
-                        </ScrollView>
-                        <Button onPress={() => { props.closeCheckbox() }} style={styles.button}>
-                            <ButtonText>
-                                <Icon as={SearchIcon} style={styles.searchIcon} />
-                            </ButtonText>
-                        </Button>
-                    </View>
-                    : 
-                    <View style={styles.spinnerContainer}>
-                        <Spinner color="$indigo600" />
-                    </View>
-                }
-            </Modal>
-        </View>
+    <View>
+        {props.checkBoxActivities.isOpen ? 
+            <View style={styles.centeredView}>
+                <Modal
+                    animationType="slide"
+                    transparent={true}
+                    visible={props.checkBoxActivities.isOpen}
+                >
+                    {props.checkbox.length ? 
+                        <View style={styles.modalView}>
+                            <ScrollView contentContainerStyle={styles.scrollViewContent}>
+                                {props.checkbox.map((item, index) => {
+                                    return (
+                                        <Pressable
+                                            key={index}
+                                            style={[
+                                                styles.pressable, 
+                                                item.selected && styles.pressableSelected
+                                            ]}
+                                            onPress={() => pressOnOption(index)}
+                                        >
+                                            <Text style={styles.text}>
+                                                {item.category}
+                                            </Text>
+                                            {item.selected ? 
+                                                <Icon as={CheckIcon} style={styles.icon} />
+                                                :
+                                                <View style={styles.iconPlaceholder}></View>
+                                            }
+                                        </Pressable>
+                                    );
+                                })}
+                            </ScrollView>
+                            <Button onPress={() => { props.closeCheckbox() }} style={styles.button}>
+                                <ButtonText>
+                                    <Icon as={SearchIcon} style={styles.searchIcon} />
+                                </ButtonText>
+                            </Button>
+                        </View>
+                        : 
+                        <View style={styles.spinnerContainer}>
+                            <Spinner color="$indigo600" />
+                        </View>
+                    }
+                </Modal>
+            </View>
+        :<View></View>
+        }
+    </View>
     );
 }
 

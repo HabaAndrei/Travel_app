@@ -5,6 +5,7 @@ import Notification from './Notification';
 import ModalDelete from './ModalDelete';
 import uuid from 'react-native-uuid';
 import LogIn from '../Screens/LogIn.js';
+import { StatusBar } from 'expo-status-bar';
 
 
 const Layout = ({ children, navigation, route, user, setUser}) => {
@@ -46,6 +47,7 @@ const Layout = ({ children, navigation, route, user, setUser}) => {
   
   return (
     <View style={styles.container}>
+      <StatusBar style="dark" />
 
       <ModalDelete   modalDelete={modalDelete} setModalDelete={setModalDelete} handleModalResponse={handleModalResponse} />
 

@@ -205,11 +205,14 @@ const Trip = (props) => {
                                 setDatePickerVisibility={setDatePickerVisibility}
                                 confimNewDate={confimNewDate}
                             />
-
-                            <Button variant="solid" mt="$2" onPress={() => { setModalVisible({ type: true, index }) }}>
-                                <ButtonText>Add new Location</ButtonText>
-                                <ButtonIcon as={AddIcon} m="$2" w="$4" h="$4"/>
-                            </Button>
+                            <Link onPress={() => { setModalVisible({ type: true, index }) }}>
+                                <HStack alignItems="center">
+                                    <LinkText size="sm" fontFamily="$heading" fontWeight="$semibold" color="$primary600" textDecorationLine="none">
+                                    Add new Location
+                                    </LinkText>
+                                    <Icon as={AddIcon} color="blue" m="$2" w="$4" h="$4"/>
+                                </HStack>
+                            </Link>
                         </View>
 
 
