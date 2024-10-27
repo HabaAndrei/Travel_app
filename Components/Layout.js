@@ -72,14 +72,14 @@ const Layout = ({ children, navigation, route, user, setUser}) => {
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={styles.footerContent}
         >
-          <Pressable style={styles.pressable} onPress={() => navigation.navigate('Home')} >
+          <Pressable style={styles.pressable} onPress={() => navigation.navigate('MyTrips')} >
             <Icon as={GlobeIcon} m="$2" w="$5" h="$5"  color="white"/>
-            <Text style={styles.pressableText}>Home</Text>
+            <Text style={styles.pressableText}>My Trips</Text>
           </Pressable>
 
           <Pressable style={styles.pressable} onPress={() => navigation.navigate('Program')} >
             <Icon as={CalendarDaysIcon} m="$2" w="$5" h="$5" color="white" />
-            <Text style={styles.pressableText}>Program</Text>
+            <Text style={styles.pressableText}>New trip</Text>
           </Pressable>
           
           <Pressable style={styles.pressable} onPress={() => navigation.navigate('UserSettings')} >
@@ -87,12 +87,6 @@ const Layout = ({ children, navigation, route, user, setUser}) => {
             <Text style={styles.pressableText}>Settings</Text>
           </Pressable>
          
-          <Pressable style={styles.pressable} onPress={() => navigation.navigate('Plans')} >
-            <Icon as={MenuIcon} m="$2" w="$5" h="$5" color="white" />
-            <Text style={styles.pressableText}>Plans</Text>
-          </Pressable> 
-
-
         </ScrollView>
       </View> : <View/> 
       }

@@ -167,7 +167,7 @@ const Program = (props) => {
     if(!rezDeleteAsyncStorage.type)return;
     setProgram([]);
     setButtonHomePage(true);
-    props.navigation.navigate('Plans');
+    props.navigation.navigate('MyTrips');
   }
 
 
@@ -180,7 +180,7 @@ const Program = (props) => {
       
         <View style={styles.buttonView} >
           <Pressable  style={styles.buttonPress}  > 
-            <Text style={styles.text} onPress={()=>{props.navigation.navigate('Home'); setButtonHomePage(false)}}>
+            <Text style={styles.text} onPress={()=>{props.navigation.navigate('SetUpTrip'); setButtonHomePage(false)}}>
               Create program</Text>
           </Pressable>
         </View>

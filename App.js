@@ -2,11 +2,11 @@ import { StyleSheet} from 'react-native'
 import React, {useEffect, useState} from 'react'
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import Home from './Screens/Home.js';
+import SetUpTrip from './Screens/SetUpTrip.js';
 import Program from './Screens/Program.js';
 import DailyProgram from './Screens/DailyProgram.js';
 import UserSettings from './Screens/UserSettings.js';
-import Plans from './Screens/Plans.js';
+import MyTrips from './Screens/MyTrips.js';
 import Locations from './Screens/Locations.js';
 import {db, auth, verifyEmailVerifiedDB} from './firebase.js';
 import { GluestackUIProvider } from "@gluestack-ui/themed"
@@ -49,9 +49,9 @@ const App = () => {
   }
 
 
-  const HomeScreen = ({ navigation, route }) => (
+  const SetUpTripScreen = ({ navigation, route }) => (
     <Layout  navigation={navigation} route={route} user={user} setUser={setUser}   >
-      <Home/>
+      <SetUpTrip/>
     </Layout>
   );
   
@@ -72,9 +72,9 @@ const App = () => {
     </Layout>
   );
 
-  const PlansScreen = ({ navigation, route }) => (
+  const MyTripsScreen = ({ navigation, route }) => (
     <Layout  navigation={navigation} route={route} user={user} setUser={setUser}  >
-      <Plans/>
+      <MyTrips/>
     </Layout>
   );
 
@@ -101,8 +101,8 @@ const App = () => {
             options={{headerShown: false}}
           />
           <Stack.Screen
-            name="Plans"
-            component={PlansScreen}
+            name="MyTrips"
+            component={MyTripsScreen}
             options={{headerShown: false}}
           />
           <Stack.Screen
@@ -121,8 +121,8 @@ const App = () => {
             options={{headerShown: false}}
           />
           <Stack.Screen
-            name="Home"
-            component={HomeScreen}
+            name="SetUpTrip"
+            component={SetUpTripScreen}
             options={{headerShown: false}}
           />
           <Stack.Screen

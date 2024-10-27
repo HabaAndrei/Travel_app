@@ -97,7 +97,7 @@ const Locations = (props) => {
 
 
   function pressOnCancel(){
-    props.navigation.navigate('Home');
+    props.navigation.navigate('SetUpTrip');
   }
 
 

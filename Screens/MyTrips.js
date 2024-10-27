@@ -4,7 +4,7 @@ import { useIsFocused } from '@react-navigation/native';
 import {getPlansFromDbWithUid} from '../firebase.js';
 import {  Card, Divider, Text, HStack , Heading, Link, LinkText, Icon, ArrowRightIcon, VStack, Button, ButtonText} from '@gluestack-ui/themed' ;
 
-const Plans = (props) => {
+const MyTrips = (props) => {
 
     const isFocused = useIsFocused();
     const [plans, setPlans] = useState([]);
@@ -37,14 +37,6 @@ const Plans = (props) => {
 
   return (
     <SafeAreaView style={{flex: 1}}>
-      {!plans.length ? 
-        <View style={styles.buttonView} >
-            <Pressable  style={styles.buttonPress}  > 
-            <Text style={styles.text} onPress={()=>{props.navigation.navigate('Home')}}>
-                Create program</Text>
-            </Pressable>
-        </View>
-        :
         <ScrollView style={{ flex: 1 }} >
             {plans.map((obiect, index)=>{
                 return <Card key={index}   p="$5" borderRadius="$lg" maxWidth={600} m="$3">
@@ -73,12 +65,11 @@ const Plans = (props) => {
                 </Card>
             })}            
         </ScrollView>
-      }
     </SafeAreaView>
   )
 }
 
-export default Plans
+export default MyTrips
 
 const styles = StyleSheet.create({
     buttonPress: {

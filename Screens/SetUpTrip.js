@@ -6,7 +6,7 @@ import DatePicker from '../Components/DatePicker';
 import {formatDateFromMilliseconds} from '../diverse';
 import CheckboxActivities from '../Components/CheckboxActivities';
 
-const Home = (props) => {
+const SetUpTrip = (props) => {
 
   const [dateFrom, setDateFrom] = useState('');
   const [dateTo, setDateTo] = useState('');
@@ -198,4 +198,4 @@ const styles = StyleSheet.create({
 
 });
 
-export default Home;
+export default SetUpTrip;
