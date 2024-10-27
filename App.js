@@ -28,9 +28,7 @@ const App = () => {
 
   function reloadUser(){
     onAuthStateChanged(auth, async (us) => {
-      console.log('se executa functia onAuthStateChanged')
       if (us) {
-        console.log(us);
         const uid = us.uid;
         const rezEmailVerified = await verifyEmailVerifiedDB(uid);
         if(rezEmailVerified.type){

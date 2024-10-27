@@ -130,8 +130,10 @@ const Locations = (props) => {
         <NavbarProgram name={props.route.name} navigation={props.navigation} />
         {
           buttonHomePage ? 
-          <View>
-            hahahahhha
+          <View style={styles.indicationView}>
+            <Text style={styles.indicationText}>
+              The locations are generated after you complete the entire form in step 1. We need that information to generate the best locations for you.
+            </Text>
           </View>
           : 
           <ScrollView>
@@ -284,11 +286,25 @@ const styles = StyleSheet.create({
   selectedCard: {
     backgroundColor: '#ADD8E6', 
   },
+  indicationView: {
+    backgroundColor: '#f9f9f9', 
+    borderColor: '#ddd', 
+    borderWidth: 1,
+    borderRadius: 8, 
+    padding: 12, 
+    marginVertical: 10,
+    shadowColor: '#000', 
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 2,
+  },
+  indicationText: {
+    color: '#333', 
+    fontSize: 14,
+    lineHeight: 20,
+  },
+
 });
 
 
-
-
-// adaug datele acestea in baza de date nu in async storage
-// fac ca clientul sa le selecteze
-// pun sa se faca speener pe ecran cand nu vin sau cand nu sunt date

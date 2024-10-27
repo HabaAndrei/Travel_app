@@ -171,80 +171,85 @@ const Program = (props) => {
   }
 
 
-
-
   return (
     <SafeAreaView style={{flex: 1}}>
 
-
       <ScrollView style={{flex:1}}>
-
         
         <NavbarProgram name={props.route.name} navigation={props.navigation} />
 
+        {buttonHomePage ? 
+          <View style={styles.indicationView}>
+            <Text style={styles.indicationText}>
+              The program is generated after you select the desired locations (from step 2) and want it to create the schedule for you.
+            </Text>
+          </View>
+          :
+          <ScrollView>
+            {!program?.length ? 
+              <View  style={{ marginTop: screenHeight / 3 }} >
+                <Center  >
+                  <Spinner color="$indigo600" />
+                </Center>
+              </View> :
 
-        {!program?.length ? 
-        <View  style={{ marginTop: screenHeight / 3 }} >
-          <Center  >
-            <Spinner color="$indigo600" />
-          </Center>
-        </View> :
+              <View> 
+                
+                <Center>
+                  <Heading>
+                    The generated program
+                  </Heading>
+                </Center>
 
-        <View> 
-          
-          <Center>
-            <Heading>
-              The generated program
-            </Heading>
-          </Center>
+                {program?.map((ob, index)=>{
+                  return  <Card  key={index}  p="$5" borderRadius="$lg" maxWidth={400} m="$3">
+                    <HStack justifyContent="space-between" alignItems="center">
+                      <Text fontSize="$sm"  fontStyle="normal"  fontFamily="$heading"  fontWeight="$normal"  lineHeight="$sm"  mb="$2"  sx={{  color: "$textLight700" }} >
+                        {'Day' + ob.day + " | " } {new Date(ob.date).toString().slice(0, 15)}   
+                      </Text>
+                      <Pressable onPress={()=>{deleteDayFromProgram(index)}} >
+                        <Icon as={TrashIcon} m="$2" w="$6" h="$6" />
+                      </Pressable>
+                    </HStack>
+                    
+                    <Heading size="md" fontFamily="$heading" mb="$4">
+                      {ob.title}
+                    </Heading>
+                    <Link onPress={()=>{goToDailyProgram({data: ob, index})}}>
+                      <HStack alignItems="center">
+                        <LinkText    size="sm"  fontFamily="$heading"  fontWeight="$semibold"  color="$primary600"  $dark-color="$primary300"  textDecorationLine="none" >
+                            See full day
+                        </LinkText>
+                        <Icon as={ArrowRightIcon}  size="sm"  color="$primary600"  mt="$0.5"  ml="$0.5"  $dark-color="$primary300"/>
+                      </HStack>
+                    </Link>
+                  </Card>   
+                })}
 
-          {program?.map((ob, index)=>{
-            return  <Card  key={index}  p="$5" borderRadius="$lg" maxWidth={400} m="$3">
-              <HStack justifyContent="space-between" alignItems="center">
-                <Text fontSize="$sm"  fontStyle="normal"  fontFamily="$heading"  fontWeight="$normal"  lineHeight="$sm"  mb="$2"  sx={{  color: "$textLight700" }} >
-                  {'Day' + ob.day + " | " } {new Date(ob.date).toString().slice(0, 15)}   
-                </Text>
-                <Pressable onPress={()=>{deleteDayFromProgram(index)}} >
-                  <Icon as={TrashIcon} m="$2" w="$6" h="$6" />
-                </Pressable>
-              </HStack>
-              
-              <Heading size="md" fontFamily="$heading" mb="$4">
-                {ob.title}
-              </Heading>
-              <Link onPress={()=>{goToDailyProgram({data: ob, index})}}>
-                <HStack alignItems="center">
-                  <LinkText    size="sm"  fontFamily="$heading"  fontWeight="$semibold"  color="$primary600"  $dark-color="$primary300"  textDecorationLine="none" >
-                      See full day
-                  </LinkText>
-                  <Icon as={ArrowRightIcon}  size="sm"  color="$primary600"  mt="$0.5"  ml="$0.5"  $dark-color="$primary300"/>
+                <HStack h="$10" justifyContent="center" alignItems="center">
+                  <HStack alignItems="center"  >
+                    <Text bold={true} onPress={()=>{deleteAllProgram()}} >Delete</Text>
+                    <Icon as={TrashIcon} m="$2" w="$6" h="$6" />
+                  </HStack>
+
+                  <Divider  style={{ margin: 15 }}  orientation="vertical"  mx="$2.5"  bg="$emerald500"  h={25}  $dark-bg="$emerald400" />
+
+                  <HStack alignItems="center">
+                    <Text bold={true} onPress={()=>regenerateProgram()} >Regenerate</Text>
+                    <Icon as={RepeatIcon} m="$2" w="$6" h="$6" />
+                  </HStack>
+
+                  <Divider  style={{ margin: 15 }}  orientation="vertical"  mx="$2.5"  bg="$indigo500"  h={25}  $dark-bg="$indigo400"/>
+
+                  <HStack alignItems="center">
+                    <Text bold={true} onPress={()=>saveProgramInDb()} >Save</Text>
+                    <Icon as={CheckIcon} m="$2" w="$6" h="$6" />
+                  </HStack>
                 </HStack>
-              </Link>
-            </Card>   
-          })}
 
-          <HStack h="$10" justifyContent="center" alignItems="center">
-            <HStack alignItems="center"  >
-              <Text bold={true} onPress={()=>{deleteAllProgram()}} >Delete</Text>
-              <Icon as={TrashIcon} m="$2" w="$6" h="$6" />
-            </HStack>
-
-            <Divider  style={{ margin: 15 }}  orientation="vertical"  mx="$2.5"  bg="$emerald500"  h={25}  $dark-bg="$emerald400" />
-
-            <HStack alignItems="center">
-              <Text bold={true} onPress={()=>regenerateProgram()} >Regenerate</Text>
-              <Icon as={RepeatIcon} m="$2" w="$6" h="$6" />
-            </HStack>
-
-            <Divider  style={{ margin: 15 }}  orientation="vertical"  mx="$2.5"  bg="$indigo500"  h={25}  $dark-bg="$indigo400"/>
-
-            <HStack alignItems="center">
-              <Text bold={true} onPress={()=>saveProgramInDb()} >Save</Text>
-              <Icon as={CheckIcon} m="$2" w="$6" h="$6" />
-            </HStack>
-          </HStack>
-
-        </View>
+              </View>
+            }
+          </ScrollView>
         }
 
       </ScrollView>
@@ -257,26 +262,24 @@ const Program = (props) => {
 export default Program
 
 const styles = StyleSheet.create({
-  buttonPress: {
-    backgroundColor: '#2196F3',
-    padding: 10,
-    borderRadius: 5,
-    height: 40,
-    width: 200,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 20,
+  indicationView: {
+    backgroundColor: '#f9f9f9', 
+    borderColor: '#ddd', 
+    borderWidth: 1,
+    borderRadius: 8, 
+    padding: 12, 
+    marginVertical: 10,
+    shadowColor: '#000', 
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 2,
   },
-  text: {
-    color: 'white',
-    fontSize: 16,
-    textAlign: 'center',
+  indicationText: {
+    color: '#333', 
+    fontSize: 14,
+    lineHeight: 20,
   },
-  buttonView: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  }, 
 })
 
 
