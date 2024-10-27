@@ -176,15 +176,7 @@ const Program = (props) => {
   return (
     <SafeAreaView style={{flex: 1}}>
 
-      {buttonHomePage ?
-      
-        <View style={styles.buttonView} >
-          <Pressable  style={styles.buttonPress}  > 
-            <Text style={styles.text} onPress={()=>{props.navigation.navigate('SetUpTrip'); setButtonHomePage(false)}}>
-              Create program</Text>
-          </Pressable>
-        </View>
-      :
+
       <ScrollView style={{flex:1}}>
 
         
@@ -256,7 +248,7 @@ const Program = (props) => {
         }
 
       </ScrollView>
-      }
+      
     </SafeAreaView>
   )
 }

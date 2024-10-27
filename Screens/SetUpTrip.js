@@ -5,6 +5,7 @@ import SearchDestination from '../Components/SearchDestination';
 import DatePicker from '../Components/DatePicker';
 import {formatDateFromMilliseconds} from '../diverse';
 import CheckboxActivities from '../Components/CheckboxActivities';
+import NavbarProgram from '../Components/NavbarProgram';
 
 const SetUpTrip = (props) => {
 
@@ -74,6 +75,9 @@ const SetUpTrip = (props) => {
   
   return (
     <ScrollView  >
+
+      <NavbarProgram name={props.route.name} navigation={props.navigation} />
+
 
       <Card p="$5" borderRadius="$lg"  m="$3" maxWidth={400} style={styles.shadow}>
         <Heading size="md" fontFamily="$heading" mb="$4">

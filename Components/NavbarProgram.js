@@ -1,72 +1,80 @@
 import { View, Text, Pressable, StyleSheet } from 'react-native';
 import React from 'react';
-import { MaterialIcons } from '@expo/vector-icons';
 
 const NavbarProgram = (props) => {
+  
+  function navigateSetUpTrip() {
+    if (props.name === 'SetUpTrip') return;
+    props.navigation.navigate('SetUpTrip');
+  }
 
+  function navigateLocations() {
+    if (props.name === 'Locations') return;
+    props.navigation.navigate('Locations');
+  }
 
-    function navigateProgram(){
-        if(props.name === 'Program')return;
-        props.navigation.navigate('Program')
-    }
+  function navigateProgram() {
+    if (props.name === 'Program') return;
+    props.navigation.navigate('Program');
+  }
 
-    function navigateLocations(){
-        if(props.name === 'Locations')return;
-        props.navigation.navigate('Locations')
-    }
-
-
-    return (
+  return (
     <View style={styles.container}>
-        <View style={styles.navbar}>
-            <Pressable
-                style={[styles.navButton, props.name === 'Locations' && styles.disabledButton]}
-                onPress={() => navigateLocations()}
-            >
-                <MaterialIcons name="arrow-back-ios" size={24} color="white" />
-                <Text style={styles.navButtonText}>Locations page</Text>
-            </Pressable>
+      <Pressable
+        style={[styles.navButton, props.name === 'SetUpTrip' && styles.activeButton]}
+        onPress={navigateSetUpTrip}
+      >
+        <Text style={styles.navButtonText}>Set up trip</Text>
+        <Text style={styles.stepText}>Step 1</Text>
+      </Pressable>
 
-            <Pressable
-                style={[styles.navButton, props.name === 'Program' && styles.disabledButton]}
-                onPress={() =>navigateProgram()}
-            >
-                <Text style={styles.navButtonText}>Program page</Text>
-                <MaterialIcons name="arrow-forward-ios" size={24} color="white" />
-            </Pressable>
-        </View>
+      <Pressable
+        style={[styles.navButton, props.name === 'Locations' && styles.activeButton]}
+        onPress={navigateLocations}
+      >
+        <Text style={styles.navButtonText}>Locations</Text>
+        <Text style={styles.stepText}>Step 2</Text>
+      </Pressable>
+
+      <Pressable
+        style={[styles.navButton, props.name === 'Program' && styles.activeButton]}
+        onPress={navigateProgram}
+      >
+        <Text style={styles.navButtonText}>Program</Text>
+        <Text style={styles.stepText}>Step 3</Text>
+      </Pressable>
     </View>
-  )
-}
+  );
+};
 
-export default NavbarProgram
+export default NavbarProgram;
 
 const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      justifyContent: 'center',
-      padding: 16,
-    },
-    navbar: {
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-    },
-    navButton: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      backgroundColor: '#007bff',
-      paddingVertical: 8,
-      paddingHorizontal: 15,
-      margin: 5,
-      borderRadius: 15,
-    },
-    navButtonText: {
-      color: 'white',
-      fontSize: 14,
-      fontWeight: '500',
-      marginHorizontal: 3,
-    },
-    disabledButton: {
-      backgroundColor: '#a3a3a3',
-    },
+  container: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    height: 80,
+    backgroundColor: '#f2f2f2',
+    borderBottomWidth: 1,
+    borderBottomColor: '#ddd',
+  },
+  navButton: {
+    alignItems: 'center',
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+  },
+  navButtonText: {
+    fontSize: 16,
+    color: '#333',
+  },
+  stepText: {
+    fontSize: 12,
+    color: '#666',
+    marginTop: 4,
+  },
+  activeButton: {
+    borderBottomWidth: 2,
+    borderBottomColor: '#007AFF',
+  },
 });

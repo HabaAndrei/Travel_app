@@ -77,7 +77,7 @@ const Layout = ({ children, navigation, route, user, setUser}) => {
             <Text style={styles.pressableText}>My Trips</Text>
           </Pressable>
 
-          <Pressable style={styles.pressable} onPress={() => navigation.navigate('Program')} >
+          <Pressable style={styles.pressable} onPress={() => navigation.navigate('SetUpTrip')} >
             <Icon as={CalendarDaysIcon} m="$2" w="$5" h="$5" color="white" />
             <Text style={styles.pressableText}>New trip</Text>
           </Pressable>
