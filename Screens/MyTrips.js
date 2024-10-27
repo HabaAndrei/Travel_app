@@ -4,6 +4,8 @@ import { useIsFocused } from '@react-navigation/native';
 import {getPlansFromDbWithUid} from '../firebase.js';
 import {  Card, Divider, Text, HStack , Heading, Link, LinkText, Icon,
     ArrowRightIcon} from '@gluestack-ui/themed' ;
+import CountdownNews from '../Components/CountdownNews.js';
+
 
 const MyTrips = (props) => {
 
@@ -38,6 +40,9 @@ const MyTrips = (props) => {
 
   return (
     <SafeAreaView style={{flex: 1}}>
+
+        <CountdownNews plans={plans} />
+
         <ScrollView style={{ flex: 1 }} >
             {plans.map((obiect, index)=>{
                 return <Card key={index}   p="$5" borderRadius="$lg" maxWidth={600} m="$3">
