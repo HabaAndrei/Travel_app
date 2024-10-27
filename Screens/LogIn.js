@@ -8,6 +8,7 @@ import {createUserEmailPassword,  signInUserEmailPassword, forgotPassword, signO
 import {isValidEmail, isValidPassword, deleteAllFromAsyncStorage, address_function_send_code_verification} from "../diverse.js"
 import uuid from 'react-native-uuid';
 import axios from 'axios';
+import ModalReAuth from '../Components/ModalReAuth.js';
 
 const LogIn = (props) => {
 
@@ -18,6 +19,7 @@ const LogIn = (props) => {
     const [signInOrUp, setSignInOrUp] = useState('');
     const [isForgotPassword, setIsForgotPassword] = useState('');
     const [codeVerify, setCodeVerify] = useState('');
+    const [isModalVisibleReAuth, setModalVisibleReAuth] = useState(false);
 
 
     async function createAccout(){
@@ -102,12 +104,14 @@ const LogIn = (props) => {
     
         const rez = await deleteTheUser();
         if(rez.type){
-          props.setUser(false);
-          deleteAllFromAsyncStorage()
+            props.setUser(false);
+            deleteAllFromAsyncStorage()
         }else{
-          console.log(rez.err);
-          props.addNotification('error', "Unfortunately, we could not delete the account");
-          return;
+            if(rez?.err?.message?.includes('auth/requires-recent-login')){
+                setModalVisibleReAuth(true);
+            }else{
+                props.addNotification('error', "Unfortunately, we could not delete the account");
+            }
         }
     }
 
@@ -157,6 +161,8 @@ const LogIn = (props) => {
 
   return (
     <ScrollView>
+
+        <ModalReAuth  isModalVisibleReAuth={isModalVisibleReAuth} setModalVisibleReAuth={setModalVisibleReAuth} />
 
         {props.user ? 
         <View>
