@@ -2,7 +2,7 @@ import { StyleSheet, Text, View, Pressable, ScrollView } from 'react-native'
 import React, {useState, useEffect } from 'react'
 import { Input, InputField, InputIcon, InputSlot, VStack, HStack, Divider, Button, Center, Heading, EyeIcon, ButtonText, 
     EyeOffIcon, Card } from '@gluestack-ui/themed'
-import {createUserEmailPassword,verifyEmail,  signInUserEmailPassword, forgotPassword, signOutUser, deleteTheUser, 
+import {createUserEmailPassword,  signInUserEmailPassword, forgotPassword, signOutUser, deleteTheUser, 
     storeCodeAndEmail, verifyCodeDB, updateEmailVerificationDB
 } from '../firebase.js'
 import {isValidEmail, isValidPassword, deleteAllFromAsyncStorage, address_function_send_code_verification} from "../diverse.js"
@@ -36,13 +36,8 @@ const LogIn = (props) => {
             return;
         }
 
-
         const rez = await createUserEmailPassword(inputEmail, inputPassword.input, inputFirstName, inputSecondName);
-        if(rez.type){
-            const user = rez.data;
-            sendEmailVerification();
-            
-        }else{
+        if(!rez.type){
             if(rez.err?.message?.includes("auth/email-already-in-use")){
                 props.addNotification('error',"This email address is already in use");
             }else{
@@ -86,17 +81,6 @@ const LogIn = (props) => {
         }else{
             props.addNotification('error', "Sending the password reset email did not work");
             console.log(rez.err);
-        }
-    }
-
-
-    async function sendEmailVerification(){
-        const rez = await verifyEmail();
-        if(rez.type){
-          props.addNotification("success" , "Confirm on the email address that this account is valid");
-        }else{
-          console.log(rez.err)
-          props.addNotification("error", "There was a problem verifying your email");
         }
     }
 
@@ -168,19 +152,16 @@ const LogIn = (props) => {
             return {...prev, email_verified: true};
         });
 
-        props.navigation.navigate('Home');
+        props.navigation.navigate('SetUpTrip');
     }
 
   return (
     <ScrollView>
+
         {props.user ? 
         <View>
-            
-    
             {!props.user?.emailVerified_code ? 
-            
             <View>
-                
                 <Center>
                     <Heading color="$text900" lineHeight="$md">
                         The next step is to verify your 
@@ -226,8 +207,6 @@ const LogIn = (props) => {
             : 
             <View></View>
             }
-            
-        
         </View>
         :
         <View >
@@ -249,18 +228,15 @@ const LogIn = (props) => {
                             onChangeText={(text) => setInputEmail(text)}
                             />
                         </Input>
-
                         <Button ml="auto" >
                             <ButtonText color="$white" onPress={forgotThePassword} >Send email</ButtonText>
                         </Button>
                     </VStack>
-
                     :    
                     <VStack space="xl">
                         <Heading color="$text900" lineHeight="$md">
                             {signInOrUp === "signup" ? "Create accout" :  "Log in"  }
                         </Heading>
-
                         {signInOrUp === "signup" ? 
                             <VStack space="xs">
                                 <Text color="$text500" lineHeight="$xs">
@@ -275,7 +251,6 @@ const LogIn = (props) => {
                                 </Input>
                             </VStack> : <View></View>
                         }  
-
                         {signInOrUp === "signup" ? 
                             <VStack space="xs">
                                 <Text color="$text500" lineHeight="$xs">
@@ -290,7 +265,6 @@ const LogIn = (props) => {
                                 </Input>
                             </VStack> : <View></View>
                         }
-
                         <VStack space="xs">
                             <Text color="$text500" lineHeight="$xs">
                                 Email
@@ -303,7 +277,6 @@ const LogIn = (props) => {
                                 />
                             </Input>
                         </VStack>
-
                         <VStack space="xs">
                             <Text color="$text500" lineHeight="$xs"> 
                                 Password 
@@ -323,8 +296,6 @@ const LogIn = (props) => {
                                 </InputSlot>
                             </Input>
                         </VStack>
-
-                        
                         <Pressable onPress={()=>setIsForgotPassword(true)}>
                             <Text style={{ color: 'blue', textDecorationLine: 'underline', marginTop: 10 }}>
                                 Forgot your password? Click here

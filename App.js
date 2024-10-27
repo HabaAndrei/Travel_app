@@ -140,14 +140,4 @@ export default App
 
 const styles = StyleSheet.create({})
 
-
-
-// Plan standard:
-// il las e utilizator sa isi creeze un program si sa isi editeze el orele
-
-
-// Plan premium:
-// Il las pe utilizator sa isi adauge locatie hotelului si sa ii fac eu cel mai bun traseu
-// Oferte si reduceri 
-// Navigare si integrare cu transportul
-// Optimizare in functie de mijlocul de transport ales
+// Adaug si un input in care sa fie locatia hotelului

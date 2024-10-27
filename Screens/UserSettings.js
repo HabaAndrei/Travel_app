@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import {VStack, HStack, Button, ButtonText, Divider} from '@gluestack-ui/themed'
 import {signOutUser, deleteTheUser, } from '../firebase.js';
 import {deleteAllFromAsyncStorage} from '../diverse.js';
-
+import ModalReAuth from '../Components/ModalReAuth.js';
 
 const UserSettings = (props) => {
 
@@ -38,6 +38,8 @@ const UserSettings = (props) => {
 
   return (
     <ScrollView style={{marginTop: 20}} >
+
+      <ModalReAuth  addNotification={props.addNotification} />
 
       <View style={{ alignItems: 'center' }}>
         <VStack space="2xl">  

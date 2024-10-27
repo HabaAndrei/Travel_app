@@ -58,13 +58,12 @@ async function signInUserEmailPassword(email, password){
   return rezFin; 
 }
 
-async function reAuth(uid){
+async function reAuth(password){
   let rezFin = {type:true};
   try{
-    const docRef = doc(db, "users", uid);
-    const userDB = await getDoc(docRef);
-    const {password, email} = userDB.data();
     const user = auth.currentUser;
+    const {email} = user;
+    console.log(user, email);
     const credential = EmailAuthProvider.credential(email, password)
     await reauthenticateWithCredential(user, credential);
   }catch(err){
@@ -75,13 +74,8 @@ async function reAuth(uid){
 
 async function deleteTheUser(){
   let rezFin = {};
-  const user = auth.currentUser;
-  const rezReAuth = await reAuth(user.uid);
-  if(!rezReAuth.type){
-    rezFin = {type: false, err: rezReAuth.err};
-    return;
-  }
   try{
+    const user = auth.currentUser;
     const rez = await deleteUser(user);
     rezFin = {type: true};
   }catch(err){
@@ -113,25 +107,13 @@ async function forgotPassword(email){
   return rezFin; 
 }
 
-
-async function verifyEmail(){
-  let rezFin = {};
-  try{
-    await sendEmailVerification(auth.currentUser);
-    rezFin = {type:true};
-  }catch(err){
-    rezFin = {type:false, err}
-  }
-  return rezFin;
-}
-
 ///////////////////////////////////////////////////////////////////////////////
 
 async function addUserIntoDb(uid, createdAt, email, password, firstName, secondName){
   
   try{
     await setDoc(doc(db, "users", uid), {
-      uid, email, firstName, secondName, password, createdAt, plan: "standard", email_verified: false
+      uid, email, firstName, secondName, createdAt, email_verified: false
     });
   }catch(err){
     console.log(err, 'nu s a introdus nimic in baza de date')
@@ -240,9 +222,9 @@ async function verifyEmailVerifiedDB(uid){
   return rezFin;
 }
 
-export {db, auth, signOutUser, deleteTheUser, addProgramIntoDb, createUserEmailPassword, verifyEmail, signInUserEmailPassword, 
+export {db, auth, signOutUser, deleteTheUser, addProgramIntoDb, createUserEmailPassword, signInUserEmailPassword, 
   getPlansFromDbWithUid, forgotPassword, updateProgram, storeCodeAndEmail, verifyCodeDB, updateEmailVerificationDB, 
-  verifyEmailVerifiedDB
+  verifyEmailVerifiedDB, reAuth
 };
 
 
