@@ -1,11 +1,13 @@
 import { StyleSheet, Text, View, Pressable, ScrollView } from 'react-native'
-import React, {useState, useEffect } from 'react'
-import { Input, InputField, InputIcon, InputSlot, VStack, HStack, Divider, Button, Center, Heading, EyeIcon, ButtonText, 
+import React, {useState } from 'react'
+import { Input, InputField, InputIcon, InputSlot, VStack, HStack, Divider, Button, 
+    Center, Heading, EyeIcon, ButtonText, 
     EyeOffIcon, Card } from '@gluestack-ui/themed'
-import {createUserEmailPassword,  signInUserEmailPassword, forgotPassword, signOutUser, deleteTheUser, 
-    storeCodeAndEmail, verifyCodeDB, updateEmailVerificationDB
+import {createUserEmailPassword,  signInUserEmailPassword, forgotPassword, signOutUser, 
+    deleteTheUser, storeCodeAndEmail, verifyCodeDB, updateEmailVerificationDB
 } from '../firebase.js'
-import {isValidEmail, isValidPassword, deleteAllFromAsyncStorage, address_function_send_code_verification} from "../diverse.js"
+import {isValidEmail, isValidPassword, deleteAllFromAsyncStorage, 
+    address_function_send_code_verification} from "../diverse.js"
 import uuid from 'react-native-uuid';
 import axios from 'axios';
 import ModalReAuth from '../Components/ModalReAuth.js';

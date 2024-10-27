@@ -1,9 +1,8 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore, collection, addDoc, doc, setDoc ,updateDoc, query, where, getDocs, getDoc } from "firebase/firestore";
 import {MEASUREMENT_ID, APIKEY, AUTH_DOMAIN, PROJECT_ID, STORAGE_BUCKET, MESSAGING_SENDER_ID, APP_ID} from '@env';
-import { getAuth, signOut,  deleteUser, initializeAuth, createUserWithEmailAndPassword, onAuthStateChanged,
-   sendEmailVerification, signInWithEmailAndPassword, sendPasswordResetEmail, reauthenticateWithCredential, 
-   EmailAuthProvider, updatePassword  } from "firebase/auth";
+import {signOut,  deleteUser, initializeAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, 
+  sendPasswordResetEmail, reauthenticateWithCredential, EmailAuthProvider  } from "firebase/auth";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getReactNativePersistence } from '@firebase/auth/dist/rn/index.js';
 

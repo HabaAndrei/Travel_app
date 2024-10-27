@@ -1,6 +1,7 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React, { useState } from 'react'
-import { Alert, AlertIcon, Pressable, AlertText, InfoIcon, Icon, CloseIcon, Center } from "@gluestack-ui/themed"
+import { Alert, AlertIcon, Pressable, AlertText, InfoIcon, Icon, CloseIcon, 
+  Center } from "@gluestack-ui/themed"
 
 const Notification = (props) => {
   function deleteNotification(id) {

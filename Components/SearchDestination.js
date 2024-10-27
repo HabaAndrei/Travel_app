@@ -1,7 +1,6 @@
-import { View ,TextInput,  Text, FlatList, Image, StyleSheet } from 'react-native';
-import React, {useState, useEffect} from 'react'
+import { View ,TextInput, Image, StyleSheet } from 'react-native';
+import React, {useState} from 'react'
 import ModalSearchDestination from './ModalSearchDestination.js';
-import { Card, Pressable } from '@gluestack-ui/themed';
 
 
 const SearchDestination = (props) => {
@@ -11,11 +10,6 @@ const SearchDestination = (props) => {
 
   const [suggestions, setSuggestions] = useState([]);
   const [modalVisible, setModalVisible] = useState({type: false, data:''});
-
-
-
-
-
   
   return (
 

@@ -1,8 +1,10 @@
 import { StyleSheet, View, ScrollView, Dimensions, Pressable, SafeAreaView } from 'react-native'
 import React, {useState, useEffect} from 'react'
-import {address_function_api, formatDateFromMilliseconds, removeItemFromAsyncStorage, addDataToAsyncStorage,
-  multiSetFromAsyncStorage, getDataFromAsyncStorage, multiGetFromAsyncStorage, multiRemoveFromAsyncStorage} from '../diverse.js';
-import { ArrowRightIcon, Spinner, Center, Card, Heading, Link, LinkText, Text, VStack, Divider, HStack, TrashIcon,RepeatIcon, CheckIcon,  Icon } from "@gluestack-ui/themed";
+import {address_function_api, formatDateFromMilliseconds, removeItemFromAsyncStorage, 
+  addDataToAsyncStorage, multiSetFromAsyncStorage, getDataFromAsyncStorage, 
+  multiGetFromAsyncStorage, multiRemoveFromAsyncStorage} from '../diverse.js';
+import { ArrowRightIcon, Spinner, Center, Card, Heading, Link, LinkText, Text, 
+  Divider, HStack, TrashIcon,RepeatIcon, CheckIcon,  Icon } from "@gluestack-ui/themed";
 import { useIsFocused } from '@react-navigation/native'; 
 import {addProgramIntoDb} from '../firebase.js';
 import axios from 'axios';
