@@ -7,6 +7,7 @@ import ModalReAuth from '../Components/ModalReAuth.js';
 
 const UserSettings = (props) => {
 
+  const [isModalVisibleReAuth, setModalVisibleReAuth] = useState(false);
 
   
   async function signOut(){
@@ -30,16 +31,18 @@ const UserSettings = (props) => {
       props.setUser(false);
       deleteAllFromAsyncStorage()
     }else{
-      console.log(rez.err);
-      props.addNotification('error', "Unfortunately, we could not delete the account");
-      return;
+      if(rez?.err?.message?.includes('auth/requires-recent-login')){
+        setModalVisibleReAuth(true);
+      }else{
+        props.addNotification('error', "Unfortunately, we could not delete the account");
+      }
     }
   }
 
   return (
     <ScrollView style={{marginTop: 20}} >
 
-      <ModalReAuth  addNotification={props.addNotification} />
+      <ModalReAuth  isModalVisibleReAuth={isModalVisibleReAuth} setModalVisibleReAuth={setModalVisibleReAuth} />
 
       <View style={{ alignItems: 'center' }}>
         <VStack space="2xl">  

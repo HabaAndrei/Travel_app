@@ -63,7 +63,6 @@ async function reAuth(password){
   try{
     const user = auth.currentUser;
     const {email} = user;
-    console.log(user, email);
     const credential = EmailAuthProvider.credential(email, password)
     await reauthenticateWithCredential(user, credential);
   }catch(err){

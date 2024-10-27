@@ -1,32 +1,41 @@
 import { StyleSheet, View, Pressable, Modal } from 'react-native'
-import React, {useState} from 'react'
-import { Input, InputField, InputIcon, InputSlot, VStack, HStack, Divider, Button, Center, Heading, EyeIcon, ButtonText, 
-    EyeOffIcon, Card, Text } from '@gluestack-ui/themed';
+import React, {useEffect, useState} from 'react'
+import { Input, InputField, Button, Heading, ButtonText, Text } from '@gluestack-ui/themed';
 import {reAuth} from '../firebase.js';
 
 
 const ModalReAuth = (props) => {
 
-    const [isModalVisible, setModalVisible] = useState(true);
     const [password, setPassword] = useState('');
+    const [err, setErr] = useState('');
 
     async function reauthenticate(){
         console.log('se executa');
         if(!password.length)return;
         const rez = await reAuth(password);
         if(!rez.type){
-            console.log(rez.err);
-            props.addNotification('error', 'eroare');
+            setErr('The password is not correct');
+        }else{
+            props.setModalVisibleReAuth(false);
         }
     }
+    
+    useEffect(()=>{
+        if(err)setErr('');
+    }, [password]);
+
+    function closeModal(){
+        props.setModalVisibleReAuth(false);
+    }
+
 
   return (
     <View style={styles.centeredView}>
         <Modal
           animationType="slide"
           transparent={true}
-          visible={isModalVisible}
-          onRequestClose={() => {setModalVisible(false)}}
+          visible={props.isModalVisibleReAuth}
+          onRequestClose={() => {props.setModalVisibleReAuth(false)}}
         >
             <View style={styles.modalView}>
 
@@ -41,15 +50,15 @@ const ModalReAuth = (props) => {
                             onChangeText={(text) => setPassword(text)} 
                         />
                     </Input>
-
-                    <Button onPress={reauthenticate} >
+                    {err ? <Text color="$text500" lineHeight="$xs" style={{marginTop: 5, color: 'red'}}> {err} </Text> : <Text></Text>}
+                    <Button onPress={reauthenticate} style={{marginTop: 10}} >
                         <ButtonText>
                             Reauthenticate
                         </ButtonText>
                     </Button>
                 </View>
                 <View style={{marginTop: 10}} >
-                    <Pressable
+                    <Pressable onPress={closeModal}
                         style={[styles.button, styles.buttonClose]}>
                         <Text style={styles.textStyle}>Close</Text>
                     </Pressable>
