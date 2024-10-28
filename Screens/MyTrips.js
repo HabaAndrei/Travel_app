@@ -21,6 +21,7 @@ const MyTrips = (props) => {
     async function getPlansFromDb(uid){
         const rezQuery = await getPlansFromDbWithUid(uid);
         if(!rezQuery.type){
+            console.log('------', rezQuery.err);
             props.addNotification("error", "Unfortunately, there was a problem when taking the program")
             return;
         }
@@ -41,9 +42,11 @@ const MyTrips = (props) => {
   return (
     <SafeAreaView style={{flex: 1}}>
 
-        <CountdownNews plans={plans} />
 
         <ScrollView style={{ flex: 1 }} >
+            
+            <CountdownNews plans={plans} />
+
             {plans.map((obiect, index)=>{
                 return <Card key={index}   p="$5" borderRadius="$lg" maxWidth={600} m="$3">
                     <Heading size="md" fontFamily="$heading" mb="$4">

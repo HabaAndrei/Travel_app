@@ -147,8 +147,8 @@ const Trip = (props) => {
             return obDay;
         })
 
-        const from = new Date(program[0].date).getTime();
-        const to = new Date(program[program.length - 1].date).getTime();
+        const from = formatDateFromMilliseconds(new Date(program[0].date).getTime());
+        const to = formatDateFromMilliseconds(new Date(program[program.length - 1].date).getTime());
         
         const rez = await updateProgram(idProgramIntoDb, from, to, program);
         if(!rez.type){
