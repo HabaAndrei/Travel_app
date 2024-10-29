@@ -1,7 +1,7 @@
 import { StyleSheet, View, PanResponder } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { Card, Text, Heading } from '@gluestack-ui/themed';
-import {formatDateFromMilliseconds} from '../diverse.js';
+import {formatDateFromMilliseconds, getDays, getHours} from '../diverse.js';
 
 const CountdownNews = (props) => {
 
@@ -36,20 +36,40 @@ const CountdownNews = (props) => {
     createNews();
   }, [props.plans]);
   
-  function returnNewsFromActivities(programDay, actualDate, actualHour, actualMinutes){
-    console.log(programDay, actualDate, actualHour, actualMinutes);
-    const {activities, title, date} = programDay;
+  function returnNewsFromActivities(programDay, actualDate, actualHour, actualMinutes) {
+    const { activities, date } = programDay;
     const news = [];
-    activities.forEach((ob)=>{
-      if(date === actualDate){
-        if(`${actualHour}:${actualMinutes}` < ob.time){
-          // aici fac o functie care ia difernta ramase de ore / minute
+  
+    const formatTimeMessage = (hours, minutes, address) =>
+      `In ${hours > 0 ? `${hours} hours` : ''} ${hours > 0 && minutes > 0 ? 'and' : ''} ${minutes > 0 ? `${minutes} minutes` : ''} you have to be at address ${address}.`;
+  
+    activities.forEach(activity => {
+      const { address, info, time, urlLocation, website, place } = activity;
+      const infOne = `Good to know: ${info}`;
+      const title = place;
+  
+      if (date === actualDate) {
+        if (`${actualHour}:${actualMinutes}` < time) {
+          const { minutes, hours } = getHours(`${actualHour}:${actualMinutes}`, time);
+          const infTwo = formatTimeMessage(hours, minutes, address);
+          news.push({ title, infOne, infTwo, urlLocation, website, address });
         }
-      }else{
-        // aici sa iau diferenta de zile
+      } else {
+        const days = getDays(new Date(actualDate).getTime(), new Date(date).getTime());
+  
+        if (days === 1) {
+          const { minutes, hours } = getHours(`${actualHour}:${actualMinutes}`, time);
+          const infTwo = formatTimeMessage(hours, minutes, address);
+          news.push({ title, infOne, infTwo, urlLocation, website, address });
+        } else {
+          const infTwo = `In ${days} days you have to be at address ${address}.`;
+          news.push({ title, infOne, infTwo, urlLocation, website, address });
+        }
       }
     });
+    return news;
   }
+  
 
 
   function createNews(){
@@ -64,7 +84,7 @@ const CountdownNews = (props) => {
     const programDays = JSON.parse(firstTriptToVisit.programDaysString);
     const indexFirstDayToVisit = programDays.findIndex((ob)=>ob.date >= actualDate);
     const arNews = returnNewsFromActivities(programDays[indexFirstDayToVisit], actualDate, actualHour, actualMinutes)
-
+    console.log(arNews);
         
   };
 

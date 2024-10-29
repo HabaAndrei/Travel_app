@@ -28,11 +28,34 @@ function isValidPassword(password) {
     if (password.length < 7) {
       return false;
     }
-  
-    // Folosim o expresie regulată pentru a găsi toate cifrele din parolă
     const digitCount = (password.match(/\d/g) || []).length;
     return digitCount >= 2;
-  }
+}
+
+function getDays(from, to){
+    console.log({from: new Date(from), to: new Date(to)})
+    const days = to - from;
+    console.log(days);
+    return days / 86400000
+}
+
+function getHours(from, to){
+    const getHoursFrom = from.slice(0, 2);
+    const getHoursTo = to.slice(0, 2);
+    const getMinutesFrom = from.slice(3, 5);
+    const getMinutesTo = to.slice(3, 5);
+    let hours = getHoursTo - getHoursFrom;
+    let minutes = getMinutesTo - getMinutesFrom;
+
+    if(Number(hours) < 0){
+        hours = (24 - Number(getHoursFrom)) + Number(getHoursTo);
+    }
+    if(Number(minutes) < 0){
+        minutes = (60 - Number(getMinutesFrom)) + Number(getMinutesTo);
+        hours -= 1;
+    }
+    return {minutes, hours}
+}
 
 ////////////////////////////
 async function getDataFromAsyncStorage(key){
@@ -139,9 +162,9 @@ async function multiRemoveFromAsyncStorage(arrayOfKeys){
     return rezFinal;
 }
 
-export {isValidPassword, isValidEmail, removeItemFromAsyncStorage, getDataFromAsyncStorage, addDataToAsyncStorage,    multiRemoveFromAsyncStorage, multiSetFromAsyncStorage, 
-    getAllKeysFromAsyncStorage, multiGetFromAsyncStorage,  formatDateFromMilliseconds,  deleteAllFromAsyncStorage, address_function_api, address_function_fuzzy, 
-    address_function_send_code_verification
+export {isValidPassword, isValidEmail, removeItemFromAsyncStorage, getDataFromAsyncStorage, addDataToAsyncStorage, multiRemoveFromAsyncStorage, multiSetFromAsyncStorage, 
+    getAllKeysFromAsyncStorage, multiGetFromAsyncStorage,  formatDateFromMilliseconds,  deleteAllFromAsyncStorage,  getDays, getHours, 
+    address_function_api, address_function_fuzzy, address_function_send_code_verification
 }
 
 
