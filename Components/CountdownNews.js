@@ -5,7 +5,7 @@ import {formatDateFromMilliseconds, getDays, getHours} from '../diverse.js';
 
 const CountdownNews = (props) => {
 
-  const [newToShow, setNewToShow] = useState([1, 2, 3, 4, 5, 6])
+  const [newsToShow, setNewToShow] = useState([])
   const [newsNumber, setNewsNumber] = useState(0);
   const [startX, setStartX] = useState(0);
 
@@ -18,7 +18,7 @@ const CountdownNews = (props) => {
       const endX = evt.nativeEvent.pageX;
       if (startX - endX > 20) {
         setNewsNumber((number)=>{
-          if(number >= newToShow.length - 1 )return number;
+          if(number >= newsToShow.length - 1 )return number;
           else return number +=1;
         })
       } else if (endX - startX > 20) {
@@ -84,18 +84,23 @@ const CountdownNews = (props) => {
     const programDays = JSON.parse(firstTriptToVisit.programDaysString);
     const indexFirstDayToVisit = programDays.findIndex((ob)=>ob.date >= actualDate);
     const arNews = returnNewsFromActivities(programDays[indexFirstDayToVisit], actualDate, actualHour, actualMinutes)
-    console.log(arNews);
+    if(arNews.length <5 && programDays[indexFirstDayToVisit + 1]){
+      const arNewsTwo = returnNewsFromActivities(programDays[indexFirstDayToVisit + 1], actualDate, actualHour, actualMinutes)
+      arNews.concat(arNewsTwo);
+    }
+    setNewToShow(arNews);
         
   };
 
   return (
-    <View {...panResponder.panHandlers}>
+    <View style={styles.container} {...panResponder.panHandlers}>
       <Card p="$5" borderRadius="$lg" maxWidth={600} m="$3">
+        <Heading style={styles.heading}>{newsToShow[newsNumber]?.title}</Heading>
+        <Text style={styles.infoText}>{newsToShow[newsNumber]?.infTwo}</Text>
+        <Text style={styles.description}>{newsToShow[newsNumber]?.infOne}</Text>
 
-        <Heading>Aici sa pun eu lucruri smechere</Heading>
-        <Text>{newToShow[newsNumber]}</Text>
         <View style={styles.dotsContainer}>
-          {newToShow.map((_, index) => (
+          {newsToShow.map((_, index) => (
             <View
               key={index}
               style={[
@@ -110,20 +115,47 @@ const CountdownNews = (props) => {
   )
 }
 
-export default CountdownNews
+export default CountdownNews;
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  heading: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 10,
+    color: '#333',
+    textAlign: 'center',
+  },
+  infoText: {
+    fontSize: 16,
+    color: '#555',
+    marginVertical: 10,
+    lineHeight: 22,
+    textAlign: 'center',
+  },
+  description: {
+    fontSize: 14,
+    color: '#777',
+    marginBottom: 15,
+    lineHeight: 20,
+    textAlign: 'center',
+  },
   dotsContainer: {
     flexDirection: 'row',
     position: 'absolute',
     bottom: 20,
     justifyContent: 'center',
+    width: '100%',
   },
   dot: {
-    width: 7,
-    height: 7,
-    borderRadius: 4,
-    marginHorizontal: 4,
+    width: 10,
+    height: 10,
+    borderRadius: 5,
+    marginHorizontal: 6,
   },
   activeDot: {
     backgroundColor: '#333',
@@ -131,4 +163,4 @@ const styles = StyleSheet.create({
   inactiveDot: {
     backgroundColor: '#ccc',
   }
-})
+});

@@ -33,9 +33,7 @@ function isValidPassword(password) {
 }
 
 function getDays(from, to){
-    console.log({from: new Date(from), to: new Date(to)})
     const days = to - from;
-    console.log(days);
     return days / 86400000
 }
 
