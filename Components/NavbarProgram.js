@@ -84,6 +84,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 10,
     paddingHorizontal: 15,
+    backgroundColor: '#e0e0e0',
+    borderRadius: 10,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
   },
   navButtonText: {
     fontSize: 16,
@@ -95,14 +101,15 @@ const styles = StyleSheet.create({
     marginTop: 4,
   },
   activeButton: {
-    borderBottomWidth: 3,
-    borderBottomColor: '#007AFF',
+    backgroundColor: '#007AFF',
+    shadowColor: '#007AFF',
+    shadowOpacity: 0.3,
   },
   activeText: {
-    color: '#007AFF',
+    color: '#fff',
     fontWeight: 'bold',
   },
   pressedButton: {
-    opacity: 0.7,
+    opacity: 0.85,
   },
 });
