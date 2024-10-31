@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import { View, Text, StyleSheet} from 'react-native';
-import { Card, Pressable, Heading, ScrollView } from '@gluestack-ui/themed';
+import { Card, Pressable, Heading, ScrollView, SafeAreaView } from '@gluestack-ui/themed';
 import SearchDestination from '../Components/SearchDestination';
 import DatePicker from '../Components/DatePicker';
 import {formatDateFromMilliseconds} from '../diverse';
@@ -74,85 +74,89 @@ const SetUpTrip = (props) => {
   }
   
   return (
-    <ScrollView  >
+    <SafeAreaView style={{flex: 1}} >
 
-      <NavbarProgram name={props.route.name} navigation={props.navigation} />
+      <ScrollView  >
+
+        <NavbarProgram name={props.route.name} navigation={props.navigation} />
 
 
-      <Card p="$5" borderRadius="$lg"  m="$3" maxWidth={400} style={styles.shadow}>
-        <Heading size="md" fontFamily="$heading" mb="$4">
-          Where?
-        </Heading>
-        <SearchDestination
-          setCheckBoxActivities={setCheckBoxActivities}  addNotification={props.addNotification}
-          dataDestination={dataDestination} setDataDestination={setDataDestination}
-        />
-      </Card>
-
-      <View style={styles.buttonGo} >
-        <Pressable  style={styles.buttonGoPressAc}
-          onPress={()=>openModalActivities()} > 
-          <Text style={styles.text} >Choose activities</Text>
-        </Pressable>
-      </View>
-      
-
-      <CheckboxActivities dataDestination={dataDestination} 
-        checkBoxActivities={checkBoxActivities} closeCheckbox={closeCheckbox}
-        checkbox={checkbox} setCheckbox={setCheckbox}  addNotification={props.addNotification}
-      /> 
-
-      <View style={{ alignItems: 'center' }}>
-        <Card style={styles.shadow} size="md" variant="elevated" m="$3" maxWidth={600}>
-          <View style={styles.row}>
-            <View style={styles.buttonContainer}>
-              {dateFrom ? (
-                <Text style={styles.centeredBoldText}>
-                  From: {new Date(formatDateFromMilliseconds(dateFrom)).toString().slice(0, 15)}
-                </Text>
-              ) : (
-                <Text></Text>
-              )}
-              <DatePicker
-                how={"from"}
-                showDatePicker={() =>
-                  setDatePickerVisibility({ type: true, data: "from", func: setDateFrom })
-                }
-                datePickerVisibility={datePickerVisibility}
-                setDatePickerVisibility={setDatePickerVisibility}
-              />
-            </View>
-
-            <View style={styles.buttonContainer}>
-              {dateTo ? (
-                <Text style={styles.centeredBoldText}>
-                  To: {new Date(formatDateFromMilliseconds(dateTo)).toString().slice(0, 15)}
-                </Text>
-              ) : (
-                <Text></Text>
-              )}
-              <DatePicker
-                how={"to"}
-                showDatePicker={() =>
-                  setDatePickerVisibility({ type: true, data: "to", func: setDateTo })
-                }
-                datePickerVisibility={datePickerVisibility}
-                setDatePickerVisibility={setDatePickerVisibility}
-              />
-            </View>
-          </View>
+        <Card p="$5" borderRadius="$lg"  m="$3" maxWidth={400} style={styles.shadow}>
+          <Heading size="md" fontFamily="$heading" mb="$4">
+            Where?
+          </Heading>
+          <SearchDestination
+            setCheckBoxActivities={setCheckBoxActivities}  addNotification={props.addNotification}
+            dataDestination={dataDestination} setDataDestination={setDataDestination}
+          />
         </Card>
-      </View>
+
+        <View style={styles.buttonGo} >
+          <Pressable  style={styles.buttonGoPressAc}
+            onPress={()=>openModalActivities()} > 
+            <Text style={styles.text} >Choose activities</Text>
+          </Pressable>
+        </View>
+        
+
+        <CheckboxActivities dataDestination={dataDestination} 
+          checkBoxActivities={checkBoxActivities} closeCheckbox={closeCheckbox}
+          checkbox={checkbox} setCheckbox={setCheckbox}  addNotification={props.addNotification}
+        /> 
+
+        <View style={{ alignItems: 'center' }}>
+          <Card style={styles.shadow} size="md" variant="elevated" m="$3" maxWidth={600}>
+            <View style={styles.row}>
+              <View style={styles.buttonContainer}>
+                {dateFrom ? (
+                  <Text style={styles.centeredBoldText}>
+                    From: {new Date(formatDateFromMilliseconds(dateFrom)).toString().slice(0, 15)}
+                  </Text>
+                ) : (
+                  <Text></Text>
+                )}
+                <DatePicker
+                  how={"from"}
+                  showDatePicker={() =>
+                    setDatePickerVisibility({ type: true, data: "from", func: setDateFrom })
+                  }
+                  datePickerVisibility={datePickerVisibility}
+                  setDatePickerVisibility={setDatePickerVisibility}
+                />
+              </View>
+
+              <View style={styles.buttonContainer}>
+                {dateTo ? (
+                  <Text style={styles.centeredBoldText}>
+                    To: {new Date(formatDateFromMilliseconds(dateTo)).toString().slice(0, 15)}
+                  </Text>
+                ) : (
+                  <Text></Text>
+                )}
+                <DatePicker
+                  how={"to"}
+                  showDatePicker={() =>
+                    setDatePickerVisibility({ type: true, data: "to", func: setDateTo })
+                  }
+                  datePickerVisibility={datePickerVisibility}
+                  setDatePickerVisibility={setDatePickerVisibility}
+                />
+              </View>
+            </View>
+          </Card>
+        </View>
 
 
-      <View style={styles.buttonGo} >
-        <Pressable  style={styles.buttonGoPressAc}
-          onPress={goToProgramPage}> 
-          <Text style={styles.text}>Create program</Text>
-        </Pressable>
-      </View>
+        <View style={styles.buttonGo} >
+          <Pressable  style={styles.buttonGoPressAc}
+            onPress={goToProgramPage}> 
+            <Text style={styles.text}>Create program</Text>
+          </Pressable>
+        </View>
 
-    </ScrollView>
+      </ScrollView>
+    </SafeAreaView>
+
   );
 };
 

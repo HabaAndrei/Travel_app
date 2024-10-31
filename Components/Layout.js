@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import { View, Text, StyleSheet, ScrollView, Pressable } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Pressable, SafeAreaView } from 'react-native';
 import { Icon, GlobeIcon, CalendarDaysIcon, SettingsIcon, MenuIcon } from "@gluestack-ui/themed";
 import Notification from './Notification';
 import ModalDelete from './ModalDelete';
@@ -100,7 +100,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'space-between',
-    paddingTop: 50,
+    // paddingTop: 50,
     backgroundColor: '#AAAABAD', 
   },
   content: {
@@ -137,10 +137,3 @@ const styles = StyleSheet.create({
 });
 
 export default Layout;
-
-
-// Golden top: #d8ab4e
-
-// Golden bottom: #b48c36
-
-// Charcoal Black: #040404

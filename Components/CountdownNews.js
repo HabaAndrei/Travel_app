@@ -31,7 +31,6 @@ const CountdownNews = (props) => {
   });
 
   useEffect(()=>{
-    console.log(props.plans);
     if(!props.plans.length)return;
     createNews();
   }, [props.plans]);

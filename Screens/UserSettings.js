@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Pressable, ScrollView } from 'react-native'
+import { StyleSheet, Text, View, Pressable, ScrollView, SafeAreaView } from 'react-native'
 import React, { useState } from 'react';
 import {VStack, HStack, Button, ButtonText, Divider} from '@gluestack-ui/themed'
 import {signOutUser, deleteTheUser, } from '../firebase.js';
@@ -40,34 +40,36 @@ const UserSettings = (props) => {
   }
 
   return (
-    <ScrollView style={{marginTop: 20}} >
+    <SafeAreaView style={{flex: 1}} >
+      <ScrollView style={{marginTop: 20}} >
 
-      <ModalReAuth  isModalVisibleReAuth={isModalVisibleReAuth} setModalVisibleReAuth={setModalVisibleReAuth} />
+        <ModalReAuth  isModalVisibleReAuth={isModalVisibleReAuth} setModalVisibleReAuth={setModalVisibleReAuth} />
 
-      <View style={{ alignItems: 'center' }}>
-        <VStack space="2xl">  
-          <HStack  px="$3"  h="$8"  rounded="$sm"  borderWidth="$2"  borderColor="$backgroundLight300"  alignItems="center"  justifyContent="center"   $dark-borderColor="$backgroundDark700"  >
-            <Button onPress={()=>signOut()} variant="link" size="xl">
-              <ButtonText>Log out</ButtonText>
-            </Button>
-            <Divider orientation="vertical" h="50%" mx="$2.5" style={{margin: 20}} />
-            <Button  onPress={()=>deleteUser()} variant="link" size="xl">
-              <ButtonText>Delete accout</ButtonText>
-            </Button>          
-          </HStack>
-        </VStack>
+        <View style={{ alignItems: 'center' }}>
+          <VStack space="2xl">  
+            <HStack  px="$3"  h="$8"  rounded="$sm"  borderWidth="$2"  borderColor="$backgroundLight300"  alignItems="center"  justifyContent="center"   $dark-borderColor="$backgroundDark700"  >
+              <Button onPress={()=>signOut()} variant="link" size="xl">
+                <ButtonText>Log out</ButtonText>
+              </Button>
+              <Divider orientation="vertical" h="50%" mx="$2.5" style={{margin: 20}} />
+              <Button  onPress={()=>deleteUser()} variant="link" size="xl">
+                <ButtonText>Delete accout</ButtonText>
+              </Button>          
+            </HStack>
+          </VStack>
 
 
-        <View  >
-          <Pressable onPress={()=>deleteAllFromAsyncStorage()} >
-            <Text style={{margin: 50, backgroundColor: 'blue'}}  >
-              Delete all from Async Storage
-            </Text>
-          </Pressable>
+          <View  >
+            <Pressable onPress={()=>deleteAllFromAsyncStorage()} >
+              <Text style={{margin: 50, backgroundColor: 'blue'}}  >
+                Delete all from Async Storage
+              </Text>
+            </Pressable>
+          </View>
         </View>
-      </View>
 
-    </ScrollView>
+      </ScrollView>
+    </SafeAreaView>
 
   )
 }

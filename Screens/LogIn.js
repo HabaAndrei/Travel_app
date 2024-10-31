@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Pressable, ScrollView } from 'react-native'
+import { StyleSheet, Text, View, Pressable, ScrollView, SafeAreaView } from 'react-native'
 import React, {useState } from 'react'
 import { Input, InputField, InputIcon, InputSlot, VStack, HStack, Divider, Button, 
     Center, Heading, EyeIcon, ButtonText, 
@@ -165,6 +165,8 @@ const LogIn = (props) => {
     }
 
   return (
+    <SafeAreaView style={{flex: 1}} >
+
     <ScrollView>
 
         <ModalReAuth  isModalVisibleReAuth={isModalVisibleReAuth} setModalVisibleReAuth={setModalVisibleReAuth} />
@@ -343,6 +345,8 @@ const LogIn = (props) => {
     
         }
     </ScrollView>
+    </SafeAreaView>
+
   )
 }
 

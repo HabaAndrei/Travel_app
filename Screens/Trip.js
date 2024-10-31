@@ -1,4 +1,4 @@
-import { StyleSheet, View, Pressable, ScrollView, Clipboard } from 'react-native';
+import { StyleSheet, View, Pressable, ScrollView, Clipboard, SafeAreaView } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { useIsFocused } from '@react-navigation/native'; 
 import { Text, AccordionTitleText,  AccordionTrigger,  AccordionHeader, AccordionContent,
@@ -157,6 +157,8 @@ const Trip = (props) => {
     }
 
     return (
+        <SafeAreaView style={{flex: 1}} >
+
         <ScrollView  >
 
 
@@ -297,6 +299,8 @@ const Trip = (props) => {
                 })}
             </Accordion>
         </ScrollView>
+        </SafeAreaView>
+
     );
 };
 

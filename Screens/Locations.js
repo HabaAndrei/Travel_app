@@ -127,116 +127,116 @@ const Locations = (props) => {
   return (
   <SafeAreaView style={{flex: 1}}>
 
-      <ScrollView style={{flex: 1}} >
+    <ScrollView style={{flex: 1}} >
 
-        <NavbarProgram name={props.route.name} navigation={props.navigation} />
-        {
-          buttonHomePage ? 
-          <View style={styles.indicationView}>
-            <Text style={styles.indicationText}>
-              The locations are generated after you complete the entire form in step 1. We need that information to generate the best locations for you.
-            </Text>
+      <NavbarProgram name={props.route.name} navigation={props.navigation} />
+      {
+        buttonHomePage ? 
+        <View style={styles.indicationView}>
+          <Text style={styles.indicationText}>
+            The locations are generated after you complete the entire form in step 1. We need that information to generate the best locations for you.
+          </Text>
+        </View>
+        : 
+        <ScrollView>
+          {!locations?.length ? (
+          <View style={{ marginTop: screenHeight / 3, }}>
+            <Center  >
+              <Spinner color="$indigo600" />
+            </Center>
           </View>
-          : 
-          <ScrollView>
-            {!locations?.length ? (
-            <View style={{ marginTop: screenHeight / 3, }}>
-              <Center  >
-                <Spinner color="$indigo600" />
-              </Center>
-            </View>
-            ) : (
+          ) : (
 
-            <View>
-              <Center>
+          <View>
+            <Center>
+              <Heading size="md" fontFamily="$heading" mb="$4">
+                Select the locations you would like to visit
+              </Heading>
+            </Center>
+        
+            {locations.map((location, index) =>{
+              return <Card key={index} p="$5" borderRadius="$lg" maxWidth={400} m="$3"
+              style={[ styles.cardPressable, location.selected && styles.selectedCard ]} >
                 <Heading size="md" fontFamily="$heading" mb="$4">
-                  Select the locations you would like to visit
+                  {location.name}
                 </Heading>
-              </Center>
-          
-              {locations.map((location, index) =>{
-                return <Card key={index} p="$5" borderRadius="$lg" maxWidth={400} m="$3"
-                style={[ styles.cardPressable, location.selected && styles.selectedCard ]} >
-                  <Heading size="md" fontFamily="$heading" mb="$4">
-                    {location.name}
-                  </Heading>
 
-                  <View style={{ flex: 1, marginTop: 20 }}>
-                    {location.arrayWithLinkImages.length ? 
-                    <ImageCarousel  imageUrls={location.arrayWithLinkImages}/>:
+                <View style={{ flex: 1, marginTop: 20 }}>
+                  {location.arrayWithLinkImages.length ? 
+                  <ImageCarousel  imageUrls={location.arrayWithLinkImages}/>:
+                  <View></View>
+                  }
+                </View>
+
+                <VStack space="md" justifyContent='center' alignItems='center'>
+                  <HStack h='$10' justifyContent='center' alignItems='center'>
+                    <Link href={location.website ? location.website : ''} isExternal>
+                      <HStack alignItems="center">
+                        <LinkText size="sm" fontFamily="$heading" fontWeight="$semibold" color="$primary600" textDecorationLine="none">
+                          {location.website ? 'Visit their website' : '' }
+                        </LinkText>
+                      </HStack>
+                    </Link>
+                    {location.urlLocation && location.website ? 
+                    <Divider orientation="vertical" mx='$2.5' bg='$emerald500' h={15} />:
                     <View></View>
                     }
-                  </View>
+                    <Link href={location.urlLocation ? location.urlLocation : ''} isExternal>
+                      <HStack alignItems="center">
+                        <LinkText size="sm" fontFamily="$heading" fontWeight="$semibold" color="$primary600" textDecorationLine="none">
+                          {location.urlLocation ? 'Google location' : ''}
+                        </LinkText>
+                      </HStack>
+                    </Link>
+                  </HStack>
+                </VStack>
 
-                  <VStack space="md" justifyContent='center' alignItems='center'>
-                    <HStack h='$10' justifyContent='center' alignItems='center'>
-                      <Link href={location.website ? location.website : ''} isExternal>
-                        <HStack alignItems="center">
-                          <LinkText size="sm" fontFamily="$heading" fontWeight="$semibold" color="$primary600" textDecorationLine="none">
-                            {location.website ? 'Visit their website' : '' }
-                          </LinkText>
-                        </HStack>
-                      </Link>
-                      {location.urlLocation && location.website ? 
-                      <Divider orientation="vertical" mx='$2.5' bg='$emerald500' h={15} />:
-                      <View></View>
+                <Center>
+                  {location.hasOwnProperty('selected_full_tour') ? 
+                    <View  style={styles.viewButtons}>
+                      {location.selected ? 
+                      <Pressable onPress={() => selectFullTour(index)} style={styles.fullTourPress}>
+                        <Text style={styles.fullTourText}>Choose to explore the entire location</Text>
+                        <Switch value={location.selected_full_tour} />
+                      </Pressable> : <Text></Text>
                       }
-                      <Link href={location.urlLocation ? location.urlLocation : ''} isExternal>
-                        <HStack alignItems="center">
-                          <LinkText size="sm" fontFamily="$heading" fontWeight="$semibold" color="$primary600" textDecorationLine="none">
-                            {location.urlLocation ? 'Google location' : ''}
-                          </LinkText>
-                        </HStack>
-                      </Link>
-                    </HStack>
-                  </VStack>
-
-                  <Center>
-                    {location.hasOwnProperty('selected_full_tour') ? 
-                      <View  style={styles.viewButtons}>
-                        {location.selected ? 
-                        <Pressable onPress={() => selectFullTour(index)} style={styles.fullTourPress}>
-                          <Text style={styles.fullTourText}>Choose to explore the entire location</Text>
-                          <Switch value={location.selected_full_tour} />
-                        </Pressable> : <Text></Text>
-                        }
-                        <Pressable style={styles.buttonPress} onPress={() => pressOnLocations(index)} >
-                          <Text style={styles.text} >
-                            {location.selected ? 'Remove location from your visit' : 'Pick location for your visit'}
-                          </Text>
-                        </Pressable>
-                      </View>
-                      :
                       <Pressable style={styles.buttonPress} onPress={() => pressOnLocations(index)} >
                         <Text style={styles.text} >
                           {location.selected ? 'Remove location from your visit' : 'Pick location for your visit'}
                         </Text>
                       </Pressable>
-                    }
-                  </Center>
-                </Card>
-              })}
-      
-              <View> 
-                <HStack h="$10" justifyContent="center" alignItems="center">
-                  <HStack alignItems="center"  >
-                    <Icon as={ArrowLeftIcon} m="$2" w="$6" h="$6" />
-                    <Text bold={true} onPress={()=>pressOnCancel()} >Go back</Text>
-                  </HStack>
-                  
-                  <Divider  style={{ margin: 15 }}  orientation="vertical"  mx="$2.5"  bg="$indigo500"  h={25}  $dark-bg="$indigo400"/>
-
-                  <HStack alignItems="center">
-                    <Text bold={true} onPress={()=>goToCreateProgram()} >Create program</Text>
-                    <Icon as={CheckIcon} m="$2" w="$6" h="$6" />
-                  </HStack>
+                    </View>
+                    :
+                    <Pressable style={styles.buttonPress} onPress={() => pressOnLocations(index)} >
+                      <Text style={styles.text} >
+                        {location.selected ? 'Remove location from your visit' : 'Pick location for your visit'}
+                      </Text>
+                    </Pressable>
+                  }
+                </Center>
+              </Card>
+            })}
+    
+            <View> 
+              <HStack h="$10" justifyContent="center" alignItems="center">
+                <HStack alignItems="center"  >
+                  <Icon as={ArrowLeftIcon} m="$2" w="$6" h="$6" />
+                  <Text bold={true} onPress={()=>pressOnCancel()} >Go back</Text>
                 </HStack>
-              </View>
+                
+                <Divider  style={{ margin: 15 }}  orientation="vertical"  mx="$2.5"  bg="$indigo500"  h={25}  $dark-bg="$indigo400"/>
+
+                <HStack alignItems="center">
+                  <Text bold={true} onPress={()=>goToCreateProgram()} >Create program</Text>
+                  <Icon as={CheckIcon} m="$2" w="$6" h="$6" />
+                </HStack>
+              </HStack>
             </View>
-            )}
-          </ScrollView> 
-        }
-      </ScrollView>
+          </View>
+          )}
+        </ScrollView> 
+      }
+    </ScrollView>
   </SafeAreaView>
 
   )
