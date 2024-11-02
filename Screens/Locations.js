@@ -16,6 +16,7 @@ const Locations = (props) => {
   const isFocused = useIsFocused();
   const [locations, setLocations] = useState([]);
   const [buttonHomePage, setButtonHomePage] = useState(false);
+  const [datePickerVisibility, setDatePickerVisibility] = useState({type: false, date:''});
 
   const screenHeight = Dimensions.get('window').height;
 

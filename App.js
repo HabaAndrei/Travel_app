@@ -140,4 +140,6 @@ export default App
 
 const styles = StyleSheet.create({})
 
-// Adaug si un input in care sa fie locatia hotelului
+// In pagina locations mai adaug : 
+// Un input in care sa fie locatia hotelului
+// datepicker from / to 

@@ -6,6 +6,7 @@ import DatePicker from '../Components/DatePicker';
 import {formatDateFromMilliseconds} from '../diverse';
 import CheckboxActivities from '../Components/CheckboxActivities';
 import NavbarProgram from '../Components/NavbarProgram';
+import CardDatePicker from '../Components/CardDatePicker';
 
 const SetUpTrip = (props) => {
 
@@ -104,47 +105,8 @@ const SetUpTrip = (props) => {
           checkbox={checkbox} setCheckbox={setCheckbox}  addNotification={props.addNotification}
         /> 
 
-        <View style={{ alignItems: 'center' }}>
-          <Card style={styles.shadow} size="md" variant="elevated" m="$3" maxWidth={600}>
-            <View style={styles.row}>
-              <View style={styles.buttonContainer}>
-                {dateFrom ? (
-                  <Text style={styles.centeredBoldText}>
-                    From: {new Date(formatDateFromMilliseconds(dateFrom)).toString().slice(0, 15)}
-                  </Text>
-                ) : (
-                  <Text></Text>
-                )}
-                <DatePicker
-                  how={"from"}
-                  showDatePicker={() =>
-                    setDatePickerVisibility({ type: true, data: "from", func: setDateFrom })
-                  }
-                  datePickerVisibility={datePickerVisibility}
-                  setDatePickerVisibility={setDatePickerVisibility}
-                />
-              </View>
-
-              <View style={styles.buttonContainer}>
-                {dateTo ? (
-                  <Text style={styles.centeredBoldText}>
-                    To: {new Date(formatDateFromMilliseconds(dateTo)).toString().slice(0, 15)}
-                  </Text>
-                ) : (
-                  <Text></Text>
-                )}
-                <DatePicker
-                  how={"to"}
-                  showDatePicker={() =>
-                    setDatePickerVisibility({ type: true, data: "to", func: setDateTo })
-                  }
-                  datePickerVisibility={datePickerVisibility}
-                  setDatePickerVisibility={setDatePickerVisibility}
-                />
-              </View>
-            </View>
-          </Card>
-        </View>
+        <CardDatePicker dateTo={dateTo} setDateTo={setDateTo} dateFrom={dateFrom} setDateFrom={setDateFrom}
+        datePickerVisibility={datePickerVisibility} setDatePickerVisibility={setDatePickerVisibility}   />
 
 
         <View style={styles.buttonGo} >
@@ -189,25 +151,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },  
-  row: {
-    flexDirection: 'row',
-    justifyContent: 'space-between', 
-  },
-  row: {
-    flexDirection: 'row',
-    justifyContent: 'space-around', 
-    alignItems: 'center',
-    width: '100%', 
-  },
-  buttonContainer: {
-    alignItems: 'center',
-    flex: 1,
-    width: 150
-  },
-  centeredBoldText: {
-    fontWeight: 'bold',
-    marginBottom: 8, 
-  },
 });
 
 export default SetUpTrip;
