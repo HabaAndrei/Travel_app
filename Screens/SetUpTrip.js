@@ -2,17 +2,13 @@ import React, {useState, useEffect} from 'react';
 import { View, Text, StyleSheet} from 'react-native';
 import { Card, Pressable, Heading, ScrollView, SafeAreaView } from '@gluestack-ui/themed';
 import SearchDestination from '../Components/SearchDestination';
-import DatePicker from '../Components/DatePicker';
 import {formatDateFromMilliseconds} from '../diverse';
 import CheckboxActivities from '../Components/CheckboxActivities';
 import NavbarProgram from '../Components/NavbarProgram';
-import CardDatePicker from '../Components/CardDatePicker';
 
 const SetUpTrip = (props) => {
 
-  const [dateFrom, setDateFrom] = useState('');
-  const [dateTo, setDateTo] = useState('');
-  const [datePickerVisibility, setDatePickerVisibility] = useState({type: false, date:''});
+  
   const [checkBoxActivities, setCheckBoxActivities] = useState({isOpen: false, city: '', country: ''})
   const [dataDestination, setDataDestination] = useState({country: '', city: ''});
   const [checkbox, setCheckbox] = useState([]);
@@ -25,14 +21,6 @@ const SetUpTrip = (props) => {
 
 
   function verifyDestinationRequest(){
-    if(!dateFrom || !dateTo){
-      props.addNotification("warning", "Please choose the start and end date of the trip."); 
-      return false
-    }
-    if((new Date(dateTo)).getTime() < (new Date(dateFrom)).getTime()){
-      props.addNotification("warning", "Please choose the start date to be smaller than the end date."); 
-      return false
-    }
     if(!dataDestination.city || !dataDestination.country){
       props.addNotification("warning", "Please choose the city and country where you want to travel to provide you with the best data.");
       return false;
@@ -43,12 +31,10 @@ const SetUpTrip = (props) => {
   
   function goToProgramPage(){
     // if(!verifyDestinationRequest())return;
-    // props.navigation.navigate('Program', {type: 'createProgram' ,from: formatDateFromMilliseconds(dateFrom), to: formatDateFromMilliseconds(dateTo), 
-    //   city: dataDestination.city, country: dataDestination.country, checkbox})
+    // props.navigation.navigate('Locations', {type: 'getAllDataAboutLocations' , 
+    //   country: dataDestination.country, city: dataDestination.city, checkbox})
 
     ///////////////////////////////////////////////////////////
-    const from = '25-09-2024';
-    const to = '26-09-2024';
     const city = 'Paris';
     const country = 'France';
     const activities =  [
@@ -104,10 +90,6 @@ const SetUpTrip = (props) => {
           checkBoxActivities={checkBoxActivities} closeCheckbox={closeCheckbox}
           checkbox={checkbox} setCheckbox={setCheckbox}  addNotification={props.addNotification}
         /> 
-
-        <CardDatePicker dateTo={dateTo} setDateTo={setDateTo} dateFrom={dateFrom} setDateFrom={setDateFrom}
-        datePickerVisibility={datePickerVisibility} setDatePickerVisibility={setDatePickerVisibility}   />
-
 
         <View style={styles.buttonGo} >
           <Pressable  style={styles.buttonGoPressAc}

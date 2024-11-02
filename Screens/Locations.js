@@ -9,6 +9,7 @@ import { Card, HStack, Heading, Center, Text, Switch, Link, Divider, LinkText, S
 } from '@gluestack-ui/themed';
 import NavbarProgram from '../Components/NavbarProgram';
 import ImageCarousel from '../Components/ImageCarousel';
+import CardDatePicker from '../Components/CardDatePicker';
 
 
 const Locations = (props) => {
@@ -16,6 +17,8 @@ const Locations = (props) => {
   const isFocused = useIsFocused();
   const [locations, setLocations] = useState([]);
   const [buttonHomePage, setButtonHomePage] = useState(false);
+  const [dateFrom, setDateFrom] = useState('');
+  const [dateTo, setDateTo] = useState('');
   const [datePickerVisibility, setDatePickerVisibility] = useState({type: false, date:''});
 
   const screenHeight = Dimensions.get('window').height;
@@ -31,22 +34,21 @@ const Locations = (props) => {
       return;
     };
   
-    const {from, to, city, country, checkbox, type} = props?.route?.params;
-    
+    const {city, country, checkbox, type} = props?.route?.params;
     if(type === "getAllDataAboutLocations"){
       let newCheckbox = [];
       checkbox.forEach((ob)=>{if(ob.selected)newCheckbox.push(ob.category)});  
-      getLocations('seeAllPlaces', from, to, city, country, newCheckbox)
+      getLocations('seeAllPlaces', city, country, newCheckbox)
       return;
     }
     
   }, [isFocused]);
 
-  async function getLocations( method, from, to, city, country, newCheckbox){
+  async function getLocations( method, city, country, newCheckbox){
     setLocations([]);
     setButtonHomePage(false)
     axios.post(`${address_function_api}`, 
-      {from, to, city, country, newCheckbox, method}
+      {city, country, newCheckbox, method}
     ).then((data)=>{
       if(data.data.type){
         const arrayWithLocations = data.data.data;
@@ -70,7 +72,6 @@ const Locations = (props) => {
 
 
   async function getLocationsFromAsyncStorage(){
-
     if(locations.length)return;
     const places = await getDataFromAsyncStorage("arrayLocationsToTravel");
     if(places?.data?.length ){
@@ -100,6 +101,19 @@ const Locations = (props) => {
 
 
   async function goToCreateProgram(){    
+
+    // from: formatDateFromMilliseconds(dateFrom), 
+    // to: formatDateFromMilliseconds(dateTo)
+
+    // if(!dateFrom || !dateTo){
+    //   props.addNotification("warning", "Please choose the start and end date of the trip."); 
+    //   return false
+    // }
+    // if((new Date(dateTo)).getTime() < (new Date(dateFrom)).getTime()){
+    //   props.addNotification("warning", "Please choose the start date to be smaller than the end date."); 
+    //   return false
+    // }
+
     addDataToAsyncStorage('arrayLocationsToTravel', locations)
     const selectedLocations = locations.filter((place)=>place.selected);
     if(!selectedLocations.length){
@@ -111,6 +125,9 @@ const Locations = (props) => {
       props.addNotification('error', 'Error submitting for program search');
       return;
     }
+
+    // aici la location param sa daug from si to , dar sa verific inante daca exista, daca nu il pun sa aleaga
+    // vezi mai sus !!!!!!!!!!!!!
     const locationParam = dataParam.data;
     props.navigation.navigate('Program', {type: 'createProgram', locations: selectedLocations, locationParam});
 
@@ -217,6 +234,10 @@ const Locations = (props) => {
                 </Center>
               </Card>
             })}
+
+            <CardDatePicker dateTo={dateTo} setDateTo={setDateTo} dateFrom={dateFrom} setDateFrom={setDateFrom}
+            datePickerVisibility={datePickerVisibility} setDatePickerVisibility={setDatePickerVisibility}   />
+
     
             <View> 
               <HStack h="$10" justifyContent="center" alignItems="center">
