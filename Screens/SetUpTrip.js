@@ -37,13 +37,13 @@ const SetUpTrip = (props) => {
     ///////////////////////////////////////////////////////////
     const city = 'Paris';
     const country = 'France';
-    const activities =  [
+    const activities = [
       { category: "Cultural exploration", selected: true },
       { category: "Historical tours", selected: true },
       { category: "Outdoor activities", selected: true },
     ]
 
-    props.navigation.navigate('Locations', {type: 'getAllDataAboutLocations' ,from, to,  country, city, checkbox: activities})
+    props.navigation.navigate('Locations', {type: 'getAllDataAboutLocations' ,country, city, checkbox: activities})
 
   }
 

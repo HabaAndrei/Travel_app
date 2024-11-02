@@ -2,7 +2,7 @@ import { StyleSheet,SafeAreaView, View, ScrollView, Pressable, Dimensions } from
 import React, {useState, useEffect} from 'react'
 import { useIsFocused } from '@react-navigation/native'; 
 import {address_function_api, getDataFromAsyncStorage, addDataToAsyncStorage, 
-  multiSetFromAsyncStorage} from '../diverse';
+  multiSetFromAsyncStorage, formatDateFromMilliseconds} from '../diverse';
 import axios from 'axios';
 import { Card, HStack, Heading, Center, Text, Switch, Link, Divider, LinkText, Spinner, 
   VStack, ArrowLeftIcon, CheckIcon, Icon,
@@ -17,8 +17,8 @@ const Locations = (props) => {
   const isFocused = useIsFocused();
   const [locations, setLocations] = useState([]);
   const [buttonHomePage, setButtonHomePage] = useState(false);
-  const [dateFrom, setDateFrom] = useState('');
-  const [dateTo, setDateTo] = useState('');
+  const [dateFrom, setDateFrom] = useState();
+  const [dateTo, setDateTo] = useState();
   const [datePickerVisibility, setDatePickerVisibility] = useState({type: false, date:''});
 
   const screenHeight = Dimensions.get('window').height;
@@ -33,18 +33,20 @@ const Locations = (props) => {
       getLocationsFromAsyncStorage();
       return;
     };
+
+    console.log('se executaa useEffectul  !!')
   
     const {city, country, checkbox, type} = props?.route?.params;
     if(type === "getAllDataAboutLocations"){
       let newCheckbox = [];
       checkbox.forEach((ob)=>{if(ob.selected)newCheckbox.push(ob.category)});  
-      getLocations('seeAllPlaces', city, country, newCheckbox)
+      createLocationsAi('seeAllPlaces', city, country, newCheckbox)
       return;
     }
     
   }, [isFocused]);
 
-  async function getLocations( method, city, country, newCheckbox){
+  async function createLocationsAi( method, city, country, newCheckbox){
     setLocations([]);
     setButtonHomePage(false)
     axios.post(`${address_function_api}`, 
@@ -61,12 +63,12 @@ const Locations = (props) => {
         });
         setLocations(arraySelected)
         multiSetFromAsyncStorage([['arrayLocationsToTravel', [...arraySelected]], 
-          ["locationsParameter", {from, to, city, country, newCheckbox}]]);
+          ["locationsParameter", {city, country, newCheckbox}]]);
       }else{
-        console.log("eroare la functia getLocations ", data);
+        console.log("eroare la functia createLocationsAi ", data);
       }       
     }).catch((err)=>{
-      console.log('eroare de la getLocations', err, ' <<== eroare');
+      console.log('eroare de la createLocationsAi', err, ' <<== eroare');
     })
   }
 
@@ -99,20 +101,21 @@ const Locations = (props) => {
     props.navigation.navigate('SetUpTrip');
   }
 
+  function verifyDestinationRequest(){
+    if(!dateFrom || !dateTo){
+      props.addNotification("warning", "Please choose the start and end date of the trip."); 
+      return false
+    }
+    if((new Date(dateTo)).getTime() < (new Date(dateFrom)).getTime()){
+      props.addNotification("warning", "Please choose the start date to be smaller than the end date."); 
+      return false
+    }
+    return true;
+  }
 
-  async function goToCreateProgram(){    
 
-    // from: formatDateFromMilliseconds(dateFrom), 
-    // to: formatDateFromMilliseconds(dateTo)
-
-    // if(!dateFrom || !dateTo){
-    //   props.addNotification("warning", "Please choose the start and end date of the trip."); 
-    //   return false
-    // }
-    // if((new Date(dateTo)).getTime() < (new Date(dateFrom)).getTime()){
-    //   props.addNotification("warning", "Please choose the start date to be smaller than the end date."); 
-    //   return false
-    // }
+  async function goToCreateProgram(){   
+    // if(!verifyDestinationRequest())return;
 
     addDataToAsyncStorage('arrayLocationsToTravel', locations)
     const selectedLocations = locations.filter((place)=>place.selected);
@@ -125,10 +128,11 @@ const Locations = (props) => {
       props.addNotification('error', 'Error submitting for program search');
       return;
     }
-
-    // aici la location param sa daug from si to , dar sa verific inante daca exista, daca nu il pun sa aleaga
-    // vezi mai sus !!!!!!!!!!!!!
     const locationParam = dataParam.data;
+    // locationParam.from = formatDateFromMilliseconds(dateFrom);
+    // locationParam.to = formatDateFromMilliseconds(dateTo)
+    locationParam.from = formatDateFromMilliseconds(1707602400000);
+    locationParam.to = formatDateFromMilliseconds(1718053200000)
     props.navigation.navigate('Program', {type: 'createProgram', locations: selectedLocations, locationParam});
 
   }

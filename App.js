@@ -94,6 +94,11 @@ const App = () => {
       <NavigationContainer>
         <Stack.Navigator>
           <Stack.Screen
+            name="Locations"
+            component={LocationsScreen}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
             name="MyTrips"
             component={MyTripsScreen}
             options={{headerShown: false}}
@@ -101,11 +106,6 @@ const App = () => {
           <Stack.Screen
             name="UserSettings"
             component={UserSettingsScreen}
-            options={{headerShown: false}}
-          />
-          <Stack.Screen
-            name="Locations"
-            component={LocationsScreen}
             options={{headerShown: false}}
           />
           <Stack.Screen
@@ -139,6 +139,8 @@ const App = () => {
 export default App
 
 const styles = StyleSheet.create({})
+
+// Fac un input pentru a genera locatii specifice
 
 // In pagina locations mai adaug : 
 // Un input in care sa fie locatia hotelului
