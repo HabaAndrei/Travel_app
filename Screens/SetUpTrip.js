@@ -12,6 +12,7 @@ const SetUpTrip = (props) => {
   const [checkBoxActivities, setCheckBoxActivities] = useState({isOpen: false, city: '', country: ''})
   const [dataDestination, setDataDestination] = useState({country: '', city: ''});
   const [checkbox, setCheckbox] = useState([]);
+  const [inputSearch, setInputSearch] = useState('');
 
   useEffect(()=>{
     if(!dataDestination.country)return;
@@ -76,12 +77,12 @@ const SetUpTrip = (props) => {
           />
         </Card>
 
-        <View style={styles.buttonGo} >
+        {/* <View style={styles.buttonGo} >
           <Pressable  style={styles.buttonGoPressAc}
             onPress={()=>openModalActivities()} > 
             <Text style={styles.text} >Choose activities</Text>
           </Pressable>
-        </View>
+        </View> */}
         
         <CheckboxActivities 
           dataDestination={dataDestination} 
@@ -90,9 +91,10 @@ const SetUpTrip = (props) => {
         /> 
 
         <CardSetUpActivities
-         dataDestination={dataDestination} 
-         checkBoxActivities={checkBoxActivities} closeCheckbox={closeCheckbox}
-         checkbox={checkbox} setCheckbox={setCheckbox}  addNotification={props.addNotification}
+          inputSearch={inputSearch}
+          setInputSearch={setInputSearch}
+          openModalActivities={openModalActivities}
+          addNotification={props.addNotification}
         />
 
         <View style={styles.buttonGo} >
