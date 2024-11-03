@@ -1,9 +1,10 @@
-import { StyleSheet, Text, View, Image, PanResponder } from 'react-native';
+import { StyleSheet, Text, View, Image, PanResponder, Dimensions } from 'react-native';
 import React, { useState } from 'react';
 
 const ImageCarousel = (props) => {
     const [imageNumber, setImageNumber] = useState(0);
     const [startX, setStartX] = useState(0);
+    const { width } = Dimensions.get('window');
 
     const panResponder = PanResponder.create({
         onStartShouldSetPanResponder: () => true,
@@ -28,7 +29,7 @@ const ImageCarousel = (props) => {
 
   return (
     <View style={styles.container} {...panResponder.panHandlers}>
-      <Image source={{ uri: props.imageUrls[imageNumber] }} style={styles.image} />
+      <Image source={{ uri: props.imageUrls[imageNumber] }}  style={{ width: width * 0.85, height: 450, alignSelf: 'center'}} />
       <View style={styles.dotsContainer}>
         {props.imageUrls.map((_, index) => (
           <View
@@ -51,10 +52,6 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  image: {
-    width: 315,
-    height: 450,
   },
   dotsContainer: {
     flexDirection: 'row',

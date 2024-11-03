@@ -1,4 +1,4 @@
-import { View ,TextInput, Image, StyleSheet } from 'react-native';
+import { View ,TextInput, Image, StyleSheet, Dimensions } from 'react-native';
 import React, {useState} from 'react'
 import ModalSearchDestination from './ModalSearchDestination.js';
 
@@ -7,14 +7,12 @@ const SearchDestination = (props) => {
 
   const [inputCity, setInputCity] = useState('');
   const [inputCountry, setInputCountry] = useState('');
-
   const [suggestions, setSuggestions] = useState([]);
   const [modalVisible, setModalVisible] = useState({type: false, data:''});
-  
+  const { width } = Dimensions.get('window');
+
   return (
-
     <View>
-
       <ModalSearchDestination
         setCheckBoxActivities={props.setCheckBoxActivities}
         modalVisible={modalVisible} setModalVisible={setModalVisible}
@@ -37,12 +35,11 @@ const SearchDestination = (props) => {
       />
       
       <Image 
-      style={{height: 150, width: 320, marginTop:10, marginBottom:10}}
-        source={require('../img/europa.png')} 
+        style={{height: 150,  width: width * 0.85, marginTop:10, marginBottom:10,  alignSelf: 'center',}}
+          source={require('../img/europa.png')} 
       />
 
       <TextInput
-        
         placeholder={!props.dataDestination.city ? 
           "City" : 
           `City - ${props.dataDestination.city}`      
@@ -55,14 +52,7 @@ const SearchDestination = (props) => {
         style={styles.textInput}
         placeholderTextColor="gray"
       />
-
-
-    
-    </View>
-
-
-    
-   
+    </View>  
   )
 }
 
