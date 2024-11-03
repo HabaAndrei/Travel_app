@@ -140,6 +140,12 @@ export default App
 
 const styles = StyleSheet.create({})
 
+
+// Password si input nou de comentariu 
+// https://v1.gluestack.io/ui/docs/components/forms/form-control
+
+
+
 // Fac un input pentru a genera locatii specifice
 
 // In pagina locations mai adaug : 

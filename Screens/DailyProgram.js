@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ScrollView, Pressable, View, Clipboard, StyleSheet } from 'react-native';
+import { ScrollView, Pressable, View, Clipboard, StyleSheet, SafeAreaView } from 'react-native';
 import { ArrowLeftIcon, CloseIcon, Card, Heading, Link, Image, LinkText, Text, VStack, Divider, HStack, TrashIcon,RepeatIcon, CheckIcon,  Icon } from "@gluestack-ui/themed";
 import {addDataToAsyncStorage, getDataFromAsyncStorage} from '../diverse.js';
 import TimePicker from '../Components/TimePicker.js';

@@ -33,8 +33,6 @@ const Locations = (props) => {
       getLocationsFromAsyncStorage();
       return;
     };
-
-    console.log('se executaa useEffectul  !!')
   
     const {city, country, checkbox, type} = props?.route?.params;
     if(type === "getAllDataAboutLocations"){
