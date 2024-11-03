@@ -1,10 +1,10 @@
 import React, {useState, useEffect} from 'react';
-import { View, Text, StyleSheet} from 'react-native';
-import { Card, Pressable, Heading, ScrollView, SafeAreaView } from '@gluestack-ui/themed';
+import { View, Text, StyleSheet, SafeAreaView} from 'react-native';
+import { Card, Pressable, Heading, ScrollView} from '@gluestack-ui/themed';
 import SearchDestination from '../Components/SearchDestination';
-import {formatDateFromMilliseconds} from '../diverse';
 import CheckboxActivities from '../Components/CheckboxActivities';
 import NavbarProgram from '../Components/NavbarProgram';
+import CardSetUpActivities from '../Components/CardSetUpActivities.js';
 
 const SetUpTrip = (props) => {
 
@@ -12,7 +12,6 @@ const SetUpTrip = (props) => {
   const [checkBoxActivities, setCheckBoxActivities] = useState({isOpen: false, city: '', country: ''})
   const [dataDestination, setDataDestination] = useState({country: '', city: ''});
   const [checkbox, setCheckbox] = useState([]);
-
 
   useEffect(()=>{
     if(!dataDestination.country)return;
@@ -67,7 +66,6 @@ const SetUpTrip = (props) => {
 
         <NavbarProgram name={props.route.name} navigation={props.navigation} />
 
-
         <Card p="$5" borderRadius="$lg"  m="$3" maxWidth={400} style={styles.shadow}>
           <Heading size="md" fontFamily="$heading" mb="$4">
             Where?
@@ -85,11 +83,17 @@ const SetUpTrip = (props) => {
           </Pressable>
         </View>
         
-
-        <CheckboxActivities dataDestination={dataDestination} 
+        <CheckboxActivities 
+          dataDestination={dataDestination} 
           checkBoxActivities={checkBoxActivities} closeCheckbox={closeCheckbox}
           checkbox={checkbox} setCheckbox={setCheckbox}  addNotification={props.addNotification}
         /> 
+
+        <CardSetUpActivities
+         dataDestination={dataDestination} 
+         checkBoxActivities={checkBoxActivities} closeCheckbox={closeCheckbox}
+         checkbox={checkbox} setCheckbox={setCheckbox}  addNotification={props.addNotification}
+        />
 
         <View style={styles.buttonGo} >
           <Pressable  style={styles.buttonGoPressAc}

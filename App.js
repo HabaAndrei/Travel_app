@@ -94,6 +94,11 @@ const App = () => {
       <NavigationContainer>
         <Stack.Navigator>
           <Stack.Screen
+            name="SetUpTrip"
+            component={SetUpTripScreen}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
             name="Locations"
             component={LocationsScreen}
             options={{headerShown: false}}
@@ -119,11 +124,6 @@ const App = () => {
             options={{headerShown: false}}
           />
           <Stack.Screen
-            name="SetUpTrip"
-            component={SetUpTripScreen}
-            options={{headerShown: false}}
-          />
-          <Stack.Screen
             name="DailyProgram"
             component={DailyProgramScreen}
             options={{headerShown: false}}
@@ -141,13 +141,7 @@ export default App
 const styles = StyleSheet.create({})
 
 
-// Password si input nou de comentariu 
-// https://v1.gluestack.io/ui/docs/components/forms/form-control
-
-
-
 // Fac un input pentru a genera locatii specifice
 
 // In pagina locations mai adaug : 
 // Un input in care sa fie locatia hotelului
-// datepicker from / to 
