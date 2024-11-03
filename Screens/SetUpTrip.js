@@ -8,7 +8,7 @@ import CardSetUpActivities from '../Components/CardSetUpActivities.js';
 
 const SetUpTrip = (props) => {
 
-  
+  const [valueRadio, setValueRadio] = useState("Activities")
   const [checkBoxActivities, setCheckBoxActivities] = useState({isOpen: false, city: '', country: ''})
   const [dataDestination, setDataDestination] = useState({country: '', city: ''});
   const [checkbox, setCheckbox] = useState([]);
@@ -76,13 +76,6 @@ const SetUpTrip = (props) => {
             dataDestination={dataDestination} setDataDestination={setDataDestination}
           />
         </Card>
-
-        {/* <View style={styles.buttonGo} >
-          <Pressable  style={styles.buttonGoPressAc}
-            onPress={()=>openModalActivities()} > 
-            <Text style={styles.text} >Choose activities</Text>
-          </Pressable>
-        </View> */}
         
         <CheckboxActivities 
           dataDestination={dataDestination} 
@@ -90,7 +83,9 @@ const SetUpTrip = (props) => {
           checkbox={checkbox} setCheckbox={setCheckbox}  addNotification={props.addNotification}
         /> 
 
-        <CardSetUpActivities
+        <CardSetUpActivities 
+          valueRadio={valueRadio}
+          setValueRadio={setValueRadio}
           inputSearch={inputSearch}
           setInputSearch={setInputSearch}
           openModalActivities={openModalActivities}
