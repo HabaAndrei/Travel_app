@@ -1,11 +1,11 @@
 import React, {useState, useEffect} from 'react';
-import { View, Text, StyleSheet, SafeAreaView} from 'react-native';
+import { View, Text, StyleSheet, SafeAreaView, } from 'react-native';
 import { Card, Pressable, Heading, ScrollView} from '@gluestack-ui/themed';
 import SearchDestination from '../Components/SearchDestination';
 import CheckboxActivities from '../Components/CheckboxActivities';
 import NavbarProgram from '../Components/NavbarProgram';
 import CardSetUpActivities from '../Components/CardSetUpActivities.js';
-import InfoChatSetUpTrip from '../Components/InfoChatSetUpTrip.js';
+import ModalInfo from '../Components/ModalInfo.js';
 
 const SetUpTrip = (props) => {
 
@@ -14,7 +14,7 @@ const SetUpTrip = (props) => {
   const [dataDestination, setDataDestination] = useState({country: '', city: ''});
   const [checkbox, setCheckbox] = useState([]);
   const [inputSearch, setInputSearch] = useState('');
-  const [isOpenInfoChat, setOpenInfoChat] = useState(true);
+  const [isOpenModalInfo, setOpenModalInfo] = useState(true);
 
   useEffect(()=>{
     if(!dataDestination.country)return;
@@ -73,7 +73,9 @@ const SetUpTrip = (props) => {
 
         <NavbarProgram name={props.route.name} navigation={props.navigation} />
 
-        <InfoChatSetUpTrip isOpenInfoChat={isOpenInfoChat} setOpenInfoChat={setOpenInfoChat} />
+        <ModalInfo isOpenModalInfo={isOpenModalInfo} setOpenModalInfo={setOpenModalInfo}
+        mes={`Please be specific when using this input. It will generate locations that are less sought after by tourists, but known by the locals, if you don't want this, choose to use the activities generated for each location. \n E.g. \n 1. Old castles in the countryside. \n 2. The oldest breweries in the city. \n 3. The oldest families in the city. \n 4. Restaurants where locals eat \n Etc... \n\n Usually these locations are not the best to visit, but they offer you an authentic experience, for each individual location you have to accept the risks and benefits.`}
+        />
 
         <Card p="$5" borderRadius="$lg"  m="$3" maxWidth={400} style={styles.shadow}>
           <Heading size="md" fontFamily="$heading" mb="$4">
