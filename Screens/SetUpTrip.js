@@ -5,6 +5,7 @@ import SearchDestination from '../Components/SearchDestination';
 import CheckboxActivities from '../Components/CheckboxActivities';
 import NavbarProgram from '../Components/NavbarProgram';
 import CardSetUpActivities from '../Components/CardSetUpActivities.js';
+import InfoChatSetUpTrip from '../Components/InfoChatSetUpTrip.js';
 
 const SetUpTrip = (props) => {
 
@@ -13,6 +14,7 @@ const SetUpTrip = (props) => {
   const [dataDestination, setDataDestination] = useState({country: '', city: ''});
   const [checkbox, setCheckbox] = useState([]);
   const [inputSearch, setInputSearch] = useState('');
+  const [isOpenInfoChat, setOpenInfoChat] = useState(true);
 
   useEffect(()=>{
     if(!dataDestination.country)return;
@@ -25,25 +27,29 @@ const SetUpTrip = (props) => {
       props.addNotification("warning", "Please choose the city and country where you want to travel to provide you with the best data.");
       return false;
     }
+    if(valueRadio === 'Chat' && !inputSearch.length){
+      props.addNotification("warning", "You chose to generate locations based on chat, so include some references in the chat department");
+      return false;
+    }
     return true;
   }
 
   
   function goToProgramPage(){
-    // if(!verifyDestinationRequest())return;
-    // props.navigation.navigate('Locations', {type: 'getAllDataAboutLocations' , 
-    //   country: dataDestination.country, city: dataDestination.city, checkbox})
+    if(!verifyDestinationRequest())return;
+    props.navigation.navigate('Locations', {type: 'getAllDataAboutLocations' , 
+      country: dataDestination.country, city: dataDestination.city, valueRadio, val: valueRadio === 'Activities' ? checkbox : inputSearch})
 
     ///////////////////////////////////////////////////////////
-    const city = 'Paris';
-    const country = 'France';
-    const activities = [
-      { category: "Cultural exploration", selected: true },
-      { category: "Historical tours", selected: true },
-      { category: "Outdoor activities", selected: true },
-    ]
+    // const city = 'Paris';
+    // const country = 'France';
+    // const activities = [
+    //   { category: "Cultural exploration", selected: true },
+    //   { category: "Historical tours", selected: true },
+    //   { category: "Outdoor activities", selected: true },
+    // ]
 
-    props.navigation.navigate('Locations', {type: 'getAllDataAboutLocations' ,country, city, checkbox: activities})
+    // props.navigation.navigate('Locations', {type: 'getAllDataAboutLocations' ,country, city, checkbox: activities})
 
   }
 
@@ -66,6 +72,8 @@ const SetUpTrip = (props) => {
       <ScrollView  >
 
         <NavbarProgram name={props.route.name} navigation={props.navigation} />
+
+        <InfoChatSetUpTrip isOpenInfoChat={isOpenInfoChat} setOpenInfoChat={setOpenInfoChat} />
 
         <Card p="$5" borderRadius="$lg"  m="$3" maxWidth={400} style={styles.shadow}>
           <Heading size="md" fontFamily="$heading" mb="$4">

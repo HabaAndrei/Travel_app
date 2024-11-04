@@ -49,7 +49,7 @@ const CardSetUpActivities = (props) => {
             <KeyboardAvoidingView style={{ flex: 1, paddingBottom: Platform.OS === 'ios' ? 60 : 0}} behavior="position">
               <Textarea >
                 <TextareaInput 
-                  placeholder="okokok"
+                  placeholder="The oldest breweries in the city"
                   value={props.inputSearch}
                   onChangeText={(text) => props.setInputSearch(text)}
                 />

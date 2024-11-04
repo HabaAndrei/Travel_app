@@ -34,21 +34,24 @@ const Locations = (props) => {
       return;
     };
   
-    const {city, country, checkbox, type} = props?.route?.params;
+    let {city, country, val, valueRadio, type} = props?.route?.params;
     if(type === "getAllDataAboutLocations"){
-      let newCheckbox = [];
-      checkbox.forEach((ob)=>{if(ob.selected)newCheckbox.push(ob.category)});  
-      createLocationsAi('seeAllPlaces', city, country, newCheckbox)
+      if(valueRadio === 'Activities'){
+        let newCheckbox = [];
+        val.forEach((ob)=>{if(ob.selected)newCheckbox.push(ob.category)}); 
+        val = newCheckbox
+      }
+      createLocationsAi('seeAllPlaces', city, country, val, valueRadio)
       return;
     }
     
   }, [isFocused]);
 
-  async function createLocationsAi( method, city, country, newCheckbox){
+  async function createLocationsAi( method, city, country, val, valueRadio){
     setLocations([]);
     setButtonHomePage(false)
     axios.post(`${address_function_api}`, 
-      {city, country, newCheckbox, method}
+      {method, city, country, val, valueRadio}
     ).then((data)=>{
       if(data.data.type){
         const arrayWithLocations = data.data.data;
@@ -61,7 +64,7 @@ const Locations = (props) => {
         });
         setLocations(arraySelected)
         multiSetFromAsyncStorage([['arrayLocationsToTravel', [...arraySelected]], 
-          ["locationsParameter", {city, country, newCheckbox}]]);
+          ["locationsParameter", {city, country, val, valueRadio}]]);
       }else{
         console.log("eroare la functia createLocationsAi ", data);
       }       
@@ -127,11 +130,17 @@ const Locations = (props) => {
       return;
     }
     const locationParam = dataParam.data;
+    ////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////
+
     // locationParam.from = formatDateFromMilliseconds(dateFrom);
     // locationParam.to = formatDateFromMilliseconds(dateTo)
     locationParam.from = formatDateFromMilliseconds(1707602400000);
     locationParam.to = formatDateFromMilliseconds(1718053200000)
     props.navigation.navigate('Program', {type: 'createProgram', locations: selectedLocations, locationParam});
+
+    /////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////
 
   }
 
