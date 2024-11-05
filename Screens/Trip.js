@@ -155,11 +155,33 @@ const Trip = (props) => {
 		}
 	}
 
+	function createStringForGoogpleMaps(address, city, country){
+		let strFin = address.split(' ').join('+');
+		strFin += (',+' + city + ',' + country + '/');
+		return strFin; 
+	}
+
+	function goToGoogle(indexLocation){
+		let url = 'https://www.google.com/maps/dir/';
+		let { city, country, program } = props.route.params;
+		program = JSON.parse(program);
+		const locationsAddressPlace = program[indexLocation].activities.map((ob)=>{
+			return {address: ob.address ? ob.address : '' , place: ob.place ? ob.place : ''}
+		});
+		locationsAddressPlace.forEach((ob)=>{
+			if(ob.address.length){
+				url += createStringForGoogpleMaps(ob.address, city, country)
+			}else{
+				url += createStringForGoogpleMaps(ob.place, city, country)
+			}
+		})
+		return url;
+	};
+
 	return (
 		<SafeAreaView style={{flex: 1}} >
 
 		<ScrollView  >
-
 
 			<ModalAddNewDay saveNewLocation={saveNewLocation} addNotification={props.addNotification} 
 			isModalVisible={isModalVisible}  setModalVisible={setModalVisible} />
@@ -192,7 +214,15 @@ const Trip = (props) => {
 						</AccordionTrigger>
 					</AccordionHeader>
 					<AccordionContent >
-					   
+						
+						<Link href={goToGoogle(index)} isExternal>
+							<HStack alignItems="center">
+								<LinkText size="sm" fontFamily="$heading" fontWeight="$semibold" color="$primary600" textDecorationLine="none">
+									See all trip in google maps
+								</LinkText>
+							</HStack>
+						</Link>
+
 						<Center>
 							<Heading>
 								{new Date(dayProgram.date).toString().slice(0, 15)}

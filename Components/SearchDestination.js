@@ -72,7 +72,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
   }, 
   img: {
-    backgroundColor: '#f0f0f0',
     borderRadius: 15, 
     padding: 5, 
     shadowColor: '#000', 
