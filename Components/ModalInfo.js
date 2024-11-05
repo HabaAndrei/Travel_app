@@ -23,7 +23,7 @@ const ModalInfo = (props) => {
             <HStack space="sm" alignItems="center">
               <Icon
                 as={AlertCircleIcon}
-                color="$success700"
+                color="blue"
                 $dark-color="$success300"
               />
               <Heading size="lg">Info</Heading>

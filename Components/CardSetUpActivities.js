@@ -2,7 +2,7 @@ import { StyleSheet, View, Pressable, KeyboardAvoidingView, Platform, } from 're
 import React, {useState} from 'react'
 import { Card, Text, Heading, ScrollView, Button, Center,
   FormControl, FormControlHelper, FormControlHelperText, FormControlLabel, FormControlLabelText, Textarea, TextareaInput, 
-  RadioGroup, HStack, Radio, RadioIndicator, RadioIcon, RadioLabel, CircleIcon
+  RadioGroup, HStack, Radio, RadioIndicator, RadioIcon, RadioLabel, CircleIcon, Icon, AlertCircleIcon
 } from '@gluestack-ui/themed';
 
 const CardSetUpActivities = (props) => {
@@ -44,7 +44,17 @@ const CardSetUpActivities = (props) => {
           isDisabled={props.valueRadio != 'Chat'}             
         >
           <FormControlLabel>
-            <FormControlLabelText>Chat</FormControlLabelText>
+            <Pressable onPress={() => props.setOpenModalInfo(true)}>
+              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <FormControlLabelText>Chat</FormControlLabelText>
+                <Icon
+                  as={AlertCircleIcon}
+                  color="blue"
+                  $dark-color="$success300"
+                  style={{ marginLeft: 5 }} 
+                />
+              </View>
+            </Pressable>
           </FormControlLabel>
             <KeyboardAvoidingView style={{ flex: 1, paddingBottom: Platform.OS === 'ios' ? 60 : 0}} behavior="position">
               <Textarea >

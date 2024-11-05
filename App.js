@@ -141,7 +141,10 @@ export default App
 const styles = StyleSheet.create({})
 
 
-// Fac un input pentru a genera locatii specifice
 
 // In pagina locations mai adaug : 
 // Un input in care sa fie locatia hotelului
+
+// Adaug info la cat mai multr lucrui unde trebuie specificat cum functioneaza aplicatia
+// in pagina set up trip fac sa se schimbe imaginea o data la ceva secunde, aleg alte poze
+// pozele sa fie pe latime / culcate

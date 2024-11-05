@@ -14,7 +14,7 @@ const SetUpTrip = (props) => {
   const [dataDestination, setDataDestination] = useState({country: '', city: ''});
   const [checkbox, setCheckbox] = useState([]);
   const [inputSearch, setInputSearch] = useState('');
-  const [isOpenModalInfo, setOpenModalInfo] = useState(true);
+  const [isOpenModalInfo, setOpenModalInfo] = useState(false);
 
   useEffect(()=>{
     if(!dataDestination.country)return;
@@ -100,6 +100,7 @@ const SetUpTrip = (props) => {
           setInputSearch={setInputSearch}
           openModalActivities={openModalActivities}
           addNotification={props.addNotification}
+          setOpenModalInfo={setOpenModalInfo}
         />
 
         <View style={styles.buttonGo} >

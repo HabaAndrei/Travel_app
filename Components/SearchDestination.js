@@ -9,6 +9,7 @@ const SearchDestination = (props) => {
   const [inputCountry, setInputCountry] = useState('');
   const [suggestions, setSuggestions] = useState([]);
   const [modalVisible, setModalVisible] = useState({type: false, data:''});
+  const [imgPath, setImgPath] = useState('../img/1.jpg');
   const { width } = Dimensions.get('window');
 
   return (
@@ -33,11 +34,13 @@ const SearchDestination = (props) => {
         style={styles.textInput}
         placeholderTextColor="gray"
       />
-      
-      <Image 
-        style={{height: 150,  width: width * 0.85, marginTop:10, marginBottom:10,  alignSelf: 'center',}}
-          source={require('../img/europa.png')} 
-      />
+
+      <View style={styles.img}>
+        <Image 
+          style={{height: 150,  width: width * 0.85, borderRadius: 10,}}
+            source={imgPath} 
+        />
+      </View>
 
       <TextInput
         placeholder={!props.dataDestination.city ? 
@@ -68,6 +71,19 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: 'black',
     backgroundColor: 'white',
+  }, 
+  img: {
+    backgroundColor: '#f0f0f0',
+    borderRadius: 15, 
+    padding: 5, 
+    shadowColor: '#000', 
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2, 
+    shadowRadius: 6, 
+    elevation: 8, 
+    alignSelf: 'center',
+    marginTop: 15,
+    marginBottom: 15,
   }
 
 })
