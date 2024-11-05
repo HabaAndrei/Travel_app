@@ -160,9 +160,21 @@ async function multiRemoveFromAsyncStorage(arrayOfKeys){
     return rezFinal;
 }
 
+////////////////////////////////////////////
+function randomNumber(){
+    return Math.floor(Math.random() * 10);
+}
+const random = randomNumber();
+const imagePath = random === 0 ? require('./img/0.jpg') : random === 1 ? require('./img/1.jpg'): 
+    random === 2 ? require('./img/2.jpg'): random === 3 ? require('./img/3.jpg'): random === 4 ? require('./img/4.jpg'): 
+    random === 5 ? require('./img/5.jpg'): random === 6 ? require('./img/6.jpg'): random === 7 ? require('./img/7.jpg'): 
+    random === 8 ? require('./img/8.jpg'): random === 9 ? require('./img/9.jpg'):  require('./img/10.jpg')
+////////////////////////////////////////////
+
+
 export {isValidPassword, isValidEmail, removeItemFromAsyncStorage, getDataFromAsyncStorage, addDataToAsyncStorage, multiRemoveFromAsyncStorage, multiSetFromAsyncStorage, 
     getAllKeysFromAsyncStorage, multiGetFromAsyncStorage,  formatDateFromMilliseconds,  deleteAllFromAsyncStorage,  getDays, getHours, 
-    address_function_api, address_function_fuzzy, address_function_send_code_verification
+    address_function_api, address_function_fuzzy, address_function_send_code_verification, imagePath
 }
 
 

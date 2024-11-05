@@ -1,7 +1,7 @@
-import { View ,TextInput, Image, StyleSheet, Dimensions } from 'react-native';
-import React, {useState} from 'react'
+import { View ,TextInput, Image, StyleSheet, Dimensions, Text } from 'react-native';
+import React, {useState, useEffect} from 'react'
 import ModalSearchDestination from './ModalSearchDestination.js';
-
+import { imagePath } from '../diverse.js';
 
 const SearchDestination = (props) => {
 
@@ -9,7 +9,6 @@ const SearchDestination = (props) => {
   const [inputCountry, setInputCountry] = useState('');
   const [suggestions, setSuggestions] = useState([]);
   const [modalVisible, setModalVisible] = useState({type: false, data:''});
-  const [imgPath, setImgPath] = useState('../img/1.jpg');
   const { width } = Dimensions.get('window');
 
   return (
@@ -38,7 +37,7 @@ const SearchDestination = (props) => {
       <View style={styles.img}>
         <Image 
           style={{height: 150,  width: width * 0.85, borderRadius: 10,}}
-            source={imgPath} 
+            source={imagePath}
         />
       </View>
 
