@@ -9,9 +9,8 @@ import ModalInfo from '../Components/ModalInfo.js';
 const SetUpTrip = (props) => {
 
   const [checkBoxActivities, setCheckBoxActivities] = useState({isOpen: false, city: '', country: ''})
-  const [dataDestination, setDataDestination] = useState({country: '', city: ''});
+  const [dataDestination, setDataDestination] = useState({country: 'France', city: 'Paris'});
   const [checkbox, setCheckbox] = useState([]);
-  const [inputSearch, setInputSearch] = useState('');
   const [isOpenModalInfo, setOpenModalInfo] = useState(false);
 
   useEffect(()=>{
@@ -91,7 +90,7 @@ const SetUpTrip = (props) => {
 
         <View style={styles.buttonGo} >
           <Button style={styles.buttonGoPressAc}
-            onPress={()=>props.openModalActivities()} >
+            onPress={()=>openModalActivities()} >
             <Text style={styles.text} >
               Choose activities
             </Text>
