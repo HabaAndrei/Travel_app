@@ -4,20 +4,17 @@ import { Card, Pressable, Heading, ScrollView, Button} from '@gluestack-ui/theme
 import SearchDestination from '../Components/SearchDestination';
 import CheckboxActivities from '../Components/CheckboxActivities';
 import NavbarProgram from '../Components/NavbarProgram';
-import ModalInfo from '../Components/ModalInfo.js';
 
 const SetUpTrip = (props) => {
 
   const [checkBoxActivities, setCheckBoxActivities] = useState({isOpen: false, city: '', country: ''})
   const [dataDestination, setDataDestination] = useState({country: 'France', city: 'Paris'});
   const [checkbox, setCheckbox] = useState([]);
-  const [isOpenModalInfo, setOpenModalInfo] = useState(false);
+  const [inputActivity, setInputActivity] = useState('');
 
   useEffect(()=>{
-    if(!dataDestination.country)return;
-    if(checkbox.length)setCheckbox([]);
-  }, [dataDestination]);
-
+    console.log(inputActivity);
+  }, [inputActivity]);
 
   function verifyDestinationRequest(){
     if(!dataDestination.city || !dataDestination.country){
@@ -68,10 +65,6 @@ const SetUpTrip = (props) => {
 
         <NavbarProgram name={props.route.name} navigation={props.navigation} />
 
-        <ModalInfo isOpenModalInfo={isOpenModalInfo} setOpenModalInfo={setOpenModalInfo}
-        mes={`Please be specific when using this input. It will generate locations that are less sought after by tourists, but known by the locals, if you don't want this, choose to use the activities generated for each location. \n E.g. \n 1. Old castles in the countryside. \n 2. The oldest breweries in the city. \n 3. The oldest families in the city. \n 4. Restaurants where locals eat \n Etc... \n\n Usually these locations are not the best to visit, but they offer you an authentic experience, for each individual location you have to accept the risks and benefits.`}
-        />
-
         <Card p="$5" borderRadius="$lg"  m="$3" maxWidth={400} style={styles.shadow}>
           <Heading size="md" fontFamily="$heading" mb="$4">
             Where?
@@ -83,6 +76,7 @@ const SetUpTrip = (props) => {
         </Card>
         
         <CheckboxActivities 
+          inputActivity={inputActivity} setInputActivity={setInputActivity}
           dataDestination={dataDestination} 
           checkBoxActivities={checkBoxActivities} closeCheckbox={closeCheckbox}
           checkbox={checkbox} setCheckbox={setCheckbox}  addNotification={props.addNotification}

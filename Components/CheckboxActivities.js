@@ -1,10 +1,12 @@
-import { Modal, View, ScrollView, Text, Pressable, StyleSheet } from 'react-native';
-import React, { useEffect } from 'react';
+import { Modal, View, ScrollView, Text, Pressable, StyleSheet, Platform, KeyboardAvoidingView } from 'react-native';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Spinner, Button, ButtonText, Icon, CheckIcon, SearchIcon } from "@gluestack-ui/themed";
+import { Spinner, Button, ButtonText, Icon, CheckIcon, SearchIcon, Textarea, TextareaInput, AlertCircleIcon, } from "@gluestack-ui/themed";
 import { address_function_api } from '../diverse.js';
 
 const CheckboxActivities = (props) => {
+
+  const [isShowDetails, setShowDetails] = useState(false);
 
   useEffect(() => {
     const { city, country } = props.dataDestination;
@@ -73,6 +75,26 @@ const CheckboxActivities = (props) => {
                       </Pressable>
                     );
                   })}
+
+                  <Pressable onPress={()=>setShowDetails(!isShowDetails)} style={{ flexDirection: 'row', alignItems: 'center' }}>
+                    <Text>Chat</Text>
+                    <Icon
+                      as={AlertCircleIcon}
+                      color="blue"
+                      $dark-color="$success300"
+                      style={{ marginLeft: 5 }} 
+                    />
+                  </Pressable>
+                  <Text style={styles.explanationText} >{isShowDetails ? 'Write here everything you want to visit, including activities or specific places' : ''}</Text>
+                  <KeyboardAvoidingView style={{ flex: 1, paddingBottom: Platform.OS === 'ios' ? 60 : 0, minWidth: 270}} behavior="position">
+                    <Textarea >
+                      <TextareaInput 
+                        placeholder="Example: The oldest breweries in the city"
+                        value={props.inputActivity}
+                        onChangeText={(text) => props.setInputActivity(text)}
+                      />
+                    </Textarea>
+                  </KeyboardAvoidingView>
                 </ScrollView>
                 <Button onPress={() => { props.closeCheckbox() }} style={styles.button}>
                   <ButtonText>
@@ -96,6 +118,13 @@ const CheckboxActivities = (props) => {
 export default CheckboxActivities;
 
 const styles = StyleSheet.create({
+  explanationText: {
+    fontSize: 14,
+    color: '#666', 
+    textAlign: 'center', 
+    marginVertical: 10, 
+    paddingHorizontal: 20, 
+  },
   scrollViewContent: {
     flexGrow: 1,
     padding: 10, 
@@ -108,6 +137,7 @@ const styles = StyleSheet.create({
     marginVertical: 5,
     backgroundColor: '#f0f0f0',
     borderRadius: 8,
+    minWidth: 270
   },
   pressableSelected: {
     backgroundColor: '#e0e0e0',
@@ -157,7 +187,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     padding: 0, 
     alignItems: 'center',
-    maxHeight: '75%', 
+    maxHeight: '85%', 
     width: '90%',
     shadowColor: '#000',
     shadowOffset: {
@@ -167,5 +197,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
+    paddingTop: 10,
   },
 });
