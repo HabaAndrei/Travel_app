@@ -1,7 +1,7 @@
 import { Modal, View, ScrollView, Text, Pressable, StyleSheet, Platform, KeyboardAvoidingView } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Spinner, Button, ButtonText, Icon, CheckIcon, SearchIcon, Textarea, TextareaInput, AlertCircleIcon, } from "@gluestack-ui/themed";
+import { Spinner, Button, ButtonText, Icon, CheckIcon, SearchIcon, Textarea, TextareaInput, AlertCircleIcon, Heading, Center} from "@gluestack-ui/themed";
 import { address_function_api } from '../diverse.js';
 
 const CheckboxActivities = (props) => {
@@ -54,6 +54,9 @@ const CheckboxActivities = (props) => {
             {props.checkbox.length ? 
               <View style={styles.modalView}>
                 <ScrollView contentContainerStyle={styles.scrollViewContent}>
+                  <Center>
+                    <Heading>Choose your activities for the next trip</Heading>
+                  </Center>
                   {props.checkbox.map((item, index) => {
                     return (
                       <Pressable
@@ -85,9 +88,9 @@ const CheckboxActivities = (props) => {
                       style={{ marginLeft: 5 }} 
                     />
                   </Pressable>
-                  <Text style={styles.explanationText} >{isShowDetails ? 'Write here everything you want to visit, including activities or specific places' : ''}</Text>
-                  <KeyboardAvoidingView style={{ flex: 1, paddingBottom: Platform.OS === 'ios' ? 60 : 0, minWidth: 270}} behavior="position">
-                    <Textarea >
+                  <Text style={isShowDetails ? styles.explanationText : ''} >{isShowDetails ? 'Write here everything you want to visit, including activities or specific places' : ''}</Text>
+                  <KeyboardAvoidingView style={{ flex: 1, paddingBottom: Platform.OS === 'ios' ? 60 : 0, minWidth: 250}} behavior="position">
+                    <Textarea style={{backgroundColor: 'white'}}>
                       <TextareaInput 
                         placeholder="Example: The oldest breweries in the city"
                         value={props.inputActivity}
@@ -96,11 +99,12 @@ const CheckboxActivities = (props) => {
                     </Textarea>
                   </KeyboardAvoidingView>
                 </ScrollView>
-                <Button onPress={() => { props.closeCheckbox() }} style={styles.button}>
-                  <ButtonText>
-                    <Icon as={SearchIcon} style={styles.searchIcon} />
-                  </ButtonText>
-                </Button>
+                <View style={styles.buttonContainer}>
+                  <Button style={[styles.button, styles.shadow]}
+                    onPress={() => { props.closeCheckbox() }}>
+                    <Text style={styles.buttonText}>Close</Text>
+                  </Button>
+                </View>
               </View>
               : 
               <View style={styles.spinnerContainer}>
@@ -137,7 +141,7 @@ const styles = StyleSheet.create({
     marginVertical: 5,
     backgroundColor: '#f0f0f0',
     borderRadius: 8,
-    minWidth: 270
+    minWidth: 250
   },
   pressableSelected: {
     backgroundColor: '#e0e0e0',
@@ -156,14 +160,6 @@ const styles = StyleSheet.create({
   iconPlaceholder: {
     width: 24,
     height: 24,
-  },
-  button: {
-    margin: 20,
-    backgroundColor: '#007BFF',
-    paddingVertical: 12,
-    paddingHorizontal: 20,
-    borderRadius: 8,
-    alignItems: 'center',
   },
   searchIcon: {
     color: '#fff',
@@ -198,5 +194,37 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 5,
     paddingTop: 10,
+  },
+  shadow: {
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 5,
+    elevation: 6,
+  },
+  buttonContainer: {
+    marginTop: 20,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  button: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#2196F3',
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderRadius: 8,
+    minWidth: 180,
+    marginVertical: 10,
+  },
+  buttonText: {
+    color: 'white',
+    textAlign: 'center',
+    fontWeight: 'bold',
+    fontSize: 16,
   },
 });

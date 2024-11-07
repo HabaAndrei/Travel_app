@@ -29,7 +29,7 @@ const ImageCarousel = (props) => {
 
   return (
     <View style={styles.container} {...panResponder.panHandlers}>
-      <Image source={{ uri: props.imageUrls[imageNumber] }}  style={{ width: width * 0.85, height: 450, alignSelf: 'center', borderRadius: 10}} />
+      <Image source={{ uri: props.imageUrls[imageNumber] }}  style={{ width: width * 0.85, height: 450, alignSelf: 'center'}} />
       <View style={styles.dotsContainer}>
         {props.imageUrls.map((_, index) => (
           <View
@@ -54,9 +54,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderRadius: 15, 
     padding: 5, 
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.2, 
-    shadowRadius: 6, 
     marginBottom: 15,
   },
   dotsContainer: {

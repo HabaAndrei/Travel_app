@@ -1,6 +1,6 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import { View, Text, StyleSheet, SafeAreaView, } from 'react-native';
-import { Card, Pressable, Heading, ScrollView, Button} from '@gluestack-ui/themed';
+import { Card, Icon, CheckIcon, ArrowRightIcon, Heading, ScrollView, Button} from '@gluestack-ui/themed';
 import SearchDestination from '../Components/SearchDestination';
 import CheckboxActivities from '../Components/CheckboxActivities';
 import NavbarProgram from '../Components/NavbarProgram';
@@ -12,9 +12,6 @@ const SetUpTrip = (props) => {
   const [checkbox, setCheckbox] = useState([]);
   const [inputActivity, setInputActivity] = useState('');
 
-  useEffect(()=>{
-    console.log(inputActivity);
-  }, [inputActivity]);
 
   function verifyDestinationRequest(){
     if(!dataDestination.city || !dataDestination.country){
@@ -82,21 +79,22 @@ const SetUpTrip = (props) => {
           checkbox={checkbox} setCheckbox={setCheckbox}  addNotification={props.addNotification}
         /> 
 
-        <View style={styles.buttonGo} >
-          <Button style={styles.buttonGoPressAc}
-            onPress={()=>openModalActivities()} >
-            <Text style={styles.text} >
-              Choose activities
-            </Text>
+        <View style={styles.buttonContainer}>
+          <Button style={[styles.button, styles.shadow]}
+            onPress={openModalActivities}>
+            <Text style={styles.buttonText}>Choose Activities</Text>
+            <Icon as={CheckIcon} style={styles.icon} />
           </Button>
         </View>
 
-        <View style={styles.buttonGo} >
-          <Pressable  style={styles.buttonGoPressAc}
-            onPress={goToProgramPage}> 
-            <Text style={styles.text}>Create program</Text>
-          </Pressable>
+        <View style={styles.buttonContainer}>
+          <Button style={[styles.button, styles.shadow]}
+            onPress={goToProgramPage}>
+            <Text style={styles.buttonText}>Continue to see locations</Text>
+            <Icon as={ArrowRightIcon} style={styles.icon} />
+          </Button>
         </View>
+
 
       </ScrollView>
     </SafeAreaView>
@@ -105,34 +103,44 @@ const SetUpTrip = (props) => {
 };
 
 const styles = StyleSheet.create({
-  shadow:{
+  shadow: {
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
-      height: 2,
+      height: 4,
     },
-    shadowOpacity: 0.5,
-    shadowRadius: 4,
-    elevation: 5,
+    shadowOpacity: 0.3,
+    shadowRadius: 5,
+    elevation: 6,
   },
-  buttonGoPressAc:{
+  buttonContainer: {
+    marginTop: 20,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  button: {
+    flexDirection: 'row',
+    alignItems: 'center',
     backgroundColor: '#2196F3',
-    padding: 10,
-    borderRadius: 5,
-    height: 40,
-    width: 160,
-    marginBottom: 30
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderRadius: 8,
+    minWidth: 180,
+    marginVertical: 10,
   },
-  text: {
+  buttonText: {
     color: 'white',
     textAlign: 'center',
+    fontWeight: 'bold',
+    fontSize: 16,
   },
-  buttonGo: {
-    marginTop: 30,
-    flex: 1, 
-    alignItems: 'center',
-    justifyContent: 'center',
-  },  
+  icon: {
+    color: 'white',
+    marginRight: 8,
+    marginLeft: 3
+  },
 });
+
 
 export default SetUpTrip;

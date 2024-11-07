@@ -4,7 +4,7 @@ import { useIsFocused } from '@react-navigation/native';
 import {address_function_api, getDataFromAsyncStorage, addDataToAsyncStorage, 
   multiSetFromAsyncStorage, formatDateFromMilliseconds} from '../diverse';
 import axios from 'axios';
-import { Card, HStack, Heading, Center, Text, Switch, Link, Divider, LinkText, Spinner, 
+import { Card, HStack, Heading, Center, Text, Switch, Button, Link, Divider, LinkText, Spinner, 
   VStack, ArrowLeftIcon, CheckIcon, Icon,
 } from '@gluestack-ui/themed';
 import NavbarProgram from '../Components/NavbarProgram';
@@ -229,18 +229,24 @@ const Locations = (props) => {
                         <Switch value={location.selected_full_tour} />
                       </Pressable> : <Text></Text>
                       }
-                      <Pressable style={styles.buttonPress} onPress={() => pressOnLocations(index)} >
-                        <Text style={styles.text} >
-                          {location.selected ? 'Remove location from your visit' : 'Pick location for your visit'}
-                        </Text>
-                      </Pressable>
+                      <View style={styles.buttonContainer}>
+                        <Button style={[styles.button, styles.shadow]}
+                          onPress={() => pressOnLocations(index)}>
+                          <Text style={styles.buttonText}> 
+                            {location.selected ? 'Remove location from your visit' : 'Pick location for your visit'}
+                          </Text>
+                        </Button>
+                      </View>
                     </View>
                     :
-                    <Pressable style={styles.buttonPress} onPress={() => pressOnLocations(index)} >
-                      <Text style={styles.text} >
-                        {location.selected ? 'Remove location from your visit' : 'Pick location for your visit'}
-                      </Text>
-                    </Pressable>
+                    <View style={styles.buttonContainer}>
+                      <Button style={[styles.button, styles.shadow]}
+                        onPress={() => pressOnLocations(index)}>
+                        <Text style={styles.buttonText}> 
+                          {location.selected ? 'Remove location from your visit' : 'Pick location for your visit'}
+                        </Text>
+                      </Button>
+                    </View>
                   }
                 </Center>
               </Card>
@@ -339,7 +345,43 @@ const styles = StyleSheet.create({
     fontSize: 14,
     lineHeight: 20,
   },
-
+  shadow: {
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 5,
+    elevation: 6,
+  },
+  buttonContainer: {
+    marginTop: 10,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  button: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#2196F3',
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderRadius: 8,
+    minWidth: 180,
+    marginVertical: 10,
+  },
+  buttonText: {
+    color: 'white',
+    textAlign: 'center',
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
+  icon: {
+    color: 'white',
+    marginRight: 8,
+    marginLeft: 3
+  },
 });
 
 
