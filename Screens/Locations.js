@@ -34,24 +34,20 @@ const Locations = (props) => {
       return;
     };
   
-    let {city, country, val, valueRadio, type} = props?.route?.params;
+    let {city, country, checkbox, input, type} = props?.route?.params;
+
     if(type === "getAllDataAboutLocations"){
-      if(valueRadio === 'Activities'){
-        let newCheckbox = [];
-        val.forEach((ob)=>{if(ob.selected)newCheckbox.push(ob.category)}); 
-        val = newCheckbox
-      }
-      createLocationsAi('seeAllPlaces', city, country, val, valueRadio)
+      createLocationsAi('seeAllPlaces', city, country, input, checkbox)
       return;
     }
     
   }, [isFocused]);
 
-  async function createLocationsAi( method, city, country, val, valueRadio){
+  async function createLocationsAi( method, city, country, input, checkbox){
     setLocations([]);
     setButtonHomePage(false)
     axios.post(`${address_function_api}`, 
-      {method, city, country, val, valueRadio}
+      {method, city, country, input, checkbox}
     ).then((data)=>{
       if(data.data.type){
         const arrayWithLocations = data.data.data;
@@ -64,7 +60,7 @@ const Locations = (props) => {
         });
         setLocations(arraySelected)
         multiSetFromAsyncStorage([['arrayLocationsToTravel', [...arraySelected]], 
-          ["locationsParameter", {city, country, val, valueRadio}]]);
+          ["locationsParameter", {city, country, input, checkbox}]]);
       }else{
         console.log("eroare la functia createLocationsAi ", data);
       }       
@@ -115,9 +111,14 @@ const Locations = (props) => {
   }
 
 
-  async function goToCreateProgram(){   
+  async function goToCreateProgram(){  
+    //////////////////////////////////////////////////////////////// 
+    // decomentez aceasta in prod ==>>>
+
     // if(!verifyDestinationRequest())return;
 
+    // decomentez aceasta in prod  <<<<=======
+    ////////////////////////////////////////////////////////////////
     addDataToAsyncStorage('arrayLocationsToTravel', locations)
     const selectedLocations = locations.filter((place)=>place.selected);
     if(!selectedLocations.length){
@@ -132,6 +133,7 @@ const Locations = (props) => {
     const locationParam = dataParam.data;
     ////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////
+    // fac si aici schimbarea in pod =>>>>>>>>>>
 
     // locationParam.from = formatDateFromMilliseconds(dateFrom);
     // locationParam.to = formatDateFromMilliseconds(dateTo)
@@ -139,6 +141,7 @@ const Locations = (props) => {
     locationParam.to = formatDateFromMilliseconds(1718053200000)
     props.navigation.navigate('Program', {type: 'createProgram', locations: selectedLocations, locationParam});
 
+    // fac si aici schimbarea in pod <<<<<<<<<<===========
     /////////////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////////////
 

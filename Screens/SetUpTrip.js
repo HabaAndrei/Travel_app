@@ -18,28 +18,38 @@ const SetUpTrip = (props) => {
       props.addNotification("warning", "Please choose the city and country where you want to travel to provide you with the best data.");
       return false;
     }
-    console.log('sa adaug ce am zis eu');
-    // aici sa adaug sa fie ceva in input sa niste elemenet selectate din checkbox
+    const isSelect = checkbox?.find((ob)=>ob.selected === true);
+    const wordWithoutSpace = inputActivity?.replace(' ', '');
+    console.log(wordWithoutSpace);
+    if(!isSelect && !wordWithoutSpace.length){
+      props.addNotification("warning", "To go further, you must choose at least one activity, write what you want to visit in the input");
+      return false;
+    }
     return true;
   }
 
   
   function goToProgramPage(){
-    if(!verifyDestinationRequest())return;
-    props.navigation.navigate('Locations', {type: 'getAllDataAboutLocations' , 
-      country: dataDestination.country, city: dataDestination.city, checkbox})
+
+    ///////////////////////////////////////////////////
+    // decomentez si sterg in prod =>>>>>>>>
+
+    // if(!verifyDestinationRequest())return;
+    // let newCheckbox = [];
+    // checkbox.forEach((ob)=>{if(ob.selected)newCheckbox.push(ob.category)}); 
+    
+    // props.navigation.navigate('Locations', {type: 'getAllDataAboutLocations' , 
+    //   country: dataDestination.country, city: dataDestination.city, checkbox: newCheckbox, input: inputActivity})
 
     ///////////////////////////////////////////////////////////
-    // const city = 'Paris';
-    // const country = 'France';
-    // const activities = [
-    //   { category: "Cultural exploration", selected: true },
-    //   { category: "Historical tours", selected: true },
-    //   { category: "Outdoor activities", selected: true },
-    // ]
+    const city = 'Paris';
+    const country = 'France';
+    const input = 'Oldest Caffe restaurantes';
+    const checkbox = ["History and heritage", "Museums and exhibitions"];
+    props.navigation.navigate('Locations', {type: 'getAllDataAboutLocations', country, city, checkbox, input})
 
-    // props.navigation.navigate('Locations', {type: 'getAllDataAboutLocations' ,country, city, checkbox: activities})
-
+    // decomentez si sterg in prod <<<<<<===========
+    /////////////////////////////////////////////////////////////////////
   }
 
   function closeCheckbox(){
