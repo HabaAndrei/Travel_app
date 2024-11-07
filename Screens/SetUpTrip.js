@@ -1,15 +1,13 @@
 import React, {useState, useEffect} from 'react';
 import { View, Text, StyleSheet, SafeAreaView, } from 'react-native';
-import { Card, Pressable, Heading, ScrollView} from '@gluestack-ui/themed';
+import { Card, Pressable, Heading, ScrollView, Button} from '@gluestack-ui/themed';
 import SearchDestination from '../Components/SearchDestination';
 import CheckboxActivities from '../Components/CheckboxActivities';
 import NavbarProgram from '../Components/NavbarProgram';
-import CardSetUpActivities from '../Components/CardSetUpActivities.js';
 import ModalInfo from '../Components/ModalInfo.js';
 
 const SetUpTrip = (props) => {
 
-  const [valueRadio, setValueRadio] = useState("Activities")
   const [checkBoxActivities, setCheckBoxActivities] = useState({isOpen: false, city: '', country: ''})
   const [dataDestination, setDataDestination] = useState({country: '', city: ''});
   const [checkbox, setCheckbox] = useState([]);
@@ -27,10 +25,8 @@ const SetUpTrip = (props) => {
       props.addNotification("warning", "Please choose the city and country where you want to travel to provide you with the best data.");
       return false;
     }
-    if(valueRadio === 'Chat' && !inputSearch.length){
-      props.addNotification("warning", "You chose to generate locations based on chat, so include some references in the chat department");
-      return false;
-    }
+    console.log('sa adaug ce am zis eu');
+    // aici sa adaug sa fie ceva in input sa niste elemenet selectate din checkbox
     return true;
   }
 
@@ -38,7 +34,7 @@ const SetUpTrip = (props) => {
   function goToProgramPage(){
     if(!verifyDestinationRequest())return;
     props.navigation.navigate('Locations', {type: 'getAllDataAboutLocations' , 
-      country: dataDestination.country, city: dataDestination.city, valueRadio, val: valueRadio === 'Activities' ? checkbox : inputSearch})
+      country: dataDestination.country, city: dataDestination.city, checkbox})
 
     ///////////////////////////////////////////////////////////
     // const city = 'Paris';
@@ -93,15 +89,14 @@ const SetUpTrip = (props) => {
           checkbox={checkbox} setCheckbox={setCheckbox}  addNotification={props.addNotification}
         /> 
 
-        <CardSetUpActivities 
-          valueRadio={valueRadio}
-          setValueRadio={setValueRadio}
-          inputSearch={inputSearch}
-          setInputSearch={setInputSearch}
-          openModalActivities={openModalActivities}
-          addNotification={props.addNotification}
-          setOpenModalInfo={setOpenModalInfo}
-        />
+        <View style={styles.buttonGo} >
+          <Button style={styles.buttonGoPressAc}
+            onPress={()=>props.openModalActivities()} >
+            <Text style={styles.text} >
+              Choose activities
+            </Text>
+          </Button>
+        </View>
 
         <View style={styles.buttonGo} >
           <Pressable  style={styles.buttonGoPressAc}

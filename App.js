@@ -94,13 +94,13 @@ const App = () => {
       <NavigationContainer>
         <Stack.Navigator>
           <Stack.Screen
-            name="MyTrips"
-            component={MyTripsScreen}
+            name="SetUpTrip"
+            component={SetUpTripScreen}
             options={{headerShown: false}}
           />
           <Stack.Screen
-            name="SetUpTrip"
-            component={SetUpTripScreen}
+            name="MyTrips"
+            component={MyTripsScreen}
             options={{headerShown: false}}
           />
           <Stack.Screen
@@ -145,6 +145,4 @@ const styles = StyleSheet.create({})
 // In pagina locations mai adaug : 
 // Un input in care sa fie locatia hotelului
 
-// Adaug info la cat mai multr lucrui unde trebuie specificat cum functioneaza aplicatia
-// in pagina set up trip fac sa se schimbe imaginea o data la ceva secunde, aleg alte poze
-// pozele sa fie pe latime / culcate
+// implementeaza in partea in prompturi cu [Attractions] 
