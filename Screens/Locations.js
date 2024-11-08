@@ -69,7 +69,6 @@ const Locations = (props) => {
     })
   }
 
-
   async function getLocationsFromAsyncStorage(){
     if(locations.length)return;
     const places = await getDataFromAsyncStorage("arrayLocationsToTravel");

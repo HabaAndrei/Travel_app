@@ -11,7 +11,7 @@ const SetUpTrip = (props) => {
   const [dataDestination, setDataDestination] = useState({country: 'France', city: 'Paris'});
   const [checkbox, setCheckbox] = useState([]);
   const [inputActivity, setInputActivity] = useState('');
-
+  const [isLocalPlaces, setLocalPlaces] = useState(false);
 
   function verifyDestinationRequest(){
     if(!dataDestination.city || !dataDestination.country){
@@ -46,6 +46,7 @@ const SetUpTrip = (props) => {
     const country = 'France';
     const input = 'Oldest Caffe restaurantes';
     const checkbox = ["History and heritage", "Museums and exhibitions"];
+    // const checkbox = [];
     props.navigation.navigate('Locations', {type: 'getAllDataAboutLocations', country, city, checkbox, input})
 
     // decomentez si sterg in prod <<<<<<===========
@@ -74,7 +75,7 @@ const SetUpTrip = (props) => {
 
         <Card p="$5" borderRadius="$lg"  m="$3" maxWidth={400} style={styles.shadow}>
           <Heading size="md" fontFamily="$heading" mb="$4">
-            Where?
+            Search your destination
           </Heading>
           <SearchDestination
             setCheckBoxActivities={setCheckBoxActivities}  addNotification={props.addNotification}
@@ -87,6 +88,7 @@ const SetUpTrip = (props) => {
           dataDestination={dataDestination} 
           checkBoxActivities={checkBoxActivities} closeCheckbox={closeCheckbox}
           checkbox={checkbox} setCheckbox={setCheckbox}  addNotification={props.addNotification}
+          isLocalPlaces={isLocalPlaces} setLocalPlaces={setLocalPlaces}
         /> 
 
         <View style={styles.buttonContainer}>

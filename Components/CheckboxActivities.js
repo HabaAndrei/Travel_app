@@ -1,7 +1,8 @@
 import { Modal, View, ScrollView, Text, Pressable, StyleSheet, Platform, KeyboardAvoidingView } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Spinner, Button, ButtonText, Icon, CheckIcon, SearchIcon, Textarea, TextareaInput, AlertCircleIcon, Heading, Center} from "@gluestack-ui/themed";
+import { Spinner, Button, Icon, CheckIcon, Textarea, TextareaInput, AlertCircleIcon, Heading, Center, RadioGroup, HStack, 
+  Radio, RadioIndicator, RadioIcon, CircleIcon, RadioLabel} from "@gluestack-ui/themed";
 import { address_function_api } from '../diverse.js';
 
 const CheckboxActivities = (props) => {
@@ -80,7 +81,7 @@ const CheckboxActivities = (props) => {
                   })}
 
                   <Pressable onPress={()=>setShowDetails(!isShowDetails)} style={{ flexDirection: 'row', alignItems: 'center' }}>
-                    <Text>Chat</Text>
+                    <Text style={styles.text} >Write your custom activities</Text>
                     <Icon
                       as={AlertCircleIcon}
                       color="blue"
@@ -89,7 +90,7 @@ const CheckboxActivities = (props) => {
                     />
                   </Pressable>
                   <Text style={isShowDetails ? styles.explanationText : ''} >{isShowDetails ? 'Write here everything you want to visit, including activities or specific places' : ''}</Text>
-                  <KeyboardAvoidingView style={{ flex: 1, paddingBottom: Platform.OS === 'ios' ? 60 : 0, minWidth: 250}} behavior="position">
+                  <KeyboardAvoidingView style={{ flex: 1,  minWidth: 250}} behavior="position">
                     <Textarea style={{backgroundColor: 'white'}}>
                       <TextareaInput 
                         placeholder="Example: The oldest breweries in the city"
@@ -98,6 +99,24 @@ const CheckboxActivities = (props) => {
                       />
                     </Textarea>
                   </KeyboardAvoidingView>
+
+                  <RadioGroup value={props.isLocalPlaces} onChange={()=>props.setLocalPlaces(!props.isLocalPlaces)}>
+                    <HStack space="2xl"> 
+                      <Radio value="Get local places">
+                        <RadioIndicator mr="$2">
+                          <RadioIcon as={CircleIcon} />
+                        </RadioIndicator>
+                        <RadioLabel>No</RadioLabel>
+                      </Radio>
+                      <Radio value="Cash On Delivery">
+                        <RadioIndicator mr="$2">
+                          <RadioIcon as={CircleIcon} />
+                        </RadioIndicator>
+                        <RadioLabel>Yes</RadioLabel>
+                      </Radio>
+                    </HStack>
+                  </RadioGroup>
+                  
                 </ScrollView>
                 <View style={styles.buttonContainer}>
                   <Button style={[styles.button, styles.shadow]}
