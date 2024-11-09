@@ -11,6 +11,7 @@ import TimePicker from '../Components/TimePicker.js';
 import DatePicker from '../Components/DatePicker';
 import {formatDateFromMilliseconds} from '../diverse';
 import ModalAddNewDay from '../Components/ModalAddNewDay.js';
+import openMap from 'react-native-open-maps';
 
 const Trip = (props) => {
 
@@ -155,28 +156,37 @@ const Trip = (props) => {
 		}
 	}
 
-	function createStringForGoogpleMaps(address, city, country){
-		let strFin = address.split(' ').join('+');
-		strFin += (',+' + city + ',' + country + '/');
-		return strFin; 
+	function addresForMaps(ob, city, country){
+		const {address, place} = ob;
+		if(address){
+			return address;
+		}else{
+			return place + ' ' + city + ' ' + country;
+		}
 	}
 
-	function goToGoogle(indexLocation){
-		let url = 'https://www.google.com/maps/dir/';
+	
+	function openMap_(indexLocation){
 		let { city, country, program } = props.route.params;
+
 		program = JSON.parse(program);
-		const locationsAddressPlace = program[indexLocation].activities.map((ob)=>{
+			const locationsAddressPlace = program[indexLocation].activities.map((ob)=>{
 			return {address: ob.address ? ob.address : '' , place: ob.place ? ob.place : ''}
 		});
-		locationsAddressPlace.forEach((ob)=>{
-			if(ob.address.length){
-				url += createStringForGoogpleMaps(ob.address, city, country)
-			}else{
-				url += createStringForGoogpleMaps(ob.place, city, country)
-			}
-		})
-		return url;
-	};
+
+		if(locationsAddressPlace.length === 1){
+			const place = addresForMaps(locationsAddressPlace[0], city, country);
+			openMap({start: place, end: place})
+		}else if(locationsAddressPlace.length === 2){
+			openMap({start: addresForMaps(locationsAddressPlace[0], city, country), end: addresForMaps(locationsAddressPlace[1], city, country)})
+		}else if(locationsAddressPlace.length > 2){
+			const first = locationsAddressPlace[0];
+			const mid = locationsAddressPlace.slice(1, locationsAddressPlace.length-1) ;
+			const last = locationsAddressPlace[locationsAddressPlace.length-1];
+			const addressWaypoints = mid.map((ob)=>addresForMaps(ob, city, country));
+			openMap({start: addresForMaps(first, city, country), waypoints: addressWaypoints, end: addresForMaps(last, city, country)});
+		}		
+	}
 
 	return (
 		<SafeAreaView style={{flex: 1}} >
@@ -215,19 +225,22 @@ const Trip = (props) => {
 					</AccordionHeader>
 					<AccordionContent >
 						
-						<Link href={goToGoogle(index)} isExternal>
-							<HStack alignItems="center">
-								<LinkText size="sm" fontFamily="$heading" fontWeight="$semibold" color="$primary600" textDecorationLine="none">
-									See all trip in google maps
-								</LinkText>
-							</HStack>
-						</Link>
+
 
 						<Center>
 							<Heading>
 								{new Date(dayProgram.date).toString().slice(0, 15)}
 							</Heading>
+
+							<Link onPress={()=>openMap_(index)} isExternal>
+								<HStack alignItems="center">
+									<LinkText size="sm" fontFamily="$heading" fontWeight="$semibold" color="$primary600" textDecorationLine="none">
+										See all trip in google maps 🗺
+									</LinkText>
+								</HStack>
+							</Link>
 						</Center>
+
 
 						<View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: 10, marginBottom: 20 }}>
 							<DatePicker
