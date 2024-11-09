@@ -1,10 +1,11 @@
-import { StyleSheet, ScrollView,  SafeAreaView } from 'react-native'
+import { StyleSheet, ScrollView,  SafeAreaView, Pressable } from 'react-native'
 import React, {useState, useEffect} from 'react'
 import { useIsFocused } from '@react-navigation/native';   
 import {getPlansFromDbWithUid} from '../firebase.js';
 import {  Card, Divider, Text, HStack , Heading, Link, LinkText, Icon,
     ArrowRightIcon} from '@gluestack-ui/themed' ;
 import CountdownNews from '../Components/CountdownNews.js';
+import openMap from 'react-native-open-maps';
 
 
 const MyTrips = (props) => {
@@ -39,11 +40,19 @@ const MyTrips = (props) => {
         return arTimestamp.map((ob)=>ob.index);
     }   
 
+    function openMap_(){
+        openMap({ latitude: 37.865101, longitude: -119.538330 });
+    }
+
   return (
     <SafeAreaView style={{flex: 1}}>
 
 
         <ScrollView style={{ flex: 1 }} >
+        
+            <Pressable onPress={openMap_}>
+                <Text>Click To Open Maps 🗺</Text>
+            </Pressable>
             
             <CountdownNews plans={plans} />
 
