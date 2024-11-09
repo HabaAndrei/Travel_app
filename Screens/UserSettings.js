@@ -4,6 +4,7 @@ import {VStack, HStack, Button, ButtonText, Divider} from '@gluestack-ui/themed'
 import {signOutUser, deleteTheUser, } from '../firebase.js';
 import {deleteAllFromAsyncStorage} from '../diverse.js';
 import ModalReAuth from '../Components/ModalReAuth.js';
+import CardFeedback from '../Components/CardFeedback.js';
 
 const UserSettings = (props) => {
 
@@ -44,6 +45,8 @@ const UserSettings = (props) => {
       <ScrollView style={{marginTop: 20}} >
 
         <ModalReAuth  isModalVisibleReAuth={isModalVisibleReAuth} setModalVisibleReAuth={setModalVisibleReAuth} />
+
+        <CardFeedback/>
 
         <View style={{ alignItems: 'center' }}>
           <VStack space="2xl">  
