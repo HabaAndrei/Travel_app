@@ -34,20 +34,20 @@ const Locations = (props) => {
       return;
     };
   
-    let {city, country, checkbox, input, type} = props?.route?.params;
+    let {city, country, checkbox, input, type, isLocalPlaces} = props?.route?.params;
 
     if(type === "getAllDataAboutLocations"){
-      createLocationsAi('seeAllPlaces', city, country, input, checkbox)
+      createLocationsAi('seeAllPlaces', city, country, input, checkbox, isLocalPlaces)
       return;
     }
     
   }, [isFocused]);
 
-  async function createLocationsAi( method, city, country, input, checkbox){
+  async function createLocationsAi( method, city, country, input, checkbox, isLocalPlaces){
     setLocations([]);
     setButtonHomePage(false)
     axios.post(`${address_function_api}`, 
-      {method, city, country, input, checkbox}
+      {method, city, country, input, checkbox, isLocalPlaces}
     ).then((data)=>{
       if(data.data.type){
         const arrayWithLocations = data.data.data;

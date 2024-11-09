@@ -11,7 +11,7 @@ const SetUpTrip = (props) => {
   const [dataDestination, setDataDestination] = useState({country: 'France', city: 'Paris'});
   const [checkbox, setCheckbox] = useState([]);
   const [inputActivity, setInputActivity] = useState('');
-  const [isLocalPlaces, setLocalPlaces] = useState(false);
+  const [isLocalPlaces, setLocalPlaces] = useState('false');
 
   function verifyDestinationRequest(){
     if(!dataDestination.city || !dataDestination.country){
@@ -39,15 +39,14 @@ const SetUpTrip = (props) => {
     // checkbox.forEach((ob)=>{if(ob.selected)newCheckbox.push(ob.category)}); 
     
     // props.navigation.navigate('Locations', {type: 'getAllDataAboutLocations' , 
-    //   country: dataDestination.country, city: dataDestination.city, checkbox: newCheckbox, input: inputActivity})
+    //   country: dataDestination.country, city: dataDestination.city, checkbox: newCheckbox, input: inputActivity, isLocalPlaces})
 
     ///////////////////////////////////////////////////////////
     const city = 'Paris';
     const country = 'France';
-    const input = 'Oldest Caffe restaurantes';
     const checkbox = ["History and heritage", "Museums and exhibitions"];
     // const checkbox = [];
-    props.navigation.navigate('Locations', {type: 'getAllDataAboutLocations', country, city, checkbox, input})
+    props.navigation.navigate('Locations', {type: 'getAllDataAboutLocations', country, city, checkbox, input: inputActivity, isLocalPlaces})
 
     // decomentez si sterg in prod <<<<<<===========
     /////////////////////////////////////////////////////////////////////

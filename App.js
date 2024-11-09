@@ -89,7 +89,6 @@ const App = () => {
   );
 
   return (
-
     <GluestackUIProvider config={config}>
       <NavigationContainer>
         <Stack.Navigator>
@@ -131,8 +130,6 @@ const App = () => {
         </Stack.Navigator>
       </NavigationContainer>
     </GluestackUIProvider>
-
-
   );
 }
 
@@ -144,6 +141,3 @@ const styles = StyleSheet.create({})
 
 // In pagina locations mai adaug : 
 // Un input in care sa fie locatia hotelului
-
-// implement partea cu radio pentru a vedea daca vrea experiente locale, 
-// tot in checkbox il adaug 

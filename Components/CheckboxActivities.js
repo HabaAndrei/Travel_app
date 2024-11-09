@@ -1,8 +1,8 @@
 import { Modal, View, ScrollView, Text, Pressable, StyleSheet, Platform, KeyboardAvoidingView } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Spinner, Button, Icon, CheckIcon, Textarea, TextareaInput, AlertCircleIcon, Heading, Center, RadioGroup, HStack, 
-  Radio, RadioIndicator, RadioIcon, CircleIcon, RadioLabel} from "@gluestack-ui/themed";
+import { Spinner, Button, Icon, CheckIcon, Textarea, VStack, TextareaInput, AlertCircleIcon, Heading, Center, RadioGroup, HStack, 
+  Radio, RadioIndicator, RadioIcon, CircleIcon, RadioLabel, Card} from "@gluestack-ui/themed";
 import { address_function_api } from '../diverse.js';
 
 const CheckboxActivities = (props) => {
@@ -68,7 +68,7 @@ const CheckboxActivities = (props) => {
                         ]}
                         onPress={() => pressOnOption(index)}
                       >
-                        <Text style={styles.text}>
+                        <Text style={[styles.text, styles.textCenter]}>
                           {item.category}
                         </Text>
                         {item.selected ? 
@@ -80,43 +80,59 @@ const CheckboxActivities = (props) => {
                     );
                   })}
 
-                  <Pressable onPress={()=>setShowDetails(!isShowDetails)} style={{ flexDirection: 'row', alignItems: 'center' }}>
-                    <Text style={styles.text} >Write your custom activities</Text>
-                    <Icon
-                      as={AlertCircleIcon}
-                      color="blue"
-                      $dark-color="$success300"
-                      style={{ marginLeft: 5 }} 
-                    />
-                  </Pressable>
-                  <Text style={isShowDetails ? styles.explanationText : ''} >{isShowDetails ? 'Write here everything you want to visit, including activities or specific places' : ''}</Text>
-                  <KeyboardAvoidingView style={{ flex: 1,  minWidth: 250}} behavior="position">
-                    <Textarea style={{backgroundColor: 'white'}}>
-                      <TextareaInput 
-                        placeholder="Example: The oldest breweries in the city"
-                        value={props.inputActivity}
-                        onChangeText={(text) => props.setInputActivity(text)}
-                      />
-                    </Textarea>
-                  </KeyboardAvoidingView>
 
-                  <RadioGroup value={props.isLocalPlaces} onChange={()=>props.setLocalPlaces(!props.isLocalPlaces)}>
-                    <HStack space="2xl"> 
-                      <Radio value="Get local places">
-                        <RadioIndicator mr="$2">
-                          <RadioIcon as={CircleIcon} />
-                        </RadioIndicator>
-                        <RadioLabel>No</RadioLabel>
-                      </Radio>
-                      <Radio value="Cash On Delivery">
-                        <RadioIndicator mr="$2">
-                          <RadioIcon as={CircleIcon} />
-                        </RadioIndicator>
-                        <RadioLabel>Yes</RadioLabel>
-                      </Radio>
-                    </HStack>
-                  </RadioGroup>
-                  
+                  <View style={styles.viewCard}>
+                    <Pressable onPress={() => setShowDetails(!isShowDetails)} style={{ 
+                      flexDirection: 'row', 
+                      alignItems: 'center', 
+                      justifyContent: 'center' 
+                    }}>
+                      <Text style={[styles.text, styles.textBold]}>Write your custom activities</Text>
+                      <Icon
+                        as={AlertCircleIcon}
+                        color="blue"
+                        $dark-color="$success300"
+                        style={{ marginLeft: 5 }} 
+                      />
+                    </Pressable>
+                    <Text style={isShowDetails ? styles.explanationText : ''}>
+                      {isShowDetails ? 'Write here everything you want to visit, including activities or specific places' : ''}
+                    </Text>
+                    <KeyboardAvoidingView style={{ flex: 1, minWidth: 250 }} behavior="position">
+                      <Textarea style={{ backgroundColor: 'white', borderRadius: 15 }}>
+                        <TextareaInput 
+                          placeholder="Example: The oldest breweries in the city"
+                          value={props.inputActivity}
+                          onChangeText={(text) => props.setInputActivity(text)}
+                        />
+                      </Textarea>
+                    </KeyboardAvoidingView>
+                  </View>
+
+                  <View style={styles.viewCard}>
+                    <View style={{alignItems: 'center', justifyContent: 'center' }} >
+                      <Text style={[styles.text, styles.textBold]}>Choose Your Experience</Text>
+                    </View>
+                    <Center>
+                      <RadioGroup style={{marginTop: 10, marginBottom: 10}} value={props.isLocalPlaces} onChange={props.setLocalPlaces}>
+                        <VStack space="sm"> 
+                          <Radio value="true">
+                            <RadioIndicator mr="$2">
+                              <RadioIcon as={CircleIcon} />
+                            </RadioIndicator>
+                            <RadioLabel>Local Favorites</RadioLabel>
+                          </Radio>
+                          <Radio value="false">
+                            <RadioIndicator mr="$2">
+                              <RadioIcon as={CircleIcon} />
+                            </RadioIndicator>
+                            <RadioLabel>Popular Tourist Spots</RadioLabel>
+                          </Radio>
+                        </VStack>
+                      </RadioGroup>
+                    </Center>
+                  </View>
+
                 </ScrollView>
                 <View style={styles.buttonContainer}>
                   <Button style={[styles.button, styles.shadow]}
@@ -141,12 +157,31 @@ const CheckboxActivities = (props) => {
 export default CheckboxActivities;
 
 const styles = StyleSheet.create({
+  viewCard: {
+    flex: 1,
+    padding: 20,
+    margin: 10,
+    borderRadius: 15,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+    paddingTop: 10,
+    backgroundColor: 'white',
+  },
   explanationText: {
     fontSize: 14,
     color: '#666', 
     textAlign: 'center', 
     marginVertical: 10, 
     paddingHorizontal: 20, 
+  },
+  textBold: {
+    fontWeight: 'bold',
   },
   scrollViewContent: {
     flexGrow: 1,
@@ -170,6 +205,10 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 16,
     color: '#333',
+  },
+  textCenter: {
+    textAlign: 'center',
+    flex: 1,
   },
   icon: {
     width: 24,
@@ -199,7 +238,7 @@ const styles = StyleSheet.create({
     margin: 20,
     marginTop: 40,
     backgroundColor: 'white',
-    borderRadius: 20,
+    borderRadius: 15,
     padding: 0, 
     alignItems: 'center',
     maxHeight: '85%', 
