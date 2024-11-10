@@ -4,6 +4,7 @@ import axios from 'axios';
 import { Spinner, Button, Icon, CheckIcon, Textarea, VStack, TextareaInput, AlertCircleIcon, Heading, Center, RadioGroup, HStack, 
   Radio, RadioIndicator, RadioIcon, CircleIcon, RadioLabel, Card} from "@gluestack-ui/themed";
 import { address_function_api } from '../diverse.js';
+import CustomButton from '../CustomElements/CustomButton.js';
 
 const CheckboxActivities = (props) => {
 
@@ -18,7 +19,9 @@ const CheckboxActivities = (props) => {
         { method: 'createActivities', city, country }
       ).then((data) => {
         if (data.data.type) {
+          console.log(data?.data?.data);
           let arVariants = Object.values(JSON.parse(data?.data?.data));
+          console.log(arVariants);
           props.setCheckbox(arVariants.map((a) => {
             let word = a[0]?.toUpperCase() + a.slice(1, a.length);
             return { selected: false, category: word };
@@ -134,12 +137,9 @@ const CheckboxActivities = (props) => {
                   </View>
 
                 </ScrollView>
-                <View style={styles.buttonContainer}>
-                  <Button style={[styles.button, styles.shadow]}
-                    onPress={() => { props.closeCheckbox() }}>
-                    <Text style={styles.buttonText}>Close</Text>
-                  </Button>
-                </View>
+
+                <CustomButton name={'Close'} func={props.closeCheckbox}/>
+              
               </View>
               : 
               <View style={styles.spinnerContainer}>
@@ -252,37 +252,5 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 5,
     paddingTop: 10,
-  },
-  shadow: {
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 4,
-    },
-    shadowOpacity: 0.3,
-    shadowRadius: 5,
-    elevation: 6,
-  },
-  buttonContainer: {
-    marginTop: 20,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  button: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#2196F3',
-    paddingVertical: 12,
-    paddingHorizontal: 20,
-    borderRadius: 8,
-    minWidth: 180,
-    marginVertical: 10,
-  },
-  buttonText: {
-    color: 'white',
-    textAlign: 'center',
-    fontWeight: 'bold',
-    fontSize: 16,
   },
 });
