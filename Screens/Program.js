@@ -49,7 +49,9 @@ const Program = (props) => {
 
   async function getProgramFromAsyncStorage(){
     const program = await getDataFromAsyncStorage("travelProgram");
-    if(!program.type){console.log('aici trebuie sa bag un mesaj de eroare')}
+    if(!program.type){
+      props.addNotification("error", "Unfortunately, we got an system error")
+    }
     if(program?.data?.length){
       setProgram([...program.data])
     }else{

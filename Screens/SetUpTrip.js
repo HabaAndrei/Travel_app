@@ -21,7 +21,6 @@ const SetUpTrip = (props) => {
     }
     const isSelect = checkbox?.find((ob)=>ob.selected === true);
     const wordWithoutSpace = inputActivity?.replaceAll(' ', '');
-    console.log(wordWithoutSpace);
     if(!isSelect && !wordWithoutSpace.length){
       props.addNotification("warning", "To go further, you must choose at least one activity, write what you want to visit in the input");
       return false;

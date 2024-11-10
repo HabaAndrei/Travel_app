@@ -124,7 +124,7 @@ const LogIn = (props) => {
     const email = props.user.email;
     const rezStore = await storeCodeAndEmail(code, email);
     if(!rezStore.type){
-      console.log(rezStore);
+      console.log(rezStore.err);
       props.addNotification('error', "There was a problem sending the code by email");
       return;
     }

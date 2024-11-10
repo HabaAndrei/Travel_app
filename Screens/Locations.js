@@ -81,7 +81,6 @@ const Locations = (props) => {
   }
 
   function pressOnLocations(index_){
-    console.log('se execute', index_);
     setLocations((prev)=>{
       const newAr = prev.map((ob, index)=>{
         if(index === index_){
