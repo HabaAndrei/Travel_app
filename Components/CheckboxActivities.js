@@ -203,8 +203,10 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   text: {
-    fontSize: 16,
     color: '#333',
+    fontSize: 16,
+    fontWeight: 'bold',
+    textAlign: 'center',
   },
   textCenter: {
     textAlign: 'center',
