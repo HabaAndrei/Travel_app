@@ -7,7 +7,16 @@ const CustomButton = (props) => {
   return (
     <View style={styles.buttonContainer}>
       <Button style={[styles.button, styles.shadow]}
-      onPress={()=>props.func()}
+        onPress={()=>{
+          console.log('este in press')
+          if(JSON.stringify(props?.paramFunc)?.length && typeof(props?.paramFunc) != 'undefined'){
+            console.log('ave, aparam', props.paramFunc)
+            return props.func(props.paramFunc);
+          }else{
+            console.log('nu avem param')
+            return props.func()
+          }
+        }}
       >
         <Text style={styles.buttonText}>{props.name}</Text>
         {props.icon ? 

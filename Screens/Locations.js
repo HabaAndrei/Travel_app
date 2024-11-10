@@ -10,6 +10,7 @@ import { Card, HStack, Heading, Center, Text, Switch, Button, Link, Divider, Lin
 import NavbarProgram from '../Components/NavbarProgram';
 import ImageCarousel from '../Components/ImageCarousel';
 import CardDatePicker from '../Components/CardDatePicker';
+import CustomButton from '../CustomElements/CustomButton.js';
 
 
 const Locations = (props) => {
@@ -80,6 +81,7 @@ const Locations = (props) => {
   }
 
   function pressOnLocations(index_){
+    console.log('se execute', index_);
     setLocations((prev)=>{
       const newAr = prev.map((ob, index)=>{
         if(index === index_){
@@ -231,24 +233,14 @@ const Locations = (props) => {
                         <Switch value={location.selected_full_tour} />
                       </Pressable> : <Text></Text>
                       }
-                      <View style={styles.buttonContainer}>
-                        <Button style={[styles.button, styles.shadow]}
-                          onPress={() => pressOnLocations(index)}>
-                          <Text style={styles.buttonText}> 
-                            {location.selected ? 'Remove location from your visit' : 'Pick location for your visit'}
-                          </Text>
-                        </Button>
-                      </View>
+                      <CustomButton name={location.selected ? 'Remove location from your visit' : 'Pick location for your visit'}
+                        func={pressOnLocations} paramFunc={index}
+                      />
                     </View>
                     :
-                    <View style={styles.buttonContainer}>
-                      <Button style={[styles.button, styles.shadow]}
-                        onPress={() => pressOnLocations(index)}>
-                        <Text style={styles.buttonText}> 
-                          {location.selected ? 'Remove location from your visit' : 'Pick location for your visit'}
-                        </Text>
-                      </Button>
-                    </View>
+                    <CustomButton name={location.selected ? 'Remove location from your visit' : 'Pick location for your visit'}
+                      func={pressOnLocations} paramFunc={index}
+                    />
                   }
                 </Center>
               </Card>
@@ -257,7 +249,6 @@ const Locations = (props) => {
             <CardDatePicker dateTo={dateTo} setDateTo={setDateTo} dateFrom={dateFrom} setDateFrom={setDateFrom}
             datePickerVisibility={datePickerVisibility} setDatePickerVisibility={setDatePickerVisibility}   />
 
-    
             <View> 
               <HStack h="$10" justifyContent="center" alignItems="center">
                 <HStack alignItems="center"  >
@@ -279,14 +270,11 @@ const Locations = (props) => {
       }
     </ScrollView>
   </SafeAreaView>
-
   )
 }
-
 export default Locations
 
 const styles = StyleSheet.create({
-
   viewButtons: {
     alignItems: 'center',
     justifyContent: 'center',
@@ -301,26 +289,6 @@ const styles = StyleSheet.create({
     marginRight: 10,
     fontSize: 16,
     color: '#333',
-  },
-  buttonPress: {
-    backgroundColor: '#2196F3',
-    padding: 10,
-    borderRadius: 5,
-    height: 40,
-    width: 200,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 20,
-  },
-  text: {
-    color: 'white',
-    fontSize: 16,
-    textAlign: 'center',
-  },
-  buttonView: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
   },
   cardPressable: {
     borderRadius: 10,
@@ -346,43 +314,6 @@ const styles = StyleSheet.create({
     color: '#333', 
     fontSize: 14,
     lineHeight: 20,
-  },
-  shadow: {
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 4,
-    },
-    shadowOpacity: 0.3,
-    shadowRadius: 5,
-    elevation: 6,
-  },
-  buttonContainer: {
-    marginTop: 10,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  button: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#2196F3',
-    paddingVertical: 12,
-    paddingHorizontal: 20,
-    borderRadius: 8,
-    minWidth: 180,
-    marginVertical: 10,
-  },
-  buttonText: {
-    color: 'white',
-    textAlign: 'center',
-    fontWeight: 'bold',
-    fontSize: 16,
-  },
-  icon: {
-    color: 'white',
-    marginRight: 8,
-    marginLeft: 3
   },
 });
 
