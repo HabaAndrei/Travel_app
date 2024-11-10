@@ -4,6 +4,7 @@ import { Card, Icon, CheckIcon, ArrowRightIcon, Heading, ScrollView, Button} fro
 import SearchDestination from '../Components/SearchDestination';
 import CheckboxActivities from '../Components/CheckboxActivities';
 import NavbarProgram from '../Components/NavbarProgram';
+import CustomButton from '../CustomElements/CustomButton.js';
 
 const SetUpTrip = (props) => {
 
@@ -90,21 +91,17 @@ const SetUpTrip = (props) => {
           isLocalPlaces={isLocalPlaces} setLocalPlaces={setLocalPlaces}
         /> 
 
-        <View style={styles.buttonContainer}>
+        <CustomButton name={'Choose Activities'} icon={CheckIcon} func={openModalActivities} />
+
+        {/* <View style={styles.buttonContainer}>
           <Button style={[styles.button, styles.shadow]}
             onPress={openModalActivities}>
             <Text style={styles.buttonText}>Choose Activities</Text>
             <Icon as={CheckIcon} style={styles.icon} />
           </Button>
-        </View>
+        </View> */}
 
-        <View style={styles.buttonContainer}>
-          <Button style={[styles.button, styles.shadow]}
-            onPress={goToProgramPage}>
-            <Text style={styles.buttonText}>Continue to see locations</Text>
-            <Icon as={ArrowRightIcon} style={styles.icon} />
-          </Button>
-        </View>
+        <CustomButton name={'Continue to see locations'} icon={ArrowRightIcon} func={goToProgramPage} />
 
 
       </ScrollView>
@@ -133,7 +130,7 @@ const styles = StyleSheet.create({
   button: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#2196F3',
+    backgroundColor: '#0B3D91',
     paddingVertical: 12,
     paddingHorizontal: 20,
     borderRadius: 8,

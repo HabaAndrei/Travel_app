@@ -93,13 +93,13 @@ const App = () => {
       <NavigationContainer>
         <Stack.Navigator>
           <Stack.Screen
-            name="UserSettings"
-            component={UserSettingsScreen}
+            name="SetUpTrip"
+            component={SetUpTripScreen}
             options={{headerShown: false}}
           />
           <Stack.Screen
-            name="SetUpTrip"
-            component={SetUpTripScreen}
+            name="UserSettings"
+            component={UserSettingsScreen}
             options={{headerShown: false}}
           />
           <Stack.Screen

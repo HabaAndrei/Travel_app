@@ -20,7 +20,8 @@ const CheckboxActivities = (props) => {
         if (data.data.type) {
           let arVariants = Object.values(JSON.parse(data?.data?.data));
           props.setCheckbox(arVariants.map((a) => {
-            let word = a[0].toUpperCase() + a.slice(1, a.length);
+            console.log(a);
+            let word = a[0]?.toUpperCase() + a.slice(1, a.length);
             return { selected: false, category: word };
           }));
         } else {

@@ -30,9 +30,9 @@ const NavbarProgram = (props) => {
       >
         <Text style={[
           styles.navButtonText,
-          props.name === 'SetUpTrip' && styles.activeText
+          props.name === 'SetUpTrip' ? styles.activeText : styles.inactiveText // Schimbăm culoarea textului
         ]}>Set up trip</Text>
-        <Text style={styles.stepText}>Step 1</Text>
+        <Text style={props.name === 'SetUpTrip' ? styles.activeStepText : styles.stepText}>Step 1</Text>
       </Pressable>
 
       <Pressable
@@ -45,9 +45,9 @@ const NavbarProgram = (props) => {
       >
         <Text style={[
           styles.navButtonText,
-          props.name === 'Locations' && styles.activeText
+          props.name === 'Locations' ? styles.activeText : styles.inactiveText // Schimbăm culoarea textului
         ]}>Locations</Text>
-        <Text style={styles.stepText}>Step 2</Text>
+        <Text style={props.name === 'Locations' ? styles.activeStepText : styles.stepText}>Step 2</Text>
       </Pressable>
 
       <Pressable
@@ -60,9 +60,9 @@ const NavbarProgram = (props) => {
       >
         <Text style={[
           styles.navButtonText,
-          props.name === 'Program' && styles.activeText
+          props.name === 'Program' ? styles.activeText : styles.inactiveText // Schimbăm culoarea textului
         ]}>Program</Text>
-        <Text style={styles.stepText}>Step 3</Text>
+        <Text style={props.name === 'Program' ? styles.activeStepText : styles.stepText}>Step 3</Text>
       </Pressable>
     </View>
   );
@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 10,
     paddingHorizontal: 15,
-    backgroundColor: '#e0e0e0',
+    backgroundColor: '#0B3D91', 
     borderRadius: 10,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
@@ -93,23 +93,32 @@ const styles = StyleSheet.create({
   },
   navButtonText: {
     fontSize: 16,
-    color: '#333',
   },
   stepText: {
     fontSize: 12,
-    color: '#666',
+    color: '#FFFFFF', 
+    marginTop: 4,
+  },
+  activeStepText: {
+    fontSize: 12,
+    color: '#000000', 
     marginTop: 4,
   },
   activeButton: {
-    backgroundColor: '#007AFF',
+    backgroundColor: '#007AFF', 
     shadowColor: '#007AFF',
     shadowOpacity: 0.3,
   },
   activeText: {
-    color: '#fff',
+    color: '#000000', 
+    fontWeight: 'bold',
+  },
+  inactiveText: {
+    color: '#FFFFFF', 
     fontWeight: 'bold',
   },
   pressedButton: {
     opacity: 0.85,
   },
 });
+
