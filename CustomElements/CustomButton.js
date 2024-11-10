@@ -8,12 +8,9 @@ const CustomButton = (props) => {
     <View style={styles.buttonContainer}>
       <Button style={[styles.button, styles.shadow]}
         onPress={()=>{
-          console.log('este in press')
           if(JSON.stringify(props?.paramFunc)?.length && typeof(props?.paramFunc) != 'undefined'){
-            console.log('ave, aparam', props.paramFunc)
             return props.func(props.paramFunc);
           }else{
-            console.log('nu avem param')
             return props.func()
           }
         }}

@@ -2,6 +2,7 @@ import { StyleSheet, View, Pressable, Modal } from 'react-native'
 import React, {useEffect, useState} from 'react'
 import { Input, InputField, Button, Heading, ButtonText, Text } from '@gluestack-ui/themed';
 import {reAuth} from '../firebase.js';
+import CustomButton from '../CustomElements/CustomButton.js';
 
 
 const ModalReAuth = (props) => {
@@ -10,8 +11,10 @@ const ModalReAuth = (props) => {
     const [err, setErr] = useState('');
 
     async function reauthenticate(){
-        console.log('se executa');
-        if(!password.length)return;
+        if(!password.length){
+            setErr('Please add your password');
+            return;
+        }
         const rez = await reAuth(password);
         if(!rez.type){
             setErr('The password is not correct');
@@ -51,18 +54,12 @@ const ModalReAuth = (props) => {
                         />
                     </Input>
                     {err ? <Text color="$text500" lineHeight="$xs" style={{marginTop: 5, color: 'red'}}> {err} </Text> : <Text></Text>}
-                    <Button onPress={reauthenticate} style={{marginTop: 10}} >
-                        <ButtonText>
-                            Reauthenticate
-                        </ButtonText>
-                    </Button>
+                   
+                    <CustomButton name={'Reauthenticate'} func={reauthenticate} />
+                
                 </View>
-                <View style={{marginTop: 10}} >
-                    <Pressable onPress={closeModal}
-                        style={[styles.button, styles.buttonClose]}>
-                        <Text style={styles.textStyle}>Close</Text>
-                    </Pressable>
-                </View>
+                
+                <CustomButton name={'Close'} func={closeModal} />
             </View>
                 
         </Modal>
@@ -94,18 +91,5 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.25,
         shadowRadius: 4,
         elevation: 5,
-    },
-    button: {
-        borderRadius: 20,
-        padding: 10,
-        elevation: 2,
-    },
-    buttonClose: {
-        backgroundColor: '#2196F3',
-    },
-    textStyle: {
-        color: 'white',
-        fontWeight: 'bold',
-        textAlign: 'center',
     },
 })

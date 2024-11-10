@@ -93,6 +93,11 @@ const App = () => {
       <NavigationContainer>
         <Stack.Navigator>
           <Stack.Screen
+            name="UserSettings"
+            component={UserSettingsScreen}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
             name="Locations"
             component={LocationsScreen}
             options={{headerShown: false}}
@@ -100,11 +105,6 @@ const App = () => {
           <Stack.Screen
             name="SetUpTrip"
             component={SetUpTripScreen}
-            options={{headerShown: false}}
-          />
-          <Stack.Screen
-            name="UserSettings"
-            component={UserSettingsScreen}
             options={{headerShown: false}}
           />
           <Stack.Screen

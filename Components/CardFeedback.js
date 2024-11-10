@@ -3,6 +3,7 @@ import React, {useEffect, useState} from 'react'
 import { Card, Heading, Select, SelectInput, Icon, ChevronDownIcon, SelectIcon, SelectItem, ButtonText, Button, 
   SelectTrigger, SelectPortal, SelectBackdrop, SelectContent, SelectDragIndicator, SelectDragIndicatorWrapper, TextareaInput, Textarea  } from '@gluestack-ui/themed';
 import {store_feedback} from '../firebase.js';
+import CustomButton from '../CustomElements/CustomButton.js';
 
 const CardFeedback = (props) => {
 
@@ -73,9 +74,8 @@ const CardFeedback = (props) => {
           </Textarea>
         </View>
 
-        <Button onPress={sendFeedback} >
-          <ButtonText>Send feedback</ButtonText>
-        </Button>
+        <CustomButton name={'Send feedback'} func={sendFeedback}/>
+
 
       </Card>
     </View>

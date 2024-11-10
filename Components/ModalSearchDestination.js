@@ -117,9 +117,7 @@ const ModalSearchDestination = (props) => {
                                 <Spinner color="$indigo600" />
                             </View>
                         }
-                        <CustomButton name={'Close'}
-                            func={closeModal}
-                        />
+                        <CustomButton name={'Close'} func={closeModal} />
                     </View>
                 </View>
             </Modal>
@@ -140,7 +138,7 @@ const styles = StyleSheet.create({
         marginTop: 40,
         backgroundColor: 'white',
         borderRadius: 15,
-        padding: 20,  // Added padding to create space inside the modal, like in CheckboxActivities
+        padding: 20,  
         alignItems: 'center',
         shadowColor: '#000',
         shadowOffset: {
