@@ -8,7 +8,7 @@ import NavbarProgram from '../Components/NavbarProgram';
 const SetUpTrip = (props) => {
 
   const [checkBoxActivities, setCheckBoxActivities] = useState({isOpen: false, city: '', country: ''})
-  const [dataDestination, setDataDestination] = useState({country: 'France', city: 'Paris'});
+  const [dataDestination, setDataDestination] = useState({country: '', city: ''});
   const [checkbox, setCheckbox] = useState([]);
   const [inputActivity, setInputActivity] = useState('');
   const [isLocalPlaces, setLocalPlaces] = useState('false');
@@ -19,7 +19,7 @@ const SetUpTrip = (props) => {
       return false;
     }
     const isSelect = checkbox?.find((ob)=>ob.selected === true);
-    const wordWithoutSpace = inputActivity?.replace(' ', '');
+    const wordWithoutSpace = inputActivity?.replaceAll(' ', '');
     console.log(wordWithoutSpace);
     if(!isSelect && !wordWithoutSpace.length){
       props.addNotification("warning", "To go further, you must choose at least one activity, write what you want to visit in the input");
@@ -34,19 +34,19 @@ const SetUpTrip = (props) => {
     ///////////////////////////////////////////////////
     // decomentez si sterg in prod =>>>>>>>>
 
-    // if(!verifyDestinationRequest())return;
-    // let newCheckbox = [];
-    // checkbox.forEach((ob)=>{if(ob.selected)newCheckbox.push(ob.category)}); 
+    if(!verifyDestinationRequest())return;
+    let newCheckbox = [];
+    checkbox.forEach((ob)=>{if(ob.selected)newCheckbox.push(ob.category)}); 
     
-    // props.navigation.navigate('Locations', {type: 'getAllDataAboutLocations' , 
-    //   country: dataDestination.country, city: dataDestination.city, checkbox: newCheckbox, input: inputActivity, isLocalPlaces})
+    props.navigation.navigate('Locations', {type: 'getAllDataAboutLocations' , 
+      country: dataDestination.country, city: dataDestination.city, checkbox: newCheckbox, input: inputActivity, isLocalPlaces})
 
     ///////////////////////////////////////////////////////////
-    const city = 'Paris';
-    const country = 'France';
-    const checkbox = ["History and heritage", "Museums and exhibitions"];
-    // const checkbox = [];
-    props.navigation.navigate('Locations', {type: 'getAllDataAboutLocations', country, city, checkbox, input: inputActivity, isLocalPlaces})
+    // const city = 'Paris';
+    // const country = 'France';
+    // const checkbox = ["History and heritage", "Museums and exhibitions"];
+    // // const checkbox = [];
+    // props.navigation.navigate('Locations', {type: 'getAllDataAboutLocations', country, city, checkbox, input: inputActivity, isLocalPlaces})
 
     // decomentez si sterg in prod <<<<<<===========
     /////////////////////////////////////////////////////////////////////

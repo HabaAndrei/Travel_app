@@ -98,13 +98,13 @@ const App = () => {
             options={{headerShown: false}}
           />
           <Stack.Screen
-            name="MyTrips"
-            component={MyTripsScreen}
+            name="SetUpTrip"
+            component={SetUpTripScreen}
             options={{headerShown: false}}
           />
           <Stack.Screen
-            name="SetUpTrip"
-            component={SetUpTripScreen}
+            name="MyTrips"
+            component={MyTripsScreen}
             options={{headerShown: false}}
           />
           <Stack.Screen

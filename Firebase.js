@@ -220,9 +220,21 @@ async function verifyEmailVerifiedDB(uid){
   return rezFin;
 }
 
+async function store_feedback(feedback, feedbackCategory){
+  let rezFin = {};
+  try{
+    const {uid} = auth.currentUser;
+    await addDoc(collection(db, "feedback"), {uid, feedback, feedbackCategory});
+    rezFin = {type: true};
+  }catch(err){
+    rezFin = {type: false, err};
+  }
+  return rezFin;
+}
+
 export {db, auth, signOutUser, deleteTheUser, addProgramIntoDb, createUserEmailPassword, signInUserEmailPassword, 
   getPlansFromDbWithUid, forgotPassword, updateProgram, storeCodeAndEmail, verifyCodeDB, updateEmailVerificationDB, 
-  verifyEmailVerifiedDB, reAuth
+  verifyEmailVerifiedDB, reAuth, store_feedback
 };
 
 

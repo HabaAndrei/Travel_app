@@ -46,7 +46,7 @@ const UserSettings = (props) => {
 
         <ModalReAuth  isModalVisibleReAuth={isModalVisibleReAuth} setModalVisibleReAuth={setModalVisibleReAuth} />
 
-        <CardFeedback/>
+        <CardFeedback addNotification={props.addNotification} />
 
         <View style={{ alignItems: 'center' }}>
           <VStack space="2xl">  
