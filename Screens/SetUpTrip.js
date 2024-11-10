@@ -93,16 +93,7 @@ const SetUpTrip = (props) => {
 
         <CustomButton name={'Choose Activities'} icon={CheckIcon} func={openModalActivities} />
 
-        {/* <View style={styles.buttonContainer}>
-          <Button style={[styles.button, styles.shadow]}
-            onPress={openModalActivities}>
-            <Text style={styles.buttonText}>Choose Activities</Text>
-            <Icon as={CheckIcon} style={styles.icon} />
-          </Button>
-        </View> */}
-
         <CustomButton name={'Continue to see locations'} icon={ArrowRightIcon} func={goToProgramPage} />
-
 
       </ScrollView>
     </SafeAreaView>
@@ -120,33 +111,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.3,
     shadowRadius: 5,
     elevation: 6,
-  },
-  buttonContainer: {
-    marginTop: 20,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  button: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#0B3D91',
-    paddingVertical: 12,
-    paddingHorizontal: 20,
-    borderRadius: 8,
-    minWidth: 180,
-    marginVertical: 10,
-  },
-  buttonText: {
-    color: 'white',
-    textAlign: 'center',
-    fontWeight: 'bold',
-    fontSize: 16,
-  },
-  icon: {
-    color: 'white',
-    marginRight: 8,
-    marginLeft: 3
   },
 });
 
