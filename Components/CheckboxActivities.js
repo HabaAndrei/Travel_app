@@ -19,9 +19,9 @@ const CheckboxActivities = (props) => {
         { method: 'createActivities', city, country }
       ).then((data) => {
         if (data.data.type) {
-          console.log(data?.data?.data);
-          let arVariants = Object.values(JSON.parse(data?.data?.data));
-          console.log(arVariants);
+          const parsedDate = JSON.parse(data?.data?.data);
+          const {activities} = parsedDate;
+          let arVariants = Object.values(activities);
           props.setCheckbox(arVariants.map((a) => {
             let word = a[0]?.toUpperCase() + a.slice(1, a.length);
             return { selected: false, category: word };
@@ -135,7 +135,6 @@ const CheckboxActivities = (props) => {
                       </RadioGroup>
                     </Center>
                   </View>
-
                 </ScrollView>
 
                 <CustomButton name={'Close'} func={props.closeCheckbox}/>

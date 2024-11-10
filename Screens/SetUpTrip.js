@@ -78,7 +78,8 @@ const SetUpTrip = (props) => {
             Search your destination
           </Heading>
           <SearchDestination
-            setCheckBoxActivities={setCheckBoxActivities}  addNotification={props.addNotification}
+            setCheckBoxActivities={setCheckBoxActivities}  setCheckbox={setCheckbox}
+            addNotification={props.addNotification}
             dataDestination={dataDestination} setDataDestination={setDataDestination}
           />
         </Card>

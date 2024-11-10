@@ -7,6 +7,8 @@ import CustomButton from '../CustomElements/CustomButton.js';
 
 const ModalSearchDestination = (props) => {
 
+    const [isMessageNotFound, setMessageNotFound] = useState(false);
+
     useEffect(() => {
         if (!props.inputCountry.length) { return };
         props.setModalVisible({ type: true, data: 'country' });
@@ -16,6 +18,7 @@ const ModalSearchDestination = (props) => {
             "value": "country",
             "country": props.inputCountry
         }).then((data) => {
+            openMessageNotFound(data.data);        
             const list = data.data?.map((country) => { return { place: country, type: "country" } });
             props.setSuggestions(list);
         }).catch((err) => {
@@ -34,6 +37,7 @@ const ModalSearchDestination = (props) => {
             "value": "city",
             "country": props.dataDestination.country
         }).then((data) => {
+            openMessageNotFound(data.data);
             const list = data.data?.map((country) => { return { place: country, type: "city" } });
             props.setSuggestions(list);
         }).catch((err) => {
@@ -41,6 +45,15 @@ const ModalSearchDestination = (props) => {
             props.addNotification("warning", "System error occurred. Please try again later.");
         });
     }, [props.inputCity]);
+
+    function openMessageNotFound(data){
+        console.log(data);
+        if(!data?.length){
+            setMessageNotFound(true);
+        }else if(isMessageNotFound && data?.length){
+            setMessageNotFound(false);
+        }
+    }
 
     function selectDestination(item) {
         if (item.type === "country") {
@@ -54,9 +67,10 @@ const ModalSearchDestination = (props) => {
                 return { ...ob, city: item.place };
             });
             props.setInputCity('');
+            props.setCheckBoxActivities((prev) => { return { ...prev, city: item.place } });
         }
         props.setModalVisible({ type: false, data: '' });
-        props.setCheckBoxActivities((prev) => { return { ...prev, city: item.place } });
+        props.setCheckbox([]);
         return;
     }
 
@@ -99,20 +113,24 @@ const ModalSearchDestination = (props) => {
                         }
 
                         {props.suggestions.length ?
-                            <FlatList
-                                data={props.suggestions}
-                                keyExtractor={(item, index) => index.toString()}
-                                renderItem={({ item }) => (
-                                    <Pressable style={styles.suggestion}
-                                        onPress={() => selectDestination(item)}>
-                                        <Text style={styles.suggestionText}>
-                                            {item.place}
-                                        </Text>
-                                    </Pressable>
-                                )}
-                                style={styles.suggestionsList}
-                            />
-                            :
+                        <FlatList
+                            data={props.suggestions}
+                            keyExtractor={(item, index) => index.toString()}
+                            renderItem={({ item }) => (
+                                <Pressable style={styles.suggestion}
+                                    onPress={() => selectDestination(item)}>
+                                    <Text style={styles.suggestionText}>
+                                        {item.place}
+                                    </Text>
+                                </Pressable>
+                            )}
+                            style={styles.suggestionsList}
+                        />
+                        : isMessageNotFound && !props.suggestions.length ? 
+                            <View style={styles.spinnerContainer}>
+                                <Text>This location was not found</Text>
+                            </View>
+                        :
                             <View style={styles.spinnerContainer}>
                                 <Spinner color="$indigo600" />
                             </View>

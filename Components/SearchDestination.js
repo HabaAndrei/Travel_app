@@ -14,7 +14,7 @@ const SearchDestination = (props) => {
   return (
     <View>
       <ModalSearchDestination
-        setCheckBoxActivities={props.setCheckBoxActivities}
+        setCheckBoxActivities={props.setCheckBoxActivities} setCheckbox={props.setCheckbox}
         modalVisible={modalVisible} setModalVisible={setModalVisible}
         dataDestination={props.dataDestination} setDataDestination={props.setDataDestination}
         inputCity={inputCity} setInputCity={setInputCity}
