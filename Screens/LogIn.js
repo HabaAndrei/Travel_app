@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Pressable, ScrollView, SafeAreaView } from 'react-native'
+import { StyleSheet, Text, View, Pressable, ScrollView, SafeAreaView, ImageBackground } from 'react-native'
 import React, {useState } from 'react'
 import { Input, InputField, InputIcon, InputSlot, VStack, HStack, Divider, Button, 
     Center, Heading, EyeIcon, ButtonText, 
@@ -165,6 +165,8 @@ const LogIn = (props) => {
 
   return (
     <SafeAreaView style={{flex: 1}} >
+
+      <ImageBackground   style={styles.backgroundImage}  source={require('../img/background.jpg')}>
 
       <ScrollView>
 
@@ -342,6 +344,7 @@ const LogIn = (props) => {
         </View>
         }
       </ScrollView>
+      </ImageBackground>
     </SafeAreaView>
 
   )
@@ -350,6 +353,13 @@ const LogIn = (props) => {
 export default LogIn
 
 const styles = StyleSheet.create({
+  backgroundImage: {
+    flex: 1,
+    width: '100%',
+    height: '100%',
+    resizeMode: 'cover',
+    justifyContent: 'center',
+  },
   shadow:{
     shadowColor: '#000',
     shadowOffset: {
