@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import { View, Text, StyleSheet, SafeAreaView, } from 'react-native';
-import { Card, Icon, CheckIcon, ArrowRightIcon, Heading, ScrollView, Button} from '@gluestack-ui/themed';
+import { Card, Icon, CheckIcon, ArrowRightIcon, Heading, ScrollView, Button, Center} from '@gluestack-ui/themed';
 import SearchDestination from '../Components/SearchDestination';
 import CheckboxActivities from '../Components/CheckboxActivities';
 import NavbarProgram from '../Components/NavbarProgram';
@@ -72,6 +72,10 @@ const SetUpTrip = (props) => {
 
         <NavbarProgram name={props.route.name} navigation={props.navigation} />
 
+        <Center>
+          <Heading>Plan your next trip</Heading>
+        </Center>
+        
         <Card p="$5" borderRadius="$lg"  m="$3" maxWidth={400} style={styles.shadow}>
           <Heading size="md" fontFamily="$heading" mb="$4">
             Search your destination
