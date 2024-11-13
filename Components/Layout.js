@@ -1,20 +1,23 @@
 import React, {useState, useEffect} from 'react';
-import { View, Text, StyleSheet, ScrollView, Pressable, SafeAreaView } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Pressable, SafeAreaView, Platform } from 'react-native';
 import { Icon, GlobeIcon, CalendarDaysIcon, SettingsIcon, MenuIcon } from "@gluestack-ui/themed";
 import Notification from './Notification';
 import ModalDelete from './ModalDelete';
 import uuid from 'react-native-uuid';
 import LogIn from '../Screens/LogIn.js';
 import { StatusBar } from 'expo-status-bar';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 
 const Layout = ({ children, navigation, route, user, setUser}) => {
 
+  const insets = useSafeAreaInsets();
   const [modalDelete, setModalDelete] = useState(false);
   const [notification, setNotification] = useState([]);
   const [deletePromise, setDeletePromise] = useState(null);
 
-  
+
+
   function addNotification(type, mes){
     setNotification((prev)=>{
       return [...prev, {id: uuid.v4().slice(0, 5), type, mes}];
@@ -44,10 +47,12 @@ const Layout = ({ children, navigation, route, user, setUser}) => {
     });
   };
 
-  
   return (
     <View style={styles.container}>
-      <StatusBar style="dark" />
+      {/* backgroundColor for statusBar */}
+      <View style={{ height: insets.top, backgroundColor: '#040404',}} />
+      
+      <StatusBar style="light"/>  
 
       <ModalDelete   modalDelete={modalDelete} setModalDelete={setModalDelete} handleModalResponse={handleModalResponse} />
 
@@ -90,27 +95,31 @@ const Layout = ({ children, navigation, route, user, setUser}) => {
           </Pressable>
          
         </ScrollView>
-      </View> : <View/> 
+      </View> : <View
+        style={styles.footerContainerClear}
+      /> 
       }
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+
   container: {
     flex: 1,
     justifyContent: 'space-between',
-    // paddingTop: 50,
     backgroundColor: '#AAAABAD', 
   },
   content: {
     flex: 1,
   },
-
-
   footerContainer: {
     height: 80, 
     paddingBottom: 20, 
+    backgroundColor: '#040404',
+  },
+  footerContainerClear: {
+    height: 50, 
     backgroundColor: '#040404',
   },
   footer: {

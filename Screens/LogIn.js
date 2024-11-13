@@ -175,44 +175,46 @@ const LogIn = (props) => {
         {props.user ? 
         <View>
           {!props.user?.emailVerified_code ? 
-            <View>
-              <Center>
-                <Heading color="$text900" lineHeight="$md">
-                  The next step is to verify your 
-                </Heading>
-                <Heading>
-                  email address.
-                </Heading>
-              </Center>
+            <View style={{ marginBottom: 40, marginRight: 20,  marginLeft: 20}} >
+              <Card p="$5" borderRadius="$lg"  m="$3" style={styles.shadow} maxWidth={400} >
+                <Center>
+                  <Heading color="$text900" lineHeight="$md">
+                    The next step is to verify your 
+                  </Heading>
+                  <Heading>
+                    email address.
+                  </Heading>
+                </Center>
 
-              <Button onPress={sendCodeToEmail} size="xl" style={{margin: 20}} >
-                <ButtonText>Send code to email</ButtonText>
-              </Button>
+                <Button onPress={sendCodeToEmail} size="l" style={{margin: 20}} >
+                  <ButtonText>Send code to email</ButtonText>
+                </Button>
 
-              <VStack space="xs" style={{margin: 20}} >
-                <Text color="$text500" lineHeight="$xs">
-                  Enter the code received via email
-                </Text>
-                <Input >
-                  <InputField
-                  type="text"
-                  value={codeVerify}
-                  onChangeText={(text) => setCodeVerify(text)}
-                  />
-                </Input>
-              </VStack>
-
-              <Button onPress={verifyCode} size="xl" style={{margin: 20}} >
-                <ButtonText>Verify code</ButtonText>
-              </Button>
+                <VStack   style={{margin: 20}} >
+                  <Text color="$text500" lineHeight="$xs">
+                    Enter the code received via email
+                  </Text>
+                  <Input >
+                    <InputField
+                    type="text"
+                    value={codeVerify}
+                    onChangeText={(text) => setCodeVerify(text)}
+                    />
+                  </Input>
+                </VStack>
+                
+                <Button ml="auto" onPress={verifyCode}>
+                  <ButtonText>Verify code</ButtonText>
+                </Button>
+              </Card>
           
               <VStack space="2xl">  
-                <HStack  px="$3"  h="$8"  rounded="$sm"  borderWidth="$2"  borderColor="$backgroundLight300"  alignItems="center"  justifyContent="center"   $dark-borderColor="$backgroundDark700"  >
-                  <Button onPress={()=>signOut()} variant="link" size="xl">
+                <HStack  px="$3"  h="$8"  rounded="$sm"      alignItems="center"  justifyContent="center"  >
+                  <Button onPress={()=>signOut()} size="l">
                     <ButtonText>Log out</ButtonText>
                   </Button>
-                  <Divider orientation="vertical" h="50%" mx="$2.5" style={{margin: 20}} />
-                  <Button  onPress={()=>deleteUser()} variant="link" size="xl">
+                  <Divider  w={20} variant="horizontal" style={{margin: 10}} />
+                  <Button  onPress={()=>deleteUser()} size="l">
                     <ButtonText>Delete accout</ButtonText>
                   </Button>          
                 </HStack>
@@ -225,12 +227,12 @@ const LogIn = (props) => {
         :
         <View >
           {signInOrUp ? 
-            <View  style={{marginBottom: 50, margin: 20}} >
+            <View  style={{ marginBottom: 40, marginRight: 20,  marginLeft: 20}} >
               <Card p="$5" borderRadius="$lg"  m="$3" style={styles.shadow} maxWidth={400} >
 
                 {isForgotPassword ? 
               
-                  <VStack space="xs">
+                  <VStack  >
                     <Text color="$text500" lineHeight="$xs">
                       Write the email to which you want to reset the password
                     </Text>
@@ -251,7 +253,7 @@ const LogIn = (props) => {
                       {signInOrUp === "signup" ? "Create accout" :  "Log in"  }
                     </Heading>
                       {signInOrUp === "signup" ? 
-                        <VStack space="xs">
+                        <VStack  >
                           <Text color="$text500" lineHeight="$xs">
                             First name
                           </Text>
@@ -265,7 +267,7 @@ const LogIn = (props) => {
                         </VStack> : <View></View>
                       }  
                       {signInOrUp === "signup" ? 
-                        <VStack space="xs">
+                        <VStack  >
                           <Text color="$text500" lineHeight="$xs">
                             Second name
                           </Text>
@@ -278,7 +280,7 @@ const LogIn = (props) => {
                           </Input>
                         </VStack> : <View></View>
                       }
-                    <VStack space="xs">
+                    <VStack>
                       <Text color="$text500" lineHeight="$xs">
                         Email
                       </Text>
@@ -290,24 +292,26 @@ const LogIn = (props) => {
                         />
                       </Input>
                     </VStack>
-                    <VStack space="xs">
-                        <Text color="$text500" lineHeight="$xs"> 
-                            Password 
-                            {signInOrUp === "signup" ? "The password must have at least seven characters, two of which must be numbers" : ""}
-                        </Text>
-                        <Input textAlign="center">
-                          <InputField
-                          type={inputPassword.showState ? "text" : "password"}
-                          value={inputPassword.input}
-                          onChangeText={(text) => setInputPassword({ ...inputPassword, input: text })}
-                          />
-                          <InputSlot pr="$3" onPress={() => setInputPassword(prev => ({ ...prev, showState: !prev.showState }))}>
-                          <InputIcon
-                              as={inputPassword.showState ? EyeIcon : EyeOffIcon}
-                              color="$darkBlue500"
-                          />
-                          </InputSlot>
+                    <VStack  >
+                      <Text color="$text500" lineHeight="$xs"> 
+                          Password 
+                      </Text>
+                      <Input textAlign="center">
+                        <InputField
+                        type={inputPassword.showState ? "text" : "password"}
+                        value={inputPassword.input}
+                        onChangeText={(text) => setInputPassword({ ...inputPassword, input: text })}
+                        />
+                        <InputSlot pr="$3" onPress={() => setInputPassword(prev => ({ ...prev, showState: !prev.showState }))}>
+                        <InputIcon
+                            as={inputPassword.showState ? EyeIcon : EyeOffIcon}
+                            color="$darkBlue500"
+                        />
+                        </InputSlot>
                       </Input>
+                      <Text color="$text500" lineHeight="$xs"> 
+                        {signInOrUp === "signup" ? "The password must have at least seven characters, two of which must be numbers" : ""}
+                      </Text>
                     </VStack>
                     <Pressable onPress={()=>setIsForgotPassword(true)}>
                       <Text style={{ color: 'blue', textDecorationLine: 'underline', marginTop: 10 }}>
@@ -330,12 +334,36 @@ const LogIn = (props) => {
 
           <View style={{ alignItems: 'center' }}>
             <VStack space="2xl">  
-              <HStack  px="$3"  h="$8"  rounded="$sm"  borderWidth="$2"  borderColor="$backgroundLight300"  alignItems="center"  justifyContent="center"   $dark-borderColor="$backgroundDark700"  >
-                <Button onPress={()=>{setSignInOrUp("signup"); setIsForgotPassword(false);}} variant="link" size="xl">
+              {!signInOrUp ? 
+              <Card p="$5" borderRadius="$lg" m="$3" style={styles.shadow} maxWidth={400}>
+                <Center>
+                  <Heading>
+                    🌍 Welcome to Travel Bot! 🎉
+                  </Heading>
+                  <Text></Text>
+                  <Text>• Ready to explore the world with us? ✈️</Text>
+                  <Text></Text>
+                  <Text>• We're so excited to be part of your adventures!</Text>
+                  <Text></Text>
+                  <Text>
+                    • Discover hidden gems, plan epic trips, and create memories that last a lifetime. ❤️  
+                  </Text>
+                  <Text>
+                    • Join us to unlock personalized travel tips, exclusive deals, and easy booking options.
+                  </Text>
+                  <Text></Text>
+                  <Text>• Let’s kick off your journey! 🌟</Text>
+                </Center>
+              </Card>
+            
+              : <Text></Text>
+              }
+              <HStack  px="$3"  h="$8"  rounded="$sm"      alignItems="center"  justifyContent="center"  >
+                <Button onPress={()=>{setSignInOrUp("signup"); setIsForgotPassword(false);}}  size="l">
                   <ButtonText>Create accout</ButtonText>
                 </Button>
-                <Divider orientation="vertical" h="50%" mx="$2.5" style={{margin: 20}} />
-                <Button  onPress={()=>{setSignInOrUp("signin"); setIsForgotPassword(false)}} variant="link" size="xl">
+                <Divider  w={20} variant="horizontal" style={{margin: 10}} />
+                <Button  onPress={()=>{setSignInOrUp("signin"); setIsForgotPassword(false)}}  size="l">
                   <ButtonText>Log in</ButtonText>
                 </Button>          
               </HStack>
