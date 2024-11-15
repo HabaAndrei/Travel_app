@@ -1,6 +1,6 @@
-import { StyleSheet, Text, View, Pressable, ScrollView, SafeAreaView, ImageBackground } from 'react-native'
+import { StyleSheet, View, Pressable, TextInput, ScrollView, SafeAreaView, TouchableOpacity, ImageBackground } from 'react-native'
 import React, {useState } from 'react'
-import { Input, InputField, InputIcon, InputSlot, VStack, HStack, Divider, Button, 
+import { Input, InputField, Text, Icon, VStack, HStack, Divider, Button, 
     Center, Heading, EyeIcon, ButtonText, 
     EyeOffIcon, Card } from '@gluestack-ui/themed'
 import {createUserEmailPassword,  signInUserEmailPassword, forgotPassword, signOutUser, 
@@ -18,7 +18,7 @@ const LogIn = (props) => {
   const [inputPassword, setInputPassword] = useState({ input: '', showState: false });
   const [inputFirstName, setInputFirstName] = useState('');
   const [inputSecondName, setInputSecondName] = useState('');
-  const [signInOrUp, setSignInOrUp] = useState('');
+  const [signInOrUp, setSignInOrUp] = useState('signin');
   const [isForgotPassword, setIsForgotPassword] = useState('');
   const [codeVerify, setCodeVerify] = useState('');
   const [isModalVisibleReAuth, setModalVisibleReAuth] = useState(false);
@@ -170,6 +170,11 @@ const LogIn = (props) => {
 
       <ScrollView>
 
+        <View style={styles.titleContainer}>
+          <Text style={styles.appName}>Travel Bot</Text>
+          <Text style={styles.slogan}>– Where Every Trip Finds Its Way 🌍</Text>
+        </View>
+
         <ModalReAuth  isModalVisibleReAuth={isModalVisibleReAuth} setModalVisibleReAuth={setModalVisibleReAuth} />
 
         {props.user ? 
@@ -209,7 +214,7 @@ const LogIn = (props) => {
               </Card>
           
               <VStack space="2xl">  
-                <HStack  px="$3"  h="$8"  rounded="$sm"      alignItems="center"  justifyContent="center"  >
+                <HStack  px="$3"  h="$8"  rounded="$sm" alignItems="center" justifyContent="center" style={{marginBottom: 30}} >
                   <Button onPress={()=>signOut()} size="l">
                     <ButtonText>Log out</ButtonText>
                   </Button>
@@ -228,146 +233,112 @@ const LogIn = (props) => {
         <View >
           {signInOrUp ? 
             <View  style={{ marginBottom: 40, marginRight: 20,  marginLeft: 20}} >
-              <Card p="$5" borderRadius="$lg"  m="$3" style={styles.shadow} maxWidth={400} >
 
-                {isForgotPassword ? 
-              
-                  <VStack  >
-                    <Text color="$text500" lineHeight="$xs">
-                      Write the email to which you want to reset the password
-                    </Text>
-                    <Input>
-                      <InputField
-                      type="text"
-                      value={inputEmail}
-                      onChangeText={(text) => setInputEmail(text)}
+              {isForgotPassword ? 
+                <VStack  >
+                  <Text color="$text500" lineHeight="$xs">
+                    Write the email to which you want to reset the password
+                  </Text>
+                  <Input>
+                    <InputField
+                    type="text"
+                    value={inputEmail}
+                    onChangeText={(text) => setInputEmail(text)}
+                    />
+                  </Input>
+                  <Button ml="auto" >
+                    <ButtonText color="$white" onPress={forgotThePassword} >Send email</ButtonText>
+                  </Button>
+                </VStack>
+                :    
+                <VStack space="xl">
+                  <Text style={styles.actionName}>{signInOrUp === "signup" ? "Create accout" :  "Log in"  }</Text>
+
+                  {signInOrUp === "signup" ? 
+                    <View style={styles.inputContainer}>
+                      <TextInput style={styles.input} placeholder='Write your email' placeholderTextColor="white"
+                        value={inputFirstName}  onChangeText={(text) => setInputFirstName(text)}/>
+                    </View>
+                    : <View></View>
+                  }  
+                  {signInOrUp === "signup" ? 
+                    <View style={styles.inputContainer}>
+                      <TextInput style={styles.input} placeholder='Second name' placeholderTextColor="white"
+                        value={inputSecondName}  onChangeText={(text) => setInputSecondName(text)}/>
+                    </View>
+                    : <View></View>
+                  }
+
+                  <View style={styles.inputContainer}>
+                    <TextInput style={styles.input} placeholder='Email' placeholderTextColor="white"
+                      value={inputEmail}  onChangeText={(text) => setInputEmail(text)}/>
+                  </View>
+                 
+                  
+                  <View style={styles.inputContainer}>
+                    <TouchableOpacity
+                        onPress={() => setInputPassword(prev => ({ ...prev, showState: !prev.showState }))} // Schimbă starea de vizibilitate a parolei
+                      >
+                        <Icon
+                          as={inputPassword.showState ? EyeIcon : EyeOffIcon}
+                          color="$darkBlue500"
+                        />
+                      </TouchableOpacity>
+                    <TextInput style={styles.input} placeholder='Password' placeholderTextColor="white"
+                      value={inputPassword.input} onChangeText={(text) => setInputPassword({ ...inputPassword, input: text })}
+                      secureTextEntry={inputPassword.showState}
                       />
-                    </Input>
-                    <Button ml="auto" >
-                      <ButtonText color="$white" onPress={forgotThePassword} >Send email</ButtonText>
-                    </Button>
-                  </VStack>
-                  :    
-                  <VStack space="xl">
-                    <Heading color="$text900" lineHeight="$md">
-                      {signInOrUp === "signup" ? "Create accout" :  "Log in"  }
-                    </Heading>
-                      {signInOrUp === "signup" ? 
-                        <VStack  >
-                          <Text color="$text500" lineHeight="$xs">
-                            First name
-                          </Text>
-                          <Input>
-                            <InputField
-                              type="text"
-                              value={inputFirstName}
-                              onChangeText={(text) => setInputFirstName(text)}
-                            />
-                          </Input>
-                        </VStack> : <View></View>
-                      }  
-                      {signInOrUp === "signup" ? 
-                        <VStack  >
-                          <Text color="$text500" lineHeight="$xs">
-                            Second name
-                          </Text>
-                          <Input>
-                            <InputField
-                              type="text"
-                              value={inputSecondName}
-                              onChangeText={(text) => setInputSecondName(text)}
-                            />
-                          </Input>
-                        </VStack> : <View></View>
-                      }
-                    <VStack>
-                      <Text color="$text500" lineHeight="$xs">
-                        Email
-                      </Text>
-                      <Input>
-                        <InputField
-                        type="text"
-                        value={inputEmail}
-                        onChangeText={(text) => setInputEmail(text)}
-                        />
-                      </Input>
-                    </VStack>
-                    <VStack  >
-                      <Text color="$text500" lineHeight="$xs"> 
-                          Password 
-                      </Text>
-                      <Input textAlign="center">
-                        <InputField
-                        type={inputPassword.showState ? "text" : "password"}
-                        value={inputPassword.input}
-                        onChangeText={(text) => setInputPassword({ ...inputPassword, input: text })}
-                        />
-                        <InputSlot pr="$3" onPress={() => setInputPassword(prev => ({ ...prev, showState: !prev.showState }))}>
-                        <InputIcon
-                            as={inputPassword.showState ? EyeIcon : EyeOffIcon}
-                            color="$darkBlue500"
-                        />
-                        </InputSlot>
-                      </Input>
-                      <Text color="$text500" lineHeight="$xs"> 
-                        {signInOrUp === "signup" ? "The password must have at least seven characters, two of which must be numbers" : ""}
-                      </Text>
-                    </VStack>
-                    <Pressable onPress={()=>setIsForgotPassword(true)}>
-                      <Text style={{ color: 'blue', textDecorationLine: 'underline', marginTop: 10 }}>
-                        Forgot your password? Click here
-                      </Text>
-                    </Pressable>
+                  </View>
 
-                    <Button ml="auto">
-                      <ButtonText color="$white" onPress={signInOrUp === "signup" ? createAccout : logIn}>
-                        {signInOrUp === "signup" ? "Create" : "Log in"}
-                      </ButtonText>
-                    </Button>
-                  </VStack>
-                }
-              </Card>
+                  {signInOrUp === "signup" ? 
+                    <Text  style={styles.textPassword}> 
+                      The password must have at least seven characters, two of which must be numbers
+                    </Text> : <Text></Text>
+                  }
+                  {/* <Text  style={signInOrUp === "signup" ? styles.textPassword : ''}> 
+                    {signInOrUp === "signup" ? "The password must have at least seven characters, two of which must be numbers" : ""}
+                  </Text>
+                   */}
+                  <Pressable onPress={()=>setIsForgotPassword(true)}>
+                    <Text style={styles.textForgot}>
+                      Forgot your password? Click here
+                    </Text>
+                  </Pressable>
+
+                  <View style={styles.buttonContainer}>
+                    <TouchableOpacity style={styles.button}
+                      onPress={signInOrUp === "signup" ? createAccout : logIn}>
+                      <Text style={styles.buttonText}> {signInOrUp === "signup" ? "Create" : "Log in"}    </Text>
+                    </TouchableOpacity>         
+                  </View>
+
+                </VStack>
+              }
             </View>
             :
             <View></View>
           }
 
-          <View style={{ alignItems: 'center' }}>
-            <VStack space="2xl">  
-              {!signInOrUp ? 
-              <Card p="$5" borderRadius="$lg" m="$3" style={styles.shadow} maxWidth={400}>
-                <Center>
-                  <Heading>
-                    🌍 Welcome to Travel Bot! 🎉
-                  </Heading>
-                  <Text></Text>
-                  <Text>• Ready to explore the world with us? ✈️</Text>
-                  <Text></Text>
-                  <Text>• We're so excited to be part of your adventures!</Text>
-                  <Text></Text>
-                  <Text>
-                    • Discover hidden gems, plan epic trips, and create memories that last a lifetime. ❤️  
-                  </Text>
-                  <Text>
-                    • Join us to unlock personalized travel tips, exclusive deals, and easy booking options.
-                  </Text>
-                  <Text></Text>
-                  <Text>• Let’s kick off your journey! 🌟</Text>
-                </Center>
-              </Card>
+          <View style={{ alignItems: 'center', marginTop: 50 }}>
+              
+            <View style={styles.buttonContainer}>
+              <TouchableOpacity style={styles.button}
+                onPress={()=>{setSignInOrUp("signup"); setIsForgotPassword(false);}}
+              >
+                <Text style={styles.buttonText}>Create accout</Text>
+              </TouchableOpacity>
+            </View>
             
-              : <Text></Text>
-              }
-              <HStack  px="$3"  h="$8"  rounded="$sm"      alignItems="center"  justifyContent="center"  >
-                <Button onPress={()=>{setSignInOrUp("signup"); setIsForgotPassword(false);}}  size="l">
-                  <ButtonText>Create accout</ButtonText>
-                </Button>
-                <Divider  w={20} variant="horizontal" style={{margin: 10}} />
-                <Button  onPress={()=>{setSignInOrUp("signin"); setIsForgotPassword(false)}}  size="l">
-                  <ButtonText>Log in</ButtonText>
-                </Button>          
-              </HStack>
-            </VStack> 
+            <View style={styles.separator} /> 
+
+            <View style={styles.buttonContainer}>
+              <TouchableOpacity style={styles.button}
+                onPress={()=>{setSignInOrUp("signin"); setIsForgotPassword(false)}}
+                >
+                <Text style={styles.buttonText}>Log in</Text>
+              </TouchableOpacity>         
+            </View>
+             
           </View>
         </View>
         }
@@ -388,14 +359,72 @@ const styles = StyleSheet.create({
     resizeMode: 'cover',
     justifyContent: 'center',
   },
-  shadow:{
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.5,
-    shadowRadius: 4,
-    elevation: 5,
+  buttonContainer: {
+    justifyContent: 'center', 
+    alignItems: 'center', 
+  },
+  button: {
+    backgroundColor: 'rgba(0, 0, 255, 0.45)', 
+    padding: 15,
+    borderRadius: 30,
+    alignItems: 'center',
+    minWidth: 200
+  },
+  buttonText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  separator: {
+    borderBottomWidth: 1, 
+    borderBottomColor: 'white', 
+    width: 400, 
+    marginVertical: 10, 
+  },
+  titleContainer: {
+    justifyContent: 'center', 
+    alignItems: 'center', 
+    marginVertical: 20, 
+  },
+  appName: {
+    fontSize: 36, 
+    fontWeight: 'bold',
+    color: 'rgba(0, 0, 255, 0.9)', 
+  },
+  actionName:{
+    fontSize: 28, 
+    fontWeight: 'bold',
+    color: 'rgba(0, 0, 255, 10)',
+  },
+  slogan: {
+    fontSize: 16, 
+    fontStyle: 'italic',
+    color: 'white', 
+    marginTop: 5, 
+  },
+  inputContainer: {
+    width: '80%',
+    borderBottomWidth: 4, // Linie sub input
+    borderBottomColor: 'white', // Culoarea liniei
+    marginVertical: 1, 
+  },
+  input: {
+    fontSize: 16,
+    color: 'white', 
+    paddingVertical: 5, 
+    fontWeight: 'bold'
+  },
+  textPassword: {
+    fontSize: 13,
+    color: 'white', 
+    paddingVertical: 5, 
+    fontWeight: 'bold'
+  }, 
+  textForgot: {
+    color: 'rgba(255, 255, 255, 0.7)', // Text alb, cu opacitate pentru a fi mai discret
+    backgroundColor: 'transparent', // Fundal transparent
+    textDecorationLine: 'underline', // Adaugă subliniere
+    fontSize: 14, // Dimensiunea fontului
+    marginTop: 10, // Spațiu deasupra textului pentru a nu fi lipit de input
   },
 })

@@ -11,7 +11,11 @@ const ModalAddNewDay = (props) => {
     const [address, setAddress] = useState('');
     const [info, setInfo] = useState('');
     const [description, setDescription] = useState('');
+    ////////////////////////////////////////
+    //  scot asat in productie !!! ==>>>>>>>
     const [hour, setHour] = useState('12:12');
+    /// <<<<=============
+    ////////////////////////////////////////
     const [isTimePickerVisible, setTimePickerVisibility] = useState({type:false});
   
     function handleConfirmTime(time){

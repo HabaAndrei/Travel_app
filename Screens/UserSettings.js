@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View, Pressable, ScrollView, SafeAreaView } from 'react-native'
 import React, { useState } from 'react';
-import {VStack, HStack, Button, ButtonText, Divider} from '@gluestack-ui/themed'
+import {VStack, HStack, Button, ButtonText, Divider, Heading, Center, Icon, SettingsIcon} from '@gluestack-ui/themed'
 import {signOutUser, deleteTheUser, } from '../firebase.js';
 import {deleteAllFromAsyncStorage} from '../diverse.js';
 import ModalReAuth from '../Components/ModalReAuth.js';
@@ -44,9 +44,18 @@ const UserSettings = (props) => {
     <SafeAreaView style={{flex: 1}} >
       <ScrollView style={{marginTop: 20}} >
 
+        <Center>
+          <HStack alignItems="center">
+            <Heading>Settings</Heading>
+            <Icon as={SettingsIcon} m="$2" w="$4" h="$4" />
+          </HStack>
+        </Center>
+
+
         <ModalReAuth  isModalVisibleReAuth={isModalVisibleReAuth} setModalVisibleReAuth={setModalVisibleReAuth} />
 
         <CardFeedback addNotification={props.addNotification} />
+
 
         <View style={{ alignItems: 'center' }}>
           <VStack space="2xl">  

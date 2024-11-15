@@ -38,7 +38,7 @@ const CardFeedback = (props) => {
 
   return (
     <View>
-      <Card p="$5" borderRadius="$lg" maxWidth={360} m="$3">
+      <Card p="$5" borderRadius="$lg" maxWidth={600} m="$3">
         <Heading size="md" fontFamily="$heading" mb="$4">
           Give us feedback 
         </Heading>

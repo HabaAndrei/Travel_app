@@ -21,7 +21,7 @@ const ModalDelete = (props) => {
         <View style={styles.centeredView}>
             <View style={styles.modalView}>
             <Text style={styles.modalText}>
-                Are you sure you want to delete this?
+                Are you sure you want to delete ?
             </Text>
 
             <View style={styles.buttonContainer}>
