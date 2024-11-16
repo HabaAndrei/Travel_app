@@ -1,6 +1,6 @@
-import { StyleSheet, View, Pressable, TextInput, ScrollView, SafeAreaView, TouchableOpacity, ImageBackground } from 'react-native'
+import { StyleSheet, View, Pressable, Text, TextInput, ScrollView, SafeAreaView, TouchableOpacity, ImageBackground } from 'react-native'
 import React, {useState } from 'react'
-import { Input, InputField, Text, Icon, VStack, HStack, Divider, Button, 
+import { Input, InputField, Icon, VStack, HStack, Divider, Button, 
     Center, Heading, EyeIcon, ButtonText, 
     EyeOffIcon, Card } from '@gluestack-ui/themed'
 import {createUserEmailPassword,  signInUserEmailPassword, forgotPassword, signOutUser, 
@@ -25,7 +25,7 @@ const LogIn = (props) => {
 
 
   async function createAccout(){
-    if(!inputEmail || !inputPassword.input || !inputFirstName || !inputSecondName){
+    if(!inputEmail?.length || !inputPassword?.input?.length || !inputFirstName?.length || !inputSecondName?.length){
       props.addNotification('warning', "Please complete all inputs");
       return;
     }
@@ -180,53 +180,60 @@ const LogIn = (props) => {
         {props.user ? 
         <View>
           {!props.user?.emailVerified_code ? 
-            <View style={{ marginBottom: 40, marginRight: 20,  marginLeft: 20}} >
-              <Card p="$5" borderRadius="$lg"  m="$3" style={styles.shadow} maxWidth={400} >
-                <Center>
-                  <Heading color="$text900" lineHeight="$md">
-                    The next step is to verify your 
-                  </Heading>
-                  <Heading>
-                    email address.
-                  </Heading>
-                </Center>
+            <View >
+              <View >
+                <Text style={styles.actionNameLow}>The next step is to verify your email address</Text>
 
-                <Button onPress={sendCodeToEmail} size="l" style={{margin: 20}} >
-                  <ButtonText>Send code to email</ButtonText>
-                </Button>
+                <View style={{margin: 10}} /> 
 
-                <VStack   style={{margin: 20}} >
-                  <Text color="$text500" lineHeight="$xs">
-                    Enter the code received via email
-                  </Text>
-                  <Input >
-                    <InputField
-                    type="text"
-                    value={codeVerify}
-                    onChangeText={(text) => setCodeVerify(text)}
-                    />
-                  </Input>
-                </VStack>
+                <View style={styles.buttonContainer}>
+                  <TouchableOpacity style={styles.button}
+                    onPress={sendCodeToEmail}>
+                    <Text style={styles.buttonText}> Send code to email </Text>
+                  </TouchableOpacity>         
+                </View>
+
+                <View style={{margin: 10}} /> 
                 
-                <Button ml="auto" onPress={verifyCode}>
-                  <ButtonText>Verify code</ButtonText>
-                </Button>
-              </Card>
-          
-              <VStack space="2xl">  
-                <HStack  px="$3"  h="$8"  rounded="$sm" alignItems="center" justifyContent="center" style={{marginBottom: 30}} >
-                  <Button onPress={()=>signOut()} size="l">
-                    <ButtonText>Log out</ButtonText>
-                  </Button>
-                  <Divider  w={20} variant="horizontal" style={{margin: 10}} />
-                  <Button  onPress={()=>deleteUser()} size="l">
-                    <ButtonText>Delete accout</ButtonText>
-                  </Button>          
-                </HStack>
-              </VStack>
+                <View style={styles.inputContainer}>
+                  <TextInput style={styles.input} placeholder='Enter the code received via email' placeholderTextColor="white"
+                    value={codeVerify}
+                    onChangeText={(text) => setCodeVerify(text)}/>
+                </View>
+
+                <View style={{margin: 10}} />
+
+                <View style={styles.buttonContainer}>
+                  <TouchableOpacity style={styles.button}
+                    onPress={verifyCode} >
+                    <Text style={styles.buttonText}> Verify code </Text>
+                  </TouchableOpacity>         
+                </View>
+              
+              </View>
+
+              <View style={{ alignItems: 'center', marginTop: 50 }}>
+                
+                <View style={styles.buttonContainer}>
+                  <TouchableOpacity style={styles.buttonWhite}
+                   onPress={()=>signOut()}>
+                    <Text style={styles.buttonTextWhite}>Log out</Text>
+                  </TouchableOpacity>
+                </View>
+                
+                <View style={styles.separator} /> 
+    
+                <View style={styles.buttonContainer}>
+                  <TouchableOpacity style={styles.buttonWhite}
+                    onPress={()=>deleteUser()}>
+                    <Text style={styles.buttonTextWhite}>Delete account</Text>
+                  </TouchableOpacity>         
+                </View>
+                
+              </View>
             </View>  
             : 
-            <View></View>
+            null
           }
         </View>
         :
@@ -235,49 +242,50 @@ const LogIn = (props) => {
             <View  style={{ marginBottom: 40, marginRight: 20,  marginLeft: 20}} >
 
               {isForgotPassword ? 
-                <VStack  >
-                  <Text color="$text500" lineHeight="$xs">
-                    Write the email to which you want to reset the password
-                  </Text>
-                  <Input>
-                    <InputField
-                    type="text"
-                    value={inputEmail}
-                    onChangeText={(text) => setInputEmail(text)}
-                    />
-                  </Input>
-                  <Button ml="auto" >
-                    <ButtonText color="$white" onPress={forgotThePassword} >Send email</ButtonText>
-                  </Button>
-                </VStack>
+                <View  >
+                  <View style={styles.inputContainer}>
+                    <TextInput style={styles.input} placeholder='Email to reset the password'
+                      placeholderTextColor="white"
+                      value={inputEmail} onChangeText={(text) => setInputEmail(text)}/>
+                  </View>
+
+                  <View style={{margin:10}} />
+
+                  <View style={styles.buttonContainer}>
+                    <TouchableOpacity style={styles.button}
+                      onPress={forgotThePassword}>
+                      <Text style={styles.buttonText}>Send email</Text>
+                    </TouchableOpacity>         
+                  </View>
+
+                </View>
                 :    
                 <VStack space="xl">
                   <Text style={styles.actionName}>{signInOrUp === "signup" ? "Create accout" :  "Log in"  }</Text>
 
                   {signInOrUp === "signup" ? 
                     <View style={styles.inputContainer}>
-                      <TextInput style={styles.input} placeholder='Write your email' placeholderTextColor="white"
+                      <TextInput style={styles.input} placeholder='Name' placeholderTextColor="white"
                         value={inputFirstName}  onChangeText={(text) => setInputFirstName(text)}/>
                     </View>
-                    : <View></View>
+                    : null
                   }  
                   {signInOrUp === "signup" ? 
                     <View style={styles.inputContainer}>
                       <TextInput style={styles.input} placeholder='Second name' placeholderTextColor="white"
                         value={inputSecondName}  onChangeText={(text) => setInputSecondName(text)}/>
                     </View>
-                    : <View></View>
+                    : null
                   }
 
                   <View style={styles.inputContainer}>
                     <TextInput style={styles.input} placeholder='Email' placeholderTextColor="white"
                       value={inputEmail}  onChangeText={(text) => setInputEmail(text)}/>
                   </View>
-                 
                   
                   <View style={styles.inputContainer}>
                     <TouchableOpacity
-                        onPress={() => setInputPassword(prev => ({ ...prev, showState: !prev.showState }))} // Schimbă starea de vizibilitate a parolei
+                        onPress={() => setInputPassword(prev => ({ ...prev, showState: !prev.showState }))} 
                       >
                         <Icon
                           as={inputPassword.showState ? EyeIcon : EyeOffIcon}
@@ -286,19 +294,17 @@ const LogIn = (props) => {
                       </TouchableOpacity>
                     <TextInput style={styles.input} placeholder='Password' placeholderTextColor="white"
                       value={inputPassword.input} onChangeText={(text) => setInputPassword({ ...inputPassword, input: text })}
-                      secureTextEntry={inputPassword.showState}
+                      secureTextEntry={!inputPassword.showState}
                       />
                   </View>
-
-                  {signInOrUp === "signup" ? 
+                  
+                  {
+                    signInOrUp === "signup" ? 
                     <Text  style={styles.textPassword}> 
                       The password must have at least seven characters, two of which must be numbers
-                    </Text> : <Text></Text>
+                    </Text> : null
                   }
-                  {/* <Text  style={signInOrUp === "signup" ? styles.textPassword : ''}> 
-                    {signInOrUp === "signup" ? "The password must have at least seven characters, two of which must be numbers" : ""}
-                  </Text>
-                   */}
+
                   <Pressable onPress={()=>setIsForgotPassword(true)}>
                     <Text style={styles.textForgot}>
                       Forgot your password? Click here
@@ -316,26 +322,26 @@ const LogIn = (props) => {
               }
             </View>
             :
-            <View></View>
+            null
           }
 
           <View style={{ alignItems: 'center', marginTop: 50 }}>
               
             <View style={styles.buttonContainer}>
-              <TouchableOpacity style={styles.button}
+              <TouchableOpacity style={styles.buttonWhite}
                 onPress={()=>{setSignInOrUp("signup"); setIsForgotPassword(false);}}
               >
-                <Text style={styles.buttonText}>Create accout</Text>
+                <Text style={styles.buttonTextWhite}>Create accout</Text>
               </TouchableOpacity>
             </View>
             
             <View style={styles.separator} /> 
 
             <View style={styles.buttonContainer}>
-              <TouchableOpacity style={styles.button}
+              <TouchableOpacity style={styles.buttonWhite}
                 onPress={()=>{setSignInOrUp("signin"); setIsForgotPassword(false)}}
                 >
-                <Text style={styles.buttonText}>Log in</Text>
+                <Text style={styles.buttonTextWhite}>Log in</Text>
               </TouchableOpacity>         
             </View>
              
@@ -375,6 +381,18 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
   },
+  buttonWhite:{
+    padding: 15,
+    borderRadius: 30,
+    alignItems: 'center',
+    minWidth: 200,
+    backgroundColor: 'rgba(255, 255, 255, 0.7)',
+  },
+  buttonTextWhite: {
+    color: 'rgba(0, 0, 255, 10)',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
   separator: {
     borderBottomWidth: 1, 
     borderBottomColor: 'white', 
@@ -395,6 +413,19 @@ const styles = StyleSheet.create({
     fontSize: 28, 
     fontWeight: 'bold',
     color: 'rgba(0, 0, 255, 10)',
+    backgroundColor: 'rgba(255, 255, 255, 0.7)',
+    borderRadius: 8,
+    paddingHorizontal: 5,
+    alignSelf: 'flex-start', 
+  },
+  actionNameLow:{
+    fontSize: 20, 
+    fontWeight: 'bold',
+    color: 'rgba(0, 0, 255, 10)',
+    backgroundColor: 'rgba(255, 255, 255, 0.7)',
+    borderRadius: 8,
+    paddingHorizontal: 5,
+    alignSelf: 'flex-start', 
   },
   slogan: {
     fontSize: 16, 
@@ -404,9 +435,8 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     width: '80%',
-    borderBottomWidth: 4, // Linie sub input
-    borderBottomColor: 'white', // Culoarea liniei
-    marginVertical: 1, 
+    borderBottomWidth: 4, 
+    borderBottomColor: 'white', 
   },
   input: {
     fontSize: 16,
@@ -421,10 +451,14 @@ const styles = StyleSheet.create({
     fontWeight: 'bold'
   }, 
   textForgot: {
-    color: 'rgba(255, 255, 255, 0.7)', // Text alb, cu opacitate pentru a fi mai discret
-    backgroundColor: 'transparent', // Fundal transparent
-    textDecorationLine: 'underline', // Adaugă subliniere
-    fontSize: 14, // Dimensiunea fontului
-    marginTop: 10, // Spațiu deasupra textului pentru a nu fi lipit de input
+    color: 'white', 
+    backgroundColor: 'rgba(0, 0, 255, 0.5)', 
+    fontSize: 14, 
+    textAlign: 'center', 
+    lineHeight: 20, 
+    paddingHorizontal: 5, 
+    borderRadius: 3,
+    alignSelf: 'flex-end', 
   },
+    
 })
