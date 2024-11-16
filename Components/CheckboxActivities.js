@@ -9,6 +9,7 @@ import CustomButton from '../CustomElements/CustomButton.js';
 const CheckboxActivities = (props) => {
 
   const [isShowDetails, setShowDetails] = useState(false);
+  const [paramsLocation, setParamsLocation] = useState(false)
 
   useEffect(() => {
     const { city, country } = props.dataDestination;
@@ -18,8 +19,14 @@ const CheckboxActivities = (props) => {
       axios.post(`${address_function_api}`, 
         { method: 'createActivities', city, country }
       ).then((data) => {
+
         if (data.data.type) {
-          const parsedDate = JSON.parse(data?.data?.data);
+          if(data?.data?.paramsLocation?.data){
+            setParamsLocation(data?.data?.paramsLocation?.data?.local_places_and_tourist_places);   
+            props.setScaleVisit(data?.data?.paramsLocation?.data?.scale_visit);         
+          }
+
+          const parsedDate = typeof(data?.data?.data) === 'string' ? JSON.parse(data?.data?.data) : data?.data?.data;
           const {activities} = parsedDate;
           let arVariants = Object.values(activities);
           props.setCheckbox(arVariants.map((a) => {
@@ -112,29 +119,32 @@ const CheckboxActivities = (props) => {
                     </KeyboardAvoidingView>
                   </View>
 
-                  <View style={styles.viewCard}>
-                    <View style={{alignItems: 'center', justifyContent: 'center' }} >
-                      <Text style={[styles.text, styles.textBold]}>Choose Your Experience</Text>
-                    </View>
-                    <Center>
-                      <RadioGroup style={{marginTop: 10, marginBottom: 10}} value={props.isLocalPlaces} onChange={props.setLocalPlaces}>
-                        <VStack space="sm"> 
-                          <Radio value="true">
-                            <RadioIndicator mr="$2">
-                              <RadioIcon as={CircleIcon} />
-                            </RadioIndicator>
-                            <RadioLabel>Local Favorites</RadioLabel>
-                          </Radio>
-                          <Radio value="false">
-                            <RadioIndicator mr="$2">
-                              <RadioIcon as={CircleIcon} />
-                            </RadioIndicator>
-                            <RadioLabel>Popular Tourist Spots</RadioLabel>
-                          </Radio>
-                        </VStack>
-                      </RadioGroup>
-                    </Center>
-                  </View>
+                  {paramsLocation ? 
+                    <View style={styles.viewCard}>
+                      <View style={{alignItems: 'center', justifyContent: 'center' }} >
+                        <Text style={[styles.text, styles.textBold]}>Choose Your Experience</Text>
+                      </View>
+                      <Center>
+                        <RadioGroup style={{marginTop: 10, marginBottom: 10}} value={props.isLocalPlaces} onChange={props.setLocalPlaces}>
+                          <VStack space="sm"> 
+                            <Radio value="true">
+                              <RadioIndicator mr="$2">
+                                <RadioIcon as={CircleIcon} />
+                              </RadioIndicator>
+                              <RadioLabel>Local Favorites</RadioLabel>
+                            </Radio>
+                            <Radio value="false">
+                              <RadioIndicator mr="$2">
+                                <RadioIcon as={CircleIcon} />
+                              </RadioIndicator>
+                              <RadioLabel>Popular Tourist Spots</RadioLabel>
+                            </Radio>
+                          </VStack>
+                        </RadioGroup>
+                      </Center>
+                    </View> : null                
+                  }
+
                 </ScrollView>
 
                 <CustomButton name={'Close'} func={props.closeCheckbox}/>

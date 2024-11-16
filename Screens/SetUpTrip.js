@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import { View, Text, StyleSheet, SafeAreaView, } from 'react-native';
 import { Card, Icon, CheckIcon, ArrowRightIcon, Heading, ScrollView, Button, Center} from '@gluestack-ui/themed';
 import SearchDestination from '../Components/SearchDestination';
@@ -13,6 +13,7 @@ const SetUpTrip = (props) => {
   const [checkbox, setCheckbox] = useState([]);
   const [inputActivity, setInputActivity] = useState('');
   const [isLocalPlaces, setLocalPlaces] = useState('false');
+  const [scaleVisit, setScaleVisit] = useState('');
 
   function verifyDestinationRequest(){
     if(!dataDestination.city || !dataDestination.country){
@@ -39,7 +40,7 @@ const SetUpTrip = (props) => {
     checkbox.forEach((ob)=>{if(ob.selected)newCheckbox.push(ob.category)}); 
     
     props.navigation.navigate('Locations', {type: 'getAllDataAboutLocations' , 
-      country: dataDestination.country, city: dataDestination.city, checkbox: newCheckbox, input: inputActivity, isLocalPlaces})
+      country: dataDestination.country, city: dataDestination.city, checkbox: newCheckbox, input: inputActivity, isLocalPlaces, scaleVisit})
 
     ///////////////////////////////////////////////////////////
     // const city = 'Paris';
@@ -89,7 +90,7 @@ const SetUpTrip = (props) => {
         
         <CheckboxActivities 
           inputActivity={inputActivity} setInputActivity={setInputActivity}
-          dataDestination={dataDestination} 
+          dataDestination={dataDestination} setScaleVisit={setScaleVisit}
           checkBoxActivities={checkBoxActivities} closeCheckbox={closeCheckbox}
           checkbox={checkbox} setCheckbox={setCheckbox}  addNotification={props.addNotification}
           isLocalPlaces={isLocalPlaces} setLocalPlaces={setLocalPlaces}
