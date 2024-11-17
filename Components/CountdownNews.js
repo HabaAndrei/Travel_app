@@ -92,24 +92,29 @@ const CountdownNews = (props) => {
   };
 
   return (
-    <View style={styles.container} {...panResponder.panHandlers}>
-      <Card p="$5" borderRadius="$lg" maxWidth={600} m="$3">
-        <Heading style={styles.heading}>{newsToShow[newsNumber]?.title}</Heading>
-        <Text style={styles.infoText}>{newsToShow[newsNumber]?.infTwo}</Text>
-        <Text style={styles.description}>{newsToShow[newsNumber]?.infOne}</Text>
 
-        <View style={styles.dotsContainer}>
-          {newsToShow.map((_, index) => (
-            <View
-              key={index}
-              style={[
-                styles.dot,
-                index === newsNumber ? styles.activeDot : styles.inactiveDot
-              ]}
-            />
-          ))}
-        </View>
-      </Card>
+    <View>
+    {newsToShow.length ? 
+      <View style={styles.container} {...panResponder.panHandlers}>
+        <Card p="$5" borderRadius="$lg" maxWidth={600} m="$3">
+          <Heading style={styles.heading}>{newsToShow[newsNumber]?.title}</Heading>
+          <Text style={styles.infoText}>{newsToShow[newsNumber]?.infTwo}</Text>
+          <Text style={styles.description}>{newsToShow[newsNumber]?.infOne}</Text>
+  
+          <View style={styles.dotsContainer}>
+            {newsToShow.map((_, index) => (
+              <View
+                key={index}
+                style={[
+                  styles.dot,
+                  index === newsNumber ? styles.activeDot : styles.inactiveDot
+                ]}
+              />
+            ))}
+          </View>
+        </Card>
+      </View> : null
+    }
     </View>
   )
 }

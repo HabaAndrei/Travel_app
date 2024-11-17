@@ -44,8 +44,8 @@ const MyTrips = (props) => {
 
         <ScrollView style={{ flex: 1 }} >
             
-            <CountdownNews plans={plans} />
-
+            {plans.length ? <CountdownNews plans={plans} /> : null}
+            
             {plans.map((obiect, index)=>{
                 return <Card key={index}   p="$5" borderRadius="$lg" maxWidth={600} m="$3">
                     <Heading size="md" fontFamily="$heading" mb="$4">
