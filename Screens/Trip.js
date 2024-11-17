@@ -156,36 +156,29 @@ const Trip = (props) => {
 		}
 	}
 
-	function addresForMaps(ob, city, country){
-		const {address, place} = ob;
-		if(address){
-			return address;
-		}else{
-			return place + ' ' + city + ' ' + country;
-		}
+	function strLatLngMaps(ob){
+		const {lat, lng} = ob;
+		return [lat, lng].join(',');
 	}
 
 	
 	function openMap_(indexLocation){
-		let { city, country, program } = props.route.params;
-
-		program = JSON.parse(program);
-			const locationsAddressPlace = program[indexLocation].activities.map((ob)=>{
-			return {address: ob.address ? ob.address : '' , place: ob.place ? ob.place : ''}
-		});
-
-		if(locationsAddressPlace.length === 1){
-			const place = addresForMaps(locationsAddressPlace[0], city, country);
+		let { program } = props.route.params;
+		if(typeof(program) === 'string')program = JSON.parse(program);
+		const locGeo = program[indexLocation].activities.map((ob)=>ob.geometry_location);
+		
+		if(locGeo.length === 1){
+			const place = strLatLngMaps(locGeo[0]);
 			openMap({start: place, end: place})
-		}else if(locationsAddressPlace.length === 2){
-			openMap({start: addresForMaps(locationsAddressPlace[0], city, country), end: addresForMaps(locationsAddressPlace[1], city, country)})
-		}else if(locationsAddressPlace.length > 2){
-			const first = locationsAddressPlace[0];
-			const mid = locationsAddressPlace.slice(1, locationsAddressPlace.length-1) ;
-			const last = locationsAddressPlace[locationsAddressPlace.length-1];
-			const addressWaypoints = mid.map((ob)=>addresForMaps(ob, city, country));
-			openMap({start: addresForMaps(first, city, country), waypoints: addressWaypoints, end: addresForMaps(last, city, country)});
-		}		
+		}else if(locGeo.length === 2){
+			openMap({start: strLatLngMaps(locGeo[0]), end: strLatLngMaps(locGeo[1])})
+		}else if(locGeo.length > 2){
+			const first = locGeo[0];
+			const mid = locGeo.slice(1, locGeo.length-1) ;
+			const last = locGeo[locGeo.length-1];
+			const addressWaypoints = mid.map((ob)=>strLatLngMaps(ob));
+			openMap({start: strLatLngMaps(first), waypoints: addressWaypoints, end: strLatLngMaps(last)});
+		}	
 	}
 
 	return (
