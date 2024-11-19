@@ -1,8 +1,6 @@
 import { StyleSheet, View, Pressable, Text, TextInput, ScrollView, SafeAreaView, TouchableOpacity, ImageBackground } from 'react-native'
 import React, {useState } from 'react'
-import { Input, InputField, Icon, VStack, HStack, Divider, Button, 
-    Center, Heading, EyeIcon, ButtonText, 
-    EyeOffIcon, Card } from '@gluestack-ui/themed'
+import { Icon, VStack, EyeIcon, EyeOffIcon } from '@gluestack-ui/themed'
 import {createUserEmailPassword,  signInUserEmailPassword, forgotPassword, signOutUser, 
     deleteTheUser, storeCodeAndEmail, verifyCodeDB, updateEmailVerificationDB
 } from '../firebase.js'
@@ -407,7 +405,7 @@ const styles = StyleSheet.create({
   appName: {
     fontSize: 36, 
     fontWeight: 'bold',
-    color: 'rgba(0, 0, 255, 0.9)', 
+    color: 'white', 
   },
   actionName:{
     fontSize: 28, 

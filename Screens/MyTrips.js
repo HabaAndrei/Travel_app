@@ -1,10 +1,11 @@
-import { StyleSheet, ScrollView,  SafeAreaView, Pressable } from 'react-native'
+import { StyleSheet, ScrollView,  SafeAreaView, View } from 'react-native'
 import React, {useState, useEffect} from 'react'
 import { useIsFocused } from '@react-navigation/native';   
 import {getPlansFromDbWithUid} from '../firebase.js';
 import {  Card, Divider, Text, HStack , Heading, Link, LinkText, Icon,
     ArrowRightIcon} from '@gluestack-ui/themed' ;
 import CountdownNews from '../Components/CountdownNews.js';
+import CustomButton from '../CustomElements/CustomButton.js';
 
 const MyTrips = (props) => {
 
@@ -20,7 +21,6 @@ const MyTrips = (props) => {
     async function getPlansFromDb(uid){
         const rezQuery = await getPlansFromDbWithUid(uid);
         if(!rezQuery.type){
-            console.log('------', rezQuery.err);
             props.addNotification("error", "Unfortunately, there was a problem when taking the program")
             return;
         }
@@ -38,15 +38,28 @@ const MyTrips = (props) => {
         return arTimestamp.map((ob)=>ob.index);
     }   
 
+    function navigateSetUpTrip(){
+        props.navigation.navigate('SetUpTrip')
+    }
   return (
     <SafeAreaView style={{flex: 1}}>
 
 
         <ScrollView style={{ flex: 1 }} >
             
-            {plans.length ? <CountdownNews plans={plans} /> : null}
+            {plans.length ? <CountdownNews plans={plans} /> : 
+            <View style={styles.titleContainer}>
+                <Text style={styles.appName}>Travel Bot</Text>
+                <Text style={styles.slogan}>– Where Every Trip Finds Its Way 🌍</Text>
+                <Text style={styles.noTripsMessage}>
+                    Your next adventure is just a few clicks away! Start scheduling your dream trip now and make unforgettable memories. Don’t let the world wait—explore, discover, and wander!
+                </Text>
+                <CustomButton name={'Set up trip'} icon={ArrowRightIcon} func={navigateSetUpTrip} />
+            </View>
+        
+            }
             
-            {plans.map((obiect, index)=>{
+            {plans?.map((obiect, index)=>{
                 return <Card key={index}   p="$5" borderRadius="$lg" maxWidth={600} m="$3">
                     <Heading size="md" fontFamily="$heading" mb="$4">
                         {obiect.country} - {obiect.city}
@@ -100,4 +113,30 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     }, 
+    titleContainer: {
+        justifyContent: 'center', 
+        alignItems: 'center', 
+        marginVertical: 20, 
+      },
+    appName: {
+        fontSize: 36, 
+        fontWeight: 'bold',
+        color: '#007AFF', 
+        shadowColor: '#007AFF',
+        shadowOpacity: 0.3,
+    },
+    slogan: {
+        fontSize: 16, 
+        fontStyle: 'italic',
+        color: '#007AFF', 
+        marginTop: 5, 
+    },
+    noTripsMessage: {
+        fontSize: 16,
+        textAlign: 'center',
+        color: 'rgba(0, 0, 0, 0.75)',
+        marginTop: 80,
+        paddingHorizontal: 20, 
+        lineHeight: 22, 
+    },
 })

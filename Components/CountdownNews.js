@@ -4,7 +4,7 @@ import { Card, Text, Heading } from '@gluestack-ui/themed';
 import {formatDateFromMilliseconds, getDays, getHours} from '../diverse.js';
 
 const CountdownNews = (props) => {
-
+  
   const [newsToShow, setNewToShow] = useState([])
   const [newsNumber, setNewsNumber] = useState(0);
   const [startX, setStartX] = useState(0);
