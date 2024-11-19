@@ -9,6 +9,7 @@ import {isValidEmail, isValidPassword, deleteAllFromAsyncStorage,
 import uuid from 'react-native-uuid';
 import axios from 'axios';
 import ModalReAuth from '../Components/ModalReAuth.js';
+import {ButtonWhite, ButtonBlue} from '../CustomElements/buttonsTwoColors.js';
 
 const LogIn = (props) => {
 
@@ -72,7 +73,6 @@ const LogIn = (props) => {
     }
   }
 
-    
   async function forgotThePassword(){
     if(!isValidEmail(inputEmail)){
       props.addNotification('error', "The email address is not valid");
@@ -161,6 +161,16 @@ const LogIn = (props) => {
     props.navigation.navigate('SetUpTrip');
   }
 
+  function createAcc(){
+    setSignInOrUp("signup"); 
+    setIsForgotPassword(false)
+  }
+
+  function logIN(){
+    setSignInOrUp("signin"); 
+    setIsForgotPassword(false)
+  }
+
   return (
     <SafeAreaView style={{flex: 1}} >
 
@@ -179,17 +189,12 @@ const LogIn = (props) => {
         <View>
           {!props.user?.emailVerified_code ? 
             <View >
-              <View >
+              <VStack >
                 <Text style={styles.actionNameLow}>The next step is to verify your email address</Text>
 
                 <View style={{margin: 10}} /> 
 
-                <View style={styles.buttonContainer}>
-                  <TouchableOpacity style={styles.button}
-                    onPress={sendCodeToEmail}>
-                    <Text style={styles.buttonText}> Send code to email </Text>
-                  </TouchableOpacity>         
-                </View>
+                <ButtonBlue name={'Send code to email'} func={sendCodeToEmail} />
 
                 <View style={{margin: 10}} /> 
                 
@@ -201,32 +206,18 @@ const LogIn = (props) => {
 
                 <View style={{margin: 10}} />
 
-                <View style={styles.buttonContainer}>
-                  <TouchableOpacity style={styles.button}
-                    onPress={verifyCode} >
-                    <Text style={styles.buttonText}> Verify code </Text>
-                  </TouchableOpacity>         
-                </View>
+                <ButtonBlue name={'Verify code'} func={verifyCode} />
+
               
-              </View>
+              </VStack>
 
               <View style={{ alignItems: 'center', marginTop: 50 }}>
                 
-                <View style={styles.buttonContainer}>
-                  <TouchableOpacity style={styles.buttonWhite}
-                   onPress={()=>signOut()}>
-                    <Text style={styles.buttonTextWhite}>Log out</Text>
-                  </TouchableOpacity>
-                </View>
+                <ButtonWhite name={'Log out'} func={signOut} />
                 
                 <View style={styles.separator} /> 
-    
-                <View style={styles.buttonContainer}>
-                  <TouchableOpacity style={styles.buttonWhite}
-                    onPress={()=>deleteUser()}>
-                    <Text style={styles.buttonTextWhite}>Delete account</Text>
-                  </TouchableOpacity>         
-                </View>
+
+                <ButtonWhite name={'Delete account'} func={deleteUser} />
                 
               </View>
             </View>  
@@ -309,12 +300,7 @@ const LogIn = (props) => {
                     </Text>
                   </Pressable>
 
-                  <View style={styles.buttonContainer}>
-                    <TouchableOpacity style={styles.button}
-                      onPress={signInOrUp === "signup" ? createAccout : logIn}>
-                      <Text style={styles.buttonText}> {signInOrUp === "signup" ? "Create" : "Log in"}    </Text>
-                    </TouchableOpacity>         
-                  </View>
+                  <ButtonBlue name={signInOrUp === "signup" ? "Create" : "Log in"} func={signInOrUp === "signup" ? createAccout : logIn} />
 
                 </VStack>
               }
@@ -325,23 +311,11 @@ const LogIn = (props) => {
 
           <View style={{ alignItems: 'center', marginTop: 50 }}>
               
-            <View style={styles.buttonContainer}>
-              <TouchableOpacity style={styles.buttonWhite}
-                onPress={()=>{setSignInOrUp("signup"); setIsForgotPassword(false);}}
-              >
-                <Text style={styles.buttonTextWhite}>Create accout</Text>
-              </TouchableOpacity>
-            </View>
+            <ButtonWhite func={createAcc} name={'Create accout'}/>
             
             <View style={styles.separator} /> 
 
-            <View style={styles.buttonContainer}>
-              <TouchableOpacity style={styles.buttonWhite}
-                onPress={()=>{setSignInOrUp("signin"); setIsForgotPassword(false)}}
-                >
-                <Text style={styles.buttonTextWhite}>Log in</Text>
-              </TouchableOpacity>         
-            </View>
+            <ButtonWhite func={logIN} name={'Log in'}/>
              
           </View>
         </View>
@@ -362,10 +336,6 @@ const styles = StyleSheet.create({
     height: '100%',
     resizeMode: 'cover',
     justifyContent: 'center',
-  },
-  buttonContainer: {
-    justifyContent: 'center', 
-    alignItems: 'center', 
   },
   button: {
     backgroundColor: 'rgba(0, 0, 255, 0.45)', 
