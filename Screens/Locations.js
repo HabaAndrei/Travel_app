@@ -21,6 +21,7 @@ const Locations = (props) => {
   const [dateFrom, setDateFrom] = useState();
   const [dateTo, setDateTo] = useState();
   const [datePickerVisibility, setDatePickerVisibility] = useState({type: false, date:''});
+  const [inputHotelAddress, setInputHotelAddress] = useState('');
 
   const screenHeight = Dimensions.get('window').height;
 

@@ -17,9 +17,9 @@ const CustomButton = (props) => {
       >
         <Text style={styles.buttonText}>{props.name}</Text>
         {props.icon ? 
-        <Icon as={props.icon} style={styles.icon} />
+        <Icon as={props.icon} color="white" style={styles.icon} />
         :
-        <Icon/>
+        null
         }
       </Button>
     </View>

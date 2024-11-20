@@ -1,4 +1,4 @@
-import { FlatList, Modal, StyleSheet, Text, Pressable, View, TextInput } from 'react-native';
+import { FlatList, Modal, StyleSheet, Text, Pressable, View, TextInput, SafeAreaView} from 'react-native';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { address_function_fuzzy } from '../diverse';
@@ -81,6 +81,8 @@ const ModalSearchDestination = (props) => {
     }
 
     return (
+    <SafeAreaView style={{flex: 1}}>
+
         <View style={styles.centeredView}>
             <Modal
                 animationType="slide"
@@ -140,6 +142,7 @@ const ModalSearchDestination = (props) => {
                 </View>
             </Modal>
         </View>
+    </SafeAreaView>
     );
 }
 
@@ -167,6 +170,7 @@ const styles = StyleSheet.create({
         shadowRadius: 4,
         elevation: 5,
         paddingTop: 10,
+        maxHeight: '70%'
     },
     textInput: {
         borderWidth: 1,
