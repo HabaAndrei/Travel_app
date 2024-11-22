@@ -8,12 +8,13 @@ import DailyProgram from './Screens/DailyProgram.js';
 import UserSettings from './Screens/UserSettings.js';
 import MyTrips from './Screens/MyTrips.js';
 import Locations from './Screens/Locations.js';
+import Trip from './Screens/Trip.js';
+import Chat from './Screens/Chat.js';
+import Layout from './Components/Layout.js';
 import {db, auth, verifyEmailVerifiedDB} from './firebase.js';
 import { GluestackUIProvider } from "@gluestack-ui/themed"
 import { config } from "@gluestack-ui/config"
-import Layout from './Components/Layout.js';
 import {onAuthStateChanged} from 'firebase/auth';
-import Trip from './Screens/Trip.js';
 
 
 const Stack = createNativeStackNavigator();
@@ -88,10 +89,21 @@ const App = () => {
     </Layout>
   );
 
+  const ChatScreen = ({ navigation, route }) => (
+    <Layout  navigation={navigation} route={route} user={user} setUser={setUser}   >
+      <Chat/>
+    </Layout>
+  );
+
   return (
     <GluestackUIProvider config={config}>
       <NavigationContainer>
         <Stack.Navigator>
+          <Stack.Screen
+            name="Chat"
+            component={ChatScreen}
+            options={{headerShown: false}}
+          />
           <Stack.Screen
             name="Locations"
             component={LocationsScreen}
