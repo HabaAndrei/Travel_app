@@ -3,6 +3,7 @@ import {View, Text, ScrollView, StyleSheet, TouchableOpacity, TextInput, Keyboar
   Platform, Keyboard } from 'react-native';
 import { Icon, ChevronsRightIcon } from '@gluestack-ui/themed';
 import {askQuestion} from '../firebase.js';
+import SelectConversation from '../Components/SelectConversation';
 
 const App = () => {
   const [message, setMessage] = useState('');
@@ -12,7 +13,10 @@ const App = () => {
     const data = await askQuestion(conv);
     if(data.type){
       setConversation((prev)=>{
-        return [...prev, {type: "ai", mes: data?.data}];
+        const newConv = prev.map((ob)=>{
+          return ob.type === 'pending' ? {type: "ai", mes: data?.data} : ob
+        })
+        return [...newConv];
       })
     }else{
       console.log('we catch err', data.err);
@@ -22,7 +26,7 @@ const App = () => {
   function sendMes(){
     if(!message.replaceAll(' ', '').length)return;
     setConversation((prev)=>{
-      const conv = [...prev, {type: 'user', mes: message}];
+      const conv = [...prev, {type: 'user', mes: message}, {type: 'pending'}];
       getResponse(conv);
       return [...conv];
     })
@@ -38,7 +42,7 @@ const App = () => {
       <View style={styles.container}>
 
         <View style={styles.topSection}>
-          <Text style={styles.text}>Partea de Sus (Fixă)</Text>
+          <SelectConversation/>
         </View>
 
         <View style={styles.middleSectionContainer}>
@@ -50,7 +54,7 @@ const App = () => {
               return (
                 <View 
                   key={index} 
-                  style={ob.type === 'ai' ? styles.receivedMessage : styles.sentMessage}
+                  style={ob.type === 'ai' || ob.type === 'pending' ? styles.receivedMessage : styles.sentMessage}
                 >
                   <Text>{ob.mes}</Text>
                 </View>
@@ -85,7 +89,7 @@ const styles = StyleSheet.create({
     height: 50,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#007AFF', 
+    backgroundColor: '#f1f1f1',
   },
   middleSectionContainer: {
     flex: 1,
