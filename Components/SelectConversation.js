@@ -1,19 +1,14 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React, {useState} from 'react'
-import { Card, Heading, Select, SelectInput, Icon, ChevronDownIcon, 
-  SelectIcon, SelectItem, ButtonText, Button, 
-  SelectTrigger, SelectPortal, SelectBackdrop, SelectContent, SelectDragIndicator, 
-  SelectDragIndicatorWrapper, 
-  TextareaInput, Textarea  } from '@gluestack-ui/themed';
+import { StyleSheet, View } from 'react-native'
+import React from 'react'
+import {  Select, SelectInput, Icon, ChevronDownIcon, SelectIcon, SelectItem,
+  SelectTrigger, SelectPortal, SelectBackdrop, SelectContent, SelectDragIndicator,  
+  SelectDragIndicatorWrapper, } from '@gluestack-ui/themed';
 
-const SelectConversation = () => {
-
-  const [conservations, setConversations] = useState(['ok', 'ok2', 'ok3']);
-  const [selectedConversation, setSelectedConversation] = useState('');
+const SelectConversation = (props) => {
 
   return (
     <View style={{width: 100}} >
-      <Select onValueChange={setSelectedConversation}>
+      <Select onValueChange={props.setSelectedConversation}>
         <SelectTrigger  size="sm" >
           <SelectInput placeholder="Chats" />
           <SelectIcon mr="$3">
@@ -26,8 +21,8 @@ const SelectConversation = () => {
             <SelectDragIndicatorWrapper>
               <SelectDragIndicator  />
             </SelectDragIndicatorWrapper>
-            {conservations.map((name, index)=>{
-              return <SelectItem key={index} label={name} value={name} />
+            {props.conversations.map((ob)=>{
+              return <SelectItem key={ob.id} label={ob.name} value={ob.id} />
             })}
           </SelectContent>
         </SelectPortal>

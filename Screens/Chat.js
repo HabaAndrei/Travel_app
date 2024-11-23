@@ -1,15 +1,47 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {View, Text, ScrollView, StyleSheet, TouchableOpacity, TextInput, KeyboardAvoidingView, 
   Platform, Keyboard } from 'react-native';
 import { Icon, ChevronsRightIcon } from '@gluestack-ui/themed';
-import {askQuestion} from '../firebase.js';
+import {askQuestion, storeConv, storeMes, getConversations, getMessages} from '../firebase.js';
 import SelectConversation from '../Components/SelectConversation';
+import { useIsFocused } from '@react-navigation/native'; 
+import uuid from 'react-native-uuid';
 
 const App = () => {
+
+  const isFocused = useIsFocused();
   const [message, setMessage] = useState('');
   const [conversation , setConversation] = useState([]);
+  const [conversations, setConversations] = useState([{id: 1, name: 'ok'}, {id: 2, name: 'ok2'}, {id: 3, name: 'ok3'}]);
+  const [selectedConversation, setSelectedConversation] = useState('');
 
-  async function getResponse(conv){
+  useEffect(()=>{
+    if(!isFocused)return;
+    getConvs();
+  }, []);
+
+  useEffect(()=>{
+    if(selectedConversation){getMess(selectedConversation)}
+  }, [selectedConversation])
+
+  async function getMess(idConv){
+    const data = await getMessages(idConv);
+    if(data.type){
+      const mess = data?.data?.map((ob)=>{return {type: ob.type, mes: ob.mes}})
+      setConversation(mess);
+    }
+  }
+
+  async function getConvs(){
+    const data = await getConversations();
+    if(data.type){
+      const convs = data.data.map((ob)=>{return {id: ob.id, name: ob.name}})
+      setConversations(convs);
+    }
+  }
+
+
+  async function getResponse(conv, idConv){
     const data = await askQuestion(conv);
     if(data.type){
       setConversation((prev)=>{
@@ -18,6 +50,9 @@ const App = () => {
         })
         return [...newConv];
       })
+      const time = new Date().getTime();
+      storeMes(idConv, 'ai', data?.data, time);
+
     }else{
       console.log('we catch err', data.err);
     }
@@ -25,11 +60,24 @@ const App = () => {
 
   function sendMes(){
     if(!message.replaceAll(' ', '').length)return;
+    let conv = '';
     setConversation((prev)=>{
-      const conv = [...prev, {type: 'user', mes: message}, {type: 'pending'}];
-      getResponse(conv);
+       conv = [...prev, {type: 'user', mes: message}, {type: 'pending'}];
       return [...conv];
     })
+    const time = new Date().getTime();
+    let uuidConv = uuid.v4().slice(0, 5);
+    let name = conv[0].mes.slice(0, 15);
+    if(!selectedConversation){
+      setConversations((prev) => [...prev, {id: uuidConv, name}])
+      setSelectedConversation({id: uuidConv, name});
+      storeConv(uuidConv, name);
+    }else{
+      uuidConv = selectedConversation.id;
+      name = selectedConversation.name;
+    }
+    getResponse(conv, uuidConv);
+    storeMes(uuidConv, 'user', message, time);
     setMessage('');
   }
 
@@ -42,7 +90,7 @@ const App = () => {
       <View style={styles.container}>
 
         <View style={styles.topSection}>
-          <SelectConversation/>
+          <SelectConversation setSelectedConversation={setSelectedConversation} conversations={conversations}/>
         </View>
 
         <View style={styles.middleSectionContainer}>

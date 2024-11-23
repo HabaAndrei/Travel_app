@@ -274,12 +274,71 @@ async function askQuestion(istoricConv){
     rezFin = {type: false, err};
   }
   return rezFin
-
 };
+
+async function storeConv(id, name){
+  let rezFin = {};
+  try{
+    const {uid} = auth.currentUser;
+    await addDoc(collection(db, "conversations"), {uid, id, name});
+    rezFin = {type: true};
+  }catch(err){
+    rezFin = {type: false, err};
+  }
+  return rezFin
+}
+
+async function storeMes(idConv, type, mes, time){
+  let rezFin = {};
+  try{
+    const {uid} = auth.currentUser;
+    await addDoc(collection(db, "messages"), {uid, idConv, type, mes, time});
+    rezFin = {type: true};
+  }catch(err){
+    rezFin = {type: false, err};
+  }
+  return rezFin
+}
+
+async function getConversations(){
+  let rezFin = {};
+  try{
+    const {uid} = auth.currentUser;
+    const q = query(collection(db, "conversations"), where("uid", "==", uid));
+    const querySnapshot = await getDocs(q);
+    let rez = [];
+    querySnapshot.forEach((doc) => {
+      let data = doc.data();
+      rez.push(data);
+    });
+    rezFin = {type:true, data: rez};
+  }catch(err){
+    rezFin = {type: false, err};
+  }
+  return rezFin;
+}
+
+async function getMessages(idConv){
+  let rezFin = {};
+  try{
+    const q = query(collection(db, "messages"), where("idConv", "==", idConv), orderBy("time"));
+    const querySnapshot = await getDocs(q);
+    let rez = [];
+    querySnapshot.forEach((doc) => {
+      let data = doc.data();
+      rez.push(data);
+    });
+    rezFin = {type:true, data: rez};
+  }catch(err){
+    rezFin = {type: false, err};
+  }
+  return rezFin;
+}
+
 
 export {db, auth, signOutUser, deleteTheUser, addProgramIntoDb, createUserEmailPassword, signInUserEmailPassword, 
   getPlansFromDbWithUid, forgotPassword, updateProgram, storeCodeAndEmail, verifyCodeDB, updateEmailVerificationDB, 
-  verifyEmailVerifiedDB, reAuth, store_feedback, askQuestion
+  verifyEmailVerifiedDB, reAuth, store_feedback, askQuestion, storeConv, storeMes, getConversations, getMessages
 };
 
 
