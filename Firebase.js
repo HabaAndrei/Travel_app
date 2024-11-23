@@ -234,38 +234,46 @@ async function store_feedback(feedback, feedbackCategory){
 }
 
 async function askQuestion(istoricConv){
-  
-  const {uid} = auth.currentUser;
-  const data = await getPlansFromDbWithUid(uid);
-  if(!data.type){
-    console.log('avem eroare', data.err);
-    return;
-  }
-  let information = '';
-  if(data.data.length){
-    const rez = data.data.map((trip)=>{
-      let {city, country, from, to, programDaysString} = trip;
-      programDaysString = JSON.parse(programDaysString);
-      const daysWithInfo = programDaysString.map((full_day)=>{
-        let {day, date, activities} = full_day;
-        const info_activities = activities.map((activity)=>{
-          const {time, info, urlLocation, website, place, description, address} = activity;
-          return {time, info, 
-            urlLocation: urlLocation ? urlLocation : '', 
-            website: website ? website : '',
-            place, description, address
-          };
+  let rezFin = {};
+  try{
+    const {uid} = auth.currentUser;
+    const data = await getPlansFromDbWithUid(uid);
+    if(!data.type){
+      return {type: false, err: data.err};
+    }
+    let information = '';
+    if(data.data.length){
+      const rez = data.data.map((trip)=>{
+        let {city, country, from, to, programDaysString} = trip;
+        programDaysString = JSON.parse(programDaysString);
+        const daysWithInfo = programDaysString.map((full_day)=>{
+          let {day, date, activities} = full_day;
+          const info_activities = activities.map((activity)=>{
+            const {time, info, urlLocation, website, place, description, address} = activity;
+            return {time, info, 
+              urlLocation: urlLocation ? urlLocation : '', 
+              website: website ? website : '',
+              place, description, address
+            };
+          })
+          return {day, date, info_activities};
         })
-        return {day, date, info_activities};
+        return {city, country, from, to, daysWithInfo};
       })
-      return {city, country, from, to, daysWithInfo};
-    })
-    information = JSON.stringify(rez);
+      information = JSON.stringify(rez);
+    }
+
+    const rezQuery =  await axios.post(`${address_function_api}`, {method: 'chat', istoricConv, information});
+    if(rezQuery?.data?.type){
+      rezFin = {type: true, data: rezQuery?.data?.data};
+    }else{
+      rezFin = {type: false, err: rezQuery?.data?.err};
+    }
+  }catch(err){
+    console.log({err});
+    rezFin = {type: false, err};
   }
-
-  const rezQuery =  await axios.post(`${address_function_api}`, {method: 'chat', istoricConv, information})
-  console.log(rezQuery)
-
+  return rezFin
 
 };
 

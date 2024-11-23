@@ -2,9 +2,32 @@ import React, { useState } from 'react';
 import {View, Text, ScrollView, StyleSheet, TouchableOpacity, TextInput, KeyboardAvoidingView, 
   Platform, Keyboard } from 'react-native';
 import { Icon, ChevronsRightIcon } from '@gluestack-ui/themed';
+import {askQuestion} from '../firebase.js';
 
 const App = () => {
   const [message, setMessage] = useState('');
+  const [conversation , setConversation] = useState([]);
+
+  async function getResponse(conv){
+    const data = await askQuestion(conv);
+    if(data.type){
+      setConversation((prev)=>{
+        return [...prev, {type: "ai", mes: data?.data}];
+      })
+    }else{
+      console.log('we catch err', data.err);
+    }
+  }
+
+  function sendMes(){
+    if(!message.replaceAll(' ', '').length)return;
+    setConversation((prev)=>{
+      const conv = [...prev, {type: 'user', mes: message}];
+      getResponse(conv);
+      return [...conv];
+    })
+    setMessage('');
+  }
 
   return (
     <KeyboardAvoidingView
@@ -23,14 +46,19 @@ const App = () => {
             style={styles.middleSection}
             contentContainerStyle={styles.middleContent}
           >
-            <Text style={styles.text}>Partea de Mijloc (Scroll Separat)</Text>
-            {Array.from({ length: 50 }, (_, i) => (
-              <Text key={i} style={styles.scrollText}>
-                Element {i + 1}
-              </Text>
-            ))}
+            {conversation.map((ob, index) => {
+              return (
+                <View 
+                  key={index} 
+                  style={ob.type === 'ai' ? styles.receivedMessage : styles.sentMessage}
+                >
+                  <Text>{ob.mes}</Text>
+                </View>
+              );
+            })}
           </ScrollView>
-        </View  >
+        </View>
+
 
         <View style={styles.bottomSection}>
           <TextInput
@@ -41,7 +69,7 @@ const App = () => {
             placeholderTextColor="gray"
             onSubmitEditing={Keyboard.dismiss} 
           />
-          <TouchableOpacity style={styles.sendButton}>
+          <TouchableOpacity style={styles.sendButton} onPress={sendMes} >
             <Icon as={ChevronsRightIcon} m="$2" w="$4" h="$4" color="black" />
           </TouchableOpacity>
         </View>
@@ -49,7 +77,6 @@ const App = () => {
     </KeyboardAvoidingView>
   );
 };
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -67,7 +94,7 @@ const styles = StyleSheet.create({
     borderColor: '#ddd',
     borderRadius: 8,
     overflow: 'hidden',
-    paddingBottom: 50
+    paddingBottom: 50,
   },
   middleSection: {
     flex: 1,
@@ -105,20 +132,29 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   sendButton: {
-    backgroundColor: '#007AFF',
-    padding: 10,
+    backgroundColor: '#0B3D91',
+    padding: 7,
     borderRadius: 20,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  text: {
-    color: '#000',
-    fontSize: 18,
-  },
-  scrollText: {
+  sentMessage: {
+    alignSelf: 'flex-end',  
+    backgroundColor: '#0B3D91',
+    padding: 10,
+    borderRadius: 20,
     marginVertical: 5,
-    fontSize: 16,
+    maxWidth: '70%',
+  },
+  receivedMessage: {
+    alignSelf: 'flex-start', 
+    backgroundColor: '#e5e5e5',
+    padding: 10,
+    borderRadius: 20,
+    marginVertical: 5,
+    maxWidth: '70%',
   },
 });
+
 
 export default App;
