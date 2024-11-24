@@ -126,24 +126,34 @@ const Chat = (props) => {
         </View>
 
         <View style={styles.middleSectionContainer}>
-          <ScrollView
-            style={styles.middleSection}
-            contentContainerStyle={styles.middleContent}
-          >
-            {conversation.map((ob, index) => {
-              return (
-                <View 
-                  key={index} 
-                  style={ob.type === 'ai' || ob.type === 'pending' ? styles.receivedMessage : styles.sentMessage}
-                >
-                  <Text>{ob.mes}</Text>
-                </View>
-              );
-            })}
-          </ScrollView>
+          
+          {conversation.length ? 
+            <ScrollView
+              style={styles.middleSection}
+              contentContainerStyle={styles.middleContent}
+            >
+              {conversation.map((ob, index) => {
+                return (
+                  <View 
+                    key={index} 
+                    style={ob.type === 'ai' || ob.type === 'pending' ? styles.receivedMessage : styles.sentMessage}
+                  >
+                    <Text>{ob.mes}</Text>
+                  </View>
+                );
+              })}
+            </ScrollView> : 
+            <View style={styles.viewText}>
+              <Text style={styles.greetingText}>
+                ✨ Hey, I’m your personal assistant Eric! ✨{"\n\n"}
+                🚀 I’ll answer any questions about the app's features{"\n"}
+                📅 Provide details about your travel itinerary{"\n"}
+                💬 And much more!{"\n\n"}
+                👉 **Try me!** 👈 
+              </Text>
+            </View>
+          }
         </View>
-
-
         <View style={styles.bottomSection}>
           <TextInput
             style={styles.input}
@@ -253,6 +263,21 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     marginVertical: 5,
     maxWidth: '70%',
+  },
+  viewText: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+    backgroundColor: '#f5f5f5', 
+  },
+  greetingText: {
+    fontSize: 18,
+    fontWeight: '500', 
+    textAlign: 'center', 
+    color: '#333333', 
+    lineHeight: 26, 
+    marginVertical: 10, 
   },
 });
 
