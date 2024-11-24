@@ -1,18 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import {View, Text, ScrollView, StyleSheet, TouchableOpacity, TextInput, KeyboardAvoidingView, 
-  Platform, Keyboard } from 'react-native';
+  Platform, Keyboard, 
+  Pressable} from 'react-native';
 import { Icon, ChevronsRightIcon } from '@gluestack-ui/themed';
-import {askQuestion, storeConv, storeMes, getConversations, getMessages} from '../firebase.js';
+import {askQuestion, storeConv, storeMes, getConversations, getMessages, deleteChat} from '../firebase.js';
 import SelectConversation from '../Components/SelectConversation';
 import { useIsFocused } from '@react-navigation/native'; 
 import uuid from 'react-native-uuid';
 
-const App = () => {
+const Chat = (props) => {
 
   const isFocused = useIsFocused();
   const [message, setMessage] = useState('');
   const [conversation , setConversation] = useState([]);
-  const [conversations, setConversations] = useState([{id: 1, name: 'ok'}, {id: 2, name: 'ok2'}, {id: 3, name: 'ok3'}]);
+  const [conversations, setConversations] = useState([]);
   const [selectedConversation, setSelectedConversation] = useState('');
 
   useEffect(()=>{
@@ -27,7 +28,8 @@ const App = () => {
   async function getMess(idConv){
     const data = await getMessages(idConv);
     if(data.type){
-      const mess = data?.data?.map((ob)=>{return {type: ob.type, mes: ob.mes}})
+      const mess = data?.data?.map((ob)=>{return {type: ob.type, mes: ob.mes}});
+      if(!mess.length)return;
       setConversation(mess);
     }
   }
@@ -81,6 +83,30 @@ const App = () => {
     setMessage('');
   }
 
+  async function deleteChat_(){
+    if(!selectedConversation)return;
+    const response = await props.areYouSureDeleting();
+    if (!response) return;
+    deleteChat(selectedConversation);
+    setConversations((prev)=>{
+      let newConvs = [];
+      prev.forEach((ob)=>{
+        if(ob.id != selectedConversation)newConvs.push(ob);
+      });
+      return [...newConvs];
+    })
+    setSelectedConversation('');
+    setConversation([]);
+  }
+
+  function newChat(){
+    setConversation([]); 
+    setSelectedConversation(''); 
+    setMessage('');
+  }
+
+  
+
   return (
     <KeyboardAvoidingView
       style={{ flex: 1 }}
@@ -90,7 +116,13 @@ const App = () => {
       <View style={styles.container}>
 
         <View style={styles.topSection}>
-          <SelectConversation setSelectedConversation={setSelectedConversation} conversations={conversations}/>
+          <Pressable onPress={deleteChat_} style={styles.sideButton}>
+            <Text style={styles.buttonText}>Delete chat</Text>
+          </Pressable>
+          <SelectConversation setSelectedConversation={setSelectedConversation} conversations={conversations} />
+          <Pressable onPress={newChat} style={styles.sideButton}>
+            <Text style={styles.buttonText}>New chat</Text>
+          </Pressable>
         </View>
 
         <View style={styles.middleSectionContainer}>
@@ -134,10 +166,26 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   topSection: {
-    height: 50,
-    justifyContent: 'center',
-    alignItems: 'center',
+    height: 60, 
+    flexDirection: 'row', 
+    justifyContent: 'space-between', 
+    alignItems: 'center', 
+    paddingHorizontal: 10, 
     backgroundColor: '#f1f1f1',
+    borderBottomWidth: 1, 
+    borderBottomColor: '#ccc',
+  },
+  sideButton: {
+    paddingVertical: 8, 
+    paddingHorizontal: 15, 
+    backgroundColor: '#0B3D91', 
+    borderRadius: 8, 
+  },
+  buttonText: {
+    color: '#fff', 
+    fontWeight: 'bold', 
+    fontSize: 14, 
+    textAlign: 'center', 
   },
   middleSectionContainer: {
     flex: 1,
@@ -209,4 +257,4 @@ const styles = StyleSheet.create({
 });
 
 
-export default App;
+export default Chat;

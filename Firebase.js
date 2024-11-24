@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getFirestore, collection, addDoc, doc, setDoc ,updateDoc, query, where, getDocs, getDoc, orderBy } from "firebase/firestore";
+import { getFirestore, collection, addDoc, doc, setDoc ,updateDoc, query, where, deleteDoc, getDocs, getDoc, orderBy } from "firebase/firestore";
 import {MEASUREMENT_ID, APIKEY, AUTH_DOMAIN, PROJECT_ID, STORAGE_BUCKET, MESSAGING_SENDER_ID, APP_ID} from '@env';
 import {signOut,  deleteUser, initializeAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, 
   sendPasswordResetEmail, reauthenticateWithCredential, EmailAuthProvider  } from "firebase/auth";
@@ -335,10 +335,26 @@ async function getMessages(idConv){
   return rezFin;
 }
 
+async function deleteChat(idConv){
+  const q = query(collection(db, "messages"), where("idConv", "==", idConv));
+  const querySnapshot = await getDocs(q);
+  querySnapshot.forEach((document) => {
+    const docRef = doc(db, 'messages', document.id);
+    deleteDoc(docRef)
+  });
+
+  const q2 = query(collection(db, "conversations"), where("id", "==", idConv));
+  const querySnapshot2 = await getDocs(q2);
+  querySnapshot2.forEach((document) => {
+    const docRef = doc(db, 'conversations', document.id);
+    deleteDoc(docRef)
+  });
+}
+
 
 export {db, auth, signOutUser, deleteTheUser, addProgramIntoDb, createUserEmailPassword, signInUserEmailPassword, 
   getPlansFromDbWithUid, forgotPassword, updateProgram, storeCodeAndEmail, verifyCodeDB, updateEmailVerificationDB, 
-  verifyEmailVerifiedDB, reAuth, store_feedback, askQuestion, storeConv, storeMes, getConversations, getMessages
+  verifyEmailVerifiedDB, reAuth, store_feedback, askQuestion, storeConv, storeMes, getConversations, getMessages, deleteChat
 };
 
 
