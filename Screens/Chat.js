@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import {View, Text, ScrollView, StyleSheet, TouchableOpacity, TextInput, KeyboardAvoidingView, 
-  Platform, Keyboard, 
-  Pressable} from 'react-native';
+  Platform, Keyboard, Pressable} from 'react-native';
 import { Icon, ChevronsRightIcon } from '@gluestack-ui/themed';
 import {askQuestion, storeConv, storeMes, getConversations, getMessages, deleteChat} from '../firebase.js';
 import SelectConversation from '../Components/SelectConversation';
 import { useIsFocused } from '@react-navigation/native'; 
 import uuid from 'react-native-uuid';
+import FontAwesome from '@expo/vector-icons/FontAwesome';
 
 const Chat = (props) => {
 
@@ -164,7 +164,7 @@ const Chat = (props) => {
             onSubmitEditing={Keyboard.dismiss} 
           />
           <TouchableOpacity style={styles.sendButton} onPress={sendMes} >
-            <Icon as={ChevronsRightIcon} m="$2" w="$4" h="$4" color="black" />
+            <FontAwesome name="send-o" size={18} color="white" />
           </TouchableOpacity>
         </View>
       </View>
@@ -243,7 +243,7 @@ const styles = StyleSheet.create({
   },
   sendButton: {
     backgroundColor: '#0B3D91',
-    padding: 7,
+    padding: 10,
     borderRadius: 20,
     justifyContent: 'center',
     alignItems: 'center',

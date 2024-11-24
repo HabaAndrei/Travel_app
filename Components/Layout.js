@@ -7,7 +7,10 @@ import uuid from 'react-native-uuid';
 import LogIn from '../Screens/LogIn.js';
 import { StatusBar } from 'expo-status-bar';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import Feather from '@expo/vector-icons/Feather';
+import FontAwesome from '@expo/vector-icons/FontAwesome';
+import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 
 const Layout = ({ children, navigation, route, user, setUser}) => {
 
@@ -80,19 +83,26 @@ const Layout = ({ children, navigation, route, user, setUser}) => {
           contentContainerStyle={styles.footerContent}
         >
           <Pressable style={styles.pressable} onPress={() => navigation.navigate('MyTrips')} >
-            <Icon as={GlobeIcon} m="$2" w="$5" h="$5"  color="white"/>
+            <FontAwesome6 name="earth-americas" size={24} color="white" />
             <Text style={styles.pressableText}>My Trips</Text>
           </Pressable>
 
           <Pressable style={styles.pressable} onPress={() => navigation.navigate('SetUpTrip')} >
-            <Icon as={CalendarDaysIcon} m="$2" w="$5" h="$5" color="white" />
+            <FontAwesome name="calendar" size={24} color="white" />
             <Text style={styles.pressableText}>New trip</Text>
           </Pressable>
           
           <Pressable style={styles.pressable} onPress={() => navigation.navigate('UserSettings')} >
-            <Icon as={SettingsIcon} m="$2" w="$5" h="$5" color="white" />
+            <Feather name="settings" size={24} color="white" />
             <Text style={styles.pressableText}>Settings</Text>
           </Pressable>
+
+          <Pressable style={styles.pressable} onPress={() => navigation.navigate('Chat')} >
+            <MaterialCommunityIcons name="robot-outline" size={24} color="white" />
+            <Text style={styles.pressableText}>Assistant</Text>
+          </Pressable>
+
+
          
         </ScrollView>
       </View> : <View
