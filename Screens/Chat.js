@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {View, Text, ScrollView, StyleSheet, TouchableOpacity, TextInput, KeyboardAvoidingView, 
   Platform, Keyboard, Pressable} from 'react-native';
-import { Icon, ChevronsRightIcon } from '@gluestack-ui/themed';
 import {askQuestion, storeConv, storeMes, getConversations, getMessages, deleteChat} from '../firebase.js';
 import SelectConversation from '../Components/SelectConversation';
 import { useIsFocused } from '@react-navigation/native'; 

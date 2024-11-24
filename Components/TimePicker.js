@@ -1,13 +1,23 @@
-import { StyleSheet, Text, View, Button } from 'react-native';
-import React, { useState } from 'react'
+import { StyleSheet, View } from 'react-native';
+import React from 'react'
 import DateTimePickerModal from "react-native-modal-datetime-picker";
-
+import {HStack, LinkText, Link } from '@gluestack-ui/themed';
 
 const TimePicker = (props) => {
 
+
+
+
   return (
     <View>
-      <Button title={props?.title ? props?.title : 'Change time'} time onPress={props.showDatePicker} />
+      <Link onPress={props.showDatePicker} >
+        <HStack alignItems="center">
+          <LinkText size="sm" fontFamily="$heading" fontWeight="$semibold" color="$primary600" textDecorationLine="none">
+            {props?.title ? props?.title : 'Change time'}
+          </LinkText>
+        </HStack>
+      </Link>
+
       <DateTimePickerModal
         isVisible={props.isTimePickerVisible.type}
         mode="time"
