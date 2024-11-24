@@ -9,7 +9,7 @@ import { useIsFocused } from '@react-navigation/native';
 import {addProgramIntoDb} from '../firebase.js';
 import axios from 'axios';
 import NavbarProgram from '../Components/NavbarProgram.js';
-
+import { storeErr} from '../firebase.js';
 
 const Program = (props) => {
 
@@ -89,6 +89,7 @@ const Program = (props) => {
         props.addNotification("warning", "Unfortunately, we could not generate your program.")
       }       
     }).catch((err)=>{
+      storeErr(err.message)
       props.addNotification("error", "Unfortunately, we could not generate program")
       console.log('eroare de la getProgram',err);
     })

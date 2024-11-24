@@ -7,6 +7,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getReactNativePersistence } from '@firebase/auth/dist/rn/index.js';
 import {address_function_api} from './diverse.js';
 import axios from 'axios';
+import * as Device from 'expo-device';
 
 
 const firebaseConfig = {
@@ -42,6 +43,7 @@ async function createUserEmailPassword(email, password, firstName, secondName){
 
     rezFin = {type: true, data: rez};
   }catch(err){
+    storeErr(err.message)
     rezFin = {type: false, err};
   }
   return rezFin;
@@ -53,6 +55,7 @@ async function signInUserEmailPassword(email, password){
     const rez = await signInWithEmailAndPassword(auth, email, password)
     rezFin = {type: true, data: rez};
   }catch(err){
+  storeErr(err.message)
     rezFin = {type: false, err};
   }
   return rezFin; 
@@ -66,6 +69,7 @@ async function reAuth(password){
     const credential = EmailAuthProvider.credential(email, password)
     await reauthenticateWithCredential(user, credential);
   }catch(err){
+    storeErr(err.message)
     rezFin = {type: false, err};
   }
   return rezFin;
@@ -78,6 +82,7 @@ async function deleteTheUser(){
     const rez = await deleteUser(user);
     rezFin = {type: true};
   }catch(err){
+    storeErr(err.message)
     rezFin = {type: false, err};
   }
   return rezFin;
@@ -89,6 +94,7 @@ async function signOutUser(){
     const rez = await signOut(auth);
     rezFin = {type: true};
   }catch(err){
+    storeErr(err.message)
     rezFin = {type: false, err};
   }
   return rezFin;
@@ -101,6 +107,7 @@ async function forgotPassword(email){
     const rez = await sendPasswordResetEmail(auth, email)
     rezFin = {type:true};
   }catch(err){
+    storeErr(err.message)
     rezFin = {type: false, err};
   }
   return rezFin; 
@@ -115,6 +122,7 @@ async function addUserIntoDb(uid, createdAt, email, password, firstName, secondN
       uid, email, firstName, secondName, createdAt, email_verified: false
     });
   }catch(err){
+    storeErr(err.message)
     console.log(err, 'nu s a introdus nimic in baza de date')
   }
 }
@@ -126,6 +134,7 @@ async function addProgramIntoDb(city, country, from , to, programDaysString, uid
   try{
     await addDoc(collection(db, "programs"), {city, country, from , to, programDaysString, uid});
   }catch(err){
+    storeErr(err.message)
     rezFin = {type: false, err}
   }
   return rezFin;
@@ -145,6 +154,7 @@ async function getPlansFromDbWithUid(uid){
     });
     rezFin = {type:true, data: programs};
   }catch(err){
+    storeErr(err.message)
     rezFin = {type: false, err}
   }
   return rezFin;
@@ -162,6 +172,7 @@ async function updateProgram(id, from, to, program){
       programDaysString: program
     });
   }catch(err){
+    storeErr(err.message)
     rezFin = {type: false, err};
   }
   return rezFin;
@@ -172,6 +183,7 @@ async function storeCodeAndEmail(code, email){
   try{
     await setDoc(doc(db, "code_verification", email), {code});
   }catch(err){
+    storeErr(err.message)
     rezFin = {type: false, err};
   }
   return rezFin; 
@@ -187,6 +199,7 @@ async function verifyCodeDB(codeInput, email){
       rezFin = {type: true, mes: 'The code does not correspond to the code sent by e-mail last time'}
     }
   }catch(err){
+    storeErr(err.message)
     rezFin = {type: false, err};
   }
   return rezFin;
@@ -201,6 +214,7 @@ async function updateEmailVerificationDB(uid){
       email_verified: true
     });
   }catch(err){
+    storeErr(err.message)
     rezFin = {type: false, err};
   }
   return rezFin;
@@ -216,6 +230,7 @@ async function verifyEmailVerifiedDB(uid){
       rezFin = {type: false};
     }    
   }catch(err){
+    storeErr(err.message)
     rezFin = {type: false, err};
   }
   return rezFin;
@@ -228,6 +243,7 @@ async function store_feedback(feedback, feedbackCategory){
     await addDoc(collection(db, "feedback"), {uid, feedback, feedbackCategory});
     rezFin = {type: true};
   }catch(err){
+    storeErr(err.message)
     rezFin = {type: false, err};
   }
   return rezFin;
@@ -270,7 +286,7 @@ async function askQuestion(istoricConv){
       rezFin = {type: false, err: rezQuery?.data?.err};
     }
   }catch(err){
-    console.log({err});
+    storeErr(err.message)
     rezFin = {type: false, err};
   }
   return rezFin
@@ -283,6 +299,7 @@ async function storeConv(id, name){
     await addDoc(collection(db, "conversations"), {uid, id, name});
     rezFin = {type: true};
   }catch(err){
+    storeErr(err.message)
     rezFin = {type: false, err};
   }
   return rezFin
@@ -295,6 +312,7 @@ async function storeMes(idConv, type, mes, time){
     await addDoc(collection(db, "messages"), {uid, idConv, type, mes, time});
     rezFin = {type: true};
   }catch(err){
+    storeErr(err.message)
     rezFin = {type: false, err};
   }
   return rezFin
@@ -313,6 +331,7 @@ async function getConversations(){
     });
     rezFin = {type:true, data: rez};
   }catch(err){
+    storeErr(err.message)
     rezFin = {type: false, err};
   }
   return rezFin;
@@ -330,6 +349,7 @@ async function getMessages(idConv){
     });
     rezFin = {type:true, data: rez};
   }catch(err){
+    storeErr(err.message)
     rezFin = {type: false, err};
   }
   return rezFin;
@@ -351,10 +371,25 @@ async function deleteChat(idConv){
   });
 }
 
+async function storeErr(mesErr){
+  const {modelName, modelId, brand} = Device;
+  let rezFin = {};
+  try{
+    const {uid} = auth.currentUser;
+    await addDoc(collection(db, "errors"), {uid, modelName, modelId, brand, mesErr});
+    rezFin = {type: true};
+  }catch(err){
+    storeErr(err.message)
+    rezFin = {type: false, err};
+  }
+  return rezFin
+}
+
 
 export {db, auth, signOutUser, deleteTheUser, addProgramIntoDb, createUserEmailPassword, signInUserEmailPassword, 
   getPlansFromDbWithUid, forgotPassword, updateProgram, storeCodeAndEmail, verifyCodeDB, updateEmailVerificationDB, 
-  verifyEmailVerifiedDB, reAuth, store_feedback, askQuestion, storeConv, storeMes, getConversations, getMessages, deleteChat
+  verifyEmailVerifiedDB, reAuth, store_feedback, askQuestion, storeConv, storeMes, getConversations, getMessages, 
+  deleteChat, storeErr
 };
 
 

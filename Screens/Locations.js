@@ -11,7 +11,7 @@ import NavbarProgram from '../Components/NavbarProgram';
 import ImageCarousel from '../Components/ImageCarousel';
 import CardDatePicker from '../Components/CardDatePicker';
 import CustomButton from '../CustomElements/CustomButton.js';
-
+import {storeErr} from '../firebase.js';
 
 const Locations = (props) => {
 
@@ -66,6 +66,7 @@ const Locations = (props) => {
         console.log("eroare la functia createLocationsAi ", data);
       }       
     }).catch((err)=>{
+      storeErr(err.message)
       console.log('eroare de la createLocationsAi', err, ' <<== eroare');
     })
   }

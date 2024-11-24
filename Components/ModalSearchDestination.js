@@ -4,6 +4,7 @@ import axios from 'axios';
 import { address_function_fuzzy } from '../diverse';
 import { Spinner } from "@gluestack-ui/themed";
 import CustomButton from '../CustomElements/CustomButton.js';
+import {    storeErr } from '../firebase.js';
 
 const ModalSearchDestination = (props) => {
 
@@ -22,6 +23,7 @@ const ModalSearchDestination = (props) => {
             const list = data.data?.map((country) => { return { place: country, type: "country" } });
             props.setSuggestions(list);
         }).catch((err) => {
+            storeErr(err.message)
             console.log(err);
             props.addNotification("warning", "System error occurred. Please try again later.");
         });
@@ -41,6 +43,7 @@ const ModalSearchDestination = (props) => {
             const list = data.data?.map((country) => { return { place: country, type: "city" } });
             props.setSuggestions(list);
         }).catch((err) => {
+            storeErr(err.message)
             console.log(err);
             props.addNotification("warning", "System error occurred. Please try again later.");
         });

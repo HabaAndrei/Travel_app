@@ -1,7 +1,7 @@
 import {ADDRESS_FUNCTION_API, ADDRESS_FUNCTION_FUZZY, 
     ADDRESS_FUNCTION_SEND_CODE_VERIFICATION} from '@env';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import { storeErr } from './firebase';
 
 
 
@@ -62,8 +62,9 @@ async function getDataFromAsyncStorage(key){
         const storedTasks = await AsyncStorage.getItem(key);
         const dataParse = JSON.parse(storedTasks);
         rezFinal = {type: true, data: dataParse}
-    } catch (error) {
-        rezFinal = {type: false, err: error};
+    } catch (err) {
+        storeErr(err.message);
+        rezFinal = {type: false, err: err};
     }
     return rezFinal;
 };
@@ -77,8 +78,9 @@ async function addDataToAsyncStorage(key, data){
     try {
       await AsyncStorage.setItem(keyString, dataString);
       rezFinal = {type: true};
-    } catch (error) {
-        rezFinal = {type: false, err: error};
+    } catch (err) {
+        storeErr(err.message);
+        rezFinal = {type: false, err: err};
     }
 
     return rezFinal;
@@ -89,8 +91,9 @@ async function removeItemFromAsyncStorage(key){
     try {
         const removeData = await AsyncStorage.removeItem(key);
         rezFinal = {type: true}
-    } catch (error) {
-        rezFinal = {type: false, err: error};
+    } catch (err) {
+        storeErr(err.message);
+        rezFinal = {type: false, err: err};
     }
     return rezFinal;
 }
@@ -100,8 +103,9 @@ async function getAllKeysFromAsyncStorage(){
     try {
         const keys = await AsyncStorage.getAllKeys();
         rezFinal = {type: true, data: keys}
-    } catch (error) {
-        rezFinal = {type: false, err: error};
+    } catch (err) {
+        storeErr(err.message);
+        rezFinal = {type: false, err: err};
     }
     return rezFinal;
 }
@@ -113,8 +117,9 @@ async function deleteAllFromAsyncStorage(){
     try {
         await AsyncStorage.clear();
         rezFinal = {type: true}
-    } catch (error) {
-        rezFinal = {type: false, err: error};
+    } catch (err) {
+        storeErr(err.message);
+        rezFinal = {type: false, err: err};
     }
     return rezFinal;
 }
@@ -125,8 +130,9 @@ async function multiGetFromAsyncStorage(arrayOfKeys){
     try {
         const data = await AsyncStorage.multiGet(arrayOfKeys);
         rezFinal = {type: true, data: data}
-    } catch (error) {
-        rezFinal = {type: false, err: error};
+    } catch (err) {
+        storeErr(err.message);
+        rezFinal = {type: false, err: err};
     }
     return rezFinal;
 }
@@ -141,8 +147,9 @@ async function multiSetFromAsyncStorage(arrayOfArrays){
     try {
         const data = await AsyncStorage.multiSet(serializedArray);
         rezFinal = {type: true, data: data}
-    } catch (error) {
-        rezFinal = {type: false, err: error};
+    } catch (err) {
+        storeErr(err.message);
+        rezFinal = {type: false, err: err};
     }
     return rezFinal;
 }
@@ -154,8 +161,9 @@ async function multiRemoveFromAsyncStorage(arrayOfKeys){
     try {
         const data = await AsyncStorage.multiRemove(arrayOfKeys);
         rezFinal = {type: true}
-    } catch (error) {
-        rezFinal = {type: false, err: error};
+    } catch (err) {
+        storeErr(err.message);
+        rezFinal = {type: false, err: err};
     }
     return rezFinal;
 }
