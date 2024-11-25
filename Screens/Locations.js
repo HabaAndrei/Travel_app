@@ -1,10 +1,10 @@
 import { StyleSheet,SafeAreaView, View, ScrollView, Pressable, Dimensions } from 'react-native'
 import React, {useState, useEffect} from 'react'
-import { useIsFocused } from '@react-navigation/native'; 
-import {address_function_api, getDataFromAsyncStorage, addDataToAsyncStorage, 
+import { useIsFocused } from '@react-navigation/native';
+import {address_function_api, getDataFromAsyncStorage, addDataToAsyncStorage,
   multiSetFromAsyncStorage, formatDateFromMilliseconds} from '../diverse';
 import axios from 'axios';
-import { Card, HStack, Heading, Center, Text, Switch, Button, Link, Divider, LinkText, Spinner, 
+import { Card, HStack, Heading, Center, Text, Switch, Button, Link, Divider, LinkText, Spinner,
   VStack, ArrowLeftIcon, CheckIcon, Icon,
 } from '@gluestack-ui/themed';
 import NavbarProgram from '../Components/NavbarProgram';
@@ -34,20 +34,20 @@ const Locations = (props) => {
       getLocationsFromAsyncStorage();
       return;
     };
-  
+
     let {city, country, checkbox, input, type, isLocalPlaces, scaleVisit} = props?.route?.params;
 
     if(type === "getAllDataAboutLocations"){
       createLocationsAi('seeAllPlaces', city, country, input, checkbox, isLocalPlaces, scaleVisit)
       return;
     }
-    
+
   }, [isFocused]);
 
   async function createLocationsAi( method, city, country, input, checkbox, isLocalPlaces, scaleVisit){
     setLocations([]);
     setButtonHomePage(false)
-    axios.post(`${address_function_api}`, 
+    axios.post(`${address_function_api}`,
       {method, city, country, input, checkbox, isLocalPlaces, scaleVisit}
     ).then((data)=>{
       if(data.data.type){
@@ -59,12 +59,13 @@ const Locations = (props) => {
             return {...ob, selected: false }
           }
         });
+        console.log(arraySelected);
         setLocations(arraySelected);
-        multiSetFromAsyncStorage([['arrayLocationsToTravel', [...arraySelected]], 
+        multiSetFromAsyncStorage([['arrayLocationsToTravel', [...arraySelected]],
           ["locationsParameter", {city, country, input, checkbox, scaleVisit}]]);
       }else{
         console.log("eroare la functia createLocationsAi ", data);
-      }       
+      }
     }).catch((err)=>{
       storeErr(err.message)
       console.log('eroare de la createLocationsAi', err, ' <<== eroare');
@@ -101,19 +102,19 @@ const Locations = (props) => {
 
   function verifyDestinationRequest(){
     if(!dateFrom || !dateTo){
-      props.addNotification("warning", "Please choose the start and end date of the trip."); 
+      props.addNotification("warning", "Please choose the start and end date of the trip.");
       return false
     }
     if((new Date(dateTo)).getTime() < (new Date(dateFrom)).getTime()){
-      props.addNotification("warning", "Please choose the start date to be smaller than the end date."); 
+      props.addNotification("warning", "Please choose the start date to be smaller than the end date.");
       return false
     }
     return true;
   }
 
 
-  async function goToCreateProgram(){  
-    //////////////////////////////////////////////////////////////// 
+  async function goToCreateProgram(){
+    ////////////////////////////////////////////////////////////////
     // decomentez aceasta in prod ==>>>
 
     // if(!verifyDestinationRequest())return;
@@ -164,13 +165,13 @@ const Locations = (props) => {
 
       <NavbarProgram name={props.route.name} navigation={props.navigation} />
       {
-        buttonHomePage ? 
+        buttonHomePage ?
         <View style={styles.indicationView}>
           <Text style={styles.indicationText}>
             The locations are generated after you complete the entire form in step 1. We need that information to generate the best locations for you.
           </Text>
         </View>
-        : 
+        :
         <ScrollView>
           {!locations?.length ? (
           <View style={{ marginTop: screenHeight / 3, }}>
@@ -186,16 +187,24 @@ const Locations = (props) => {
                 Select the locations you would like to visit
               </Heading>
             </Center>
-        
+
             {locations.map((location, index) =>{
               return <Card key={index} p="$5" borderRadius="$lg" maxWidth={400} m="$3"
               style={[ styles.cardPressable, location.selected && styles.selectedCard ]} >
                 <Heading size="md" fontFamily="$heading" mb="$4">
                   {location.name}
                 </Heading>
+                {location?.average_hours_visit ?
+                  <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                    <Text  style={{marginRight: 30}} fontSize="$sm" fontStyle="normal" fontWeight="$normal" lineHeight="$sm" mb="$2" sx={{ color: "$textLight700" }}>
+                      Average time to visit: {location.average_hours_visit} h
+                    </Text>
+                  </View>
+                  : null
+                }
 
                 <View style={{ flex: 1, marginTop: 20 }}>
-                  {location.arrayWithLinkImages.length ? 
+                  {location.arrayWithLinkImages.length ?
                   <ImageCarousel  imageUrls={location.arrayWithLinkImages}/>:
                   <View></View>
                   }
@@ -210,7 +219,7 @@ const Locations = (props) => {
                         </LinkText>
                       </HStack>
                     </Link>
-                    {location.urlLocation && location.website ? 
+                    {location.urlLocation && location.website ?
                     <Divider orientation="vertical" mx='$2.5' bg='$emerald500' h={15} />:
                     <View></View>
                     }
@@ -225,9 +234,9 @@ const Locations = (props) => {
                 </VStack>
 
                 <Center>
-                  {location.hasOwnProperty('selected_full_tour') ? 
+                  {location.hasOwnProperty('selected_full_tour') ?
                     <View  style={styles.viewButtons}>
-                      {location.selected ? 
+                      {location.selected ?
                       <Pressable onPress={() => selectFullTour(index)} style={styles.fullTourPress}>
                         <Text style={styles.fullTourText}>Choose to explore the entire location</Text>
                         <Switch value={location.selected_full_tour} />
@@ -249,13 +258,13 @@ const Locations = (props) => {
             <CardDatePicker dateTo={dateTo} setDateTo={setDateTo} dateFrom={dateFrom} setDateFrom={setDateFrom}
             datePickerVisibility={datePickerVisibility} setDatePickerVisibility={setDatePickerVisibility}   />
 
-            <View> 
+            <View>
               <HStack h="$10" justifyContent="center" alignItems="center">
                 <HStack alignItems="center"  >
                   <Icon as={ArrowLeftIcon} m="$2" w="$6" h="$6" />
                   <Text bold={true} onPress={()=>pressOnCancel()} >Go back</Text>
                 </HStack>
-                
+
                 <Divider  style={{ margin: 15 }}  orientation="vertical"  mx="$2.5"  bg="$indigo500"  h={25}  $dark-bg="$indigo400"/>
 
                 <HStack alignItems="center">
@@ -266,7 +275,7 @@ const Locations = (props) => {
             </View>
           </View>
           )}
-        </ScrollView> 
+        </ScrollView>
       }
     </ScrollView>
   </SafeAreaView>
@@ -295,23 +304,23 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   selectedCard: {
-    backgroundColor: '#ADD8E6', 
+    backgroundColor: '#ADD8E6',
   },
   indicationView: {
-    backgroundColor: '#f9f9f9', 
-    borderColor: '#ddd', 
+    backgroundColor: '#f9f9f9',
+    borderColor: '#ddd',
     borderWidth: 1,
-    borderRadius: 8, 
-    padding: 12, 
+    borderRadius: 8,
+    padding: 12,
     marginVertical: 10,
-    shadowColor: '#000', 
+    shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 2,
   },
   indicationText: {
-    color: '#333', 
+    color: '#333',
     fontSize: 14,
     lineHeight: 20,
   },

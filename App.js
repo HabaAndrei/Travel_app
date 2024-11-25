@@ -22,7 +22,7 @@ const Stack = createNativeStackNavigator();
 const App = () => {
 
   const [user, setUser] = useState(false);
- 
+
   useEffect(()=>{
     reloadUser();
   }, [])
@@ -53,7 +53,7 @@ const App = () => {
       <SetUpTrip/>
     </Layout>
   );
-  
+
   const ProgramScreen = ({ navigation, route }) => (
     <Layout  navigation={navigation} route={route}  user={user} setUser={setUser}   >
       <Program/>
@@ -151,7 +151,12 @@ const styles = StyleSheet.create({})
 
 
 
-// In pagina locations mai adaug : 
+// In pagina locations mai adaug :
 // Un input in care sa fie locatia hotelului
 
 // Rezolv bug ul cu datepickerul, si adaug butoane custom!!
+
+// trimit in server si partea cu average hors visit =>>> vezi ca nu ma asculta din pacate , mergi si verifica!!
+
+// caut alte date de cautare cu nume doar in engleza
+
