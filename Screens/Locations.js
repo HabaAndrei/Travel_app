@@ -123,6 +123,27 @@ const Locations = (props) => {
       props.addNotification('warning', 'You do not have any location selected to make the trip');
       return;
     }
+    const data = selectedLocations.map((ob)=>{
+      const {dataTimeLocation} = ob;
+      if(!dataTimeLocation)return ob;
+      const {packages} = dataTimeLocation;
+      if(!packages || !Object.entries(packages).length)return ob;
+      let newPackeges = {};
+      let num = 1;
+      let hours = 0;
+      Object.values(packages).forEach((ob)=>{
+        if(!ob.selected)return;
+        newPackeges[num] = ob;
+        hours += ob?.average_visiting_hours
+        num++;
+      })
+      if(hours > 0){
+        ob.dataTimeLocation.average_hours_visiting_full_location = hours;
+      }
+      ob.dataTimeLocation.packages = newPackeges;
+      return ob;
+    })
+
     const dataParam = await getDataFromAsyncStorage('locationsParameter');
     if(!dataParam.type){
       props.addNotification('error', 'Error submitting for program search');
@@ -137,7 +158,7 @@ const Locations = (props) => {
     // locationParam.to = formatDateFromMilliseconds(dateTo)
     locationParam.from = formatDateFromMilliseconds(1707602400000);
     locationParam.to = formatDateFromMilliseconds(1718053200000)
-    props.navigation.navigate('Program', {type: 'createProgram', locations: selectedLocations, locationParam});
+    props.navigation.navigate('Program', {type: 'createProgram', locations: data, locationParam});
 
     // fac si aici schimbarea in pod <<<<<<<<<<===========
     /////////////////////////////////////////////////////////////////
