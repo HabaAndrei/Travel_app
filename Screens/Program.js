@@ -1,11 +1,11 @@
 import { StyleSheet, View, ScrollView, Dimensions, Pressable, SafeAreaView } from 'react-native'
 import React, {useState, useEffect} from 'react'
-import {address_function_api, formatDateFromMilliseconds, removeItemFromAsyncStorage, 
-  addDataToAsyncStorage, multiSetFromAsyncStorage, getDataFromAsyncStorage, 
+import {address_function_api, formatDateFromMilliseconds, removeItemFromAsyncStorage,
+  addDataToAsyncStorage, multiSetFromAsyncStorage, getDataFromAsyncStorage,
   multiGetFromAsyncStorage, multiRemoveFromAsyncStorage} from '../diverse.js';
-import { ArrowRightIcon, Spinner, Center, Card, Heading, Link, LinkText, Text, 
+import { ArrowRightIcon, Spinner, Center, Card, Heading, Link, LinkText, Text,
   Divider, HStack, TrashIcon,RepeatIcon, CheckIcon,  Icon } from "@gluestack-ui/themed";
-import { useIsFocused } from '@react-navigation/native'; 
+import { useIsFocused } from '@react-navigation/native';
 import {addProgramIntoDb} from '../firebase.js';
 import axios from 'axios';
 import NavbarProgram from '../Components/NavbarProgram.js';
@@ -14,7 +14,7 @@ import { storeErr} from '../firebase.js';
 const Program = (props) => {
 
   // createProgram => creez date din azure
-  // getProgramAsync => iau date din async storage 
+  // getProgramAsync => iau date din async storage
   // keepProgram => pastram programul din useState
 
   const isFocused = useIsFocused();
@@ -26,8 +26,8 @@ const Program = (props) => {
 
   useEffect(()=>{
 
-    if(!isFocused)return 
-   
+    if(!isFocused)return
+
     if(!props?.route?.params?.type || props?.route?.params?.type === "getProgramAsync"){
       getProgramFromAsyncStorage();
       return;
@@ -41,7 +41,7 @@ const Program = (props) => {
     if(type === "createProgram"){
       createProgramAi('createProgram', from, to, city, country, locations);
     }
-    
+
 
   }, [isFocused]);
 
@@ -59,10 +59,10 @@ const Program = (props) => {
     }
   }
 
- 
+
 
   async function regenerateProgram(){
-    
+
     const rez = await getDataFromAsyncStorage("travelParameter");
     if(!rez.type)return
     let {method, from, to, city, country, locations} = rez.data;
@@ -75,19 +75,19 @@ const Program = (props) => {
   async function createProgramAi(method, from, to, city, country, locations){
     setButtonHomePage(false);
     setProgram([]);
-    axios.post(`${address_function_api}`, 
+    axios.post(`${address_function_api}`,
       {method, from, to, city, country, locations}
     ).then((data)=>{
 
       if(data.data.type){
         const values = Object.values(data.data.data);
         setProgram([...values]);
-        multiSetFromAsyncStorage([['travelProgram', [...values]], 
+        multiSetFromAsyncStorage([['travelProgram', [...values]],
           ["travelParameter", {method, from, to, city, country, locations}]]);
       }else{
         console.log("eroare la functia getProgram ", data.data);
         props.addNotification("warning", "Unfortunately, we could not generate your program.")
-      }       
+      }
     }).catch((err)=>{
       storeErr(err.message)
       props.addNotification("error", "Unfortunately, we could not generate program")
@@ -116,13 +116,13 @@ const Program = (props) => {
         })
 
         addDataToAsyncStorage('travelProgram', updateDayProgram);
-      
+
         return [...updateDayProgram];
       })
     }
   }
 
-  
+
   async function deleteAllProgram(){
 
     const response = await props.areYouSureDeleting();
@@ -180,10 +180,10 @@ const Program = (props) => {
     <SafeAreaView style={{flex: 1}}>
 
       <ScrollView style={{flex:1}}>
-        
+
         <NavbarProgram name={props.route.name} navigation={props.navigation} />
 
-        {buttonHomePage ? 
+        {buttonHomePage ?
           <View style={styles.indicationView}>
             <Text style={styles.indicationText}>
               The program is generated after you select the desired locations (from step 2) and want it to create the schedule for you.
@@ -191,15 +191,15 @@ const Program = (props) => {
           </View>
           :
           <ScrollView>
-            {!program?.length ? 
+            {!program?.length ?
               <View  style={{ marginTop: screenHeight / 3 }} >
                 <Center  >
                   <Spinner color="$indigo600" />
                 </Center>
               </View> :
 
-              <View> 
-                
+              <View>
+
                 <Center>
                   <Heading>
                     The generated program
@@ -210,13 +210,13 @@ const Program = (props) => {
                   return  <Card  key={index}  p="$5" borderRadius="$lg" maxWidth={400} m="$3">
                     <HStack justifyContent="space-between" alignItems="center">
                       <Text fontSize="$sm"  fontStyle="normal"  fontFamily="$heading"  fontWeight="$normal"  lineHeight="$sm"  mb="$2"  sx={{  color: "$textLight700" }} >
-                        {'Day' + ob.day + " | " } {new Date(ob.date).toString().slice(0, 15)}   
+                        {'Day' + ob.day + " | " } {new Date(ob.date).toString().slice(0, 15)}
                       </Text>
                       <Pressable onPress={()=>{deleteDayFromProgram(index)}} >
                         <Icon as={TrashIcon} m="$2" w="$6" h="$6" />
                       </Pressable>
                     </HStack>
-                    
+
                     <Heading size="md" fontFamily="$heading" mb="$4">
                       {ob.title}
                     </Heading>
@@ -228,7 +228,7 @@ const Program = (props) => {
                         <Icon as={ArrowRightIcon}  size="sm"  color="$primary600"  mt="$0.5"  ml="$0.5"  $dark-color="$primary300"/>
                       </HStack>
                     </Link>
-                  </Card>   
+                  </Card>
                 })}
 
                 <HStack h="$10" justifyContent="center" alignItems="center">
@@ -258,7 +258,7 @@ const Program = (props) => {
         }
 
       </ScrollView>
-      
+
     </SafeAreaView>
   )
 }
@@ -268,20 +268,20 @@ export default Program
 
 const styles = StyleSheet.create({
   indicationView: {
-    backgroundColor: '#f9f9f9', 
-    borderColor: '#ddd', 
+    backgroundColor: '#f9f9f9',
+    borderColor: '#ddd',
     borderWidth: 1,
-    borderRadius: 8, 
-    padding: 12, 
+    borderRadius: 8,
+    padding: 12,
     marginVertical: 10,
-    shadowColor: '#000', 
+    shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 2,
   },
   indicationText: {
-    color: '#333', 
+    color: '#333',
     fontSize: 14,
     lineHeight: 20,
   },
