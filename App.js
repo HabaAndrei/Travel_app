@@ -100,13 +100,13 @@ const App = () => {
       <NavigationContainer>
         <Stack.Navigator>
           <Stack.Screen
-            name="Chat"
-            component={ChatScreen}
+            name="Locations"
+            component={LocationsScreen}
             options={{headerShown: false}}
           />
           <Stack.Screen
-            name="Locations"
-            component={LocationsScreen}
+            name="Chat"
+            component={ChatScreen}
             options={{headerShown: false}}
           />
           <Stack.Screen
@@ -155,8 +155,6 @@ const styles = StyleSheet.create({})
 // Un input in care sa fie locatia hotelului
 
 // Rezolv bug ul cu datepickerul, si adaug butoane custom!!
-
-// trimit in server si partea cu average hors visit =>>> vezi ca nu ma asculta din pacate , mergi si verifica!!
 
 // caut alte date de cautare cu nume doar in engleza
 

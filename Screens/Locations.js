@@ -4,13 +4,14 @@ import { useIsFocused } from '@react-navigation/native';
 import {address_function_api, getDataFromAsyncStorage, addDataToAsyncStorage,
   multiSetFromAsyncStorage, formatDateFromMilliseconds} from '../diverse';
 import axios from 'axios';
-import { Card, HStack, Heading, Center, Text, Switch, Button, Link, Divider, LinkText, Spinner,
+import { Card, HStack, Heading, Center, Text, Link, Divider, LinkText, Spinner,
   VStack, ArrowLeftIcon, CheckIcon, Icon,
 } from '@gluestack-ui/themed';
 import NavbarProgram from '../Components/NavbarProgram';
 import ImageCarousel from '../Components/ImageCarousel';
 import CardDatePicker from '../Components/CardDatePicker';
 import CustomButton from '../CustomElements/CustomButton.js';
+import ListPackeges from '../Components/ListPackeges.js';
 import {storeErr} from '../firebase.js';
 
 const Locations = (props) => {
@@ -53,13 +54,8 @@ const Locations = (props) => {
       if(data.data.type){
         const arrayWithLocations = data.data.data;
         const arraySelected = arrayWithLocations.map((ob)=>{
-          if(!ob.full_tour){
-            return {...ob, selected: false, selected_full_tour: false}
-          }else{
-            return {...ob, selected: false }
-          }
+          return {...ob, selected: false}
         });
-        console.log(arraySelected);
         setLocations(arraySelected);
         multiSetFromAsyncStorage([['arrayLocationsToTravel', [...arraySelected]],
           ["locationsParameter", {city, country, input, checkbox, scaleVisit}]]);
@@ -149,12 +145,16 @@ const Locations = (props) => {
 
   }
 
-  function selectFullTour(index){
-    setLocations((prev)=>{
-      let data = [...prev];
-      data[index].selected_full_tour = !data[index].selected_full_tour;
-      return [...prev];
-    })
+  function selectPackage(indexLocation, indexPackage){
+    try{
+      setLocations((prev)=>{
+        const selected = prev[indexLocation].dataTimeLocation.packages[indexPackage + 1].selected
+        prev[indexLocation].dataTimeLocation.packages[indexPackage + 1].selected = !selected;
+        return [...prev];
+      })
+    }catch(err){
+      props.addNotification('error', 'There was a problem selecting the package');
+    }
   }
 
 
@@ -194,19 +194,11 @@ const Locations = (props) => {
                 <Heading size="md" fontFamily="$heading" mb="$4">
                   {location.name}
                 </Heading>
-                {location?.average_hours_visit ?
-                  <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                    <Text  style={{marginRight: 30}} fontSize="$sm" fontStyle="normal" fontWeight="$normal" lineHeight="$sm" mb="$2" sx={{ color: "$textLight700" }}>
-                      Average time to visit: {location.average_hours_visit} h
-                    </Text>
-                  </View>
-                  : null
-                }
 
                 <View style={{ flex: 1, marginTop: 20 }}>
                   {location.arrayWithLinkImages.length ?
                   <ImageCarousel  imageUrls={location.arrayWithLinkImages}/>:
-                  <View></View>
+                  null
                   }
                 </View>
 
@@ -234,24 +226,16 @@ const Locations = (props) => {
                 </VStack>
 
                 <Center>
-                  {location.hasOwnProperty('selected_full_tour') ?
-                    <View  style={styles.viewButtons}>
-                      {location.selected ?
-                      <Pressable onPress={() => selectFullTour(index)} style={styles.fullTourPress}>
-                        <Text style={styles.fullTourText}>Choose to explore the entire location</Text>
-                        <Switch value={location.selected_full_tour} />
-                      </Pressable> : <Text></Text>
-                      }
-                      <CustomButton name={location.selected ? 'Remove location from your visit' : 'Pick location for your visit'}
-                        func={pressOnLocations} paramFunc={index}
-                      />
-                    </View>
-                    :
-                    <CustomButton name={location.selected ? 'Remove location from your visit' : 'Pick location for your visit'}
-                      func={pressOnLocations} paramFunc={index}
-                    />
-                  }
+                  <CustomButton name={location.selected ? 'Remove location from your visit' : 'Pick location for your visit'}
+                    func={pressOnLocations} paramFunc={index}
+                  />
                 </Center>
+
+                {location?.dataTimeLocation && location?.selected ?
+                  <ListPackeges dataTimeLocation={location.dataTimeLocation} indexLocation={index} selectPackage={selectPackage} />
+                  : null
+                }
+
               </Card>
             })}
 
