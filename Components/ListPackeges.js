@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
     shadowRadius: 3,
-    height: 120,
+    height: 140,
     width: '45%',
     marginVertical: 10,
   },
