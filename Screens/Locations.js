@@ -118,12 +118,13 @@ const Locations = (props) => {
     // decomentez aceasta in prod  <<<<=======
     ////////////////////////////////////////////////////////////////
     addDataToAsyncStorage('arrayLocationsToTravel', locations)
-    const selectedLocations = locations.filter((place)=>place.selected);
+    const newLocationReference = JSON.parse(JSON.stringify(locations));
+    const selectedLocations = [...newLocationReference].filter((place)=>place.selected);
     if(!selectedLocations.length){
       props.addNotification('warning', 'You do not have any location selected to make the trip');
       return;
     }
-    const data = selectedLocations.map((ob)=>{
+    const data = [...selectedLocations].map((ob)=>{
       const {dataTimeLocation} = ob;
       if(!dataTimeLocation)return ob;
       const {packages} = dataTimeLocation;
