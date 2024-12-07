@@ -110,6 +110,12 @@ const Trip = (props) => {
         return 0;
       }
     });
+    const id = props.route.params.id;
+    if (!id) {
+      props.addNotification('error', 'There is a problem when updating the date');
+      return;
+    }
+    saveProgramIntoDB(id, program);
     setTripProgram(program);
     setModalVisible({ type: false });
   }
