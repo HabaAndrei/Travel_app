@@ -18,7 +18,7 @@ const Locations = (props) => {
 
   const isFocused = useIsFocused();
   const [locations, setLocations] = useState([]);
-  const [buttonHomePage, setButtonHomePage] = useState(false);
+  const [isRecomandation, setRecomandation] = useState(false);
   const [dateFrom, setDateFrom] = useState();
   const [dateTo, setDateTo] = useState();
   const [datePickerVisibility, setDatePickerVisibility] = useState({type: false, date:''});
@@ -47,7 +47,7 @@ const Locations = (props) => {
 
   async function createLocationsAi( method, city, country, input, checkbox, isLocalPlaces, scaleVisit){
     setLocations([]);
-    setButtonHomePage(false)
+    setRecomandation(false)
     axios.post(`${address_function_api}`,
       {method, city, country, input, checkbox, isLocalPlaces, scaleVisit}
     ).then((data)=>{
@@ -74,7 +74,7 @@ const Locations = (props) => {
     if(places?.data?.length ){
       setLocations([...places.data])
     }else{
-      setButtonHomePage(true);
+      setRecomandation(true);
     }
   }
 
@@ -187,7 +187,7 @@ const Locations = (props) => {
 
       <NavbarProgram name={props.route.name} navigation={props.navigation} />
       {
-        buttonHomePage ?
+        isRecomandation ?
         <View style={styles.indicationView}>
           <Text style={styles.indicationText}>
             The locations are generated after you complete the entire form in step 1. We need that information to generate the best locations for you.

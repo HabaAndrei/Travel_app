@@ -19,7 +19,7 @@ const Program = (props) => {
 
   const isFocused = useIsFocused();
   const [program, setProgram] = useState([]);
-  const [buttonHomePage, setButtonHomePage] = useState(false);
+  const [isRecomandation, setRecomandation] = useState(false);
 
   const screenHeight = Dimensions.get('window').height;
 
@@ -55,7 +55,7 @@ const Program = (props) => {
     if(program?.data?.length){
       setProgram([...program.data])
     }else{
-      setButtonHomePage(true);
+      setRecomandation(true);
     }
   }
 
@@ -73,7 +73,7 @@ const Program = (props) => {
 
 
   async function createProgramAi(method, from, to, city, country, locations){
-    setButtonHomePage(false);
+    setRecomandation(false);
     setProgram([]);
     axios.post(`${address_function_api}`,
       {method, from, to, city, country, locations}
@@ -129,9 +129,8 @@ const Program = (props) => {
     if (response) {
       const rez = await removeItemFromAsyncStorage('travelProgram');
       if(!rez.type)return;
-      props.navigation.navigate('Home')
       setProgram([]);
-
+      setRecomandation(true)
     }
   }
 
@@ -171,7 +170,7 @@ const Program = (props) => {
     const rezDeleteAsyncStorage = await multiRemoveFromAsyncStorage(["travelProgram", "travelParameter"])
     if(!rezDeleteAsyncStorage.type)return;
     setProgram([]);
-    setButtonHomePage(true);
+    setRecomandation(true);
     props.navigation.navigate('MyTrips');
   }
 
@@ -183,7 +182,7 @@ const Program = (props) => {
 
         <NavbarProgram name={props.route.name} navigation={props.navigation} />
 
-        {buttonHomePage ?
+        {isRecomandation ?
           <View style={styles.indicationView}>
             <Text style={styles.indicationText}>
               The program is generated after you select the desired locations (from step 2) and want it to create the schedule for you.
