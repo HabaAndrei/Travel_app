@@ -7,10 +7,10 @@ import ImageCarousel from '../Components/ImageCarousel.js';
 
 
 const DailyProgram = (props) => {
-  
+
   const [dailyProgram, setDailyProgram] = useState({data: {}, index: ''});
   const [isTimePickerVisible, setTimePickerVisibility] = useState({type:false, index: ''});
-  
+
   useEffect( () => {
     const { data, index } = props.route.params;
     setDailyProgram({ data, index });
@@ -79,12 +79,12 @@ const DailyProgram = (props) => {
     hideDatePicker();
   };
 
-  
+
   return (
     <SafeAreaView style={{flex: 1}} >
 
       <ScrollView contentContainerStyle={styles.scrollViewContent}>
-          
+
         <View>
           <Text style={styles.title}>{dailyProgram.data.title}</Text>
           <View style={styles.detailsContainer}>
@@ -92,7 +92,6 @@ const DailyProgram = (props) => {
             <Text style={styles.dayText}>Day {dailyProgram.data.day}</Text>
           </View>
 
-        
           {dailyProgram?.data?.activities?.map((ob, index) => {
             return <Card key={index} p="$5" borderRadius="$lg" maxWidth={400} m="$3">
               <HStack justifyContent="space-between" alignItems="center">
@@ -108,12 +107,12 @@ const DailyProgram = (props) => {
                 <Text  style={{marginRight: 30}} fontSize="$sm" fontStyle="normal" fontWeight="$normal" lineHeight="$sm" mb="$2" sx={{ color: "$textLight700" }}>
                   {ob.time}
                 </Text>
-                <TimePicker isTimePickerVisible={isTimePickerVisible} setTimePickerVisibility={setTimePickerVisibility} 
+                <TimePicker isTimePickerVisible={isTimePickerVisible} setTimePickerVisibility={setTimePickerVisibility}
                   showDatePicker={()=>setTimePickerVisibility({type: true, index})} hideDatePicker={hideDatePicker} handleConfirm={handleConfirm}
                 />
               </View>
 
-              {ob.address ? 
+              {ob.address ?
                 <Text size="m" style={{ marginTop: 10 }}>
                   <Text bold={true}>Address: </Text> {ob.address}
                   <Text style={styles.buttonText} onPress={() => copyInClipboard(`${ob.address}`)}>
@@ -131,8 +130,8 @@ const DailyProgram = (props) => {
               </Text>
 
               <View style={{ flex: 1, marginTop: 20 }}>
-                {ob.arrayWithLinkImages.length ? 
-                <ImageCarousel   imageUrls={ob.arrayWithLinkImages }/> : 
+                {ob.arrayWithLinkImages.length ?
+                <ImageCarousel   imageUrls={ob.arrayWithLinkImages }/> :
                 <View></View>
                 }
               </View>
@@ -146,7 +145,7 @@ const DailyProgram = (props) => {
                       </LinkText>
                     </HStack>
                   </Link>
-                  {ob.urlLocation && ob.website ? 
+                  {ob.urlLocation && ob.website ?
                   <Divider orientation="vertical" mx='$2.5' bg='$emerald500' h={15} />:
                   <View></View>
                   }
@@ -163,7 +162,7 @@ const DailyProgram = (props) => {
             })}
         </View>
 
-        <View> 
+        <View>
           <HStack h="$10" justifyContent="center" alignItems="center">
             <HStack alignItems="center"  >
               <Icon as={ArrowLeftIcon} m="$2" w="$6" h="$6" />
