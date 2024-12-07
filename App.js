@@ -39,10 +39,10 @@ const App = () => {
         }else if(!rezEmailVerified.type && rezEmailVerified.err){
           setUser(us);
         }
-        console.log('Avem uid deci avem user => ', uid)
+        console.log('user disconnected')
       } else {
         setUser(false);
-        console.log('nu avem user conectat')
+        console.log('user connected')
       }
     });
   }
@@ -148,13 +148,3 @@ const App = () => {
 export default App
 
 const styles = StyleSheet.create({})
-
-
-
-// In pagina locations mai adaug :
-// Un input in care sa fie locatia hotelului
-
-// Rezolv bug ul cu datepickerul, si adaug butoane custom!!
-
-// caut alte date de cautare cu nume doar in engleza
-

@@ -1,10 +1,10 @@
 import { StyleSheet, View, Pressable, Text, TextInput, ScrollView, SafeAreaView, TouchableOpacity, ImageBackground } from 'react-native'
 import React, {useState } from 'react'
 import { Icon, VStack, EyeIcon, EyeOffIcon } from '@gluestack-ui/themed'
-import {createUserEmailPassword,  signInUserEmailPassword, forgotPassword, signOutUser, 
+import {createUserEmailPassword,  signInUserEmailPassword, forgotPassword, signOutUser,
     deleteTheUser, storeCodeAndEmail, verifyCodeDB, updateEmailVerificationDB
 } from '../firebase.js'
-import {isValidEmail, isValidPassword, deleteAllFromAsyncStorage, 
+import {isValidEmail, isValidPassword, deleteAllFromAsyncStorage,
     address_function_send_code_verification} from "../diverse.js"
 import uuid from 'react-native-uuid';
 import axios from 'axios';
@@ -98,9 +98,9 @@ const LogIn = (props) => {
       return;
     }
   }
-  
+
   async function deleteUser(){
-  
+
     const response = await props.areYouSureDeleting();
     if (!response) return;
 
@@ -118,28 +118,31 @@ const LogIn = (props) => {
   }
 
   async function sendCodeToEmail(){
-    const code = uuid.v4().slice(0, 6);
-    const email = props.user.email;
-    const rezStore = await storeCodeAndEmail(code, email);
-    if(!rezStore.type){
-      console.log(rezStore.err);
+    try{
+      const code = uuid.v4().slice(0, 6);
+      const email = props.user.email;
+      const rezStore = await storeCodeAndEmail(code, email);
+      if(!rezStore.type){
+        props.addNotification('error', "There was a problem sending the code by email");
+        return;
+      }
+      const rezSend = await axios.post(address_function_send_code_verification, {code, email});
+      if(!rezSend.data.type){
+        props.addNotification('error', "There was a problem sending the code by email");
+        return;
+      }
+      props.addNotification('success', "The email was successful. Please enter the code received on the email address in the input");
+    }catch(err){
+      console.log(err);
       props.addNotification('error', "There was a problem sending the code by email");
-      return;
     }
-    const rezSend = await axios.post(address_function_send_code_verification, {code, email});
-    if(!rezSend.data.type){
-      console.log(rezSend.data.err);
-      props.addNotification('error', "There was a problem sending the code by email");
-      return;
-    }
-    props.addNotification('success', "The email was successful. Please enter the code received on the email address in the input");
   }
 
   async function verifyCode(){
     if(codeVerify.length != 6){
         props.addNotification('error', 'The code must have 6 characters, without spaces');
         return;
-    }        
+    }
     const rezDB = await verifyCodeDB(codeVerify, props.user.email);
     if(!rezDB.type){
         props.addNotification('error', 'There was a problem verifying the code');
@@ -162,12 +165,12 @@ const LogIn = (props) => {
   }
 
   function createAcc(){
-    setSignInOrUp("signup"); 
+    setSignInOrUp("signup");
     setIsForgotPassword(false)
   }
 
   function logIN(){
-    setSignInOrUp("signin"); 
+    setSignInOrUp("signin");
     setIsForgotPassword(false)
   }
 
@@ -185,19 +188,19 @@ const LogIn = (props) => {
 
         <ModalReAuth  isModalVisibleReAuth={isModalVisibleReAuth} setModalVisibleReAuth={setModalVisibleReAuth} />
 
-        {props.user ? 
+        {props.user ?
         <View>
-          {!props.user?.emailVerified_code ? 
+          {!props.user?.emailVerified_code ?
             <View >
               <VStack >
                 <Text style={styles.actionNameLow}>The next step is to verify your email address</Text>
 
-                <View style={{margin: 10}} /> 
+                <View style={{margin: 10}} />
 
                 <ButtonBlue name={'Send code to email'} func={sendCodeToEmail} />
 
-                <View style={{margin: 10}} /> 
-                
+                <View style={{margin: 10}} />
+
                 <View style={styles.inputContainer}>
                   <TextInput style={styles.input} placeholder='Enter the code received via email' placeholderTextColor="white"
                     value={codeVerify}
@@ -208,29 +211,29 @@ const LogIn = (props) => {
 
                 <ButtonBlue name={'Verify code'} func={verifyCode} />
 
-              
+
               </VStack>
 
               <View style={{ alignItems: 'center', marginTop: 50 }}>
-                
+
                 <ButtonWhite name={'Log out'} func={signOut} />
-                
-                <View style={styles.separator} /> 
+
+                <View style={styles.separator} />
 
                 <ButtonWhite name={'Delete account'} func={deleteUser} />
-                
+
               </View>
-            </View>  
-            : 
+            </View>
+            :
             null
           }
         </View>
         :
         <View >
-          {signInOrUp ? 
+          {signInOrUp ?
             <View  style={{ marginBottom: 40, marginRight: 20,  marginLeft: 20}} >
 
-              {isForgotPassword ? 
+              {isForgotPassword ?
                 <View  >
                   <View style={styles.inputContainer}>
                     <TextInput style={styles.input} placeholder='Email to reset the password'
@@ -244,22 +247,22 @@ const LogIn = (props) => {
                     <TouchableOpacity style={styles.button}
                       onPress={forgotThePassword}>
                       <Text style={styles.buttonText}>Send email</Text>
-                    </TouchableOpacity>         
+                    </TouchableOpacity>
                   </View>
 
                 </View>
-                :    
+                :
                 <VStack space="xl">
                   <Text style={styles.actionName}>{signInOrUp === "signup" ? "Create accout" :  "Log in"  }</Text>
 
-                  {signInOrUp === "signup" ? 
+                  {signInOrUp === "signup" ?
                     <View style={styles.inputContainer}>
                       <TextInput style={styles.input} placeholder='Name' placeholderTextColor="white"
                         value={inputFirstName}  onChangeText={(text) => setInputFirstName(text)}/>
                     </View>
                     : null
-                  }  
-                  {signInOrUp === "signup" ? 
+                  }
+                  {signInOrUp === "signup" ?
                     <View style={styles.inputContainer}>
                       <TextInput style={styles.input} placeholder='Second name' placeholderTextColor="white"
                         value={inputSecondName}  onChangeText={(text) => setInputSecondName(text)}/>
@@ -271,10 +274,10 @@ const LogIn = (props) => {
                     <TextInput style={styles.input} placeholder='Email' placeholderTextColor="white"
                       value={inputEmail}  onChangeText={(text) => setInputEmail(text)}/>
                   </View>
-                  
+
                   <View style={styles.inputContainer}>
                     <TouchableOpacity
-                        onPress={() => setInputPassword(prev => ({ ...prev, showState: !prev.showState }))} 
+                        onPress={() => setInputPassword(prev => ({ ...prev, showState: !prev.showState }))}
                       >
                         <Icon
                           as={inputPassword.showState ? EyeIcon : EyeOffIcon}
@@ -286,10 +289,10 @@ const LogIn = (props) => {
                       secureTextEntry={!inputPassword.showState}
                       />
                   </View>
-                  
+
                   {
-                    signInOrUp === "signup" ? 
-                    <Text  style={styles.textPassword}> 
+                    signInOrUp === "signup" ?
+                    <Text  style={styles.textPassword}>
                       The password must have at least seven characters, two of which must be numbers
                     </Text> : null
                   }
@@ -310,13 +313,13 @@ const LogIn = (props) => {
           }
 
           <View style={{ alignItems: 'center', marginTop: 50 }}>
-              
+
             <ButtonWhite func={createAcc} name={'Create accout'}/>
-            
-            <View style={styles.separator} /> 
+
+            <View style={styles.separator} />
 
             <ButtonWhite func={logIN} name={'Log in'}/>
-             
+
           </View>
         </View>
         }
@@ -338,7 +341,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   button: {
-    backgroundColor: 'rgba(0, 0, 255, 0.45)', 
+    backgroundColor: 'rgba(0, 0, 255, 0.45)',
     padding: 15,
     borderRadius: 30,
     alignItems: 'center',
@@ -362,71 +365,71 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   separator: {
-    borderBottomWidth: 1, 
-    borderBottomColor: 'white', 
-    width: 400, 
-    marginVertical: 10, 
+    borderBottomWidth: 1,
+    borderBottomColor: 'white',
+    width: 400,
+    marginVertical: 10,
   },
   titleContainer: {
-    justifyContent: 'center', 
-    alignItems: 'center', 
-    marginVertical: 20, 
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginVertical: 20,
   },
   appName: {
-    fontSize: 36, 
+    fontSize: 36,
     fontWeight: 'bold',
-    color: 'white', 
+    color: 'white',
   },
   actionName:{
-    fontSize: 28, 
+    fontSize: 28,
     fontWeight: 'bold',
     color: 'rgba(0, 0, 255, 10)',
     backgroundColor: 'rgba(255, 255, 255, 0.7)',
     borderRadius: 8,
     paddingHorizontal: 5,
-    alignSelf: 'flex-start', 
+    alignSelf: 'flex-start',
   },
   actionNameLow:{
-    fontSize: 20, 
+    fontSize: 20,
     fontWeight: 'bold',
     color: 'rgba(0, 0, 255, 10)',
     backgroundColor: 'rgba(255, 255, 255, 0.7)',
     borderRadius: 8,
     paddingHorizontal: 5,
-    alignSelf: 'flex-start', 
+    alignSelf: 'flex-start',
   },
   slogan: {
-    fontSize: 16, 
+    fontSize: 16,
     fontStyle: 'italic',
-    color: 'white', 
-    marginTop: 5, 
+    color: 'white',
+    marginTop: 5,
   },
   inputContainer: {
     width: '80%',
-    borderBottomWidth: 4, 
-    borderBottomColor: 'white', 
+    borderBottomWidth: 4,
+    borderBottomColor: 'white',
   },
   input: {
     fontSize: 16,
-    color: 'white', 
-    paddingVertical: 5, 
+    color: 'white',
+    paddingVertical: 5,
     fontWeight: 'bold'
   },
   textPassword: {
     fontSize: 13,
-    color: 'white', 
-    paddingVertical: 5, 
+    color: 'white',
+    paddingVertical: 5,
     fontWeight: 'bold'
-  }, 
-  textForgot: {
-    color: 'white', 
-    backgroundColor: 'rgba(0, 0, 255, 0.5)', 
-    fontSize: 14, 
-    textAlign: 'center', 
-    lineHeight: 20, 
-    paddingHorizontal: 5, 
-    borderRadius: 3,
-    alignSelf: 'flex-end', 
   },
-    
+  textForgot: {
+    color: 'white',
+    backgroundColor: 'rgba(0, 0, 255, 0.5)',
+    fontSize: 14,
+    textAlign: 'center',
+    lineHeight: 20,
+    paddingHorizontal: 5,
+    borderRadius: 3,
+    alignSelf: 'flex-end',
+  },
+
 })

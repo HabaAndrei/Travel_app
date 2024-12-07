@@ -19,7 +19,7 @@ const ModalSearchDestination = (props) => {
             "value": "country",
             "country": props.inputCountry
         }).then((data) => {
-            openMessageNotFound(data.data);        
+            openMessageNotFound(data.data);
             const list = data.data?.map((country) => { return { place: country, type: "country" } });
             props.setSuggestions(list);
         }).catch((err) => {
@@ -131,7 +131,7 @@ const ModalSearchDestination = (props) => {
                             )}
                             style={styles.suggestionsList}
                         />
-                        : isMessageNotFound && !props.suggestions.length ? 
+                        : isMessageNotFound && !props.suggestions.length ?
                             <View style={styles.spinnerContainer}>
                                 <Text>This location was not found</Text>
                             </View>
@@ -162,7 +162,7 @@ const styles = StyleSheet.create({
         marginTop: 40,
         backgroundColor: 'white',
         borderRadius: 15,
-        padding: 20,  
+        padding: 20,
         alignItems: 'center',
         shadowColor: '#000',
         shadowOffset: {
@@ -183,11 +183,11 @@ const styles = StyleSheet.create({
         color: '#333',
         backgroundColor: 'white',
         width: 250,
-        marginVertical: 15, 
+        marginVertical: 15,
     },
     suggestionsList: {
         marginTop: 10,
-        width: '100%', 
+        width: '100%',
     },
     suggestion: {
         backgroundColor: '#f0f0f0',
