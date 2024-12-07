@@ -1,7 +1,7 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore, collection, addDoc, doc, setDoc ,updateDoc, query, where, deleteDoc, getDocs, getDoc, orderBy } from "firebase/firestore";
 import {MEASUREMENT_ID, APIKEY, AUTH_DOMAIN, PROJECT_ID, STORAGE_BUCKET, MESSAGING_SENDER_ID, APP_ID} from '@env';
-import {signOut,  deleteUser, initializeAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, 
+import {signOut,  deleteUser, initializeAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword,
   sendPasswordResetEmail, reauthenticateWithCredential, EmailAuthProvider  } from "firebase/auth";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getReactNativePersistence } from '@firebase/auth/dist/rn/index.js';
@@ -35,7 +35,7 @@ async function createUserEmailPassword(email, password, firstName, secondName){
   let rezFin = {};
   try{
     const rez = await createUserWithEmailAndPassword(auth, email, password);
-    
+
     const {uid} = rez.user;
     const {createdAt} = rez.user.metadata;
 
@@ -58,7 +58,7 @@ async function signInUserEmailPassword(email, password){
   storeErr(err.message)
     rezFin = {type: false, err};
   }
-  return rezFin; 
+  return rezFin;
 }
 
 async function reAuth(password){
@@ -110,13 +110,13 @@ async function forgotPassword(email){
     storeErr(err.message)
     rezFin = {type: false, err};
   }
-  return rezFin; 
+  return rezFin;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
 async function addUserIntoDb(uid, createdAt, email, password, firstName, secondName){
-  
+
   try{
     await setDoc(doc(db, "users", uid), {
       uid, email, firstName, secondName, createdAt, email_verified: false
@@ -186,11 +186,11 @@ async function storeCodeAndEmail(code, email){
     storeErr(err.message)
     rezFin = {type: false, err};
   }
-  return rezFin; 
+  return rezFin;
 }
 
 async function verifyCodeDB(codeInput, email){
-  let rezFin = {type: true}; 
+  let rezFin = {type: true};
   try{
     const docRef = doc(db, "code_verification", email);
     const dataFromDB = await getDoc(docRef);
@@ -207,7 +207,7 @@ async function verifyCodeDB(codeInput, email){
 }
 
 async function updateEmailVerificationDB(uid){
-  let rezFin = {type: true}; 
+  let rezFin = {type: true};
   try{
     const ref = doc(db, "users", uid);
     await updateDoc(ref, {
@@ -221,14 +221,14 @@ async function updateEmailVerificationDB(uid){
 }
 
 async function verifyEmailVerifiedDB(uid){
-  let rezFin = {type: true}; 
+  let rezFin = {type: true};
   try{
     const docRef = doc(db, "users", uid);
     const dataFromDB = await getDoc(docRef);
     const data = dataFromDB.data();
     if(data.email_verified != true){
       rezFin = {type: false};
-    }    
+    }
   }catch(err){
     storeErr(err.message)
     rezFin = {type: false, err};
@@ -249,7 +249,7 @@ async function store_feedback(feedback, feedbackCategory){
   return rezFin;
 }
 
-async function askQuestion(istoricConv){
+async function askQuestion(histoyConv){
   let rezFin = {};
   try{
     const {uid} = auth.currentUser;
@@ -266,8 +266,8 @@ async function askQuestion(istoricConv){
           let {day, date, activities} = full_day;
           const info_activities = activities.map((activity)=>{
             const {time, info, urlLocation, website, place, description, address} = activity;
-            return {time, info, 
-              urlLocation: urlLocation ? urlLocation : '', 
+            return {time, info,
+              urlLocation: urlLocation ? urlLocation : '',
               website: website ? website : '',
               place, description, address
             };
@@ -279,7 +279,7 @@ async function askQuestion(istoricConv){
       information = JSON.stringify(rez);
     }
 
-    const rezQuery =  await axios.post(`${address_function_api}`, {method: 'chat', istoricConv, information});
+    const rezQuery =  await axios.post(`${address_function_api}`, {method: 'chat', histoyConv, information});
     if(rezQuery?.data?.type){
       rezFin = {type: true, data: rezQuery?.data?.data};
     }else{
@@ -386,9 +386,9 @@ async function storeErr(mesErr){
 }
 
 
-export {db, auth, signOutUser, deleteTheUser, addProgramIntoDb, createUserEmailPassword, signInUserEmailPassword, 
-  getPlansFromDbWithUid, forgotPassword, updateProgram, storeCodeAndEmail, verifyCodeDB, updateEmailVerificationDB, 
-  verifyEmailVerifiedDB, reAuth, store_feedback, askQuestion, storeConv, storeMes, getConversations, getMessages, 
+export {db, auth, signOutUser, deleteTheUser, addProgramIntoDb, createUserEmailPassword, signInUserEmailPassword,
+  getPlansFromDbWithUid, forgotPassword, updateProgram, storeCodeAndEmail, verifyCodeDB, updateEmailVerificationDB,
+  verifyEmailVerifiedDB, reAuth, store_feedback, askQuestion, storeConv, storeMes, getConversations, getMessages,
   deleteChat, storeErr
 };
 

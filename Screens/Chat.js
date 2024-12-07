@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import {View, Text, ScrollView, StyleSheet, TouchableOpacity, TextInput, KeyboardAvoidingView, 
+import {View, Text, ScrollView, StyleSheet, TouchableOpacity, TextInput, KeyboardAvoidingView,
   Platform, Keyboard, Pressable} from 'react-native';
 import {askQuestion, storeConv, storeMes, getConversations, getMessages, deleteChat} from '../firebase.js';
 import SelectConversation from '../Components/SelectConversation';
-import { useIsFocused } from '@react-navigation/native'; 
+import { useIsFocused } from '@react-navigation/native';
 import uuid from 'react-native-uuid';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 
@@ -41,7 +41,6 @@ const Chat = (props) => {
     }
   }
 
-
   async function getResponse(conv, idConv){
     const data = await askQuestion(conv);
     if(data.type){
@@ -53,8 +52,8 @@ const Chat = (props) => {
       })
       const time = new Date().getTime();
       storeMes(idConv, 'ai', data?.data, time);
-
     }else{
+      props.addNotification("warning", "An error occurred while generating the message");
       console.log('we catch err', data.err);
     }
   }
@@ -99,18 +98,16 @@ const Chat = (props) => {
   }
 
   function newChat(){
-    setConversation([]); 
-    setSelectedConversation(''); 
+    setConversation([]);
+    setSelectedConversation('');
     setMessage('');
   }
-
-  
 
   return (
     <KeyboardAvoidingView
       style={{ flex: 1 }}
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-      keyboardVerticalOffset={Platform.OS === 'ios' ? 60 : 0} 
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 60 : 0}
     >
       <View style={styles.container}>
 
@@ -125,30 +122,32 @@ const Chat = (props) => {
         </View>
 
         <View style={styles.middleSectionContainer}>
-          
-          {conversation.length ? 
+
+          {conversation.length ?
             <ScrollView
               style={styles.middleSection}
               contentContainerStyle={styles.middleContent}
             >
               {conversation.map((ob, index) => {
                 return (
-                  <View 
-                    key={index} 
+                  <View
+                    key={index}
                     style={ob.type === 'ai' || ob.type === 'pending' ? styles.receivedMessage : styles.sentMessage}
                   >
-                    <Text>{ob.mes}</Text>
+                    <Text style={ob.type !== 'ai' && ob.type !== 'pending' ? styles.sentMessageText : null}>
+                      {ob.mes}
+                    </Text>
                   </View>
                 );
               })}
-            </ScrollView> : 
+            </ScrollView> :
             <View style={styles.viewText}>
               <Text style={styles.greetingText}>
                 ✨ Hey, I’m your personal assistant Eric! ✨{"\n\n"}
                 🚀 I’ll answer any questions about the app's features{"\n"}
                 📅 Provide details about your travel itinerary{"\n"}
                 💬 And much more!{"\n\n"}
-                👉 **Try me!** 👈 
+                👉 **Try me!** 👈
               </Text>
             </View>
           }
@@ -160,7 +159,7 @@ const Chat = (props) => {
             value={message}
             onChangeText={setMessage}
             placeholderTextColor="gray"
-            onSubmitEditing={Keyboard.dismiss} 
+            onSubmitEditing={Keyboard.dismiss}
           />
           <TouchableOpacity style={styles.sendButton} onPress={sendMes} >
             <FontAwesome name="send-o" size={18} color="white" />
@@ -175,26 +174,26 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   topSection: {
-    height: 60, 
-    flexDirection: 'row', 
-    justifyContent: 'space-between', 
-    alignItems: 'center', 
-    paddingHorizontal: 10, 
+    height: 60,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 10,
     backgroundColor: '#f1f1f1',
-    borderBottomWidth: 1, 
+    borderBottomWidth: 1,
     borderBottomColor: '#ccc',
   },
   sideButton: {
-    paddingVertical: 8, 
-    paddingHorizontal: 15, 
-    backgroundColor: '#0B3D91', 
-    borderRadius: 8, 
+    paddingVertical: 8,
+    paddingHorizontal: 15,
+    backgroundColor: '#0B3D91',
+    borderRadius: 8,
   },
   buttonText: {
-    color: '#fff', 
-    fontWeight: 'bold', 
-    fontSize: 14, 
-    textAlign: 'center', 
+    color: '#fff',
+    fontWeight: 'bold',
+    fontSize: 14,
+    textAlign: 'center',
   },
   middleSectionContainer: {
     flex: 1,
@@ -215,8 +214,8 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
   },
   bottomSection: {
-    position: 'absolute', 
-    bottom: 0, 
+    position: 'absolute',
+    bottom: 0,
     left: 0,
     right: 0,
     flexDirection: 'row',
@@ -248,15 +247,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   sentMessage: {
-    alignSelf: 'flex-end',  
+    alignSelf: 'flex-end',
     backgroundColor: '#0B3D91',
     padding: 10,
     borderRadius: 20,
     marginVertical: 5,
     maxWidth: '70%',
   },
+  sentMessageText: {
+    color: 'white',
+  },
   receivedMessage: {
-    alignSelf: 'flex-start', 
+    alignSelf: 'flex-start',
     backgroundColor: '#e5e5e5',
     padding: 10,
     borderRadius: 20,
@@ -268,15 +270,15 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
-    backgroundColor: '#f5f5f5', 
+    backgroundColor: '#f5f5f5',
   },
   greetingText: {
     fontSize: 18,
-    fontWeight: '500', 
-    textAlign: 'center', 
-    color: '#333333', 
-    lineHeight: 26, 
-    marginVertical: 10, 
+    fontWeight: '500',
+    textAlign: 'center',
+    color: '#333333',
+    lineHeight: 26,
+    marginVertical: 10,
   },
 });
 
