@@ -16,13 +16,13 @@ const ModalReAuth = (props) => {
             return;
         }
         const rez = await reAuth(password);
-        if(!rez.type){
+        if(!rez.isResolve){
             setErr('The password is not correct');
         }else{
             props.setModalVisibleReAuth(false);
         }
     }
-    
+
     useEffect(()=>{
         if(err)setErr('');
     }, [password]);
@@ -49,19 +49,19 @@ const ModalReAuth = (props) => {
                         Password
                     </Text>
                     <Input>
-                        <InputField  type="text"  value={password}  
-                            onChangeText={(text) => setPassword(text)} 
+                        <InputField  type="text"  value={password}
+                            onChangeText={(text) => setPassword(text)}
                         />
                     </Input>
                     {err ? <Text color="$text500" lineHeight="$xs" style={{marginTop: 5, color: 'red'}}> {err} </Text> : <Text></Text>}
-                   
+
                     <CustomButton name={'Reauthenticate'} func={reauthenticate} />
-                
+
                 </View>
-                
+
                 <CustomButton name={'Close'} func={closeModal} />
             </View>
-                
+
         </Modal>
     </View>
   )
@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-     
+
     },
     modalView: {
         margin: 30,

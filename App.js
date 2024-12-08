@@ -32,7 +32,7 @@ const App = () => {
       if (_user) {
         const uid = _user.uid;
         const rezEmailVerified = await verifyEmailVerifiedDB(uid);
-        if (rezEmailVerified.type) {
+        if (rezEmailVerified.isResolve) {
           setUser({..._user, email_verified: true});
         } else {
           setUser(_user);
@@ -47,7 +47,6 @@ const App = () => {
 
   const customComponent = (Component) => {
     return ({ navigation, route }) => {
-      console.log({ navigation, route });
       return (
         <Layout navigation={navigation} route={route} user={user} setUser={setUser} >
           <Component />

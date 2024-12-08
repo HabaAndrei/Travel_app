@@ -26,7 +26,7 @@ const Chat = (props) => {
 
   async function getMess(idConv){
     const data = await getMessages(idConv);
-    if(data.type){
+    if(data.isResolve){
       const mess = data?.data?.map((ob)=>{return {type: ob.type, mes: ob.mes}});
       if(!mess.length)return;
       setConversation(mess);
@@ -35,7 +35,7 @@ const Chat = (props) => {
 
   async function getConvs(){
     const data = await getConversations();
-    if(data.type){
+    if(data.isResolve){
       const convs = data.data.map((ob)=>{return {id: ob.id, name: ob.name}})
       setConversations(convs);
     }
@@ -43,7 +43,7 @@ const Chat = (props) => {
 
   async function getResponse(conv, idConv){
     const data = await askQuestion(conv);
-    if(data.type){
+    if(data.isResolve){
       setConversation((prev)=>{
         const newConv = prev.map((ob)=>{
           return ob.type === 'pending' ? {type: "ai", mes: data?.data} : ob

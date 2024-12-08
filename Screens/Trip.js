@@ -147,7 +147,7 @@ const Trip = (props) => {
     const from = formatDateFromMilliseconds(new Date(program[0].date).getTime());
     const to = formatDateFromMilliseconds(new Date(program[program.length - 1].date).getTime());
     const rez = await updateProgram(idProgramIntoDb, from, to, program);
-    if (!rez.type) {
+    if (!isResolve.type) {
       console.log('Error saving program:', rez.err);
     }
   }

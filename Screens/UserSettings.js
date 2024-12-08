@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View, Pressable, ScrollView, SafeAreaView } from 'react-native'
 import React, { useState } from 'react';
 import {VStack, HStack, Button, ButtonText, Divider, Heading, Center, Icon, SettingsIcon} from '@gluestack-ui/themed'
-import {signOutUser, deleteTheUser, } from '../firebase.js';
+import {_signOut, _deleteUser, } from '../firebase.js';
 import {deleteAllFromAsyncStorage} from '../diverse.js';
 import ModalReAuth from '../Components/ModalReAuth.js';
 import CardFeedback from '../Components/CardFeedback.js';
@@ -12,8 +12,8 @@ const UserSettings = (props) => {
 
 
   async function signOut(){
-    const rez = await signOutUser();
-    if(rez.type){
+    const rez = await _signOut();
+    if(rez.isResolve){
       props.setUser(undefined)
     }else{
       console.log(rez.err);
@@ -27,8 +27,8 @@ const UserSettings = (props) => {
     const response = await props.areYouSureDeleting();
     if (!response) return;
 
-    const rez = await deleteTheUser();
-    if(rez.type){
+    const rez = await _deleteUser();
+    if(rez.isResolve){
       props.setUser(undefined);
       deleteAllFromAsyncStorage()
     }else{

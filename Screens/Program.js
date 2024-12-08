@@ -49,7 +49,7 @@ const Program = (props) => {
 
   async function getProgramFromAsyncStorage(){
     const program = await getDataFromAsyncStorage("travelProgram");
-    if(!program.type){
+    if(!program.isResolve){
       props.addNotification("error", "Unfortunately, we got an system error")
     }
     if(program?.data?.length){
@@ -64,7 +64,7 @@ const Program = (props) => {
   async function regenerateProgram(){
 
     const rez = await getDataFromAsyncStorage("travelParameter");
-    if(!rez.type)return
+    if(!rez.isResolve)return
     let {method, from, to, city, country, locations} = rez.data;
     setProgram([]);
     createProgramAi( method, from, to, city, country, locations)
@@ -128,7 +128,7 @@ const Program = (props) => {
     const response = await props.areYouSureDeleting();
     if (response) {
       const rez = await removeItemFromAsyncStorage('travelProgram');
-      if(!rez.type)return;
+      if(!rez.isResolve)return;
       setProgram([]);
       setRecomandation(true)
     }
@@ -147,7 +147,7 @@ const Program = (props) => {
       return;
     }
     const rez = await multiGetFromAsyncStorage(["travelProgram", "travelParameter"]);
-    if(!rez.type){
+    if(!rez.isResolve){
       props.addNotification("error", "Unfortunately we could not save the program for you")
       console.log(rez.err);
       return;
@@ -161,14 +161,14 @@ const Program = (props) => {
     const programDaysString = JSON.stringify(travelProgram);
     const uid = props.user.uid;
     const rezAddInDb = await addProgramIntoDb(city, country, from , to, programDaysString, uid)
-    if(!rezAddInDb.type){
+    if(!rezAddInDb.isResolve){
       props.addNotification("error", "Unfortunately we could not save the program for you")
       console.log(rezAddInDb.err);
       return;
     }
 
     const rezDeleteAsyncStorage = await multiRemoveFromAsyncStorage(["travelProgram", "travelParameter"])
-    if(!rezDeleteAsyncStorage.type)return;
+    if(!rezDeleteAsyncStorage.isResolve)return;
     setProgram([]);
     setRecomandation(true);
     props.navigation.navigate('MyTrips');

@@ -1,8 +1,8 @@
 import { StyleSheet, View, Pressable, Text, TextInput, ScrollView, SafeAreaView, TouchableOpacity, ImageBackground } from 'react-native'
 import React, {useState } from 'react'
 import { Icon, VStack, EyeIcon, EyeOffIcon } from '@gluestack-ui/themed'
-import {createUserEmailPassword,  signInUserEmailPassword, forgotPassword, signOutUser,
-    deleteTheUser, storeCodeAndEmail, verifyCodeDB, updateEmailVerificationDB
+import {_createUserWithEmailAndPassword,  _signInWithEmailAndPassword, _sendPasswordResetEmail, _signOut,
+    _deleteUser, storeCodeAndEmail, verifyCodeDB, updateEmailVerificationDB
 } from '../firebase.js'
 import {isValidEmail, isValidPassword, deleteAllFromAsyncStorage,
     address_function_send_code_verification} from "../diverse.js"
@@ -39,8 +39,8 @@ const LogIn = (props) => {
       return;
     }
 
-    const rez = await createUserEmailPassword(inputEmail, inputPassword.input, inputFirstName, inputSecondName);
-    if(!rez.type){
+    const rez = await _createUserWithEmailAndPassword(inputEmail, inputPassword.input, inputFirstName, inputSecondName);
+    if(!rez.isResolve){
       if(rez.err?.message?.includes("auth/email-already-in-use")){
         props.addNotification('error',"This email address is already in use");
         return;
@@ -63,8 +63,8 @@ const LogIn = (props) => {
       return;
     }
 
-    const rez = await signInUserEmailPassword(inputEmail, inputPassword.input);
-    if(rez.type){
+    const rez = await _signInWithEmailAndPassword(inputEmail, inputPassword.input);
+    if(rez.isResolve){
       const user = rez.data;
       props.navigation.navigate('SetupTrip');
     }else{
@@ -79,8 +79,8 @@ const LogIn = (props) => {
       return;
     }
 
-    const rez = await forgotPassword(inputEmail);
-    if(rez.type){
+    const rez = await _sendPasswordResetEmail(inputEmail);
+    if(rez.isResolve){
       props.addNotification('success', "Password reset email has been sent");
     }else{
       props.addNotification('error', "Sending the password reset email did not work");
@@ -89,8 +89,8 @@ const LogIn = (props) => {
   }
 
   async function signOut(){
-    const rez = await signOutUser();
-    if(rez.type){
+    const rez = await _signOut();
+    if(rez.isResolve){
       props.setUser(undefined)
     }else{
       console.log(rez.err);
@@ -104,8 +104,8 @@ const LogIn = (props) => {
     const response = await props.areYouSureDeleting();
     if (!response) return;
 
-    const rez = await deleteTheUser();
-    if(rez.type){
+    const rez = await _deleteUser();
+    if(rez.isResolve){
       props.setUser(undefined);
       deleteAllFromAsyncStorage()
     }else{
@@ -122,7 +122,7 @@ const LogIn = (props) => {
       const code = uuid.v4().slice(0, 6);
       const email = props.user.email;
       const rezStore = await storeCodeAndEmail(code, email);
-      if(!rezStore.type){
+      if(!rezStore.isResolve){
         props.addNotification('error', "There was a problem sending the code by email");
         return;
       }
@@ -144,16 +144,16 @@ const LogIn = (props) => {
         return;
     }
     const rezDB = await verifyCodeDB(codeVerify, props.user.email);
-    if(!rezDB.type){
+    if(!rezDB.isResolve){
         props.addNotification('error', 'There was a problem verifying the code');
         return
-    }else if(rezDB.type && rezDB.mes){
+    }else if(rezDB.isResolve && rezDB.mes){
         props.addNotification('error', rezDB.mes);
         return;
     }
 
     const rezUpdateDB = await updateEmailVerificationDB(props.user.uid);
-    if(!rezUpdateDB.type){
+    if(!rezUpdateDB.isResolve){
         props.addNotification('error', 'Please retry the operation and generate a new code');
         return;
     }

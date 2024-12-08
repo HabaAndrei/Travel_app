@@ -146,7 +146,7 @@ const Locations = (props) => {
     })
 
     const dataParam = await getDataFromAsyncStorage('locationsParameter');
-    if(!dataParam.type){
+    if(!dataParam.isResolve){
       props.addNotification('error', 'Error submitting for program search');
       return;
     }

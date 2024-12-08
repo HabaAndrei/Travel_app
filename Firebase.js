@@ -30,7 +30,7 @@ const auth = initializeAuth(app, {
 });
 
 
-async function createUserEmailPassword(email, password, firstName, secondName){
+async function _createUserWithEmailAndPassword(email, password, firstName, secondName){
 
   let rezFin = {};
   try{
@@ -41,28 +41,28 @@ async function createUserEmailPassword(email, password, firstName, secondName){
 
     await addUserIntoDb(uid, createdAt, email, password, firstName, secondName);
 
-    rezFin = {type: true, data: rez};
+    rezFin = {isResolve: true, data: rez};
   }catch(err){
     storeErr(err.message)
-    rezFin = {type: false, err};
+    rezFin = {isResolve: false, err};
   }
   return rezFin;
 }
 
-async function signInUserEmailPassword(email, password){
+async function _signInWithEmailAndPassword(email, password){
   let rezFin = {};
   try{
     const rez = await signInWithEmailAndPassword(auth, email, password)
-    rezFin = {type: true, data: rez};
+    rezFin = {isResolve: true, data: rez};
   }catch(err){
   storeErr(err.message)
-    rezFin = {type: false, err};
+    rezFin = {isResolve: false, err};
   }
   return rezFin;
 }
 
 async function reAuth(password){
-  let rezFin = {type:true};
+  let rezFin = {isResolve: true};
   try{
     const user = auth.currentUser;
     const {email} = user;
@@ -70,45 +70,45 @@ async function reAuth(password){
     await reauthenticateWithCredential(user, credential);
   }catch(err){
     storeErr(err.message)
-    rezFin = {type: false, err};
+    rezFin = {isResolve: false, err};
   }
   return rezFin;
 }
 
-async function deleteTheUser(){
+async function _deleteUser(){
   let rezFin = {};
   try{
     const user = auth.currentUser;
     const rez = await deleteUser(user);
-    rezFin = {type: true};
+    rezFin = {isResolve: true};
   }catch(err){
     storeErr(err.message)
-    rezFin = {type: false, err};
+    rezFin = {isResolve: false, err};
   }
   return rezFin;
 }
 
-async function signOutUser(){
+async function _signOut(){
   let rezFin = {};
   try{
     const rez = await signOut(auth);
-    rezFin = {type: true};
+    rezFin = {isResolve: true};
   }catch(err){
     storeErr(err.message)
-    rezFin = {type: false, err};
+    rezFin = {isResolve: false, err};
   }
   return rezFin;
 }
 
 
-async function forgotPassword(email){
+async function _sendPasswordResetEmail(email){
   let rezFin = {};
   try{
     const rez = await sendPasswordResetEmail(auth, email)
-    rezFin = {type:true};
+    rezFin = {isResolve: true};
   }catch(err){
     storeErr(err.message)
-    rezFin = {type: false, err};
+    rezFin = {isResolve: false, err};
   }
   return rezFin;
 }
@@ -130,18 +130,18 @@ async function addUserIntoDb(uid, createdAt, email, password, firstName, secondN
 
 async function addProgramIntoDb(city, country, from , to, programDaysString, uid){
 
-  let rezFin = {type: true};
+  let rezFin = {isResolve: true};
   try{
     await addDoc(collection(db, "programs"), {city, country, from , to, programDaysString, uid});
   }catch(err){
     storeErr(err.message)
-    rezFin = {type: false, err}
+    rezFin = {isResolve: false, err}
   }
   return rezFin;
 }
 
 async function getPlansFromDbWithUid(uid){
-  let rezFin = {type: true};
+  let rezFin = {isResolve: true};
   try{
     const q = query(collection(db, "programs"), where("uid", "==", uid), orderBy("from"));
     const querySnapshot = await getDocs(q);
@@ -152,16 +152,16 @@ async function getPlansFromDbWithUid(uid){
       data.id = id;
       programs.push(data);
     });
-    rezFin = {type:true, data: programs};
+    rezFin = {isResolve:true, data: programs};
   }catch(err){
     storeErr(err.message)
-    rezFin = {type: false, err}
+    rezFin = {isResolve: false, err}
   }
   return rezFin;
 }
 
 async function updateProgram(id, from, to, program){
-  let rezFin = {type: true};
+  let rezFin = {isResolve: true};
 
   try{
     if(typeof(program) != 'string')program = JSON.stringify(program);
@@ -173,41 +173,41 @@ async function updateProgram(id, from, to, program){
     });
   }catch(err){
     storeErr(err.message)
-    rezFin = {type: false, err};
+    rezFin = {isResolve: false, err};
   }
   return rezFin;
 }
 
 async function storeCodeAndEmail(code, email){
-  let rezFin = {type: true};
+  let rezFin = {isResolve: true};
   try{
     await setDoc(doc(db, "code_verification", email), {code});
   }catch(err){
     storeErr(err.message)
-    rezFin = {type: false, err};
+    rezFin = {isResolve: false, err};
   }
   return rezFin;
 }
 
 async function verifyCodeDB(codeInput, email){
-  let rezFin = {type: true};
+  let rezFin = {isResolve: true};
   try{
     const docRef = doc(db, "code_verification", email);
     const dataFromDB = await getDoc(docRef);
     const {code} = dataFromDB.data();
     if(code != codeInput){
-      rezFin = {type: true, mes: 'The code does not correspond to the code sent by e-mail last time'}
+      rezFin = {isResolve: true, mes: 'The code does not correspond to the code sent by e-mail last time'}
     }
   }catch(err){
     storeErr(err.message)
-    rezFin = {type: false, err};
+    rezFin = {isResolve: false, err};
   }
   return rezFin;
 
 }
 
 async function updateEmailVerificationDB(uid){
-  let rezFin = {type: true};
+  let rezFin = {isResolve: true};
   try{
     const ref = doc(db, "users", uid);
     await updateDoc(ref, {
@@ -215,23 +215,23 @@ async function updateEmailVerificationDB(uid){
     });
   }catch(err){
     storeErr(err.message)
-    rezFin = {type: false, err};
+    rezFin = {isResolve: false, err};
   }
   return rezFin;
 }
 
 async function verifyEmailVerifiedDB(uid){
-  let rezFin = {type: true};
+  let rezFin = {isResolve: true};
   try{
     const docRef = doc(db, "users", uid);
     const dataFromDB = await getDoc(docRef);
     const data = dataFromDB.data();
     if(data.email_verified != true){
-      rezFin = {type: false};
+      rezFin = {isResolve: false};
     }
   }catch(err){
     storeErr(err.message)
-    rezFin = {type: false, err};
+    rezFin = {isResolve: false, err};
   }
   return rezFin;
 }
@@ -241,10 +241,10 @@ async function store_feedback(feedback, feedbackCategory){
   try{
     const {uid} = auth.currentUser;
     await addDoc(collection(db, "feedback"), {uid, feedback, feedbackCategory});
-    rezFin = {type: true};
+    rezFin = {isResolve: true};
   }catch(err){
     storeErr(err.message)
-    rezFin = {type: false, err};
+    rezFin = {isResolve: false, err};
   }
   return rezFin;
 }
@@ -254,8 +254,8 @@ async function askQuestion(histoyConv){
   try{
     const {uid} = auth.currentUser;
     const data = await getPlansFromDbWithUid(uid);
-    if(!data.type){
-      return {type: false, err: data.err};
+    if(!data.isResolve){
+      return {isResolve: false, err: data.err};
     }
     let information = '';
     if(data.data.length){
@@ -281,13 +281,13 @@ async function askQuestion(histoyConv){
 
     const rezQuery =  await axios.post(`${address_function_api}`, {method: 'chat', histoyConv, information});
     if(rezQuery?.data?.type){
-      rezFin = {type: true, data: rezQuery?.data?.data};
+      rezFin = {isResolve: true, data: rezQuery?.data?.data};
     }else{
-      rezFin = {type: false, err: rezQuery?.data?.err};
+      rezFin = {isResolve: false, err: rezQuery?.data?.err};
     }
   }catch(err){
     storeErr(err.message)
-    rezFin = {type: false, err};
+    rezFin = {isResolve: false, err};
   }
   return rezFin
 };
@@ -297,10 +297,10 @@ async function storeConv(id, name){
   try{
     const {uid} = auth.currentUser;
     await addDoc(collection(db, "conversations"), {uid, id, name});
-    rezFin = {type: true};
+    rezFin = {isResolve: true};
   }catch(err){
     storeErr(err.message)
-    rezFin = {type: false, err};
+    rezFin = {isResolve: false, err};
   }
   return rezFin
 }
@@ -310,10 +310,10 @@ async function storeMes(idConv, type, mes, time){
   try{
     const {uid} = auth.currentUser;
     await addDoc(collection(db, "messages"), {uid, idConv, type, mes, time});
-    rezFin = {type: true};
+    rezFin = {isResolve: true};
   }catch(err){
     storeErr(err.message)
-    rezFin = {type: false, err};
+    rezFin = {isResolve: false, err};
   }
   return rezFin
 }
@@ -329,10 +329,10 @@ async function getConversations(){
       let data = doc.data();
       rez.push(data);
     });
-    rezFin = {type:true, data: rez};
+    rezFin = {isResolve:true, data: rez};
   }catch(err){
     storeErr(err.message)
-    rezFin = {type: false, err};
+    rezFin = {isResolve: false, err};
   }
   return rezFin;
 }
@@ -347,10 +347,10 @@ async function getMessages(idConv){
       let data = doc.data();
       rez.push(data);
     });
-    rezFin = {type:true, data: rez};
+    rezFin = {isResolve:true, data: rez};
   }catch(err){
     storeErr(err.message)
-    rezFin = {type: false, err};
+    rezFin = {isResolve: false, err};
   }
   return rezFin;
 }
@@ -377,17 +377,17 @@ async function storeErr(mesErr){
   try{
     const {uid} = auth.currentUser;
     await addDoc(collection(db, "errors"), {uid, modelName, modelId, brand, mesErr});
-    rezFin = {type: true};
+    rezFin = {isResolve: true};
   }catch(err){
     storeErr(err.message)
-    rezFin = {type: false, err};
+    rezFin = {isResolve: false, err};
   }
   return rezFin
 }
 
 
-export {db, auth, signOutUser, deleteTheUser, addProgramIntoDb, createUserEmailPassword, signInUserEmailPassword,
-  getPlansFromDbWithUid, forgotPassword, updateProgram, storeCodeAndEmail, verifyCodeDB, updateEmailVerificationDB,
+export {db, auth, _signOut, _deleteUser, addProgramIntoDb, _createUserWithEmailAndPassword, _signInWithEmailAndPassword,
+  getPlansFromDbWithUid, _sendPasswordResetEmail, updateProgram, storeCodeAndEmail, verifyCodeDB, updateEmailVerificationDB,
   verifyEmailVerifiedDB, reAuth, store_feedback, askQuestion, storeConv, storeMes, getConversations, getMessages,
   deleteChat, storeErr
 };
