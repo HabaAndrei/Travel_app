@@ -45,53 +45,16 @@ const App = () => {
     });
   }
 
-
-  const SetupTripScreen = ({ navigation, route }) => (
-    <Layout  navigation={navigation} route={route} user={user} setUser={setUser}   >
-      <SetupTrip/>
-    </Layout>
-  );
-
-  const ProgramScreen = ({ navigation, route }) => (
-    <Layout  navigation={navigation} route={route}  user={user} setUser={setUser}   >
-      <Program/>
-    </Layout>
-  );
-  const DailyProgramScreen = ({ navigation, route }) => (
-    <Layout  navigation={navigation} route={route}  user={user} setUser={setUser}   >
-      <DailyProgram/>
-    </Layout>
-  );
-
-  const UserSettingsScreen = ({ navigation, route }) => (
-    <Layout  navigation={navigation} route={route} user={user} setUser={setUser}  >
-      <UserSettings/>
-    </Layout>
-  );
-
-  const MyTripsScreen = ({ navigation, route }) => (
-    <Layout  navigation={navigation} route={route} user={user} setUser={setUser}  >
-      <MyTrips/>
-    </Layout>
-  );
-
-  const LocationsScreen = ({ navigation, route }) => (
-    <Layout  navigation={navigation} route={route} user={user} setUser={setUser}   >
-      <Locations/>
-    </Layout>
-  );
-
-  const TripScreen = ({ navigation, route }) => (
-    <Layout  navigation={navigation} route={route} user={user} setUser={setUser}   >
-      <Trip/>
-    </Layout>
-  );
-
-  const ChatScreen = ({ navigation, route }) => (
-    <Layout  navigation={navigation} route={route} user={user} setUser={setUser}   >
-      <Chat/>
-    </Layout>
-  );
+  const customComponent = (Component) => {
+    return ({ navigation, route }) => {
+      console.log({ navigation, route });
+      return (
+        <Layout navigation={navigation} route={route} user={user} setUser={setUser} >
+          <Component />
+        </Layout>
+      );
+    };
+  };
 
   return (
     <GluestackUIProvider config={config}>
@@ -99,42 +62,42 @@ const App = () => {
         <Stack.Navigator>
           <Stack.Screen
             name="Locations"
-            component={LocationsScreen}
+            component={customComponent(Locations)}
             options={{headerShown: false}}
           />
           <Stack.Screen
             name="Chat"
-            component={ChatScreen}
+            component={customComponent(Chat)}
             options={{headerShown: false}}
           />
           <Stack.Screen
             name="MyTrips"
-            component={MyTripsScreen}
+            component={customComponent(MyTrips)}
             options={{headerShown: false}}
           />
           <Stack.Screen
             name="SetupTrip"
-            component={SetupTripScreen}
+            component={customComponent(SetupTrip)}
             options={{headerShown: false}}
           />
           <Stack.Screen
             name="UserSettings"
-            component={UserSettingsScreen}
+            component={customComponent(UserSettings)}
             options={{headerShown: false}}
           />
           <Stack.Screen
             name="Trip"
-            component={TripScreen}
+            component={customComponent(Trip)}
             options={{headerShown: false}}
           />
           <Stack.Screen
             name="Program"
-            component={ProgramScreen}
+            component={customComponent(Program)}
             options={{headerShown: false}}
           />
           <Stack.Screen
             name="DailyProgram"
-            component={DailyProgramScreen}
+            component={customComponent(DailyProgram)}
             options={{headerShown: false}}
           />
         </Stack.Navigator>
