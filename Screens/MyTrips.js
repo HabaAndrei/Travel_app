@@ -1,6 +1,6 @@
 import { StyleSheet, ScrollView,  SafeAreaView, View } from 'react-native'
 import React, {useState, useEffect} from 'react'
-import { useIsFocused } from '@react-navigation/native';   
+import { useIsFocused } from '@react-navigation/native';
 import {getPlansFromDbWithUid} from '../firebase.js';
 import {  Card, Divider, Text, HStack , Heading, Link, LinkText, Icon,
     ArrowRightIcon} from '@gluestack-ui/themed' ;
@@ -36,29 +36,29 @@ const MyTrips = (props) => {
         const arTimestamp = arrayDate.map((date, index)=> {return {date : new Date(date).getTime(), index}})
         arTimestamp.sort((a, b)=> a.date - b.date);
         return arTimestamp.map((ob)=>ob.index);
-    }   
+    }
 
     function navigateSetUpTrip(){
-        props.navigation.navigate('SetUpTrip')
+        props.navigation.navigate('SetupTrip')
     }
   return (
     <SafeAreaView style={{flex: 1}}>
 
 
         <ScrollView style={{ flex: 1 }} >
-            
-            {plans.length ? <CountdownNews plans={plans} /> : 
+
+            {plans.length ? <CountdownNews plans={plans} /> :
             <View style={styles.titleContainer}>
                 <Text style={styles.appName}>Travel Bot</Text>
                 <Text style={styles.slogan}>– Where Every Trip Finds Its Way 🌍</Text>
                 <Text style={styles.noTripsMessage}>
                     Your next adventure is just a few clicks away! Start scheduling your dream trip now and make unforgettable memories. Don’t let the world wait—explore, discover, and wander!
                 </Text>
-                <CustomButton name={'Set up trip'} icon={ArrowRightIcon} func={navigateSetUpTrip} />
+                <CustomButton name={'Setup trip'} icon={ArrowRightIcon} func={navigateSetUpTrip} />
             </View>
-        
+
             }
-            
+
             {plans?.map((obiect, index)=>{
                 return <Card key={index}   p="$5" borderRadius="$lg" maxWidth={600} m="$3">
                     <Heading size="md" fontFamily="$heading" mb="$4">
@@ -84,7 +84,7 @@ const MyTrips = (props) => {
                         </Link>
                     </HStack>
                 </Card>
-            })}            
+            })}
         </ScrollView>
     </SafeAreaView>
   )
@@ -112,31 +112,31 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
-    }, 
+    },
     titleContainer: {
-        justifyContent: 'center', 
-        alignItems: 'center', 
-        marginVertical: 20, 
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginVertical: 20,
       },
     appName: {
-        fontSize: 36, 
+        fontSize: 36,
         fontWeight: 'bold',
-        color: '#007AFF', 
+        color: '#007AFF',
         shadowColor: '#007AFF',
         shadowOpacity: 0.3,
     },
     slogan: {
-        fontSize: 16, 
+        fontSize: 16,
         fontStyle: 'italic',
-        color: '#007AFF', 
-        marginTop: 5, 
+        color: '#007AFF',
+        marginTop: 5,
     },
     noTripsMessage: {
         fontSize: 16,
         textAlign: 'center',
         color: 'rgba(0, 0, 0, 0.75)',
         marginTop: 80,
-        paddingHorizontal: 20, 
-        lineHeight: 22, 
+        paddingHorizontal: 20,
+        lineHeight: 22,
     },
 })

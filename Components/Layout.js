@@ -29,22 +29,22 @@ const Layout = ({ children, navigation, route, user, setUser}) => {
 
   async function areYouSureDeleting() {
     return new Promise((resolve) => {
-      setDeletePromise(() => resolve); 
-      setModalDelete(true); 
+      setDeletePromise(() => resolve);
+      setModalDelete(true);
     });
   }
 
   function handleModalResponse(response) {
     if (deletePromise) {
       deletePromise(response);
-      setDeletePromise(null); 
+      setDeletePromise(null);
     }
   }
 
   const renderChildrenWithProps = () => {
     return React.Children.map(children, child => {
-      return React.cloneElement(child, { 
-        route, notification, setNotification, addNotification, areYouSureDeleting, navigation, 
+      return React.cloneElement(child, {
+        route, notification, setNotification, addNotification, areYouSureDeleting, navigation,
         user, setUser
       });
     });
@@ -54,31 +54,31 @@ const Layout = ({ children, navigation, route, user, setUser}) => {
     <View style={styles.container}>
       {/* backgroundColor for statusBar */}
       <View style={{ height: insets.top, backgroundColor: '#040404',}} />
-      
-      <StatusBar style="light"/>  
+
+      <StatusBar style="light"/>
 
       <ModalDelete   modalDelete={modalDelete} setModalDelete={setModalDelete} handleModalResponse={handleModalResponse} />
 
       <Notification  notification={notification} setNotification={setNotification}  />
 
-      {user?.email_verified ? 
-      
+      {user?.email_verified ?
+
         <View style={styles.content}>
-      
+
           {renderChildrenWithProps()}
-        </View> 
-        : 
-        <LogIn   user={user} setUser={setUser} addNotification={addNotification} 
+        </View>
+        :
+        <LogIn   user={user} setUser={setUser} addNotification={addNotification}
           areYouSureDeleting={areYouSureDeleting}  navigation={navigation} />
       }
 
 
-     {user?.email_verified ?  
-          
+     {user?.email_verified ?
+
       <View style={styles.footerContainer}>
-        <ScrollView 
-          horizontal={true} 
-          style={styles.footer} 
+        <ScrollView
+          horizontal={true}
+          style={styles.footer}
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={styles.footerContent}
         >
@@ -87,11 +87,11 @@ const Layout = ({ children, navigation, route, user, setUser}) => {
             <Text style={styles.pressableText}>My Trips</Text>
           </Pressable>
 
-          <Pressable style={styles.pressable} onPress={() => navigation.navigate('SetUpTrip')} >
+          <Pressable style={styles.pressable} onPress={() => navigation.navigate('SetupTrip')} >
             <FontAwesome name="calendar" size={24} color="white" />
             <Text style={styles.pressableText}>New trip</Text>
           </Pressable>
-          
+
           <Pressable style={styles.pressable} onPress={() => navigation.navigate('UserSettings')} >
             <Feather name="settings" size={24} color="white" />
             <Text style={styles.pressableText}>Settings</Text>
@@ -103,11 +103,11 @@ const Layout = ({ children, navigation, route, user, setUser}) => {
           </Pressable>
 
 
-         
+
         </ScrollView>
       </View> : <View
         style={styles.footerContainerClear}
-      /> 
+      />
       }
     </View>
   );
@@ -117,25 +117,25 @@ const styles = StyleSheet.create({
 
   container: {
     flex: 1,
-    backgroundColor: '#AAAABAD', 
+    backgroundColor: '#AAAABAD',
   },
   content: {
     flex: 1,
   },
   footerContainer: {
-    height: 80, 
-    paddingBottom: 20, 
+    height: 80,
+    paddingBottom: 20,
     backgroundColor: '#040404',
   },
   footerContainerClear: {
-    height: 50, 
+    height: 50,
     backgroundColor: '#040404',
   },
   footer: {
     flex: 1,
   },
   footerContent: {
-    flexDirection: 'row', 
+    flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 10,
   },
@@ -143,14 +143,14 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
-    marginHorizontal: 10, 
-    padding: 10, 
-    borderRadius: 8, 
+    marginHorizontal: 10,
+    padding: 10,
+    borderRadius: 8,
   },
   pressableText: {
     marginTop: 4,
-    fontSize: 12, 
-    color: 'white', 
+    fontSize: 12,
+    color: 'white',
   },
 });
 

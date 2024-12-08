@@ -1,12 +1,12 @@
 import React, {useState, useEffect} from 'react';
 import { View, Text, StyleSheet, SafeAreaView, } from 'react-native';
 import { Card, Icon, CheckIcon, ArrowRightIcon, Heading, ScrollView, Button, Center} from '@gluestack-ui/themed';
-import SearchDestination from '../Components/SearchDestination';
-import CheckboxActivities from '../Components/CheckboxActivities';
-import NavbarProgram from '../Components/NavbarProgram';
+import SearchDestination from '../Components/SearchDestination.js';
+import CheckboxActivities from '../Components/CheckboxActivities.js';
+import NavbarProgram from '../Components/NavbarProgram.js';
 import CustomButton from '../CustomElements/CustomButton.js';
 
-const SetUpTrip = (props) => {
+const SetupTrip = (props) => {
 
   const [checkBoxActivities, setCheckBoxActivities] = useState({isOpen: false, city: '', country: ''})
   const [dataDestination, setDataDestination] = useState({country: '', city: ''});
@@ -29,7 +29,7 @@ const SetUpTrip = (props) => {
     return true;
   }
 
-  
+
   function goToProgramPage(){
 
     ///////////////////////////////////////////////////
@@ -37,9 +37,9 @@ const SetUpTrip = (props) => {
 
     if(!verifyDestinationRequest())return;
     let newCheckbox = [];
-    checkbox.forEach((ob)=>{if(ob.selected)newCheckbox.push(ob.category)}); 
-    
-    props.navigation.navigate('Locations', {type: 'getAllDataAboutLocations' , 
+    checkbox.forEach((ob)=>{if(ob.selected)newCheckbox.push(ob.category)});
+
+    props.navigation.navigate('Locations', {type: 'getAllDataAboutLocations' ,
       country: dataDestination.country, city: dataDestination.city, checkbox: newCheckbox, input: inputActivity, isLocalPlaces, scaleVisit})
 
     ///////////////////////////////////////////////////////////
@@ -65,7 +65,7 @@ const SetUpTrip = (props) => {
       props.addNotification("warning", "Please choose the city and country where you want to travel to provide you with the best data.");
     }
   }
-  
+
   return (
     <SafeAreaView style={{flex: 1}} >
 
@@ -76,7 +76,7 @@ const SetUpTrip = (props) => {
         <Center>
           <Heading>Plan your next trip</Heading>
         </Center>
-        
+
         <Card p="$5" borderRadius="$lg"  m="$3" maxWidth={400} style={styles.shadow}>
           <Heading size="md" fontFamily="$heading" mb="$4">
             Search your destination
@@ -87,14 +87,14 @@ const SetUpTrip = (props) => {
             dataDestination={dataDestination} setDataDestination={setDataDestination}
           />
         </Card>
-        
-        <CheckboxActivities 
+
+        <CheckboxActivities
           inputActivity={inputActivity} setInputActivity={setInputActivity}
           dataDestination={dataDestination} setScaleVisit={setScaleVisit}
           checkBoxActivities={checkBoxActivities} closeCheckbox={closeCheckbox}
           checkbox={checkbox} setCheckbox={setCheckbox}  addNotification={props.addNotification}
           isLocalPlaces={isLocalPlaces} setLocalPlaces={setLocalPlaces}
-        /> 
+        />
 
         <CustomButton name={'Choose Activities'} icon={CheckIcon} func={openModalActivities} />
 
@@ -120,4 +120,4 @@ const styles = StyleSheet.create({
 });
 
 
-export default SetUpTrip;
+export default SetupTrip;

@@ -4,8 +4,8 @@ import React from 'react';
 const NavbarProgram = (props) => {
 
   function navigateSetUpTrip() {
-    if (props.name === 'SetUpTrip') return;
-    props.navigation.navigate('SetUpTrip');
+    if (props.name === 'SetupTrip') return;
+    props.navigation.navigate('SetupTrip');
   }
 
   function navigateLocations() {
@@ -23,16 +23,16 @@ const NavbarProgram = (props) => {
       <Pressable
         style={({ pressed }) => [
           styles.navButton,
-          props.name === 'SetUpTrip' && styles.activeButton,
+          props.name === 'SetupTrip' && styles.activeButton,
           pressed && styles.pressedButton,
         ]}
         onPress={navigateSetUpTrip}
       >
         <Text style={[
           styles.navButtonText,
-          props.name === 'SetUpTrip' ? styles.activeText : styles.inactiveText // Schimbăm culoarea textului
-        ]}>Set up trip</Text>
-        <Text style={props.name === 'SetUpTrip' ? styles.activeStepText : styles.stepText}>Step 1</Text>
+          props.name === 'SetupTrip' ? styles.activeText : styles.inactiveText // Schimbăm culoarea textului
+        ]}>Setup trip</Text>
+        <Text style={props.name === 'SetupTrip' ? styles.activeStepText : styles.stepText}>Step 1</Text>
       </Pressable>
 
       <Pressable
@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 10,
     paddingHorizontal: 15,
-    backgroundColor: '#0B3D91', 
+    backgroundColor: '#0B3D91',
     borderRadius: 10,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
@@ -96,25 +96,25 @@ const styles = StyleSheet.create({
   },
   stepText: {
     fontSize: 12,
-    color: '#FFFFFF', 
+    color: '#FFFFFF',
     marginTop: 4,
   },
   activeStepText: {
     fontSize: 12,
-    color: '#000000', 
+    color: '#000000',
     marginTop: 4,
   },
   activeButton: {
-    backgroundColor: '#007AFF', 
+    backgroundColor: '#007AFF',
     shadowColor: '#007AFF',
     shadowOpacity: 0.3,
   },
   activeText: {
-    color: '#000000', 
+    color: '#000000',
     fontWeight: 'bold',
   },
   inactiveText: {
-    color: '#FFFFFF', 
+    color: '#FFFFFF',
     fontWeight: 'bold',
   },
   pressedButton: {

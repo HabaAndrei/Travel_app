@@ -49,7 +49,7 @@ const LogIn = (props) => {
         return;
       }
     }
-    props.navigation.navigate('SetUpTrip');
+    props.navigation.navigate('SetupTrip');
   }
 
   async function logIn(){
@@ -66,7 +66,7 @@ const LogIn = (props) => {
     const rez = await signInUserEmailPassword(inputEmail, inputPassword.input);
     if(rez.type){
       const user = rez.data;
-      props.navigation.navigate('SetUpTrip');
+      props.navigation.navigate('SetupTrip');
     }else{
       props.addNotification('error', "Invalid login credentials");
       console.log(rez.err);
@@ -161,7 +161,7 @@ const LogIn = (props) => {
         return {...prev, email_verified: true};
     });
 
-    props.navigation.navigate('SetUpTrip');
+    props.navigation.navigate('SetupTrip');
   }
 
   function createAcc(){

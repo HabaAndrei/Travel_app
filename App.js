@@ -2,7 +2,7 @@ import { StyleSheet} from 'react-native'
 import React, {useEffect, useState} from 'react'
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import SetUpTrip from './Screens/SetUpTrip.js';
+import SetupTrip from './Screens/SetupTrip.js';
 import Program from './Screens/Program.js';
 import DailyProgram from './Screens/DailyProgram.js';
 import UserSettings from './Screens/UserSettings.js';
@@ -46,9 +46,9 @@ const App = () => {
   }
 
 
-  const SetUpTripScreen = ({ navigation, route }) => (
+  const SetupTripScreen = ({ navigation, route }) => (
     <Layout  navigation={navigation} route={route} user={user} setUser={setUser}   >
-      <SetUpTrip/>
+      <SetupTrip/>
     </Layout>
   );
 
@@ -113,8 +113,8 @@ const App = () => {
             options={{headerShown: false}}
           />
           <Stack.Screen
-            name="SetUpTrip"
-            component={SetUpTripScreen}
+            name="SetupTrip"
+            component={SetupTripScreen}
             options={{headerShown: false}}
           />
           <Stack.Screen
