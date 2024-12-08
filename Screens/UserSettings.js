@@ -10,11 +10,11 @@ const UserSettings = (props) => {
 
   const [isModalVisibleReAuth, setModalVisibleReAuth] = useState(false);
 
-  
+
   async function signOut(){
     const rez = await signOutUser();
     if(rez.type){
-      props.setUser(false)
+      props.setUser(undefined)
     }else{
       console.log(rez.err);
       props.addNotification('error', "Unfortunately, we couldn't log you out");
@@ -29,7 +29,7 @@ const UserSettings = (props) => {
 
     const rez = await deleteTheUser();
     if(rez.type){
-      props.setUser(false);
+      props.setUser(undefined);
       deleteAllFromAsyncStorage()
     }else{
       if(rez?.err?.message?.includes('auth/requires-recent-login')){
@@ -58,7 +58,7 @@ const UserSettings = (props) => {
 
 
         <View style={{ alignItems: 'center' }}>
-          <VStack space="2xl">  
+          <VStack space="2xl">
             <HStack  px="$3"  h="$8"  rounded="$sm"  borderWidth="$2"  borderColor="$backgroundLight300"  alignItems="center"  justifyContent="center"   $dark-borderColor="$backgroundDark700"  >
               <Button onPress={()=>signOut()} variant="link" size="xl">
                 <ButtonText>Log out</ButtonText>
@@ -66,7 +66,7 @@ const UserSettings = (props) => {
               <Divider orientation="vertical" h="50%" mx="$2.5" style={{margin: 20}} />
               <Button  onPress={()=>deleteUser()} variant="link" size="xl">
                 <ButtonText>Delete accout</ButtonText>
-              </Button>          
+              </Button>
             </HStack>
           </VStack>
 

@@ -91,7 +91,7 @@ const LogIn = (props) => {
   async function signOut(){
     const rez = await signOutUser();
     if(rez.type){
-      props.setUser(false)
+      props.setUser(undefined)
     }else{
       console.log(rez.err);
       props.addNotification('error', "Unfortunately, we couldn't log you out");
@@ -106,7 +106,7 @@ const LogIn = (props) => {
 
     const rez = await deleteTheUser();
     if(rez.type){
-      props.setUser(false);
+      props.setUser(undefined);
       deleteAllFromAsyncStorage()
     }else{
       if(rez?.err?.message?.includes('auth/requires-recent-login')){

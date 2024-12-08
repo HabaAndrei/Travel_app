@@ -21,28 +21,26 @@ const Stack = createNativeStackNavigator();
 
 const App = () => {
 
-  const [user, setUser] = useState(false);
+  const [user, setUser] = useState(undefined);
 
   useEffect(()=>{
     reloadUser();
   }, [])
 
   function reloadUser(){
-    onAuthStateChanged(auth, async (us) => {
-      if (us) {
-        const uid = us.uid;
+    onAuthStateChanged(auth, async (_user) => {
+      if (_user) {
+        const uid = _user.uid;
         const rezEmailVerified = await verifyEmailVerifiedDB(uid);
-        if(rezEmailVerified.type){
-          setUser({...us, email_verified: true});
-        }else if(!rezEmailVerified.type && !rezEmailVerified.err){
-          setUser(us);
-        }else if(!rezEmailVerified.type && rezEmailVerified.err){
-          setUser(us);
+        if (rezEmailVerified.type) {
+          setUser({..._user, email_verified: true});
+        } else {
+          setUser(_user);
         }
-        console.log('user disconnected')
-      } else {
-        setUser(false);
         console.log('user connected')
+      } else {
+        setUser(undefined);
+        console.log('user disconnected')
       }
     });
   }
