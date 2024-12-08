@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View, Pressable, ScrollView, SafeAreaView } from 'react-native'
 import { useState } from 'react';
 import {VStack, HStack, Button, ButtonText, Divider, Heading, Center, Icon, SettingsIcon} from '@gluestack-ui/themed'
-import {_signOut, _deleteUser, } from '../firebase.js';
+import { FirebaseAuth } from '../firebase.js';
 import {deleteAllFromAsyncStorage} from '../diverse.js';
 import ModalReAuth from '../Components/ModalReAuth.js';
 import CardFeedback from '../Components/CardFeedback.js';
@@ -10,9 +10,10 @@ const UserSettings = (props) => {
 
   const [isModalVisibleReAuth, setModalVisibleReAuth] = useState(false);
 
+  const firebaseAuth = new FirebaseAuth();
 
   async function signOut(){
-    const rez = await _signOut();
+    const rez = await firebaseAuth._signOut();
     if(rez.isResolve){
       props.setUser(undefined)
     }else{
@@ -27,7 +28,7 @@ const UserSettings = (props) => {
     const response = await props.areYouSureDeleting();
     if (!response) return;
 
-    const rez = await _deleteUser();
+    const rez = await firebaseAuth._deleteUser();
     if(rez.isResolve){
       props.setUser(undefined);
       deleteAllFromAsyncStorage()

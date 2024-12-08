@@ -1,7 +1,7 @@
 import { StyleSheet, View, Modal } from 'react-native'
 import {useEffect, useState} from 'react';
 import { Input, InputField, Heading, Text } from '@gluestack-ui/themed';
-import {reAuth} from '../firebase.js';
+import { FirebaseAuth} from '../firebase.js';
 import CustomButton from '../CustomElements/CustomButton.js';
 
 
@@ -9,13 +9,14 @@ const ModalReAuth = (props) => {
 
     const [password, setPassword] = useState('');
     const [err, setErr] = useState('');
+    const firebaseAuth = new FirebaseAuth();
 
     async function reauthenticate(){
         if(!password.length){
             setErr('Please add your password');
             return;
         }
-        const rez = await reAuth(password);
+        const rez = await firebaseAuth.reAuth(password);
         if(!rez.isResolve){
             setErr('The password is not correct');
         }else{

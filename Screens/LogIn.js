@@ -1,11 +1,8 @@
 import { StyleSheet, View, Pressable, Text, TextInput, ScrollView, SafeAreaView, TouchableOpacity, ImageBackground } from 'react-native'
 import {useState } from 'react'
 import { Icon, VStack, EyeIcon, EyeOffIcon } from '@gluestack-ui/themed'
-import {_createUserWithEmailAndPassword,  _signInWithEmailAndPassword, _sendPasswordResetEmail, _signOut,
-    _deleteUser, storeCodeAndEmail, verifyCodeDB, updateEmailVerificationDB
-} from '../firebase.js'
-import {isValidEmail, isValidPassword, deleteAllFromAsyncStorage,
-    address_function_send_code_verification} from "../diverse.js"
+import { FirebaseAuth, storeCodeAndEmail, verifyCodeDB, updateEmailVerificationDB } from '../firebase.js'
+import {isValidEmail, isValidPassword, deleteAllFromAsyncStorage, address_function_send_code_verification} from "../diverse.js"
 import uuid from 'react-native-uuid';
 import axios from 'axios';
 import ModalReAuth from '../Components/ModalReAuth.js';
@@ -22,6 +19,7 @@ const LogIn = (props) => {
   const [codeVerify, setCodeVerify] = useState('');
   const [isModalVisibleReAuth, setModalVisibleReAuth] = useState(false);
 
+  const firebaseAuth = new FirebaseAuth();
 
   async function createAccout(){
     if(!inputEmail?.length || !inputPassword?.input?.length || !inputFirstName?.length || !inputSecondName?.length){
@@ -39,7 +37,7 @@ const LogIn = (props) => {
       return;
     }
 
-    const rez = await _createUserWithEmailAndPassword(inputEmail, inputPassword.input, inputFirstName, inputSecondName);
+    const rez = await firebaseAuth._createUserWithEmailAndPassword(inputEmail, inputPassword.input, inputFirstName, inputSecondName);
     if(!rez.isResolve){
       if(rez.err?.message?.includes("auth/email-already-in-use")){
         props.addNotification('error',"This email address is already in use");
@@ -63,7 +61,7 @@ const LogIn = (props) => {
       return;
     }
 
-    const rez = await _signInWithEmailAndPassword(inputEmail, inputPassword.input);
+    const rez = await firebaseAuth._signInWithEmailAndPassword(inputEmail, inputPassword.input);
     if(rez.isResolve){
       const user = rez.data;
       props.navigation.navigate('SetupTrip');
@@ -79,7 +77,7 @@ const LogIn = (props) => {
       return;
     }
 
-    const rez = await _sendPasswordResetEmail(inputEmail);
+    const rez = await firebaseAuth._sendPasswordResetEmail(inputEmail);
     if(rez.isResolve){
       props.addNotification('success', "Password reset email has been sent");
     }else{
@@ -89,7 +87,7 @@ const LogIn = (props) => {
   }
 
   async function signOut(){
-    const rez = await _signOut();
+    const rez = await firebaseAuth._signOut();
     if(rez.isResolve){
       props.setUser(undefined)
     }else{
@@ -104,7 +102,7 @@ const LogIn = (props) => {
     const response = await props.areYouSureDeleting();
     if (!response) return;
 
-    const rez = await _deleteUser();
+    const rez = await firebaseAuth._deleteUser();
     if(rez.isResolve){
       props.setUser(undefined);
       deleteAllFromAsyncStorage()

@@ -20,98 +20,106 @@ const firebaseConfig = {
   measurementId: MEASUREMENT_ID
 };
 
-
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-
-
 const auth = initializeAuth(app, {
   persistence: getReactNativePersistence(AsyncStorage),
 });
 
+/////////////////////////////////
+/////////////////////////////////
+/////////////////////////////////
+/////////////////////////////////
 
-async function _createUserWithEmailAndPassword(email, password, firstName, secondName){
+class FirebaseAuth {
 
-  let rezFin = {};
-  try{
-    const rez = await createUserWithEmailAndPassword(auth, email, password);
+  async _createUserWithEmailAndPassword(email, password, firstName, secondName){
+    let rezFin = {};
+    try{
+      const rez = await createUserWithEmailAndPassword(auth, email, password);
 
-    const {uid} = rez.user;
-    const {createdAt} = rez.user.metadata;
+      const {uid} = rez.user;
+      const {createdAt} = rez.user.metadata;
 
-    await addUserIntoDb(uid, createdAt, email, password, firstName, secondName);
+      await addUserIntoDb(uid, createdAt, email, password, firstName, secondName);
 
-    rezFin = {isResolve: true, data: rez};
-  }catch(err){
+      rezFin = {isResolve: true, data: rez};
+    }catch(err){
+      storeErr(err.message)
+      rezFin = {isResolve: false, err};
+    }
+    return rezFin;
+  }
+
+  async _signInWithEmailAndPassword(email, password){
+    let rezFin = {};
+    try{
+      const rez = await signInWithEmailAndPassword(auth, email, password)
+      rezFin = {isResolve: true, data: rez};
+    }catch(err){
     storeErr(err.message)
-    rezFin = {isResolve: false, err};
+      rezFin = {isResolve: false, err};
+    }
+    return rezFin;
   }
-  return rezFin;
-}
 
-async function _signInWithEmailAndPassword(email, password){
-  let rezFin = {};
-  try{
-    const rez = await signInWithEmailAndPassword(auth, email, password)
-    rezFin = {isResolve: true, data: rez};
-  }catch(err){
-  storeErr(err.message)
-    rezFin = {isResolve: false, err};
+  async reAuth(password){
+    let rezFin = {isResolve: true};
+    try{
+      const user = auth.currentUser;
+      const {email} = user;
+      const credential = EmailAuthProvider.credential(email, password)
+      await reauthenticateWithCredential(user, credential);
+    }catch(err){
+      storeErr(err.message)
+      rezFin = {isResolve: false, err};
+    }
+    return rezFin;
   }
-  return rezFin;
-}
 
-async function reAuth(password){
-  let rezFin = {isResolve: true};
-  try{
-    const user = auth.currentUser;
-    const {email} = user;
-    const credential = EmailAuthProvider.credential(email, password)
-    await reauthenticateWithCredential(user, credential);
-  }catch(err){
-    storeErr(err.message)
-    rezFin = {isResolve: false, err};
+  async _deleteUser(){
+    let rezFin = {};
+    try{
+      const user = auth.currentUser;
+      const rez = await deleteUser(user);
+      rezFin = {isResolve: true};
+    }catch(err){
+      storeErr(err.message)
+      rezFin = {isResolve: false, err};
+    }
+    return rezFin;
   }
-  return rezFin;
-}
 
-async function _deleteUser(){
-  let rezFin = {};
-  try{
-    const user = auth.currentUser;
-    const rez = await deleteUser(user);
-    rezFin = {isResolve: true};
-  }catch(err){
-    storeErr(err.message)
-    rezFin = {isResolve: false, err};
+  async _signOut(){
+    let rezFin = {};
+    try{
+      const rez = await signOut(auth);
+      rezFin = {isResolve: true};
+    }catch(err){
+      storeErr(err.message)
+      rezFin = {isResolve: false, err};
+    }
+    return rezFin;
   }
-  return rezFin;
-}
 
-async function _signOut(){
-  let rezFin = {};
-  try{
-    const rez = await signOut(auth);
-    rezFin = {isResolve: true};
-  }catch(err){
-    storeErr(err.message)
-    rezFin = {isResolve: false, err};
+  async _sendPasswordResetEmail(email){
+    let rezFin = {};
+    try{
+      const rez = await sendPasswordResetEmail(auth, email)
+      rezFin = {isResolve: true};
+    }catch(err){
+      storeErr(err.message)
+      rezFin = {isResolve: false, err};
+    }
+    return rezFin;
   }
-  return rezFin;
-}
+};
 
-
-async function _sendPasswordResetEmail(email){
-  let rezFin = {};
-  try{
-    const rez = await sendPasswordResetEmail(auth, email)
-    rezFin = {isResolve: true};
-  }catch(err){
-    storeErr(err.message)
-    rezFin = {isResolve: false, err};
-  }
-  return rezFin;
-}
+/////////////////////////////////
+/////////////////////////////////
+/////////////////////////////////
+/////////////////////////////////
+/////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -386,10 +394,10 @@ async function storeErr(mesErr){
 }
 
 
-export {db, auth, _signOut, _deleteUser, addProgramIntoDb, _createUserWithEmailAndPassword, _signInWithEmailAndPassword,
-  getPlansFromDbWithUid, _sendPasswordResetEmail, updateProgram, storeCodeAndEmail, verifyCodeDB, updateEmailVerificationDB,
-  verifyEmailVerifiedDB, reAuth, store_feedback, askQuestion, storeConv, storeMes, getConversations, getMessages,
-  deleteChat, storeErr
+export {db, auth, addProgramIntoDb,
+  getPlansFromDbWithUid, updateProgram, storeCodeAndEmail, verifyCodeDB, updateEmailVerificationDB,
+  verifyEmailVerifiedDB, store_feedback, askQuestion, storeConv, storeMes, getConversations, getMessages,
+  deleteChat, storeErr, FirebaseAuth
 };
 
 
