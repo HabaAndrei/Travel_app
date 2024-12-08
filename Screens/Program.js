@@ -79,7 +79,7 @@ const Program = (props) => {
       {method, from, to, city, country, locations}
     ).then((data)=>{
 
-      if(data.data.type){
+      if(data.data.isResolve){
         const values = Object.values(data.data.data);
         setProgram([...values]);
         multiSetFromAsyncStorage([['travelProgram', [...values]],

@@ -51,7 +51,7 @@ const Locations = (props) => {
     axios.post(`${address_function_api}`,
       {method, city, country, input, checkbox, isLocalPlaces, scaleVisit}
     ).then((data)=>{
-      if(data.data.type){
+      if(data.data.isResolve){
         const arrayWithLocations = data.data.data;
         const arraySelected = arrayWithLocations.map((ob)=>{
           return {...ob, selected: false}

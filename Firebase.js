@@ -280,7 +280,7 @@ async function askQuestion(histoyConv){
     }
 
     const rezQuery =  await axios.post(`${address_function_api}`, {method: 'chat', histoyConv, information});
-    if(rezQuery?.data?.type){
+    if(rezQuery?.data?.isResolve){
       rezFin = {isResolve: true, data: rezQuery?.data?.data};
     }else{
       rezFin = {isResolve: false, err: rezQuery?.data?.err};

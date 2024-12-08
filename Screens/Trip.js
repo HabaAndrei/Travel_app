@@ -95,7 +95,7 @@ const Trip = (props) => {
     const index = isModalVisible.index;
     let program = [...tripProgram];
     program[index].activities.push({
-      name: name ? name : '',
+      place: name ? name : '',
       address: address ? address : '',
       info: info ? info : '',
       description: description ? description : '',
@@ -147,7 +147,7 @@ const Trip = (props) => {
     const from = formatDateFromMilliseconds(new Date(program[0].date).getTime());
     const to = formatDateFromMilliseconds(new Date(program[program.length - 1].date).getTime());
     const rez = await updateProgram(idProgramIntoDb, from, to, program);
-    if (!isResolve.type) {
+    if (!rez.isResolve) {
       console.log('Error saving program:', rez.err);
     }
   }
