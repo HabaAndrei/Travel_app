@@ -1,5 +1,5 @@
 import { StyleSheet, View, Pressable, Text, TextInput, ScrollView, SafeAreaView, TouchableOpacity, ImageBackground } from 'react-native'
-import React, {useState } from 'react'
+import {useState } from 'react'
 import { Icon, VStack, EyeIcon, EyeOffIcon } from '@gluestack-ui/themed'
 import {_createUserWithEmailAndPassword,  _signInWithEmailAndPassword, _sendPasswordResetEmail, _signOut,
     _deleteUser, storeCodeAndEmail, verifyCodeDB, updateEmailVerificationDB

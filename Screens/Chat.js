@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import {View, Text, ScrollView, StyleSheet, TouchableOpacity, TextInput, KeyboardAvoidingView,
   Platform, Keyboard, Pressable} from 'react-native';
 import {askQuestion, storeConv, storeMes, getConversations, getMessages, deleteChat} from '../firebase.js';

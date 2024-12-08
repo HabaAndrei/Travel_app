@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, Image, PanResponder, Dimensions } from 'react-native';
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 const ImageCarousel = (props) => {
     const [imageNumber, setImageNumber] = useState(0);
@@ -52,8 +52,8 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: 15, 
-    padding: 5, 
+    borderRadius: 15,
+    padding: 5,
     marginBottom: 15,
   },
   dotsContainer: {

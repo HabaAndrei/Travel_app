@@ -1,6 +1,6 @@
-import { StyleSheet, View, Pressable, Modal } from 'react-native'
-import React, {useEffect, useState} from 'react'
-import { Input, InputField, Button, Heading, ButtonText, Text } from '@gluestack-ui/themed';
+import { StyleSheet, View, Modal } from 'react-native'
+import {useEffect, useState} from 'react';
+import { Input, InputField, Heading, Text } from '@gluestack-ui/themed';
 import {reAuth} from '../firebase.js';
 import CustomButton from '../CustomElements/CustomButton.js';
 

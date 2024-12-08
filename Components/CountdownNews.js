@@ -1,10 +1,10 @@
 import { StyleSheet, View, PanResponder } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Card, Text, Heading } from '@gluestack-ui/themed';
 import {formatDateFromMilliseconds, getDays, getHours} from '../diverse.js';
 
 const CountdownNews = (props) => {
-  
+
   const [newsToShow, setNewToShow] = useState([])
   const [newsNumber, setNewsNumber] = useState(0);
   const [startX, setStartX] = useState(0);
@@ -34,19 +34,19 @@ const CountdownNews = (props) => {
     if(!props.plans.length)return;
     createNews();
   }, [props.plans]);
-  
+
   function returnNewsFromActivities(programDay, actualDate, actualHour, actualMinutes) {
     const { activities, date } = programDay;
     const news = [];
-  
+
     const formatTimeMessage = (hours, minutes, address) =>
       `In ${hours > 0 ? `${hours} hours` : ''} ${hours > 0 && minutes > 0 ? 'and' : ''} ${minutes > 0 ? `${minutes} minutes` : ''} you have to be at address ${address}.`;
-  
+
     activities.forEach(activity => {
       const { address, info, time, urlLocation, website, place } = activity;
       const infOne = `Good to know: ${info}`;
       const title = place;
-  
+
       if (date === actualDate) {
         if (`${actualHour}:${actualMinutes}` < time) {
           const { minutes, hours } = getHours(`${actualHour}:${actualMinutes}`, time);
@@ -55,7 +55,7 @@ const CountdownNews = (props) => {
         }
       } else {
         const days = getDays(new Date(actualDate).getTime(), new Date(date).getTime());
-  
+
         if (days === 1) {
           const { minutes, hours } = getHours(`${actualHour}:${actualMinutes}`, time);
           const infTwo = formatTimeMessage(hours, minutes, address);
@@ -68,7 +68,7 @@ const CountdownNews = (props) => {
     });
     return news;
   }
-  
+
 
 
   function createNews(){
@@ -88,19 +88,19 @@ const CountdownNews = (props) => {
       arNews.concat(arNewsTwo);
     }
     setNewToShow(arNews);
-        
+
   };
 
   return (
 
     <View>
-    {newsToShow.length ? 
+    {newsToShow.length ?
       <View style={styles.container} {...panResponder.panHandlers}>
         <Card p="$5" borderRadius="$lg" maxWidth={600} m="$3">
           <Heading style={styles.heading}>{newsToShow[newsNumber]?.title}</Heading>
           <Text style={styles.infoText}>{newsToShow[newsNumber]?.infTwo}</Text>
           <Text style={styles.description}>{newsToShow[newsNumber]?.infOne}</Text>
-  
+
           <View style={styles.dotsContainer}>
             {newsToShow.map((_, index) => (
               <View

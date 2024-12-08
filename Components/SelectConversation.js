@@ -1,7 +1,6 @@
 import { StyleSheet, View } from 'react-native'
-import React from 'react'
 import {  Select, SelectInput, Icon, ChevronDownIcon, SelectIcon, SelectItem,
-  SelectTrigger, SelectPortal, SelectBackdrop, SelectContent, SelectDragIndicator,  
+  SelectTrigger, SelectPortal, SelectBackdrop, SelectContent, SelectDragIndicator,
   SelectDragIndicatorWrapper, } from '@gluestack-ui/themed';
 
 const SelectConversation = (props) => {

@@ -1,5 +1,4 @@
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'
-import React from 'react'
 
 const ButtonWhite = (props) => {
   return (
@@ -18,7 +17,7 @@ const ButtonBlue = (props) => {
       <TouchableOpacity style={styles.button}
         onPress={()=>props.func()}>
         <Text style={styles.buttonText}>{props.name}</Text>
-      </TouchableOpacity>         
+      </TouchableOpacity>
     </View>
   )
 }
@@ -27,7 +26,7 @@ export {ButtonWhite, ButtonBlue};
 
 const styles = StyleSheet.create({
   button: {
-    backgroundColor: 'rgba(0, 0, 255, 0.45)', 
+    backgroundColor: 'rgba(0, 0, 255, 0.45)',
     padding: 15,
     borderRadius: 30,
     alignItems: 'center',
@@ -51,7 +50,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   buttonContainer: {
-    justifyContent: 'center', 
-    alignItems: 'center', 
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 })

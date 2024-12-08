@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, Modal, Pressable, ScrollView, KeyboardAvoidingView, Platform, TextInput } from 'react-native';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import TimePicker from './TimePicker.js';
 import { Center } from '@gluestack-ui/themed';
 

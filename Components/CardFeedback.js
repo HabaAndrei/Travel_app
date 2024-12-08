@@ -1,6 +1,6 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native'
-import React, {useEffect, useState} from 'react'
-import { Card, Heading, Select, SelectInput, Icon, ChevronDownIcon, SelectIcon, SelectItem, ButtonText, Button, 
+import {useEffect, useState} from 'react'
+import { Card, Heading, Select, SelectInput, Icon, ChevronDownIcon, SelectIcon, SelectItem, ButtonText, Button,
   SelectTrigger, SelectPortal, SelectBackdrop, SelectContent, SelectDragIndicator, SelectDragIndicatorWrapper, TextareaInput, Textarea  } from '@gluestack-ui/themed';
 import {store_feedback} from '../firebase.js';
 import CustomButton from '../CustomElements/CustomButton.js';
@@ -21,7 +21,7 @@ const CardFeedback = (props) => {
     }
     return true;
   }
-  
+
 
   async function sendFeedback(){
     if(!verifyFields())return;
@@ -40,7 +40,7 @@ const CardFeedback = (props) => {
     <View>
       <Card p="$5" borderRadius="$lg" maxWidth={600} m="$3">
         <Heading size="md" fontFamily="$heading" mb="$4">
-          Give us feedback 
+          Give us feedback
         </Heading>
         <View>
           <Select onValueChange={setFeedbackCategoryState}>
@@ -63,10 +63,10 @@ const CardFeedback = (props) => {
             </SelectPortal>
           </Select>
         </View>
-        
+
         <View>
           <Textarea style={{ backgroundColor: 'white', marginTop: 10 }}>
-            <TextareaInput 
+            <TextareaInput
               placeholder="Write your feedback here"
               value={feedback}
               onChangeText={(text) => setFeedback(text)}

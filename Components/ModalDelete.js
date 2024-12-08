@@ -1,18 +1,16 @@
 import { StyleSheet, Text, View, Modal, Pressable } from 'react-native';
-import React from 'react';
 
 const ModalDelete = (props) => {
 
-
-    const closeWithResponse = (response) => {
-      props.handleModalResponse(response);
-      props.setModalDelete(false);
-    };
+  const closeWithResponse = (response) => {
+    props.handleModalResponse(response);
+    props.setModalDelete(false);
+  };
 
   return (
    <View>
-    {props.modalDelete ? 
-    
+    {props.modalDelete ?
+
       <View style={styles.centeredView}>
         <Modal
         animationType="slide"
@@ -87,13 +85,13 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     padding: 10,
     elevation: 2,
-    width: '40%', 
+    width: '40%',
   },
   buttonYes: {
     backgroundColor: '#4CAF50',
   },
   buttonNo: {
-    backgroundColor: '#F44336', 
+    backgroundColor: '#F44336',
   },
   textStyle: {
     color: 'white',

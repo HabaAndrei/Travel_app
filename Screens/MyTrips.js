@@ -1,5 +1,5 @@
 import { StyleSheet, ScrollView,  SafeAreaView, View } from 'react-native'
-import React, {useState, useEffect} from 'react'
+import {useState, useEffect} from 'react'
 import { useIsFocused } from '@react-navigation/native';
 import {getPlansFromDbWithUid} from '../firebase.js';
 import {  Card, Divider, Text, HStack , Heading, Link, LinkText, Icon,

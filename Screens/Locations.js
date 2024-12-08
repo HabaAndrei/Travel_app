@@ -1,5 +1,5 @@
 import { StyleSheet,SafeAreaView, View, ScrollView, Pressable, Dimensions } from 'react-native'
-import React, {useState, useEffect} from 'react'
+import {useState, useEffect} from 'react'
 import { useIsFocused } from '@react-navigation/native';
 import {address_function_api, getDataFromAsyncStorage, addDataToAsyncStorage,
   multiSetFromAsyncStorage, formatDateFromMilliseconds} from '../diverse';

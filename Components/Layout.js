@@ -1,6 +1,5 @@
-import React, {useState, useEffect} from 'react';
-import { View, Text, StyleSheet, ScrollView, Pressable, SafeAreaView, Platform } from 'react-native';
-import { Icon, GlobeIcon, CalendarDaysIcon, SettingsIcon, MenuIcon } from "@gluestack-ui/themed";
+import React, {useState} from 'react';
+import { View, Text, StyleSheet, ScrollView, Pressable } from 'react-native';
 import Notification from './Notification';
 import ModalDelete from './ModalDelete';
 import uuid from 'react-native-uuid';

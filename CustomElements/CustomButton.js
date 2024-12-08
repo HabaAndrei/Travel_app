@@ -1,5 +1,4 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import { StyleSheet, Text, View } from 'react-native';
 import { Button, Icon } from "@gluestack-ui/themed";
 
 const CustomButton = (props) => {
@@ -16,7 +15,7 @@ const CustomButton = (props) => {
         }}
       >
         <Text style={styles.buttonText}>{props.name}</Text>
-        {props.icon ? 
+        {props.icon ?
         <Icon as={props.icon} color="white" style={styles.icon} />
         :
         null

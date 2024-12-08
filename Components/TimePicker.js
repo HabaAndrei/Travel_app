@@ -1,5 +1,4 @@
 import { StyleSheet, View } from 'react-native';
-import React from 'react'
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import {HStack, LinkText, Link } from '@gluestack-ui/themed';
 

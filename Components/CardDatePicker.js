@@ -1,7 +1,6 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
-import {formatDateFromMilliseconds} from '../diverse.js'; 
-import { Card, Pressable, Heading, ScrollView, SafeAreaView } from '@gluestack-ui/themed';
+import { StyleSheet, Text, View } from 'react-native';
+import {formatDateFromMilliseconds} from '../diverse.js';
+import { Card} from '@gluestack-ui/themed';
 import DatePicker from '../Components/DatePicker';
 
 
@@ -63,13 +62,13 @@ const styles = StyleSheet.create({
   },
   centeredBoldText: {
     fontWeight: 'bold',
-    marginBottom: 8, 
+    marginBottom: 8,
   },
   row: {
     flexDirection: 'row',
-    justifyContent: 'space-around', 
+    justifyContent: 'space-around',
     alignItems: 'center',
-    width: '100%', 
+    width: '100%',
   },
   shadow:{
     shadowColor: '#000',

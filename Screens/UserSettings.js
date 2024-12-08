@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, Pressable, ScrollView, SafeAreaView } from 'react-native'
-import React, { useState } from 'react';
+import { useState } from 'react';
 import {VStack, HStack, Button, ButtonText, Divider, Heading, Center, Icon, SettingsIcon} from '@gluestack-ui/themed'
 import {_signOut, _deleteUser, } from '../firebase.js';
 import {deleteAllFromAsyncStorage} from '../diverse.js';

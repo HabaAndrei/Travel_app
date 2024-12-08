@@ -1,5 +1,5 @@
 import { FlatList, Modal, StyleSheet, Text, Pressable, View, TextInput, SafeAreaView} from 'react-native';
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { address_function_fuzzy } from '../diverse';
 import { Spinner } from "@gluestack-ui/themed";

@@ -1,9 +1,8 @@
 import { StyleSheet, View, Pressable, ScrollView, Clipboard, SafeAreaView } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useIsFocused } from '@react-navigation/native';
 import { Text, AccordionTitleText,  AccordionTrigger,  AccordionHeader, AccordionContent,
-	AccordionItem, Accordion, AddIcon, Card, Heading, ButtonText, Button, ButtonIcon,
-	Icon, TrashIcon, HStack, VStack, LinkText, Link, Divider, Center, RemoveIcon
+	AccordionItem, Accordion, AddIcon, Card, Heading, Icon, TrashIcon, HStack, VStack, LinkText, Link, Divider, Center, RemoveIcon
 } from '@gluestack-ui/themed';
 import ImageCarousel from '../Components/ImageCarousel.js';
 import { updateProgram } from '../firebase.js';
@@ -157,10 +156,10 @@ const Trip = (props) => {
     return [lat, lng].join(',');
   }
 
-  function openMap_(indexLocation) {
+  function _openMap(indexLocation) {
     let { program } = props.route.params;
     if (typeof program === 'string') program = JSON.parse(program);
-    const locGeo = program[indexLocation].activities.map((ob) => ob.geometry_location);
+    const locGeo = program[indexLocation].activities.filter((ob) => ob?.geometry_location);
     if (locGeo.length === 1) {
       const place = strLatLngMaps(locGeo[0]);
       openMap({ start: place, end: place });
@@ -217,7 +216,7 @@ return (
                   {new Date(dayProgram.date).toString().slice(0, 15)}
                 </Heading>
 
-                <Link onPress={() => openMap_(index)} isExternal>
+                <Link onPress={() => _openMap(index)} isExternal>
                   <HStack alignItems="center">
                     <LinkText size="sm" fontFamily="$heading" fontWeight="$semibold" color="$primary600" textDecorationLine="none">
                       See all trip in google maps 🗺

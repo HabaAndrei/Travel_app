@@ -1,5 +1,5 @@
 import { StyleSheet, View, ScrollView, Dimensions, Pressable, SafeAreaView } from 'react-native'
-import React, {useState, useEffect} from 'react'
+import {useState, useEffect} from 'react'
 import {address_function_api, formatDateFromMilliseconds, removeItemFromAsyncStorage,
   addDataToAsyncStorage, multiSetFromAsyncStorage, getDataFromAsyncStorage,
   multiGetFromAsyncStorage, multiRemoveFromAsyncStorage} from '../diverse.js';
