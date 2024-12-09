@@ -5,7 +5,7 @@ import { Text, AccordionTitleText,  AccordionTrigger,  AccordionHeader, Accordio
 	AccordionItem, Accordion, AddIcon, Card, Heading, Icon, TrashIcon, HStack, VStack, LinkText, Link, Divider, Center, RemoveIcon
 } from '@gluestack-ui/themed';
 import ImageCarousel from '../Components/ImageCarousel.js';
-import { updateProgram } from '../firebase.js';
+import {FirebaseFirestore} from '../firebase.js';
 import TimePicker from '../Components/TimePicker.js';
 import DatePicker from '../Components/DatePicker';
 import { formatDateFromMilliseconds } from '../diverse';
@@ -18,6 +18,8 @@ const Trip = (props) => {
   const [isTimePickerVisible, setTimePickerVisibility] = useState({ type: false, index: '', indexActivity: '' });
   const [datePickerVisibility, setDatePickerVisibility] = useState({ type: false, index: '' });
   const [isModalVisible, setModalVisible] = useState({ type: false });
+
+  const firebaseFirestore = new FirebaseFirestore();
 
   useEffect(() => {
     if (!isFocused) return;
@@ -145,7 +147,7 @@ const Trip = (props) => {
     });
     const from = formatDateFromMilliseconds(new Date(program[0].date).getTime());
     const to = formatDateFromMilliseconds(new Date(program[program.length - 1].date).getTime());
-    const rez = await updateProgram(idProgramIntoDb, from, to, program);
+    const rez = await firebaseFirestore.updateProgram(idProgramIntoDb, from, to, program);
     if (!rez.isResolve) {
       console.log('Error saving program:', rez.err);
     }

@@ -11,7 +11,7 @@ import Locations from './Screens/Locations.js';
 import Trip from './Screens/Trip.js';
 import Chat from './Screens/Chat.js';
 import Layout from './Components/Layout.js';
-import {auth, verifyEmailVerifiedDB} from './firebase.js';
+import {auth, FirebaseFirestore} from './firebase.js';
 import { GluestackUIProvider } from "@gluestack-ui/themed"
 import { config } from "@gluestack-ui/config"
 import {onAuthStateChanged} from 'firebase/auth';
@@ -23,6 +23,8 @@ const App = () => {
 
   const [user, setUser] = useState(undefined);
 
+  const firebaseFirestore = new FirebaseFirestore();
+
   useEffect(()=>{
     reloadUser();
   }, [])
@@ -31,7 +33,7 @@ const App = () => {
     onAuthStateChanged(auth, async (_user) => {
       if (_user) {
         const uid = _user.uid;
-        const rezEmailVerified = await verifyEmailVerifiedDB(uid);
+        const rezEmailVerified = await firebaseFirestore.verifyEmailVerifiedDB(uid);
         if (rezEmailVerified.isResolve) {
           setUser({..._user, email_verified: true});
         } else {

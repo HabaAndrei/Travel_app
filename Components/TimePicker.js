@@ -4,9 +4,6 @@ import {HStack, LinkText, Link } from '@gluestack-ui/themed';
 
 const TimePicker = (props) => {
 
-
-
-
   return (
     <View>
       <Link onPress={props.showDatePicker} >

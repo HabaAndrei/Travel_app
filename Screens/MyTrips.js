@@ -1,7 +1,7 @@
 import { StyleSheet, ScrollView,  SafeAreaView, View } from 'react-native'
 import {useState, useEffect} from 'react'
 import { useIsFocused } from '@react-navigation/native';
-import {getPlansFromDbWithUid} from '../firebase.js';
+import {FirebaseFirestore} from '../firebase.js';
 import {  Card, Divider, Text, HStack , Heading, Link, LinkText, Icon,
     ArrowRightIcon} from '@gluestack-ui/themed' ;
 import CountdownNews from '../Components/CountdownNews.js';
@@ -11,6 +11,7 @@ const MyTrips = (props) => {
 
     const isFocused = useIsFocused();
     const [plans, setPlans] = useState([]);
+    const firebaseFirestore = new FirebaseFirestore();
 
     useEffect(()=>{
         if(!isFocused || !props.user.uid)return;
@@ -19,7 +20,7 @@ const MyTrips = (props) => {
 
 
     async function getPlansFromDb(uid){
-        const rezQuery = await getPlansFromDbWithUid(uid);
+        const rezQuery = await firebaseFirestore.getPlansFromDbWithUid(uid);
         if(!rezQuery.isResolve){
             props.addNotification("error", "Unfortunately, there was a problem when taking the program")
             return;

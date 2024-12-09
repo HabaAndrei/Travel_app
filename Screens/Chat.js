@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import {View, Text, ScrollView, StyleSheet, TouchableOpacity, TextInput, KeyboardAvoidingView,
   Platform, Keyboard, Pressable} from 'react-native';
-import {askQuestion, storeConv, storeMes, getConversations, getMessages, deleteChat} from '../firebase.js';
+import {FirebaseFirestore} from '../firebase.js';
 import SelectConversation from '../Components/SelectConversation';
 import { useIsFocused } from '@react-navigation/native';
 import uuid from 'react-native-uuid';
@@ -15,6 +15,8 @@ const Chat = (props) => {
   const [conversations, setConversations] = useState([]);
   const [selectedConversation, setSelectedConversation] = useState('');
 
+  const firebaseFirestore = new FirebaseFirestore();
+
   useEffect(()=>{
     if(!isFocused)return;
     getConvs();
@@ -25,7 +27,7 @@ const Chat = (props) => {
   }, [selectedConversation])
 
   async function getMess(idConv){
-    const data = await getMessages(idConv);
+    const data = await firebaseFirestore.getMessages(idConv);
     if(data.isResolve){
       const mess = data?.data?.map((ob)=>{return {type: ob.type, mes: ob.mes}});
       if(!mess.length)return;
@@ -34,7 +36,7 @@ const Chat = (props) => {
   }
 
   async function getConvs(){
-    const data = await getConversations();
+    const data = await firebaseFirestore.getConversations();
     if(data.isResolve){
       const convs = data.data.map((ob)=>{return {id: ob.id, name: ob.name}})
       setConversations(convs);
@@ -42,7 +44,7 @@ const Chat = (props) => {
   }
 
   async function getResponse(conv, idConv){
-    const data = await askQuestion(conv);
+    const data = await firebaseFirestore.askQuestion(conv);
     if(data.isResolve){
       setConversation((prev)=>{
         const newConv = prev.map((ob)=>{
@@ -51,7 +53,7 @@ const Chat = (props) => {
         return [...newConv];
       })
       const time = new Date().getTime();
-      storeMes(idConv, 'ai', data?.data, time);
+      firebaseFirestore.storeMes(idConv, 'ai', data?.data, time);
     }else{
       props.addNotification("warning", "An error occurred while generating the message");
       console.log('we catch err', data.err);
@@ -71,21 +73,21 @@ const Chat = (props) => {
     if(!selectedConversation){
       setConversations((prev) => [...prev, {id: uuidConv, name}])
       setSelectedConversation({id: uuidConv, name});
-      storeConv(uuidConv, name);
+      firebaseFirestore.storeConv(uuidConv, name);
     }else{
       uuidConv = selectedConversation.id;
       name = selectedConversation.name;
     }
     getResponse(conv, uuidConv);
-    storeMes(uuidConv, 'user', message, time);
+    firebaseFirestore.storeMes(uuidConv, 'user', message, time);
     setMessage('');
   }
 
-  async function deleteChat_(){
+  async function _deleteChat(){
     if(!selectedConversation)return;
     const response = await props.areYouSureDeleting();
     if (!response) return;
-    deleteChat(selectedConversation);
+    firebaseFirestore.deleteChat(selectedConversation);
     setConversations((prev)=>{
       let newConvs = [];
       prev.forEach((ob)=>{
@@ -112,7 +114,7 @@ const Chat = (props) => {
       <View style={styles.container}>
 
         <View style={styles.topSection}>
-          <Pressable onPress={deleteChat_} style={styles.sideButton}>
+          <Pressable onPress={_deleteChat} style={styles.sideButton}>
             <Text style={styles.buttonText}>Delete chat</Text>
           </Pressable>
           <SelectConversation setSelectedConversation={setSelectedConversation} conversations={conversations} />

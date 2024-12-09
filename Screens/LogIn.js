@@ -1,7 +1,7 @@
 import { StyleSheet, View, Pressable, Text, TextInput, ScrollView, SafeAreaView, TouchableOpacity, ImageBackground } from 'react-native'
 import {useState } from 'react'
 import { Icon, VStack, EyeIcon, EyeOffIcon } from '@gluestack-ui/themed'
-import { FirebaseAuth, storeCodeAndEmail, verifyCodeDB, updateEmailVerificationDB } from '../firebase.js'
+import { FirebaseAuth, FirebaseFirestore } from '../firebase.js'
 import {isValidEmail, isValidPassword, deleteAllFromAsyncStorage, address_function_send_code_verification} from "../diverse.js"
 import uuid from 'react-native-uuid';
 import axios from 'axios';
@@ -20,6 +20,7 @@ const LogIn = (props) => {
   const [isModalVisibleReAuth, setModalVisibleReAuth] = useState(false);
 
   const firebaseAuth = new FirebaseAuth();
+  const firebaseFirestore = new FirebaseFirestore();
 
   async function createAccout(){
     if(!inputEmail?.length || !inputPassword?.input?.length || !inputFirstName?.length || !inputSecondName?.length){
@@ -119,7 +120,7 @@ const LogIn = (props) => {
     try{
       const code = uuid.v4().slice(0, 6);
       const email = props.user.email;
-      const rezStore = await storeCodeAndEmail(code, email);
+      const rezStore = await firebaseFirestore.storeCodeAndEmail(code, email);
       if(!rezStore.isResolve){
         props.addNotification('error', "There was a problem sending the code by email");
         return;
@@ -141,16 +142,13 @@ const LogIn = (props) => {
         props.addNotification('error', 'The code must have 6 characters, without spaces');
         return;
     }
-    const rezDB = await verifyCodeDB(codeVerify, props.user.email);
+    const rezDB = await firebaseFirestore.verifyCodeDB(codeVerify, props.user.email);
     if(!rezDB.isResolve){
-        props.addNotification('error', 'There was a problem verifying the code');
-        return
-    }else if(rezDB.isResolve && rezDB.mes){
-        props.addNotification('error', rezDB.mes);
-        return;
+      props.addNotification('error', 'There was a problem verifying the code');
+      return
     }
 
-    const rezUpdateDB = await updateEmailVerificationDB(props.user.uid);
+    const rezUpdateDB = await firebaseFirestore.updateEmailVerificationDB(props.user.uid);
     if(!rezUpdateDB.isResolve){
         props.addNotification('error', 'Please retry the operation and generate a new code');
         return;

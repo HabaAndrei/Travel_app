@@ -5,11 +5,13 @@ import { Spinner, Button, Icon, CheckIcon, Textarea, VStack, TextareaInput, Aler
   Radio, RadioIndicator, RadioIcon, CircleIcon, RadioLabel, Card} from "@gluestack-ui/themed";
 import { address_function_api } from '../diverse.js';
 import CustomButton from '../CustomElements/CustomButton.js';
-import {    storeErr } from '../firebase.js';
+import { FirebaseFirestore } from '../firebase.js';
 const CheckboxActivities = (props) => {
 
   const [isShowDetails, setShowDetails] = useState(false);
   const [paramsLocation, setParamsLocation] = useState(false)
+
+  const firebaseFirestore = new FirebaseFirestore();
 
   useEffect(() => {
     const { city, country } = props.dataDestination;
@@ -38,7 +40,7 @@ const CheckboxActivities = (props) => {
           props.addNotification("warning", "Unfortunately, we could not generate activities.");
         }
       }).catch((err) => {
-        storeErr(err.message)
+        firebaseFirestore.storeErr(err.message)
         props.closeCheckbox();
         props.addNotification("warning", "Unfortunately, we could not generate activities. System error!");
         console.log(err);

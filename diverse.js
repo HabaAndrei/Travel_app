@@ -1,11 +1,12 @@
 import {ADDRESS_FUNCTION_API, ADDRESS_FUNCTION_FUZZY,
   ADDRESS_FUNCTION_SEND_CODE_VERIFICATION} from '@env';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { storeErr } from './firebase';
+import { FirebaseFirestore } from './firebase';
 
 const address_function_api = ADDRESS_FUNCTION_API;
 const address_function_fuzzy = ADDRESS_FUNCTION_FUZZY;
 const address_function_send_code_verification = ADDRESS_FUNCTION_SEND_CODE_VERIFICATION;
+const firebaseFirestore = new FirebaseFirestore();
 
 function formatDateFromMilliseconds(milliseconds) {
   const date = new Date(milliseconds);
@@ -58,7 +59,7 @@ async function getDataFromAsyncStorage(key) {
     const dataParse = JSON.parse(storedTasks);
     rezFinal = { isResolve: true, data: dataParse };
   } catch (err) {
-    storeErr(err.message);
+    firebaseFirestore.storeErr(err.message);
     rezFinal = { isResolve: false, err: err };
   }
   return rezFinal;
@@ -82,7 +83,7 @@ async function addDataToAsyncStorage(key, data) {
     await AsyncStorage.setItem(keyString, dataString);
     rezFinal = { isResolve: true };
   } catch (err) {
-    storeErr(err.message);
+    firebaseFirestore.storeErr(err.message);
     rezFinal = { isResolve: false, err: err };
   }
   return rezFinal;
@@ -94,7 +95,7 @@ async function removeItemFromAsyncStorage(key) {
     await AsyncStorage.removeItem(key);
     rezFinal = { isResolve: true };
   } catch (err) {
-    storeErr(err.message);
+    firebaseFirestore.storeErr(err.message);
     rezFinal = { isResolve: false, err: err };
   }
   return rezFinal;
@@ -106,7 +107,7 @@ async function getAllKeysFromAsyncStorage() {
     const keys = await AsyncStorage.getAllKeys();
     rezFinal = { isResolve: true, data: keys };
   } catch (err) {
-    storeErr(err.message);
+    firebaseFirestore.storeErr(err.message);
     rezFinal = { isResolve: false, err: err };
   }
   return rezFinal;
@@ -118,7 +119,7 @@ async function deleteAllFromAsyncStorage() {
     await AsyncStorage.clear();
     rezFinal = { isResolve: true };
   } catch (err) {
-    storeErr(err.message);
+    firebaseFirestore.storeErr(err.message);
     rezFinal = { isResolve: false, err: err };
   }
   return rezFinal;
@@ -130,7 +131,7 @@ async function multiGetFromAsyncStorage(arrayOfKeys) {
     const data = await AsyncStorage.multiGet(arrayOfKeys);
     rezFinal = { isResolve: true, data: data };
   } catch (err) {
-    storeErr(err.message);
+    firebaseFirestore.storeErr(err.message);
     rezFinal = { isResolve: false, err: err };
   }
   return rezFinal;
@@ -143,7 +144,7 @@ async function multiSetFromAsyncStorage(arrayOfArrays) {
     await AsyncStorage.multiSet(serializedArray);
     rezFinal = { isResolve: true };
   } catch (err) {
-    storeErr(err.message);
+    firebaseFirestore.storeErr(err.message);
     rezFinal = { isResolve: false, err: err };
   }
   return rezFinal;
@@ -155,7 +156,7 @@ async function multiRemoveFromAsyncStorage(arrayOfKeys) {
     await AsyncStorage.multiRemove(arrayOfKeys);
     rezFinal = { isResolve: true };
   } catch (err) {
-    storeErr(err.message);
+    firebaseFirestore.storeErr(err.message);
     rezFinal = { isResolve: false, err: err };
   }
   return rezFinal;

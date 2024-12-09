@@ -6,10 +6,9 @@ import {address_function_api, formatDateFromMilliseconds, removeItemFromAsyncSto
 import { ArrowRightIcon, Spinner, Center, Card, Heading, Link, LinkText, Text,
   Divider, HStack, TrashIcon,RepeatIcon, CheckIcon,  Icon } from "@gluestack-ui/themed";
 import { useIsFocused } from '@react-navigation/native';
-import {addProgramIntoDb} from '../firebase.js';
+import {FirebaseFirestore} from '../firebase.js';
 import axios from 'axios';
 import NavbarProgram from '../Components/NavbarProgram.js';
-import { storeErr} from '../firebase.js';
 
 const Program = (props) => {
 
@@ -21,6 +20,7 @@ const Program = (props) => {
   const [program, setProgram] = useState([]);
   const [isRecomandation, setRecomandation] = useState(false);
 
+  const firebaseFirestore = new FirebaseFirestore();
   const screenHeight = Dimensions.get('window').height;
 
 
@@ -89,7 +89,7 @@ const Program = (props) => {
         props.addNotification("warning", "Unfortunately, we could not generate your program.")
       }
     }).catch((err)=>{
-      storeErr(err.message)
+      firebaseFirestore.storeErr(err.message)
       props.addNotification("error", "Unfortunately, we could not generate program")
       console.log('eroare de la getProgram',err);
     })
@@ -160,7 +160,7 @@ const Program = (props) => {
     const to = travelProgram[travelProgram.length - 1].date;
     const programDaysString = JSON.stringify(travelProgram);
     const uid = props.user.uid;
-    const rezAddInDb = await addProgramIntoDb(city, country, from , to, programDaysString, uid)
+    const rezAddInDb = await firebaseFirestore.addProgramIntoDb(city, country, from , to, programDaysString, uid)
     if(!rezAddInDb.isResolve){
       props.addNotification("error", "Unfortunately we could not save the program for you")
       console.log(rezAddInDb.err);

@@ -12,7 +12,7 @@ import ImageCarousel from '../Components/ImageCarousel';
 import CardDatePicker from '../Components/CardDatePicker';
 import CustomButton from '../CustomElements/CustomButton.js';
 import ListPackeges from '../Components/ListPackeges.js';
-import {storeErr} from '../firebase.js';
+import {FirebaseFirestore} from '../firebase.js';
 
 const Locations = (props) => {
 
@@ -23,6 +23,7 @@ const Locations = (props) => {
   const [dateTo, setDateTo] = useState();
   const [datePickerVisibility, setDatePickerVisibility] = useState({type: false, date:''});
 
+  const firebaseFirestore = new FirebaseFirestore();
   const screenHeight = Dimensions.get('window').height;
 
   useEffect(()=>{
@@ -63,7 +64,7 @@ const Locations = (props) => {
         console.log("eroare la functia createLocationsAi ", data);
       }
     }).catch((err)=>{
-      storeErr(err.message)
+      firebaseFirestore.storeErr(err.message)
       console.log('eroare de la createLocationsAi', err, ' <<== eroare');
     })
   }

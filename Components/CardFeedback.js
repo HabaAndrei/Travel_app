@@ -2,7 +2,7 @@ import { Pressable, StyleSheet, Text, View } from 'react-native'
 import {useEffect, useState} from 'react'
 import { Card, Heading, Select, SelectInput, Icon, ChevronDownIcon, SelectIcon, SelectItem, ButtonText, Button,
   SelectTrigger, SelectPortal, SelectBackdrop, SelectContent, SelectDragIndicator, SelectDragIndicatorWrapper, TextareaInput, Textarea  } from '@gluestack-ui/themed';
-import {store_feedback} from '../firebase.js';
+import {FirebaseFirestore} from '../firebase.js';
 import CustomButton from '../CustomElements/CustomButton.js';
 
 const CardFeedback = (props) => {
@@ -10,6 +10,7 @@ const CardFeedback = (props) => {
   const [feedback, setFeedback] = useState('');
   const [feedbackCategoryState, setFeedbackCategoryState] = useState('');
   const feedbackCategory = ['Bugs and Issues', 'Functionality and Features', 'Good to Know', 'Ideas for Future Development', 'Usability and Navigation'];
+  const firebaseFirestore = new FirebaseFirestore();
 
   function verifyFields(){
     if(!feedbackCategoryState.length){
@@ -25,7 +26,7 @@ const CardFeedback = (props) => {
 
   async function sendFeedback(){
     if(!verifyFields())return;
-    const rez = await store_feedback(feedback, feedbackCategoryState);
+    const rez = await firebaseFirestore.store_feedback(feedback, feedbackCategoryState);
     if(rez.err){
       console.log(rez.err);
       props.addNotification('error', 'Unfortunately, the feedback could not be sent')
