@@ -120,7 +120,6 @@ class FirebaseAuth {
 class FirebaseFirestore{
 
   async addUserIntoDb(uid, createdAt, email, password, firstName, secondName){
-
     try{
       await setDoc(doc(db, "users", uid), {
         uid, email, firstName, secondName, createdAt, email_verified: false
@@ -132,7 +131,6 @@ class FirebaseFirestore{
 
 
   async addProgramIntoDb(city, country, from , to, programDaysString, uid){
-
     let rezFin = {isResolve: true};
     try{
       await addDoc(collection(db, "programs"), {city, country, from , to, programDaysString, uid});
@@ -165,7 +163,6 @@ class FirebaseFirestore{
 
   async updateProgram(id, from, to, program){
     let rezFin = {isResolve: true};
-
     try{
       if(typeof(program) != 'string')program = JSON.stringify(program);
       const ref = doc(db, 'programs', id);
@@ -387,6 +384,20 @@ class FirebaseFirestore{
     }
     return rezFin
   }
+
+  async getNews(){
+    try{
+      const q = query(collection(db, "news"));
+      const querySnapshot = await getDocs(q);
+      let data = [];
+      querySnapshot.forEach((doc) => data.push({...doc.data(), id: doc.id}));
+      return {isResolve: true, data};
+    }catch(err){
+      this.storeErr(err.message)
+      return {isResolve: false, err};
+    }
+  }
+
 
 }
 

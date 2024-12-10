@@ -2,30 +2,30 @@ import { StyleSheet, Text, View, Image, PanResponder, Dimensions } from 'react-n
 import { useState } from 'react';
 
 const ImageCarousel = (props) => {
-    const [imageNumber, setImageNumber] = useState(0);
-    const [startX, setStartX] = useState(0);
-    const { width } = Dimensions.get('window');
+  const [imageNumber, setImageNumber] = useState(0);
+  const [startX, setStartX] = useState(0);
+  const { width } = Dimensions.get('window');
 
-    const panResponder = PanResponder.create({
-        onStartShouldSetPanResponder: () => true,
-        onPanResponderGrant: (evt) => {
-          setStartX(evt.nativeEvent.pageX);
-        },
-        onPanResponderRelease: (evt) => {
-          const endX = evt.nativeEvent.pageX;
-          if (startX - endX > 20) {
-            setImageNumber((number)=>{
-                if(number >= props.imageUrls.length - 1 )return number;
-                else return number +=1;
-            })
-          } else if (endX - startX > 20) {
-            setImageNumber((number)=>{
-                if(number <= 0 )return number;
-                else return number -=1;
-            })
-          }
-        }
-    });
+  const panResponder = PanResponder.create({
+    onStartShouldSetPanResponder: () => true,
+    onPanResponderGrant: (evt) => {
+      setStartX(evt.nativeEvent.pageX);
+    },
+    onPanResponderRelease: (evt) => {
+      const endX = evt.nativeEvent.pageX;
+      if (startX - endX > 20) {
+        setImageNumber((number)=>{
+          if(number >= props.imageUrls.length - 1 )return number;
+          else return number +=1;
+        })
+      } else if (endX - startX > 20) {
+        setImageNumber((number)=>{
+          if(number <= 0 )return number;
+          else return number -=1;
+        })
+      }
+    }
+  });
 
   return (
     <View style={styles.container} {...panResponder.panHandlers}>
