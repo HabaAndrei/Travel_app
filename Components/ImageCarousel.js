@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Image, PanResponder, Dimensions } from 'react-native';
+import { StyleSheet, View, Image, PanResponder, Dimensions } from 'react-native';
 import { useState } from 'react';
 
 const ImageCarousel = (props) => {

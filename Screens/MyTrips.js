@@ -55,7 +55,7 @@ const MyTrips = (props) => {
           </View>
         }
 
-        <NewsCarousel />
+        <NewsCarousel navigation={props.navigation}/>
 
         {plans?.map((obiect, index) => {
           return (

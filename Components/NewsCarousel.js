@@ -4,7 +4,7 @@ import { FirebaseFirestore } from '../firebase';
 import { useIsFocused } from '@react-navigation/native';
 import { Card, Text, Heading, LinkText, Link, Icon, ArrowRightIcon, HStack } from '@gluestack-ui/themed';
 
-const NewsCarousel = () => {
+const NewsCarousel = (props) => {
 
   const [newsNumber, setNewsNumber] = useState(0);
   const [news, setNews] = useState([]);
@@ -45,6 +45,10 @@ const NewsCarousel = () => {
     }
   });
 
+  function goToNews(){
+    props.navigation.navigate('News', {data: news?.[newsNumber]})
+  }
+
   return (
     <View style={styles.container} {...panResponder.panHandlers}>
       {news?.[newsNumber] ?
@@ -63,13 +67,13 @@ const NewsCarousel = () => {
             },
           }}
         >
-          {news?.[newsNumber]?.pubDate}
+          Published at {news?.[newsNumber]?.pubDate}
         </Text>
         <Heading size="md" fontFamily="$heading" mb="$4">
           {news?.[newsNumber]?.title}
         </Heading>
 
-        <Link style={styles.linkText} isExternal>
+        <Link onPress={goToNews} style={styles.linkText} isExternal>
           <HStack alignItems="center">
             <LinkText
               size="sm"

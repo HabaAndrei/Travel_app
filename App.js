@@ -10,6 +10,7 @@ import MyTrips from './Screens/MyTrips.js';
 import Locations from './Screens/Locations.js';
 import Trip from './Screens/Trip.js';
 import Chat from './Screens/Chat.js';
+import News from './Screens/News.js';
 import Layout from './Components/Layout.js';
 import {auth, FirebaseFirestore} from './firebase.js';
 import { GluestackUIProvider } from "@gluestack-ui/themed"
@@ -64,6 +65,11 @@ const App = () => {
           <Stack.Screen
             name="MyTrips"
             component={customComponent(MyTrips)}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="News"
+            component={customComponent(News)}
             options={{headerShown: false}}
           />
           <Stack.Screen
