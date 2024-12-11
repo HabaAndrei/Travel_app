@@ -126,7 +126,7 @@ const LogIn = (props) => {
         return;
       }
       const rezSend = await axios.post(address_function_send_code_verification, {code, email});
-      if(!rezSend.data.type){
+      if(!rezSend.data.isResolve){
         props.addNotification('error', "There was a problem sending the code by email");
         return;
       }
