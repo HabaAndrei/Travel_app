@@ -249,9 +249,9 @@ class FirebaseFirestore{
     return rezFin;
   }
 
+
   async askQuestion(histoyConv){
-    let rezFin = {};
-    try{
+    return this._storeErr(async ()=>{
       const {uid} = auth.currentUser;
       const data = await this.getPlansFromDbWithUid(uid);
       if(!data.isResolve){
@@ -278,18 +278,13 @@ class FirebaseFirestore{
         })
         information = JSON.stringify(rez);
       }
-
       const rezQuery =  await axios.post(`${address_function_api}`, {method: 'chat', histoyConv, information});
       if(rezQuery?.data?.isResolve){
-        rezFin = {isResolve: true, data: rezQuery?.data?.data};
+        return {isResolve: true, data: rezQuery?.data?.data};
       }else{
-        rezFin = {isResolve: false, err: rezQuery?.data?.err};
+        return {isResolve: false, err: rezQuery?.data?.err};
       }
-    }catch(err){
-      this.storeErr(err.message)
-      rezFin = {isResolve: false, err};
-    }
-    return rezFin
+    })
   };
 
   async storeConv(id, name){
@@ -369,6 +364,18 @@ class FirebaseFirestore{
       const docRef = doc(db, 'conversations', document.id);
       deleteDoc(docRef)
     });
+  }
+
+  async _storeErr(cb){
+    try{
+      const data = await cb();
+      return data;
+    }catch(err){
+      const {uid} = auth.currentUser;
+      const {modelName, modelId, brand} = Device;
+      await addDoc(collection(db, "errors"), {uid, modelName, modelId, brand, mesErr: err.message});
+      return {isResolve: false, err: err.message}
+    }
   }
 
   async storeErr(mesErr){

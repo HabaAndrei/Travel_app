@@ -19,7 +19,7 @@ const Chat = (props) => {
 
   useEffect(()=>{
     if(!isFocused)return;
-    getConvs();
+    getConversations();
   }, []);
 
   useEffect(()=>{
@@ -35,7 +35,7 @@ const Chat = (props) => {
     }
   }
 
-  async function getConvs(){
+  async function getConversations(){
     const data = await firebaseFirestore.getConversations();
     if(data.isResolve){
       const convs = data.data.map((ob)=>{return {id: ob.id, name: ob.name}})
@@ -45,6 +45,7 @@ const Chat = (props) => {
 
   async function getResponse(conv, idConv){
     const data = await firebaseFirestore.askQuestion(conv);
+    console.log(data, ' <<== the result');
     if(data.isResolve){
       setConversation((prev)=>{
         const newConv = prev.map((ob)=>{
@@ -58,6 +59,7 @@ const Chat = (props) => {
       props.addNotification("warning", "An error occurred while generating the message");
       console.log('we catch err', data.err);
     }
+
   }
 
   function sendMes(){

@@ -167,10 +167,40 @@ function randomNumber() {
 }
 
 const random = randomNumber();
-const imagePath = random === 0 ? require('./img/0.jpg') : random === 1 ? require('./img/1.jpg') :
-  random === 2 ? require('./img/2.jpg') : random === 3 ? require('./img/3.jpg') : random === 4 ? require('./img/4.jpg') :
-  random === 5 ? require('./img/5.jpg') : random === 6 ? require('./img/6.jpg') : random === 7 ? require('./img/7.jpg') :
-  random === 8 ? require('./img/8.jpg') : random === 9 ? require('./img/9.jpg') : require('./img/10.jpg');
+let imagePath = '';
+switch(random){
+  case 0:
+    imagePath = require('./img/0.jpg');
+    break;
+  case 1:
+    imagePath = require('./img/1.jpg');
+    break;
+  case 2:
+    imagePath = require('./img/2.jpg');
+    break;
+  case 3:
+    imagePath = require('./img/3.jpg');
+    break;
+  case 4:
+    imagePath = require('./img/4.jpg');
+    break;
+  case 5:
+    imagePath = require('./img/5.jpg');
+    break;
+  case 6:
+    imagePath = require('./img/6.jpg');
+    break;
+  case 7:
+    imagePath = require('./img/7.jpg');
+    break;
+  case 8:
+    imagePath = require('./img/8.jpg');
+    break;
+  case 9:
+    imagePath = require('./img/9.jpg');
+    break;
+  case 10: imagePath = require('./img/10.jpg');
+}
 
 export {
   isValidPassword, isValidEmail, removeItemFromAsyncStorage, getDataFromAsyncStorage, addDataToAsyncStorage,
