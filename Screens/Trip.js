@@ -148,7 +148,7 @@ const Trip = (props) => {
     const from = formatDateFromMilliseconds(new Date(program[0].date).getTime());
     const to = formatDateFromMilliseconds(new Date(program[program.length - 1].date).getTime());
     const rez = await firebaseFirestore.updateProgram(idProgramIntoDb, from, to, program);
-    if (!rez.isResolve) {
+    if (!rez.isResolved) {
       console.log('Error saving program:', rez.err);
     }
   }

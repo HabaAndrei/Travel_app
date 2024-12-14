@@ -53,20 +53,20 @@ function getHours(from, to) {
 }
 
 async function getDataFromAsyncStorage(key) {
-  let rezFinal = { isResolve: false, err: '' };
+  let rezFinal = { isResolved: false, err: '' };
   try {
     const storedTasks = await AsyncStorage.getItem(key);
     const dataParse = JSON.parse(storedTasks);
-    rezFinal = { isResolve: true, data: dataParse };
+    rezFinal = { isResolved: true, data: dataParse };
   } catch (err) {
     firebaseFirestore.storeErr(err.message);
-    rezFinal = { isResolve: false, err: err };
+    rezFinal = { isResolved: false, err: err };
   }
   return rezFinal;
 }
 
 async function addDataToAsyncStorage(key, data) {
-  let rezFinal = { isResolve: false, err: '' };
+  let rezFinal = { isResolved: false, err: '' };
   let keyString;
   let dataString;
   if (typeof(key) !== "string") {
@@ -81,83 +81,83 @@ async function addDataToAsyncStorage(key, data) {
   }
   try {
     await AsyncStorage.setItem(keyString, dataString);
-    rezFinal = { isResolve: true };
+    rezFinal = { isResolved: true };
   } catch (err) {
     firebaseFirestore.storeErr(err.message);
-    rezFinal = { isResolve: false, err: err };
+    rezFinal = { isResolved: false, err: err };
   }
   return rezFinal;
 }
 
 async function removeItemFromAsyncStorage(key) {
-  let rezFinal = { isResolve: false, err: '' };
+  let rezFinal = { isResolved: false, err: '' };
   try {
     await AsyncStorage.removeItem(key);
-    rezFinal = { isResolve: true };
+    rezFinal = { isResolved: true };
   } catch (err) {
     firebaseFirestore.storeErr(err.message);
-    rezFinal = { isResolve: false, err: err };
+    rezFinal = { isResolved: false, err: err };
   }
   return rezFinal;
 }
 
 async function getAllKeysFromAsyncStorage() {
-  let rezFinal = { isResolve: false, err: '' };
+  let rezFinal = { isResolved: false, err: '' };
   try {
     const keys = await AsyncStorage.getAllKeys();
-    rezFinal = { isResolve: true, data: keys };
+    rezFinal = { isResolved: true, data: keys };
   } catch (err) {
     firebaseFirestore.storeErr(err.message);
-    rezFinal = { isResolve: false, err: err };
+    rezFinal = { isResolved: false, err: err };
   }
   return rezFinal;
 }
 
 async function deleteAllFromAsyncStorage() {
-  let rezFinal = { isResolve: false, err: '' };
+  let rezFinal = { isResolved: false, err: '' };
   try {
     await AsyncStorage.clear();
-    rezFinal = { isResolve: true };
+    rezFinal = { isResolved: true };
   } catch (err) {
     firebaseFirestore.storeErr(err.message);
-    rezFinal = { isResolve: false, err: err };
+    rezFinal = { isResolved: false, err: err };
   }
   return rezFinal;
 }
 
 async function multiGetFromAsyncStorage(arrayOfKeys) {
-  let rezFinal = { isResolve: false, err: '' };
+  let rezFinal = { isResolved: false, err: '' };
   try {
     const data = await AsyncStorage.multiGet(arrayOfKeys);
-    rezFinal = { isResolve: true, data: data };
+    rezFinal = { isResolved: true, data: data };
   } catch (err) {
     firebaseFirestore.storeErr(err.message);
-    rezFinal = { isResolve: false, err: err };
+    rezFinal = { isResolved: false, err: err };
   }
   return rezFinal;
 }
 
 async function multiSetFromAsyncStorage(arrayOfArrays) {
   const serializedArray = arrayOfArrays.map(([key, value]) => [key, JSON.stringify(value)]);
-  let rezFinal = { isResolve: false, err: '' };
+  let rezFinal = { isResolved: false, err: '' };
   try {
     await AsyncStorage.multiSet(serializedArray);
-    rezFinal = { isResolve: true };
+    rezFinal = { isResolved: true };
   } catch (err) {
     firebaseFirestore.storeErr(err.message);
-    rezFinal = { isResolve: false, err: err };
+    rezFinal = { isResolved: false, err: err };
   }
   return rezFinal;
 }
 
 async function multiRemoveFromAsyncStorage(arrayOfKeys) {
-  let rezFinal = { isResolve: false, err: '' };
+  let rezFinal = { isResolved: false, err: '' };
   try {
     await AsyncStorage.multiRemove(arrayOfKeys);
-    rezFinal = { isResolve: true };
+    rezFinal = { isResolved: true };
   } catch (err) {
     firebaseFirestore.storeErr(err.message);
-    rezFinal = { isResolve: false, err: err };
+    rezFinal = { isResolved: false, err: err };
   }
   return rezFinal;
 }

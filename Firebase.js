@@ -43,10 +43,10 @@ class FirebaseAuth {
       const {createdAt} = rez.user.metadata;
       await this.firebaseFirestore.addUserIntoDb(uid, createdAt, email, password, firstName, secondName);
 
-      rezFin = {isResolve: true, data: rez};
+      rezFin = {isResolved: true, data: rez};
     }catch(err){
       this.firebaseFirestore.storeErr(err.message)
-      rezFin = {isResolve: false, err};
+      rezFin = {isResolved: false, err};
     }
     return rezFin;
   }
@@ -55,16 +55,16 @@ class FirebaseAuth {
     let rezFin = {};
     try{
       const rez = await signInWithEmailAndPassword(auth, email, password)
-      rezFin = {isResolve: true, data: rez};
+      rezFin = {isResolved: true, data: rez};
     }catch(err){
       this.firebaseFirestore.storeErr(err.message)
-      rezFin = {isResolve: false, err};
+      rezFin = {isResolved: false, err};
     }
     return rezFin;
   }
 
   async reAuth(password){
-    let rezFin = {isResolve: true};
+    let rezFin = {isResolved: true};
     try{
       const user = auth.currentUser;
       const {email} = user;
@@ -72,7 +72,7 @@ class FirebaseAuth {
       await reauthenticateWithCredential(user, credential);
     }catch(err){
       this.firebaseFirestore.storeErr(err.message)
-      rezFin = {isResolve: false, err};
+      rezFin = {isResolved: false, err};
     }
     return rezFin;
   }
@@ -82,10 +82,10 @@ class FirebaseAuth {
     try{
       const user = auth.currentUser;
       const rez = await deleteUser(user);
-      rezFin = {isResolve: true};
+      rezFin = {isResolved: true};
     }catch(err){
       this.firebaseFirestore.storeErr(err.message)
-      rezFin = {isResolve: false, err};
+      rezFin = {isResolved: false, err};
     }
     return rezFin;
   }
@@ -94,10 +94,10 @@ class FirebaseAuth {
     let rezFin = {};
     try{
       const rez = await signOut(auth);
-      rezFin = {isResolve: true};
+      rezFin = {isResolved: true};
     }catch(err){
       this.firebaseFirestore.storeErr(err.message)
-      rezFin = {isResolve: false, err};
+      rezFin = {isResolved: false, err};
     }
     return rezFin;
   }
@@ -106,10 +106,10 @@ class FirebaseAuth {
     let rezFin = {};
     try{
       const rez = await sendPasswordResetEmail(auth, email)
-      rezFin = {isResolve: true};
+      rezFin = {isResolved: true};
     }catch(err){
       this.firebaseFirestore.storeErr(err.message)
-      rezFin = {isResolve: false, err};
+      rezFin = {isResolved: false, err};
     }
     return rezFin;
   }
@@ -131,18 +131,18 @@ class FirebaseFirestore{
 
 
   async addProgramIntoDb(city, country, from , to, programDaysString, uid){
-    let rezFin = {isResolve: true};
+    let rezFin = {isResolved: true};
     try{
       await addDoc(collection(db, "programs"), {city, country, from , to, programDaysString, uid});
     }catch(err){
       this.storeErr(err.message)
-      rezFin = {isResolve: false, err}
+      rezFin = {isResolved: false, err}
     }
     return rezFin;
   }
 
   async getPlansFromDbWithUid(uid){
-    let rezFin = {isResolve: true};
+    let rezFin = {isResolved: true};
     try{
       const q = query(collection(db, "programs"), where("uid", "==", uid), orderBy("from"));
       const querySnapshot = await getDocs(q);
@@ -153,16 +153,16 @@ class FirebaseFirestore{
         data.id = id;
         programs.push(data);
       });
-      rezFin = {isResolve:true, data: programs};
+      rezFin = {isResolved:true, data: programs};
     }catch(err){
       this.storeErr(err.message)
-      rezFin = {isResolve: false, err}
+      rezFin = {isResolved: false, err}
     }
     return rezFin;
   }
 
   async updateProgram(id, from, to, program){
-    let rezFin = {isResolve: true};
+    let rezFin = {isResolved: true};
     try{
       if(typeof(program) != 'string')program = JSON.stringify(program);
       const ref = doc(db, 'programs', id);
@@ -173,41 +173,41 @@ class FirebaseFirestore{
       });
     }catch(err){
       this.storeErr(err.message)
-      rezFin = {isResolve: false, err};
+      rezFin = {isResolved: false, err};
     }
     return rezFin;
   }
 
   async storeCodeAndEmail(code, email){
-    let rezFin = {isResolve: true};
+    let rezFin = {isResolved: true};
     try{
       await setDoc(doc(db, "code_verification", email), {code});
     }catch(err){
       this.storeErr(err.message)
-      rezFin = {isResolve: false, err};
+      rezFin = {isResolved: false, err};
     }
     return rezFin;
   }
 
   async verifyCodeDB(codeInput, email){
-    let rezFin = {isResolve: true};
+    let rezFin = {isResolved: true};
     try{
       const docRef = doc(db, "code_verification", email);
       const dataFromDB = await getDoc(docRef);
       const {code} = dataFromDB.data();
       if(code != codeInput){
-        rezFin = {isResolve: false, mes: 'The code does not correspond to the code sent by e-mail last time'}
+        rezFin = {isResolved: false, mes: 'The code does not correspond to the code sent by e-mail last time'}
       }
     }catch(err){
       this.storeErr(err.message)
-      rezFin = {isResolve: false, err};
+      rezFin = {isResolved: false, err};
     }
     return rezFin;
 
   }
 
   async updateEmailVerificationDB(uid){
-    let rezFin = {isResolve: true};
+    let rezFin = {isResolved: true};
     try{
       const ref = doc(db, "users", uid);
       await updateDoc(ref, {
@@ -215,23 +215,23 @@ class FirebaseFirestore{
       });
     }catch(err){
       this.storeErr(err.message)
-      rezFin = {isResolve: false, err};
+      rezFin = {isResolved: false, err};
     }
     return rezFin;
   }
 
   async verifyEmailVerifiedDB(uid){
-    let rezFin = {isResolve: true};
+    let rezFin = {isResolved: true};
     try{
       const docRef = doc(db, "users", uid);
       const dataFromDB = await getDoc(docRef);
       const data = dataFromDB.data();
       if(data.email_verified != true){
-        rezFin = {isResolve: false};
+        rezFin = {isResolved: false};
       }
     }catch(err){
       this.storeErr(err.message)
-      rezFin = {isResolve: false, err};
+      rezFin = {isResolved: false, err};
     }
     return rezFin;
   }
@@ -241,10 +241,10 @@ class FirebaseFirestore{
     try{
       const {uid} = auth.currentUser;
       await addDoc(collection(db, "feedback"), {uid, feedback, feedbackCategory});
-      rezFin = {isResolve: true};
+      rezFin = {isResolved: true};
     }catch(err){
       this.storeErr(err.message)
-      rezFin = {isResolve: false, err};
+      rezFin = {isResolved: false, err};
     }
     return rezFin;
   }
@@ -254,8 +254,8 @@ class FirebaseFirestore{
     return this._storeErr(async ()=>{
       const {uid} = auth.currentUser;
       const data = await this.getPlansFromDbWithUid(uid);
-      if(!data.isResolve){
-        return {isResolve: false, err: data.err};
+      if(!data.isResolved){
+        return {isResolved: false, err: data.err};
       }
       let information = '';
       if(data.data.length){
@@ -279,10 +279,10 @@ class FirebaseFirestore{
         information = JSON.stringify(rez);
       }
       const rezQuery =  await axios.post(`${address_function_api}`, {method: 'chat', histoyConv, information});
-      if(rezQuery?.data?.isResolve){
-        return {isResolve: true, data: rezQuery?.data?.data};
+      if(rezQuery?.data?.isResolved){
+        return {isResolved: true, data: rezQuery?.data?.data};
       }else{
-        return {isResolve: false, err: rezQuery?.data?.err};
+        return {isResolved: false, err: rezQuery?.data?.err};
       }
     })
   };
@@ -292,10 +292,10 @@ class FirebaseFirestore{
     try{
       const {uid} = auth.currentUser;
       await addDoc(collection(db, "conversations"), {uid, id, name});
-      rezFin = {isResolve: true};
+      rezFin = {isResolved: true};
     }catch(err){
       this.storeErr(err.message)
-      rezFin = {isResolve: false, err};
+      rezFin = {isResolved: false, err};
     }
     return rezFin
   }
@@ -305,10 +305,10 @@ class FirebaseFirestore{
     try{
       const {uid} = auth.currentUser;
       await addDoc(collection(db, "messages"), {uid, idConv, type, mes, time});
-      rezFin = {isResolve: true};
+      rezFin = {isResolved: true};
     }catch(err){
       this.storeErr(err.message)
-      rezFin = {isResolve: false, err};
+      rezFin = {isResolved: false, err};
     }
     return rezFin
   }
@@ -324,10 +324,10 @@ class FirebaseFirestore{
         let data = doc.data();
         rez.push(data);
       });
-      rezFin = {isResolve:true, data: rez};
+      rezFin = {isResolved:true, data: rez};
     }catch(err){
       this.storeErr(err.message)
-      rezFin = {isResolve: false, err};
+      rezFin = {isResolved: false, err};
     }
     return rezFin;
   }
@@ -342,10 +342,10 @@ class FirebaseFirestore{
         let data = doc.data();
         rez.push(data);
       });
-      rezFin = {isResolve:true, data: rez};
+      rezFin = {isResolved:true, data: rez};
     }catch(err){
       this.storeErr(err.message)
-      rezFin = {isResolve: false, err};
+      rezFin = {isResolved: false, err};
     }
     return rezFin;
   }
@@ -374,7 +374,7 @@ class FirebaseFirestore{
       const {uid} = auth.currentUser;
       const {modelName, modelId, brand} = Device;
       await addDoc(collection(db, "errors"), {uid, modelName, modelId, brand, mesErr: err.message});
-      return {isResolve: false, err: err.message}
+      return {isResolved: false, err: err.message}
     }
   }
 
@@ -384,28 +384,13 @@ class FirebaseFirestore{
     try{
       const {uid} = auth.currentUser;
       await addDoc(collection(db, "errors"), {uid, modelName, modelId, brand, mesErr});
-      rezFin = {isResolve: true};
+      rezFin = {isResolved: true};
     }catch(err){
       this.storeErr(err.message)
-      rezFin = {isResolve: false, err};
+      rezFin = {isResolved: false, err};
     }
     return rezFin
   }
-
-  async getNews(){
-    try{
-      const q = query(collection(db, "news"));
-      const querySnapshot = await getDocs(q);
-      let data = [];
-      querySnapshot.forEach((doc) => data.push({...doc.data(), id: doc.id}));
-      return {isResolve: true, data};
-    }catch(err){
-      this.storeErr(err.message)
-      return {isResolve: false, err};
-    }
-  }
-
-
 }
 
 

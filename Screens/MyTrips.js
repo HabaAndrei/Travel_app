@@ -5,7 +5,6 @@ import { FirebaseFirestore } from '../firebase.js';
 import { Card, Divider, Text, HStack, Heading, Link, LinkText, Icon, ArrowRightIcon } from '@gluestack-ui/themed';
 import CountdownNews from '../Components/CountdownNews.js';
 import CustomButton from '../CustomElements/CustomButton.js';
-import NewsCarousel from '../Components/NewsCarousel.js';
 
 const MyTrips = (props) => {
   const isFocused = useIsFocused();
@@ -19,7 +18,7 @@ const MyTrips = (props) => {
 
   async function getPlansFromDb(uid) {
     const rezQuery = await firebaseFirestore.getPlansFromDbWithUid(uid);
-    if (!rezQuery.isResolve) {
+    if (!rezQuery.isResolved) {
       props.addNotification("error", "Unfortunately, there was a problem when taking the program")
       return;
     }
@@ -54,8 +53,6 @@ const MyTrips = (props) => {
             <CustomButton name={'Setup trip'} icon={ArrowRightIcon} func={navigateSetUpTrip} />
           </View>
         }
-
-        <NewsCarousel navigation={props.navigation}/>
 
         {plans?.map((obiect, index) => {
           return (

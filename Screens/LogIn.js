@@ -39,7 +39,7 @@ const LogIn = (props) => {
     }
 
     const rez = await firebaseAuth._createUserWithEmailAndPassword(inputEmail, inputPassword.input, inputFirstName, inputSecondName);
-    if(!rez.isResolve){
+    if(!rez.isResolved){
       if(rez.err?.message?.includes("auth/email-already-in-use")){
         props.addNotification('error',"This email address is already in use");
         return;
@@ -63,7 +63,7 @@ const LogIn = (props) => {
     }
 
     const rez = await firebaseAuth._signInWithEmailAndPassword(inputEmail, inputPassword.input);
-    if(rez.isResolve){
+    if(rez.isResolved){
       const user = rez.data;
       props.navigation.navigate('SetupTrip');
     }else{
@@ -79,7 +79,7 @@ const LogIn = (props) => {
     }
 
     const rez = await firebaseAuth._sendPasswordResetEmail(inputEmail);
-    if(rez.isResolve){
+    if(rez.isResolved){
       props.addNotification('success', "Password reset email has been sent");
     }else{
       props.addNotification('error', "Sending the password reset email did not work");
@@ -89,7 +89,7 @@ const LogIn = (props) => {
 
   async function signOut(){
     const rez = await firebaseAuth._signOut();
-    if(rez.isResolve){
+    if(rez.isResolved){
       props.setUser(undefined)
     }else{
       console.log(rez.err);
@@ -104,7 +104,7 @@ const LogIn = (props) => {
     if (!response) return;
 
     const rez = await firebaseAuth._deleteUser();
-    if(rez.isResolve){
+    if(rez.isResolved){
       props.setUser(undefined);
       deleteAllFromAsyncStorage()
     }else{
@@ -121,12 +121,12 @@ const LogIn = (props) => {
       const code = uuid.v4().slice(0, 6);
       const email = props.user.email;
       const rezStore = await firebaseFirestore.storeCodeAndEmail(code, email);
-      if(!rezStore.isResolve){
+      if(!rezStore.isResolved){
         props.addNotification('error', "There was a problem sending the code by email");
         return;
       }
       const rezSend = await axios.post(address_function_send_code_verification, {code, email});
-      if(!rezSend.data.isResolve){
+      if(!rezSend.data.isResolved){
         props.addNotification('error', "There was a problem sending the code by email");
         return;
       }
@@ -143,13 +143,13 @@ const LogIn = (props) => {
         return;
     }
     const rezDB = await firebaseFirestore.verifyCodeDB(codeVerify, props.user.email);
-    if(!rezDB.isResolve){
+    if(!rezDB.isResolved){
       props.addNotification('error', 'There was a problem verifying the code');
       return
     }
 
     const rezUpdateDB = await firebaseFirestore.updateEmailVerificationDB(props.user.uid);
-    if(!rezUpdateDB.isResolve){
+    if(!rezUpdateDB.isResolved){
         props.addNotification('error', 'Please retry the operation and generate a new code');
         return;
     }

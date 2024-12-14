@@ -52,7 +52,7 @@ const Locations = (props) => {
     axios.post(`${address_function_api}`,
       {method, city, country, input, checkbox, isLocalPlaces, scaleVisit}
     ).then((data)=>{
-      if(data.data.isResolve){
+      if(data.data.isResolved){
         const arrayWithLocations = data.data.data;
         const arraySelected = arrayWithLocations.map((ob)=>{
           return {...ob, selected: false}
@@ -147,7 +147,7 @@ const Locations = (props) => {
     })
 
     const dataParam = await getDataFromAsyncStorage('locationsParameter');
-    if(!dataParam.isResolve){
+    if(!dataParam.isResolved){
       props.addNotification('error', 'Error submitting for program search');
       return;
     }

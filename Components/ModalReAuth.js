@@ -15,7 +15,7 @@ const ModalReAuth = (props) => {
       return;
     }
     const rez = await firebaseAuth.reAuth(password);
-    if (!rez.isResolve) {
+    if (!rez.isResolved) {
       setErr('The password is not correct');
     } else {
       props.setModalVisibleReAuth(false);

@@ -14,7 +14,7 @@ const UserSettings = (props) => {
 
   async function signOut(){
     const rez = await firebaseAuth._signOut();
-    if(rez.isResolve){
+    if(rez.isResolved){
       props.setUser(undefined)
     }else{
       console.log(rez.err);
@@ -29,7 +29,7 @@ const UserSettings = (props) => {
     if (!response) return;
 
     const rez = await firebaseAuth._deleteUser();
-    if(rez.isResolve){
+    if(rez.isResolved){
       props.setUser(undefined);
       deleteAllFromAsyncStorage()
     }else{

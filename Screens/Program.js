@@ -49,7 +49,7 @@ const Program = (props) => {
 
   async function getProgramFromAsyncStorage(){
     const program = await getDataFromAsyncStorage("travelProgram");
-    if(!program.isResolve){
+    if(!program.isResolved){
       props.addNotification("error", "Unfortunately, we got an system error")
     }
     if(program?.data?.length){
@@ -64,7 +64,7 @@ const Program = (props) => {
   async function regenerateProgram(){
 
     const rez = await getDataFromAsyncStorage("travelParameter");
-    if(!rez.isResolve)return
+    if(!rez.isResolved)return
     let {method, from, to, city, country, locations} = rez.data;
     setProgram([]);
     createProgramAi( method, from, to, city, country, locations)
@@ -79,7 +79,7 @@ const Program = (props) => {
       {method, from, to, city, country, locations}
     ).then((data)=>{
 
-      if(data.data.isResolve){
+      if(data.data.isResolved){
         const values = Object.values(data.data.data);
         setProgram([...values]);
         multiSetFromAsyncStorage([['travelProgram', [...values]],
@@ -128,7 +128,7 @@ const Program = (props) => {
     const response = await props.areYouSureDeleting();
     if (response) {
       const rez = await removeItemFromAsyncStorage('travelProgram');
-      if(!rez.isResolve)return;
+      if(!rez.isResolved)return;
       setProgram([]);
       setRecomandation(true)
     }
@@ -147,7 +147,7 @@ const Program = (props) => {
       return;
     }
     const rez = await multiGetFromAsyncStorage(["travelProgram", "travelParameter"]);
-    if(!rez.isResolve){
+    if(!rez.isResolved){
       props.addNotification("error", "Unfortunately we could not save the program for you")
       console.log(rez.err);
       return;
@@ -161,14 +161,14 @@ const Program = (props) => {
     const programDaysString = JSON.stringify(travelProgram);
     const uid = props.user.uid;
     const rezAddInDb = await firebaseFirestore.addProgramIntoDb(city, country, from , to, programDaysString, uid)
-    if(!rezAddInDb.isResolve){
+    if(!rezAddInDb.isResolved){
       props.addNotification("error", "Unfortunately we could not save the program for you")
       console.log(rezAddInDb.err);
       return;
     }
 
     const rezDeleteAsyncStorage = await multiRemoveFromAsyncStorage(["travelProgram", "travelParameter"])
-    if(!rezDeleteAsyncStorage.isResolve)return;
+    if(!rezDeleteAsyncStorage.isResolved)return;
     setProgram([]);
     setRecomandation(true);
     props.navigation.navigate('MyTrips');

@@ -28,7 +28,7 @@ const Chat = (props) => {
 
   async function getMess(idConv){
     const data = await firebaseFirestore.getMessages(idConv);
-    if(data.isResolve){
+    if(data.isResolved){
       const mess = data?.data?.map((ob)=>{return {type: ob.type, mes: ob.mes}});
       if(!mess.length)return;
       setConversation(mess);
@@ -37,7 +37,7 @@ const Chat = (props) => {
 
   async function getConversations(){
     const data = await firebaseFirestore.getConversations();
-    if(data.isResolve){
+    if(data.isResolved){
       const convs = data.data.map((ob)=>{return {id: ob.id, name: ob.name}})
       setConversations(convs);
     }
@@ -46,7 +46,7 @@ const Chat = (props) => {
   async function getResponse(conv, idConv){
     const data = await firebaseFirestore.askQuestion(conv);
     console.log(data, ' <<== the result');
-    if(data.isResolve){
+    if(data.isResolved){
       setConversation((prev)=>{
         const newConv = prev.map((ob)=>{
           return ob.type === 'pending' ? {type: "ai", mes: data?.data} : ob

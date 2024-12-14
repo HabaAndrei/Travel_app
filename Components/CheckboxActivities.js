@@ -22,7 +22,7 @@ const CheckboxActivities = (props) => {
         { method: 'createActivities', city, country }
       ).then((data) => {
 
-        if (data.data.isResolve) {
+        if (data.data.isResolved) {
           if(data?.data?.paramsLocation?.data){
             setParamsLocation(data?.data?.paramsLocation?.data?.local_places_and_tourist_places);
             props.setScaleVisit(data?.data?.paramsLocation?.data?.scale_visit);
