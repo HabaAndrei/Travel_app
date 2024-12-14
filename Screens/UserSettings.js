@@ -33,7 +33,7 @@ const UserSettings = (props) => {
       props.setUser(undefined);
       deleteAllFromAsyncStorage()
     }else{
-      if(rez?.err?.message?.includes('auth/requires-recent-login')){
+      if(rez?.err?.includes('auth/requires-recent-login')){
         setModalVisibleReAuth(true);
       }else{
         props.addNotification('error', "Unfortunately, we could not delete the account");

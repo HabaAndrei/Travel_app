@@ -53,20 +53,14 @@ function getHours(from, to) {
 }
 
 async function getDataFromAsyncStorage(key) {
-  let rezFinal = { isResolved: false, err: '' };
-  try {
+  return firebaseFirestore._storeErr(async ()=>{
     const storedTasks = await AsyncStorage.getItem(key);
     const dataParse = JSON.parse(storedTasks);
-    rezFinal = { isResolved: true, data: dataParse };
-  } catch (err) {
-    firebaseFirestore.storeErr(err.message);
-    rezFinal = { isResolved: false, err: err };
-  }
-  return rezFinal;
+    return { isResolved: true, data: dataParse };
+  })
 }
 
 async function addDataToAsyncStorage(key, data) {
-  let rezFinal = { isResolved: false, err: '' };
   let keyString;
   let dataString;
   if (typeof(key) !== "string") {
@@ -79,87 +73,53 @@ async function addDataToAsyncStorage(key, data) {
   } else {
     dataString = data;
   }
-  try {
+  return firebaseFirestore._storeErr(async ()=>{
     await AsyncStorage.setItem(keyString, dataString);
-    rezFinal = { isResolved: true };
-  } catch (err) {
-    firebaseFirestore.storeErr(err.message);
-    rezFinal = { isResolved: false, err: err };
-  }
-  return rezFinal;
+    return { isResolved: true };
+  })
 }
 
 async function removeItemFromAsyncStorage(key) {
-  let rezFinal = { isResolved: false, err: '' };
-  try {
+  return firebaseFirestore._storeErr(async ()=>{
     await AsyncStorage.removeItem(key);
-    rezFinal = { isResolved: true };
-  } catch (err) {
-    firebaseFirestore.storeErr(err.message);
-    rezFinal = { isResolved: false, err: err };
-  }
-  return rezFinal;
+    return { isResolved: true };
+  })
 }
 
 async function getAllKeysFromAsyncStorage() {
-  let rezFinal = { isResolved: false, err: '' };
-  try {
+  return firebaseFirestore._storeErr(async ()=>{
     const keys = await AsyncStorage.getAllKeys();
-    rezFinal = { isResolved: true, data: keys };
-  } catch (err) {
-    firebaseFirestore.storeErr(err.message);
-    rezFinal = { isResolved: false, err: err };
-  }
-  return rezFinal;
+    return { isResolved: true, data: keys };
+  })
 }
 
 async function deleteAllFromAsyncStorage() {
-  let rezFinal = { isResolved: false, err: '' };
-  try {
+  return firebaseFirestore._storeErr(async ()=>{
     await AsyncStorage.clear();
-    rezFinal = { isResolved: true };
-  } catch (err) {
-    firebaseFirestore.storeErr(err.message);
-    rezFinal = { isResolved: false, err: err };
-  }
-  return rezFinal;
+    return { isResolved: true };
+  });
 }
 
 async function multiGetFromAsyncStorage(arrayOfKeys) {
-  let rezFinal = { isResolved: false, err: '' };
-  try {
+  return firebaseFirestore._storeErr(async ()=>{
     const data = await AsyncStorage.multiGet(arrayOfKeys);
-    rezFinal = { isResolved: true, data: data };
-  } catch (err) {
-    firebaseFirestore.storeErr(err.message);
-    rezFinal = { isResolved: false, err: err };
-  }
-  return rezFinal;
+    return { isResolved: true, data: data };
+  });
 }
 
 async function multiSetFromAsyncStorage(arrayOfArrays) {
   const serializedArray = arrayOfArrays.map(([key, value]) => [key, JSON.stringify(value)]);
-  let rezFinal = { isResolved: false, err: '' };
-  try {
+  return firebaseFirestore._storeErr(async ()=>{
     await AsyncStorage.multiSet(serializedArray);
-    rezFinal = { isResolved: true };
-  } catch (err) {
-    firebaseFirestore.storeErr(err.message);
-    rezFinal = { isResolved: false, err: err };
-  }
-  return rezFinal;
+    return { isResolved: true };
+  });
 }
 
 async function multiRemoveFromAsyncStorage(arrayOfKeys) {
-  let rezFinal = { isResolved: false, err: '' };
-  try {
+  return firebaseFirestore._storeErr(async ()=>{
     await AsyncStorage.multiRemove(arrayOfKeys);
-    rezFinal = { isResolved: true };
-  } catch (err) {
-    firebaseFirestore.storeErr(err.message);
-    rezFinal = { isResolved: false, err: err };
-  }
-  return rezFinal;
+    return { isResolved: true };
+  });
 }
 
 function randomNumber() {

@@ -35,83 +35,52 @@ class FirebaseAuth {
   }
 
   async _createUserWithEmailAndPassword(email, password, firstName, secondName){
-    let rezFin = {};
-    try{
+    return this.firebaseFirestore._storeErr(async ()=>{
       const rez = await createUserWithEmailAndPassword(auth, email, password);
-
       const {uid} = rez.user;
       const {createdAt} = rez.user.metadata;
       await this.firebaseFirestore.addUserIntoDb(uid, createdAt, email, password, firstName, secondName);
-
-      rezFin = {isResolved: true, data: rez};
-    }catch(err){
-      this.firebaseFirestore.storeErr(err.message)
-      rezFin = {isResolved: false, err};
-    }
-    return rezFin;
+      return {isResolved: true, data: rez};
+    })
   }
 
   async _signInWithEmailAndPassword(email, password){
-    let rezFin = {};
-    try{
+    return this.firebaseFirestore._storeErr(async ()=>{
       const rez = await signInWithEmailAndPassword(auth, email, password)
-      rezFin = {isResolved: true, data: rez};
-    }catch(err){
-      this.firebaseFirestore.storeErr(err.message)
-      rezFin = {isResolved: false, err};
-    }
-    return rezFin;
+      return {isResolved: true, data: rez};
+    })
   }
 
   async reAuth(password){
-    let rezFin = {isResolved: true};
-    try{
+    return this.firebaseFirestore._storeErr(async ()=>{
       const user = auth.currentUser;
       const {email} = user;
       const credential = EmailAuthProvider.credential(email, password)
       await reauthenticateWithCredential(user, credential);
-    }catch(err){
-      this.firebaseFirestore.storeErr(err.message)
-      rezFin = {isResolved: false, err};
-    }
-    return rezFin;
+      return {isResolved: true};
+    })
   }
 
   async _deleteUser(){
-    let rezFin = {};
-    try{
+    return this.firebaseFirestore._storeErr(async ()=>{
       const user = auth.currentUser;
       const rez = await deleteUser(user);
-      rezFin = {isResolved: true};
-    }catch(err){
-      this.firebaseFirestore.storeErr(err.message)
-      rezFin = {isResolved: false, err};
-    }
-    return rezFin;
+      return {isResolved: true};
+    })
   }
 
   async _signOut(){
-    let rezFin = {};
-    try{
+    return this.firebaseFirestore._storeErr(async ()=>{
       const rez = await signOut(auth);
-      rezFin = {isResolved: true};
-    }catch(err){
-      this.firebaseFirestore.storeErr(err.message)
-      rezFin = {isResolved: false, err};
-    }
-    return rezFin;
+      return {isResolved: true};
+    })
   }
 
   async _sendPasswordResetEmail(email){
-    let rezFin = {};
-    try{
+    return this.firebaseFirestore._storeErr(async ()=>{
       const rez = await sendPasswordResetEmail(auth, email)
-      rezFin = {isResolved: true};
-    }catch(err){
-      this.firebaseFirestore.storeErr(err.message)
-      rezFin = {isResolved: false, err};
-    }
-    return rezFin;
+      return {isResolved: true};
+    })
   }
 };
 
@@ -120,30 +89,24 @@ class FirebaseAuth {
 class FirebaseFirestore{
 
   async addUserIntoDb(uid, createdAt, email, password, firstName, secondName){
-    try{
+    return this._storeErr(async ()=>{
       await setDoc(doc(db, "users", uid), {
         uid, email, firstName, secondName, createdAt, email_verified: false
       });
-    }catch(err){
-      this.storeErr(err.message)
-    }
+      return {isResolved: true};
+    })
   }
 
 
   async addProgramIntoDb(city, country, from , to, programDaysString, uid){
-    let rezFin = {isResolved: true};
-    try{
+    return this._storeErr(async ()=>{
       await addDoc(collection(db, "programs"), {city, country, from , to, programDaysString, uid});
-    }catch(err){
-      this.storeErr(err.message)
-      rezFin = {isResolved: false, err}
-    }
-    return rezFin;
+      return {isResolved: true};
+    })
   }
 
   async getPlansFromDbWithUid(uid){
-    let rezFin = {isResolved: true};
-    try{
+    return this._storeErr(async ()=>{
       const q = query(collection(db, "programs"), where("uid", "==", uid), orderBy("from"));
       const querySnapshot = await getDocs(q);
       let programs = [];
@@ -153,17 +116,12 @@ class FirebaseFirestore{
         data.id = id;
         programs.push(data);
       });
-      rezFin = {isResolved:true, data: programs};
-    }catch(err){
-      this.storeErr(err.message)
-      rezFin = {isResolved: false, err}
-    }
-    return rezFin;
+      return {isResolved:true, data: programs};
+    })
   }
 
   async updateProgram(id, from, to, program){
-    let rezFin = {isResolved: true};
-    try{
+    return this._storeErr(async ()=>{
       if(typeof(program) != 'string')program = JSON.stringify(program);
       const ref = doc(db, 'programs', id);
       const rez = await updateDoc(ref, {
@@ -171,82 +129,58 @@ class FirebaseFirestore{
         to: to,
         programDaysString: program
       });
-    }catch(err){
-      this.storeErr(err.message)
-      rezFin = {isResolved: false, err};
-    }
-    return rezFin;
+      return {isResolved: true};
+    })
+
   }
 
   async storeCodeAndEmail(code, email){
-    let rezFin = {isResolved: true};
-    try{
+    return this._storeErr(async ()=>{
       await setDoc(doc(db, "code_verification", email), {code});
-    }catch(err){
-      this.storeErr(err.message)
-      rezFin = {isResolved: false, err};
-    }
-    return rezFin;
+      return {isResolved: true};
+    })
   }
 
   async verifyCodeDB(codeInput, email){
-    let rezFin = {isResolved: true};
-    try{
+    return this._storeErr(async ()=>{
       const docRef = doc(db, "code_verification", email);
       const dataFromDB = await getDoc(docRef);
       const {code} = dataFromDB.data();
       if(code != codeInput){
-        rezFin = {isResolved: false, mes: 'The code does not correspond to the code sent by e-mail last time'}
+        return {isResolved: false, mes: 'The code does not correspond to the code sent by e-mail last time'}
       }
-    }catch(err){
-      this.storeErr(err.message)
-      rezFin = {isResolved: false, err};
-    }
-    return rezFin;
-
+      return {isResolved: true};
+    })
   }
 
   async updateEmailVerificationDB(uid){
-    let rezFin = {isResolved: true};
-    try{
+    return this._storeErr(async ()=>{
       const ref = doc(db, "users", uid);
       await updateDoc(ref, {
         email_verified: true
       });
-    }catch(err){
-      this.storeErr(err.message)
-      rezFin = {isResolved: false, err};
-    }
-    return rezFin;
+      return {isResolved: true};
+    })
   }
 
   async verifyEmailVerifiedDB(uid){
-    let rezFin = {isResolved: true};
-    try{
+    return this._storeErr(async ()=>{
       const docRef = doc(db, "users", uid);
       const dataFromDB = await getDoc(docRef);
       const data = dataFromDB.data();
       if(data.email_verified != true){
-        rezFin = {isResolved: false};
+        return {isResolved: false};
       }
-    }catch(err){
-      this.storeErr(err.message)
-      rezFin = {isResolved: false, err};
-    }
-    return rezFin;
+      return {isResolved: true};
+    })
   }
 
   async store_feedback(feedback, feedbackCategory){
-    let rezFin = {};
-    try{
+    return this._storeErr(async ()=>{
       const {uid} = auth.currentUser;
       await addDoc(collection(db, "feedback"), {uid, feedback, feedbackCategory});
-      rezFin = {isResolved: true};
-    }catch(err){
-      this.storeErr(err.message)
-      rezFin = {isResolved: false, err};
-    }
-    return rezFin;
+      return {isResolved: true};
+    })
   }
 
 
@@ -288,34 +222,23 @@ class FirebaseFirestore{
   };
 
   async storeConv(id, name){
-    let rezFin = {};
-    try{
+    return this._storeErr(async ()=>{
       const {uid} = auth.currentUser;
       await addDoc(collection(db, "conversations"), {uid, id, name});
-      rezFin = {isResolved: true};
-    }catch(err){
-      this.storeErr(err.message)
-      rezFin = {isResolved: false, err};
-    }
-    return rezFin
+      return {isResolved: true};
+    })
   }
 
   async storeMes(idConv, type, mes, time){
-    let rezFin = {};
-    try{
+    return this._storeErr(async ()=>{
       const {uid} = auth.currentUser;
       await addDoc(collection(db, "messages"), {uid, idConv, type, mes, time});
-      rezFin = {isResolved: true};
-    }catch(err){
-      this.storeErr(err.message)
-      rezFin = {isResolved: false, err};
-    }
-    return rezFin
+      return {isResolved: true};
+    })
   }
 
   async getConversations(){
-    let rezFin = {};
-    try{
+    return this._storeErr(async ()=>{
       const {uid} = auth.currentUser;
       const q = query(collection(db, "conversations"), where("uid", "==", uid));
       const querySnapshot = await getDocs(q);
@@ -324,17 +247,12 @@ class FirebaseFirestore{
         let data = doc.data();
         rez.push(data);
       });
-      rezFin = {isResolved:true, data: rez};
-    }catch(err){
-      this.storeErr(err.message)
-      rezFin = {isResolved: false, err};
-    }
-    return rezFin;
+      return {isResolved:true, data: rez};
+    })
   }
 
   async getMessages(idConv){
-    let rezFin = {};
-    try{
+    return this._storeErr(async ()=>{
       const q = query(collection(db, "messages"), where("idConv", "==", idConv), orderBy("time"));
       const querySnapshot = await getDocs(q);
       let rez = [];
@@ -342,28 +260,27 @@ class FirebaseFirestore{
         let data = doc.data();
         rez.push(data);
       });
-      rezFin = {isResolved:true, data: rez};
-    }catch(err){
-      this.storeErr(err.message)
-      rezFin = {isResolved: false, err};
-    }
-    return rezFin;
+      return {isResolved:true, data: rez};
+    })
   }
 
   async deleteChat(idConv){
-    const q = query(collection(db, "messages"), where("idConv", "==", idConv));
-    const querySnapshot = await getDocs(q);
-    querySnapshot.forEach((document) => {
-      const docRef = doc(db, 'messages', document.id);
-      deleteDoc(docRef)
-    });
+    return this._storeErr(async ()=>{
+      const q = query(collection(db, "messages"), where("idConv", "==", idConv));
+      const querySnapshot = await getDocs(q);
+      querySnapshot.forEach((document) => {
+        const docRef = doc(db, 'messages', document.id);
+        deleteDoc(docRef)
+      });
+      const q2 = query(collection(db, "conversations"), where("id", "==", idConv));
+      const querySnapshot2 = await getDocs(q2);
+      querySnapshot2.forEach((document) => {
+        const docRef = doc(db, 'conversations', document.id);
+        deleteDoc(docRef)
+      });
+      return {isResolved:true};
+    })
 
-    const q2 = query(collection(db, "conversations"), where("id", "==", idConv));
-    const querySnapshot2 = await getDocs(q2);
-    querySnapshot2.forEach((document) => {
-      const docRef = doc(db, 'conversations', document.id);
-      deleteDoc(docRef)
-    });
   }
 
   async _storeErr(cb){
@@ -374,6 +291,7 @@ class FirebaseFirestore{
       const {uid} = auth.currentUser;
       const {modelName, modelId, brand} = Device;
       await addDoc(collection(db, "errors"), {uid, modelName, modelId, brand, mesErr: err.message});
+      console.log('we catch an error', {err});
       return {isResolved: false, err: err.message}
     }
   }
