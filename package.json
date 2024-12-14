@@ -4,8 +4,8 @@
   "main": "expo/AppEntry.js",
   "scripts": {
     "start": "expo start",
-    "android": "expo start --android",
-    "ios": "expo start --ios",
+    "android": "expo run:android",
+    "ios": "expo run:ios",
     "web": "expo start --web"
   },
   "dependencies": {
@@ -24,10 +24,12 @@
     "axios": "^1.7.7",
     "babel-plugin-inline-dotenv": "^1.7.0",
     "babel-preset-expo": "~12.0.0",
-    "expo": "^52.0.11",
+    "expo": "^52.0.18",
+    "expo-constants": "^17.0.3",
     "expo-device": "^7.0.1",
     "expo-file-system": "^18.0.5",
     "expo-modules-core": "^2.1.1",
+    "expo-notifications": "^0.29.11",
     "expo-status-bar": "~2.0.0",
     "expo-updates": "^0.26.10",
     "firebase": "^10.3.0",
