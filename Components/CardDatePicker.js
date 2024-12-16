@@ -20,12 +20,10 @@ const CardDatePicker = (props) => {
               <Text></Text>
             )}
             <DatePicker
-              how={"from"}
-              showDatePicker={() =>
-                props.setDatePickerVisibility({ type: true, data: "from", func: props.setDateFrom })
-              }
-              datePickerVisibility={props.datePickerVisibility}
-              setDatePickerVisibility={props.setDatePickerVisibility}
+              name={'Select start date'}
+              getDate={(date)=>{
+                props.setDateFrom(date)
+              }}
             />
           </View>
 
@@ -38,12 +36,10 @@ const CardDatePicker = (props) => {
               <Text></Text>
             )}
             <DatePicker
-              how={"to"}
-              showDatePicker={() =>
-                props.setDatePickerVisibility({ type: true, data: "to", func: props.setDateTo })
-              }
-              datePickerVisibility={props.datePickerVisibility}
-              setDatePickerVisibility={props.setDatePickerVisibility}
+              name={'Select end date'}
+              getDate={(date)=>{
+                props.setDateTo(date)
+              }}
             />
           </View>
         </View>

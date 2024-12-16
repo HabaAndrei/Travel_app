@@ -1,40 +1,35 @@
 import { StyleSheet, Text, View, Button } from 'react-native';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import {HStack, LinkText, Link } from '@gluestack-ui/themed';
-
+import {useState} from 'react';
 
 const DatePicker = (props) => {
 
-    const hideDatePicker = () => {
-      props.setDatePickerVisibility({type: false});
-    };
+  const [datePickerVisibility, setDatePickerVisibility] = useState(false);
+  const hideDatePicker = () => {
+    setDatePickerVisibility(false);
+  };
 
-    const handleConfirm = (date) => {
-      if(props.datePickerVisibility.data === "from"){
-        props.datePickerVisibility.func(new Date(date).getTime());
-      }else if(props.datePickerVisibility.data === "to"){
-        props.datePickerVisibility.func(new Date(date).getTime());
-      }else{
-        props.confimNewDate(new Date(date).getTime());
-      }
-      hideDatePicker();
-    };
+  const handleConfirm = (date) => {
+    if (props?.extraFunction) props?.extraFunction();
+    props.getDate(new Date(date).getTime());
+    hideDatePicker();
+  };
 
   return (
     <View>
-      <Link onPress={props.showDatePicker} >
+      <Link onPress={()=>setDatePickerVisibility(true)} >
         <HStack alignItems="center">
           <LinkText size="sm" fontFamily="$heading" fontWeight="$semibold" color="$primary600" textDecorationLine="none">
             {
-              props.how? (props.how == "from" ? "Select start date" :
-              "Select end date" ) : "Change the date"
+              props?.name ? props?.name  : 'Change the date'
             }
           </LinkText>
         </HStack>
       </Link>
 
       <DateTimePickerModal
-        isVisible={props.datePickerVisibility.type}
+        isVisible={datePickerVisibility}
         mode="date"
         onConfirm={handleConfirm}
         onCancel={hideDatePicker}

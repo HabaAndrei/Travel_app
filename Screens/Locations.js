@@ -21,7 +21,6 @@ const Locations = (props) => {
   const [isRecomandation, setRecomandation] = useState(false);
   const [dateFrom, setDateFrom] = useState();
   const [dateTo, setDateTo] = useState();
-  const [datePickerVisibility, setDatePickerVisibility] = useState({type: false, date:''});
 
   const firebaseFirestore = new FirebaseFirestore();
   const screenHeight = Dimensions.get('window').height;
@@ -262,8 +261,10 @@ const Locations = (props) => {
               </Card>
             })}
 
-            <CardDatePicker dateTo={dateTo} setDateTo={setDateTo} dateFrom={dateFrom} setDateFrom={setDateFrom}
-            datePickerVisibility={datePickerVisibility} setDatePickerVisibility={setDatePickerVisibility}   />
+            <CardDatePicker
+              setDateTo={setDateTo} dateTo={dateTo}
+              setDateFrom={setDateFrom} dateFrom={dateFrom}
+            />
 
             <View>
               <HStack h="$10" justifyContent="center" alignItems="center">

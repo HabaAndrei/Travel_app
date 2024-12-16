@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { ScrollView, Pressable, View, Clipboard, StyleSheet, SafeAreaView } from 'react-native';
-import { ArrowLeftIcon, CloseIcon, Card, Heading, Link, Image, LinkText, Text, VStack, Divider, HStack, TrashIcon,RepeatIcon, CheckIcon,  Icon } from "@gluestack-ui/themed";
+import { ArrowLeftIcon, Card, Heading, Link, LinkText, Text, VStack, Divider, HStack, TrashIcon, CheckIcon,  Icon } from "@gluestack-ui/themed";
 import {addDataToAsyncStorage, getDataFromAsyncStorage} from '../diverse.js';
 import TimePicker from '../Components/TimePicker.js';
 import ImageCarousel from '../Components/ImageCarousel.js';
@@ -9,7 +9,7 @@ import ImageCarousel from '../Components/ImageCarousel.js';
 const DailyProgram = (props) => {
 
   const [dailyProgram, setDailyProgram] = useState({data: {}, index: ''});
-  const [isTimePickerVisible, setTimePickerVisibility] = useState({type:false, index: ''});
+  const indexActivity = useRef(0);
 
   useEffect( () => {
     const { data, index } = props.route.params;
@@ -56,28 +56,23 @@ const DailyProgram = (props) => {
   }
 
 
-  const hideDatePicker = () => {
-    setTimePickerVisibility({type: false, index: ''});
-  };
-
-  const handleConfirm = (time) => {
+  function getTime(time){
     const timestamp = new Date(time).getTime();
     let hour = new Date(timestamp).getHours();
     let minutes = new Date(timestamp).getMinutes();
     if(JSON.stringify(minutes).length < 2)minutes = "0" + JSON.stringify(minutes);
     if(JSON.stringify(hour).length < 2)hour = "0" + JSON.stringify(hour);
-    const {index} = isTimePickerVisible;
     setDailyProgram((prev)=>{
       const activities = prev.data?.activities;
       let newAr = activities.map((ob, i)=>{
-        if(i === index)ob.time = `${hour}:${minutes}`;
+        if(i === indexActivity.current)ob.time = `${hour}:${minutes}`;
         return ob;
       })
       prev.data.activities = [...newAr];
-      return prev;
+      return {...prev};
     })
-    hideDatePicker();
-  };
+  }
+
 
 
   return (
@@ -107,8 +102,8 @@ const DailyProgram = (props) => {
                 <Text  style={{marginRight: 30}} fontSize="$sm" fontStyle="normal" fontWeight="$normal" lineHeight="$sm" mb="$2" sx={{ color: "$textLight700" }}>
                   {ob.time}
                 </Text>
-                <TimePicker isTimePickerVisible={isTimePickerVisible} setTimePickerVisibility={setTimePickerVisibility}
-                  showDatePicker={()=>setTimePickerVisibility({type: true, index})} hideDatePicker={hideDatePicker} handleConfirm={handleConfirm}
+                <TimePicker
+                  getTime={getTime} extraFunction={()=>{indexActivity.current = index}}
                 />
               </View>
 

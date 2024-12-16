@@ -1,5 +1,5 @@
 import { StyleSheet, View, Pressable, ScrollView, Clipboard, SafeAreaView } from 'react-native';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useIsFocused } from '@react-navigation/native';
 import { Text, AccordionTitleText,  AccordionTrigger,  AccordionHeader, AccordionContent,
 	AccordionItem, Accordion, AddIcon, Card, Heading, Icon, TrashIcon, HStack, VStack, LinkText, Link, Divider, Center, RemoveIcon
@@ -13,11 +13,12 @@ import ModalAddNewDay from '../Components/ModalAddNewDay.js';
 import openMap from 'react-native-open-maps';
 
 const Trip = (props) => {
+
   const isFocused = useIsFocused();
   const [tripProgram, setTripProgram] = useState([]);
-  const [isTimePickerVisible, setTimePickerVisibility] = useState({ type: false, index: '', indexActivity: '' });
-  const [datePickerVisibility, setDatePickerVisibility] = useState({ type: false, index: '' });
   const [isModalVisible, setModalVisible] = useState({ type: false });
+  const indexDay = useRef(0);
+  const indexActivityRef = useRef(0);
 
   const firebaseFirestore = new FirebaseFirestore();
 
@@ -52,9 +53,6 @@ const Trip = (props) => {
     });
   }
 
-  const hideDatePicker = () => {
-    setTimePickerVisibility({ type: false, index: '', indexActivity: '' });
-  };
 
   async function handleConfirmTime(time) {
     const timestamp = new Date(time).getTime();
@@ -62,15 +60,13 @@ const Trip = (props) => {
     let minutes = new Date(timestamp).getMinutes();
     if (JSON.stringify(minutes).length < 2) minutes = "0" + JSON.stringify(minutes);
     if (JSON.stringify(hour).length < 2) hour = "0" + JSON.stringify(hour);
-    const { index, indexActivity } = isTimePickerVisible;
     let program = [...tripProgram];
-    program[index].activities[indexActivity].time = `${hour}:${minutes}`;
+    program[indexDay.current].activities[indexActivityRef.current].time = `${hour}:${minutes}`;
     const id = props.route.params.id;
     if (!id) {
       props.addNotification('error', 'There is a problem when updating the time');
       return;
     }
-    hideDatePicker();
     saveProgramIntoDB(id, program);
     setTripProgram((prev) => {
       return [...program];
@@ -79,8 +75,8 @@ const Trip = (props) => {
 
   async function confimNewDate(date) {
     const data = formatDateFromMilliseconds(date);
-    const newProgram = [...tripProgram];
-    newProgram[datePickerVisibility.index].date = data;
+    const newProgram = JSON.parse(JSON.stringify(tripProgram));
+    newProgram[indexDay.current].date = data;
     const id = props.route.params.id;
     if (!id) {
       props.addNotification('error', 'There is a problem when updating the date');
@@ -229,10 +225,8 @@ return (
 
               <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: 10, marginBottom: 20 }}>
                 <DatePicker
-                  showDatePicker={() => setDatePickerVisibility({ type: true, index })}
-                  datePickerVisibility={datePickerVisibility}
-                  setDatePickerVisibility={setDatePickerVisibility}
-                  confimNewDate={confimNewDate}
+                  getDate={confimNewDate}
+                  extraFunction={()=>indexDay.current = index}
                 />
                 <Link onPress={() => { setModalVisible({ type: true, index }) }}>
                   <HStack alignItems="center">
@@ -259,9 +253,12 @@ return (
                     <Text style={{ marginRight: 30 }} fontSize="$sm" fontStyle="normal" fontWeight="$normal" lineHeight="$sm" mb="$2" sx={{ color: "$textLight700" }}>
                       {obActivity.time}
                     </Text>
-                    <TimePicker isTimePickerVisible={isTimePickerVisible} setTimePickerVisibility={setTimePickerVisibility}
-                      showDatePicker={() => setTimePickerVisibility({ type: true, index, indexActivity })} hideDatePicker={hideDatePicker}
-                      handleConfirm={handleConfirmTime}
+                    <TimePicker
+                      getTime={handleConfirmTime}
+                      extraFunction={()=>{
+                        indexActivityRef.current = indexActivity;
+                        indexDay.current = index;
+                      }}
                     />
                   </View>
 

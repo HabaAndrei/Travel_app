@@ -4,12 +4,12 @@ import TimePicker from './TimePicker.js';
 import { Center } from '@gluestack-ui/themed';
 
 const ModalAddNewDay = (props) => {
+
   const [name, setName] = useState('');
   const [address, setAddress] = useState('');
   const [info, setInfo] = useState('');
   const [description, setDescription] = useState('');
   const [hour, setHour] = useState('12:12');
-  const [isTimePickerVisible, setTimePickerVisibility] = useState({ type: false });
 
   function handleConfirmTime(time) {
     const timestamp = new Date(time).getTime();
@@ -18,12 +18,8 @@ const ModalAddNewDay = (props) => {
     if (JSON.stringify(minutes).length < 2) minutes = "0" + JSON.stringify(minutes);
     if (JSON.stringify(hour).length < 2) hour = "0" + JSON.stringify(hour);
     setHour(`${hour}:${minutes}`);
-    hideDatePicker();
   }
 
-  function hideDatePicker() {
-    setTimePickerVisibility({ type: false });
-  };
 
   function pressOnSave() {
     if (!name.length || !hour) {
@@ -74,9 +70,9 @@ const ModalAddNewDay = (props) => {
                   placeholderTextColor="gray"
                 />
                 <Center>
-                  <TimePicker isTimePickerVisible={isTimePickerVisible} setTimePickerVisibility={setTimePickerVisibility}
-                    showDatePicker={() => setTimePickerVisibility({ type: true })} hideDatePicker={hideDatePicker}
-                    handleConfirm={handleConfirmTime} title={'Add time'}
+                  <TimePicker
+                    getTime={handleConfirmTime}
+                    name={'Add time'}
                   />
                   <Text bold={true}>{hour ? hour : ''}</Text>
                 </Center>
