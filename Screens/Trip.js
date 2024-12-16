@@ -150,7 +150,7 @@ const Trip = (props) => {
   }
 
   function strLatLngMaps(ob) {
-    const { lat, lng } = ob;
+    const { lat, lng } = ob?.geometry_location;
     return [lat, lng].join(',');
   }
 
