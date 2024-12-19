@@ -62,6 +62,11 @@ const App = () => {
       <NavigationContainer>
         <Stack.Navigator>
           <Stack.Screen
+            name="SetupTrip"
+            component={customComponent(SetupTrip)}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
             name="Locations"
             component={customComponent(Locations)}
             options={{headerShown: false}}
@@ -69,11 +74,6 @@ const App = () => {
           <Stack.Screen
             name="Chat"
             component={customComponent(Chat)}
-            options={{headerShown: false}}
-          />
-          <Stack.Screen
-            name="SetupTrip"
-            component={customComponent(SetupTrip)}
             options={{headerShown: false}}
           />
           <Stack.Screen
