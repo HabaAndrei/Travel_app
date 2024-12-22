@@ -1,7 +1,7 @@
 import { StyleSheet,SafeAreaView, View, ScrollView, Pressable, Dimensions } from 'react-native'
 import {useState, useEffect} from 'react'
 import { useIsFocused } from '@react-navigation/native';
-import {address_function_api, getDataFromAsyncStorage, addDataToAsyncStorage,
+import {address_function_locations, getDataFromAsyncStorage, addDataToAsyncStorage,
   multiSetFromAsyncStorage, formatDateFromMilliseconds} from '../diverse';
 import axios from 'axios';
 import { Card, HStack, Heading, Center, Text, Link, Divider, LinkText, Spinner,
@@ -39,17 +39,17 @@ const Locations = (props) => {
     let {city, country, checkbox, input, type, isLocalPlaces, scaleVisit} = props?.route?.params;
 
     if(type === "getAllDataAboutLocations"){
-      createLocationsAi('seeAllPlaces', city, country, input, checkbox, isLocalPlaces, scaleVisit)
+      createLocationsAi(city, country, input, checkbox, isLocalPlaces, scaleVisit)
       return;
     }
 
   }, [isFocused]);
 
-  async function createLocationsAi( method, city, country, input, checkbox, isLocalPlaces, scaleVisit){
+  async function createLocationsAi(city, country, input, checkbox, isLocalPlaces, scaleVisit){
     setLocations([]);
     setRecomandation(false)
-    axios.post(`${address_function_api}`,
-      {method, city, country, input, checkbox, isLocalPlaces, scaleVisit}
+    axios.post(`${address_function_locations}`,
+      {city, country, input, checkbox, isLocalPlaces, scaleVisit}
     ).then((data)=>{
       if(data.data.isResolved){
         const arrayWithLocations = data.data.data;

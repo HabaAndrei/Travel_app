@@ -1,6 +1,6 @@
 import { StyleSheet, View, ScrollView, Dimensions, Pressable, SafeAreaView } from 'react-native'
 import {useState, useEffect} from 'react'
-import {address_function_api, formatDateFromMilliseconds, removeItemFromAsyncStorage,
+import {address_function_program, formatDateFromMilliseconds, removeItemFromAsyncStorage,
   addDataToAsyncStorage, multiSetFromAsyncStorage, getDataFromAsyncStorage,
   multiGetFromAsyncStorage, multiRemoveFromAsyncStorage} from '../diverse.js';
 import { ArrowRightIcon, Spinner, Center, Card, Heading, Link, LinkText, Text,
@@ -39,7 +39,7 @@ const Program = (props) => {
     const {locations, type} = props?.route?.params;
 
     if(type === "createProgram"){
-      createProgramAi('createProgram', from, to, city, country, locations);
+      createProgramAi(from, to, city, country, locations);
     }
 
 
@@ -65,25 +65,25 @@ const Program = (props) => {
 
     const rez = await getDataFromAsyncStorage("travelParameter");
     if(!rez.isResolved)return
-    let {method, from, to, city, country, locations} = rez.data;
+    let {from, to, city, country, locations} = rez.data;
     setProgram([]);
-    createProgramAi( method, from, to, city, country, locations)
+    createProgramAi(from, to, city, country, locations)
   }
 
 
 
-  async function createProgramAi(method, from, to, city, country, locations){
+  async function createProgramAi(from, to, city, country, locations){
     setRecomandation(false);
     setProgram([]);
-    axios.post(`${address_function_api}`,
-      {method, from, to, city, country, locations}
+    axios.post(`${address_function_program}`,
+      {from, to, city, country, locations}
     ).then((data)=>{
 
       if(data.data.isResolved){
         const values = Object.values(data.data.data);
         setProgram([...values]);
         multiSetFromAsyncStorage([['travelProgram', [...values]],
-          ["travelParameter", {method, from, to, city, country, locations}]]);
+          ["travelParameter", {from, to, city, country, locations}]]);
       }else{
         console.log("eroare la functia getProgram ", data.data);
         props.addNotification("warning", "Unfortunately, we could not generate your program.")

@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Spinner, Button, Icon, CheckIcon, Textarea, VStack, TextareaInput, AlertCircleIcon, Heading, Center, RadioGroup, HStack,
   Radio, RadioIndicator, RadioIcon, CircleIcon, RadioLabel, Card} from "@gluestack-ui/themed";
-import { address_function_api } from '../diverse.js';
+import { address_function_activities } from '../diverse.js';
 import CustomButton from '../CustomElements/CustomButton.js';
 import { FirebaseFirestore } from '../firebase.js';
 const CheckboxActivities = (props) => {
@@ -18,10 +18,7 @@ const CheckboxActivities = (props) => {
     const { isOpen } = props.checkBoxActivities;
     if (isOpen) {
       if (props.checkbox.length) return;
-      axios.post(`${address_function_api}`,
-        { method: 'createActivities', city, country }
-      ).then((data) => {
-
+      axios.post(`${address_function_activities}`, {city, country }).then((data) => {
         if (data.data.isResolved) {
           if(data?.data?.paramsLocation?.data){
             setParamsLocation(data?.data?.paramsLocation?.data?.local_places_and_tourist_places);

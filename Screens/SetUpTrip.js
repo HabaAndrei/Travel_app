@@ -1,6 +1,6 @@
 import {useState} from 'react';
 import { StyleSheet, SafeAreaView, } from 'react-native';
-import { Card, CheckIcon, ArrowRightIcon, Heading, ScrollView, Button, Center} from '@gluestack-ui/themed';
+import { Card, CheckIcon, ArrowRightIcon, Heading, ScrollView, Center} from '@gluestack-ui/themed';
 import SearchDestination from '../Components/SearchDestination.js';
 import CheckboxActivities from '../Components/CheckboxActivities.js';
 import NavbarProgram from '../Components/NavbarProgram.js';

@@ -6,7 +6,7 @@ import {signOut,  deleteUser, initializeAuth, createUserWithEmailAndPassword, si
   sendPasswordResetEmail, reauthenticateWithCredential, EmailAuthProvider  } from "firebase/auth";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getReactNativePersistence } from '@firebase/auth/dist/rn/index.js';
-import {address_function_api} from './diverse.js';
+import {address_function_chat} from './diverse.js';
 import axios from 'axios';
 import * as Device from 'expo-device';
 
@@ -212,7 +212,7 @@ class FirebaseFirestore{
         })
         information = JSON.stringify(rez);
       }
-      const rezQuery =  await axios.post(`${address_function_api}`, {method: 'chat', histoyConv, information});
+      const rezQuery =  await axios.post(`${address_function_chat}`, { histoyConv, information});
       if(rezQuery?.data?.isResolved){
         return {isResolved: true, data: rezQuery?.data?.data};
       }else{
