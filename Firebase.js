@@ -288,9 +288,9 @@ class FirebaseFirestore{
       const data = await cb();
       return data;
     }catch(err){
-      const {uid} = auth.currentUser;
+      const uid = auth?.currentUser?.uid;
       const {modelName, modelId, brand} = Device;
-      await addDoc(collection(db, "errors"), {uid, modelName, modelId, brand, mesErr: err.message});
+      await addDoc(collection(db, "errors"), {uid: uid || 'user not connected', modelName, modelId, brand, mesErr: err.message});
       console.log('we catch an error', {err});
       return {isResolved: false, err: err.message}
     }
