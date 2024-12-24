@@ -1,5 +1,5 @@
 import { StyleSheet, View, Pressable, Text, TextInput, ScrollView, SafeAreaView, TouchableOpacity, ImageBackground } from 'react-native'
-import {useState } from 'react'
+import { useReducer, useState } from 'react'
 import { Icon, VStack, EyeIcon, EyeOffIcon } from '@gluestack-ui/themed'
 import { FirebaseAuth, FirebaseFirestore } from '../firebase.js'
 import {isValidEmail, isValidPassword, deleteAllFromAsyncStorage, address_function_send_code_verification} from "../diverse.js"
@@ -10,8 +10,24 @@ import {ButtonWhite, ButtonBlue} from '../CustomElements/buttonsTwoColors.js';
 
 const LogIn = (props) => {
 
+  const [inputPassword, passwordDispatch] = useReducer(passwordReducer, {
+    input: '', showState: false
+  });
+  function passwordReducer(state, action) {
+    const { type, payload } = action;
+    switch (type) {
+      case 'changeInput': {
+        return { ...state, input: payload || '' };
+      }
+      case 'showState': {
+        return { ...state, showState: !state.showState };
+      }
+      default:
+        return state;
+    }
+  }
+
   const [inputEmail, setInputEmail] = useState('');
-  const [inputPassword, setInputPassword] = useState({ input: '', showState: false });
   const [inputFirstName, setInputFirstName] = useState('');
   const [inputSecondName, setInputSecondName] = useState('');
   const [signInOrUp, setSignInOrUp] = useState('signin');
@@ -22,7 +38,7 @@ const LogIn = (props) => {
   const firebaseAuth = new FirebaseAuth();
   const firebaseFirestore = new FirebaseFirestore();
 
-  async function createAccout(){
+  async function createAccount(){
     if(!inputEmail?.length || !inputPassword?.input?.length || !inputFirstName?.length || !inputSecondName?.length){
       props.addNotification('warning', "Please complete all inputs");
       return;
@@ -165,7 +181,7 @@ const LogIn = (props) => {
     setIsForgotPassword(false)
   }
 
-  function logIN(){
+  function logInMethod(){
     setSignInOrUp("signin");
     setIsForgotPassword(false)
   }
@@ -273,7 +289,7 @@ const LogIn = (props) => {
 
                   <View style={styles.inputContainer}>
                     <TouchableOpacity
-                        onPress={() => setInputPassword(prev => ({ ...prev, showState: !prev.showState }))}
+                        onPress={() => passwordDispatch({type: 'showState'})}
                       >
                         <Icon
                           as={inputPassword.showState ? EyeIcon : EyeOffIcon}
@@ -281,7 +297,7 @@ const LogIn = (props) => {
                         />
                       </TouchableOpacity>
                     <TextInput style={styles.input} placeholder='Password' placeholderTextColor="white"
-                      value={inputPassword.input} onChangeText={(text) => setInputPassword({ ...inputPassword, input: text })}
+                      value={inputPassword.input} onChangeText={(text) => passwordDispatch({type: 'changeInput', payload: text})}
                       secureTextEntry={!inputPassword.showState}
                       />
                   </View>
@@ -299,7 +315,7 @@ const LogIn = (props) => {
                     </Text>
                   </Pressable>
 
-                  <ButtonBlue name={signInOrUp === "signup" ? "Create" : "Log in"} func={signInOrUp === "signup" ? createAccout : logIn} />
+                  <ButtonBlue name={signInOrUp === "signup" ? "Create" : "Log in"} func={signInOrUp === "signup" ? createAccount : logIn} />
 
                 </VStack>
               }
@@ -314,7 +330,7 @@ const LogIn = (props) => {
 
             <View style={styles.separator} />
 
-            <ButtonWhite func={logIN} name={'Log in'}/>
+            <ButtonWhite func={logInMethod} name={'Log in'}/>
 
           </View>
         </View>
