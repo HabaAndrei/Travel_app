@@ -128,20 +128,17 @@ const Locations = (props) => {
       const {dataTimeLocation} = ob;
       if(!dataTimeLocation)return ob;
       const {packages} = dataTimeLocation;
-      if(!packages || !Object.entries(packages).length)return ob;
-      let newPackeges = {};
-      let num = 1;
+      if(!packages || !packages.length)return ob;
       let hours = 0;
-      Object.values(packages).forEach((ob)=>{
-        if(!ob.selected)return;
-        newPackeges[num] = ob;
-        hours += ob?.average_visiting_hours
-        num++;
+      const selectedPackeges = packages.filter((ob)=>{
+        if (!ob.selected) return false;
+        hours += ob?.average_visiting_hours || 0;
+        return true;
       })
-      if(hours > 0){
-        ob.dataTimeLocation.average_hours_visiting_full_location = hours;
-      }
-      ob.dataTimeLocation.packages = newPackeges;
+
+      if (hours > 0) ob.dataTimeLocation.average_hours_visiting_full_location = hours;
+
+      ob.dataTimeLocation.packages = selectedPackeges;
       return ob;
     })
 
@@ -170,8 +167,8 @@ const Locations = (props) => {
   function selectPackage(indexLocation, indexPackage){
     try{
       setLocations((prev)=>{
-        const selected = prev[indexLocation].dataTimeLocation.packages[indexPackage + 1].selected
-        prev[indexLocation].dataTimeLocation.packages[indexPackage + 1].selected = !selected;
+        const selected = prev[indexLocation].dataTimeLocation.packages[indexPackage].selected
+        prev[indexLocation].dataTimeLocation.packages[indexPackage].selected = !selected;
         return [...prev];
       })
     }catch(err){

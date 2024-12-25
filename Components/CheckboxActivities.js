@@ -6,6 +6,7 @@ import { Spinner, Button, Icon, CheckIcon, Textarea, VStack, TextareaInput, Aler
 import { address_function_activities } from '../diverse.js';
 import CustomButton from '../CustomElements/CustomButton.js';
 import { FirebaseFirestore } from '../firebase.js';
+
 const CheckboxActivities = (props) => {
 
   const [isShowDetails, setShowDetails] = useState(false);
@@ -27,8 +28,7 @@ const CheckboxActivities = (props) => {
 
           const parsedDate = typeof(data?.data?.data) === 'string' ? JSON.parse(data?.data?.data) : data?.data?.data;
           const {activities} = parsedDate;
-          let arVariants = Object.values(activities);
-          props.setCheckbox(arVariants.map((a) => {
+          props.setCheckbox(activities.map((a) => {
             let word = a[0]?.toUpperCase() + a.slice(1, a.length);
             return { selected: false, category: word };
           }));

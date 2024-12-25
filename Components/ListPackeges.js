@@ -6,7 +6,7 @@ const ListPackeges = (props) => {
     <View>
       {props?.dataTimeLocation?.packages ? (
         <View style={styles.container}>
-          {Object.values(props?.dataTimeLocation?.packages).map((ob, index) => {
+          {props?.dataTimeLocation?.packages.map((ob, index) => {
             const isSelected = ob.selected;
             return (
               <Pressable
