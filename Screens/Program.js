@@ -78,11 +78,10 @@ const Program = (props) => {
     axios.post(`${address_function_program}`,
       {from, to, city, country, locations}
     ).then((data)=>{
-
       if(data.data.isResolved){
-        const values = Object.values(data.data.data);
-        setProgram([...values]);
-        multiSetFromAsyncStorage([['travelProgram', [...values]],
+        const days = data.data.data;
+        setProgram([...days]);
+        multiSetFromAsyncStorage([['travelProgram', [...days]],
           ["travelParameter", {from, to, city, country, locations}]]);
       }else{
         console.log("eroare la functia getProgram ", data.data);
