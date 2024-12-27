@@ -2,9 +2,10 @@ import { StyleSheet, ScrollView, SafeAreaView, View } from 'react-native'
 import { useState, useEffect } from 'react'
 import { useIsFocused } from '@react-navigation/native';
 import { FirebaseFirestore } from '../firebase.js';
-import { Card, Divider, Text, HStack, Heading, Link, LinkText, Icon, ArrowRightIcon } from '@gluestack-ui/themed';
+import { Text, ArrowRightIcon } from '@gluestack-ui/themed';
 import CountdownNews from '../Components/CountdownNews.js';
 import CustomButton from '../CustomElements/CustomButton.js';
+import CardPresentationTrip from '../Components/CardPresentationTrip.js';
 
 const MyTrips = (props) => {
   const isFocused = useIsFocused();
@@ -40,6 +41,29 @@ const MyTrips = (props) => {
     props.navigation.navigate('SetupTrip')
   }
 
+  async function deleteTrip(indexTrip){
+    const response = await props.areYouSureDeleting();
+    if (!response) return;
+    const idTrip = plans[indexTrip].id;
+    const responseFirestore = await firebaseFirestore.deleteTrip(idTrip);
+    if(!responseFirestore.isResolved){
+      props.addNotification("error", "Unfortunately, there was a problem deleting")
+      return;
+    }
+    setPlans((prevPlan)=>{
+      prevPlan.splice(indexTrip, 1);
+      return [...prevPlan];
+    })
+  }
+
+  function formatTime(time){
+    return new Date(time).toString().slice(0, 15);
+  }
+
+  function goToTripScreen(plan){
+    props.navigation.navigate('Trip', { from: plan.from, to: plan.to, city: plan.city, country: plan.country, program: plan.programDaysString, id: plan.id })
+  }
+
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <ScrollView style={{ flex: 1 }}>
@@ -54,34 +78,20 @@ const MyTrips = (props) => {
           </View>
         }
 
-        {plans?.map((obiect, index) => {
-          return (
-            <Card key={index} p="$5" borderRadius="$lg" maxWidth={600} m="$3">
-              <Heading size="md" fontFamily="$heading" mb="$4">
-                {obiect.country} - {obiect.city}
-              </Heading>
-              <HStack space='sm' mt='$3' h='$5'>
-                <Text size='xs'>
-                  From: {new Date(obiect.from).toString().slice(0, 15)}
-                </Text>
-                <Divider orientation='vertical' bg='$trueGray300' />
-                <Text size='xs'>
-                  To: {new Date(obiect.to).toString().slice(0, 15)}
-                </Text>
-              </HStack>
-              <HStack alignItems="center" justifyContent="flex-end">
-                <Link onPress={() => { props.navigation.navigate('Trip', { from: obiect.from, to: obiect.to, city: obiect.city, country: obiect.country, program: obiect.programDaysString, id: obiect.id }) }}>
-                  <HStack alignItems="center">
-                    <LinkText size="sm" fontFamily="$heading" fontWeight="$semibold" color="$primary600" $dark-color="$primary300" textDecorationLine="none">
-                      See the travel
-                    </LinkText>
-                    <Icon as={ArrowRightIcon} size="sm" color="$primary600" mt="$0.5" ml="$0.5" $dark-color="$primary300" />
-                  </HStack>
-                </Link>
-              </HStack>
-            </Card>
-          )
-        })}
+        {plans?.map((plan, index)=>(
+          <CardPresentationTrip
+            key={index}
+            index={index}
+            textDate={`From: ${formatTime(plan.from)} | To: ${formatTime(plan.to)}`}
+            deleteFunction={deleteTrip}
+            deleteFunctionParameters={[index]}
+            title={`${plan.country} - ${plan.city}`}
+            functionRedirect={goToTripScreen}
+            functionRedirectParameters={[plan]}
+            nameRedirect={'See the travel'}
+          />
+        ))}
+
       </ScrollView>
     </SafeAreaView>
   )

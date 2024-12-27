@@ -3,12 +3,12 @@ import {useState, useEffect} from 'react'
 import {address_function_program, formatDateFromMilliseconds, removeItemFromAsyncStorage,
   addDataToAsyncStorage, multiSetFromAsyncStorage, getDataFromAsyncStorage,
   multiGetFromAsyncStorage, multiRemoveFromAsyncStorage} from '../diverse.js';
-import { ArrowRightIcon, Spinner, Center, Card, Heading, Link, LinkText, Text,
-  Divider, HStack, TrashIcon,RepeatIcon, CheckIcon,  Icon } from "@gluestack-ui/themed";
+import { Spinner, Center, Heading, Text, Divider, HStack, TrashIcon,RepeatIcon, CheckIcon,  Icon } from "@gluestack-ui/themed";
 import { useIsFocused } from '@react-navigation/native';
 import {FirebaseFirestore} from '../firebase.js';
 import axios from 'axios';
 import NavbarProgram from '../Components/NavbarProgram.js';
+import CardPresentationTrip from '../Components/CardPresentationTrip.js';
 
 const Program = (props) => {
 
@@ -25,15 +25,14 @@ const Program = (props) => {
 
 
   useEffect(()=>{
-
-    if(!isFocused)return
+    if (!isFocused) return
 
     if(!props?.route?.params?.type || props?.route?.params?.type === "getProgramAsync"){
       getProgramFromAsyncStorage();
       return;
     };
 
-    if(props?.route?.params?.type === "keepProgram")return;
+    if (props?.route?.params?.type === "keepProgram") return;
 
     const {from, to, city, country} = props?.route?.params?.locationParam;
     const {locations, type} = props?.route?.params;
@@ -41,8 +40,6 @@ const Program = (props) => {
     if(type === "createProgram"){
       createProgramAi(from, to, city, country, locations);
     }
-
-
   }, [isFocused]);
 
 
@@ -59,18 +56,13 @@ const Program = (props) => {
     }
   }
 
-
-
   async function regenerateProgram(){
-
     const rez = await getDataFromAsyncStorage("travelParameter");
     if(!rez.isResolved)return
     let {from, to, city, country, locations} = rez.data;
     setProgram([]);
     createProgramAi(from, to, city, country, locations)
   }
-
-
 
   async function createProgramAi(from, to, city, country, locations){
     setRecomandation(false);
@@ -94,36 +86,31 @@ const Program = (props) => {
     })
   }
 
-
   async function deleteDayFromProgram(index) {
     const response = await props.areYouSureDeleting();
-    if (response) {
-      setProgram((prev)=>{
-        const firstPart = prev.slice(0, index);
-        const secondPart = prev.slice(index + 1, prev.length);
-        let newProgram = firstPart.concat(secondPart);
-        let day = 0;
-        const updateDayProgram = newProgram.map((ob, index)=>{
-          ob.day = index + 1;
-          if(index === 0 ){
-            day = new Date(ob.date).getTime();
-          }else{
-            day+=86400000;
-            ob.date = formatDateFromMilliseconds(day);
-          }
-          return {...ob}
-        })
-
-        addDataToAsyncStorage('travelProgram', updateDayProgram);
-
-        return [...updateDayProgram];
+    if (!response) return;
+    setProgram((prev)=>{
+      const firstPart = prev.slice(0, index);
+      const secondPart = prev.slice(index + 1, prev.length);
+      let newProgram = firstPart.concat(secondPart);
+      let day = 0;
+      const updateDayProgram = newProgram.map((ob, index)=>{
+        ob.day = index + 1;
+        if(index === 0 ){
+          day = new Date(ob.date).getTime();
+        }else{
+          day+=86400000;
+          ob.date = formatDateFromMilliseconds(day);
+        }
+        return {...ob}
       })
-    }
+      addDataToAsyncStorage('travelProgram', updateDayProgram);
+      return [...updateDayProgram];
+    })
   }
 
 
   async function deleteAllProgram(){
-
     const response = await props.areYouSureDeleting();
     if (response) {
       const rez = await removeItemFromAsyncStorage('travelProgram');
@@ -133,12 +120,9 @@ const Program = (props) => {
     }
   }
 
-
   function goToDailyProgram(obiect){
     props.navigation.navigate('DailyProgram', {data: obiect.data, index: obiect.index})
   }
-
-
 
   async function saveProgramInDb(){
     if(!props.user){
@@ -167,7 +151,7 @@ const Program = (props) => {
     }
 
     const rezDeleteAsyncStorage = await multiRemoveFromAsyncStorage(["travelProgram", "travelParameter"])
-    if(!rezDeleteAsyncStorage.isResolved)return;
+    if (!rezDeleteAsyncStorage.isResolved) return;
     setProgram([]);
     setRecomandation(true);
     props.navigation.navigate('MyTrips');
@@ -204,30 +188,19 @@ const Program = (props) => {
                   </Heading>
                 </Center>
 
-                {program?.map((ob, index)=>{
-                  return  <Card  key={index}  p="$5" borderRadius="$lg" maxWidth={400} m="$3">
-                    <HStack justifyContent="space-between" alignItems="center">
-                      <Text fontSize="$sm"  fontStyle="normal"  fontFamily="$heading"  fontWeight="$normal"  lineHeight="$sm"  mb="$2"  sx={{  color: "$textLight700" }} >
-                        {'Day' + ob.day + " | " } {new Date(ob.date).toString().slice(0, 15)}
-                      </Text>
-                      <Pressable onPress={()=>{deleteDayFromProgram(index)}} >
-                        <Icon as={TrashIcon} m="$2" w="$6" h="$6" />
-                      </Pressable>
-                    </HStack>
-
-                    <Heading size="md" fontFamily="$heading" mb="$4">
-                      {ob.title}
-                    </Heading>
-                    <Link onPress={()=>{goToDailyProgram({data: ob, index})}}>
-                      <HStack alignItems="center">
-                        <LinkText    size="sm"  fontFamily="$heading"  fontWeight="$semibold"  color="$primary600"  $dark-color="$primary300"  textDecorationLine="none" >
-                            See full day
-                        </LinkText>
-                        <Icon as={ArrowRightIcon}  size="sm"  color="$primary600"  mt="$0.5"  ml="$0.5"  $dark-color="$primary300"/>
-                      </HStack>
-                    </Link>
-                  </Card>
-                })}
+                {program.map((day, index)=>(
+                  <CardPresentationTrip
+                    key={index}
+                    index={index}
+                    textDate={`Day ${day.day}  |  ${new Date(day.date).toString().slice(0, 15)}`}
+                    deleteFunction={deleteDayFromProgram}
+                    deleteFunctionParameters={[index]}
+                    title={day.title}
+                    functionRedirect={goToDailyProgram}
+                    functionRedirectParameters={[{data: day, index}]}
+                    nameRedirect={'See full day'}
+                  />
+                ))}
 
                 <HStack h="$10" justifyContent="center" alignItems="center">
                   <HStack alignItems="center"  >

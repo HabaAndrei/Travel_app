@@ -280,7 +280,6 @@ class FirebaseFirestore{
       });
       return {isResolved:true};
     })
-
   }
 
   async _storeErr(cb){
@@ -309,6 +308,15 @@ class FirebaseFirestore{
     }
     return rezFin
   }
+
+  async deleteTrip(idTrip){
+    return this._storeErr(async ()=>{
+      await deleteDoc(doc(db, "programs", idTrip));
+      return {isResolved:true};
+    })
+  }
+
+
 }
 
 
