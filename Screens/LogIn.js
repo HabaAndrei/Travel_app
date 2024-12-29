@@ -5,7 +5,7 @@ import { FirebaseAuth, FirebaseFirestore } from '../firebase.js'
 import {isValidEmail, isValidPassword, deleteAllFromAsyncStorage, address_function_send_code_verification} from "../diverse.js"
 import uuid from 'react-native-uuid';
 import axios from 'axios';
-import ModalReAuth from '../Components/ModalReAuth.js';
+import ModalReAuth from '../Components/Modals/ModalReAuth.js';
 import {ButtonWhite, ButtonBlue} from '../CustomElements/buttonsTwoColors.js';
 
 const LogIn = (props) => {

@@ -1,10 +1,10 @@
 import { FlatList, Modal, StyleSheet, Text, Pressable, View, TextInput, SafeAreaView } from 'react-native';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { address_function_fuzzy } from '../diverse';
+import { address_function_fuzzy } from '../../diverse.js';
 import { Spinner } from "@gluestack-ui/themed";
-import CustomButton from '../CustomElements/CustomButton.js';
-import { FirebaseFirestore } from '../firebase.js';
+import CustomButton from '../../CustomElements/CustomButton.js';
+import { FirebaseFirestore } from '../../firebase.js';
 
 const ModalSearchDestination = (props) => {
 

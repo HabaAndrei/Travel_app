@@ -1,8 +1,8 @@
 import { StyleSheet, View, Modal } from 'react-native';
 import { useEffect, useState } from 'react';
 import { Input, InputField, Heading, Text } from '@gluestack-ui/themed';
-import { FirebaseAuth } from '../firebase.js';
-import CustomButton from '../CustomElements/CustomButton.js';
+import { FirebaseAuth } from '../../firebase.js';
+import CustomButton from '../../CustomElements/CustomButton.js';
 
 const ModalReAuth = (props) => {
   const [password, setPassword] = useState('');

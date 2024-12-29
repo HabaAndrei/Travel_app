@@ -9,9 +9,9 @@ import { Card, HStack, Heading, Center, Text, Link, Divider, LinkText, Spinner,
 } from '@gluestack-ui/themed';
 import NavbarProgram from '../Components/NavbarProgram';
 import ImageCarousel from '../Components/ImageCarousel';
-import CardDatePicker from '../Components/CardDatePicker';
+import CardDatePicker from '../Components/LocationsComponents/CardDatePicker.js';
 import CustomButton from '../CustomElements/CustomButton.js';
-import ListPackeges from '../Components/ListPackeges.js';
+import ListPackeges from '../Components/LocationsComponents/ListPackeges.js';
 import {FirebaseFirestore} from '../firebase.js';
 
 const Locations = (props) => {

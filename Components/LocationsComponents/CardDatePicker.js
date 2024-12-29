@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View } from 'react-native';
-import {formatDateFromMilliseconds} from '../diverse.js';
+import {formatDateFromMilliseconds} from '../../diverse.js';
 import { Card} from '@gluestack-ui/themed';
-import DatePicker from '../Components/DatePicker';
+import DatePicker from '../Pickers/DatePicker.js';
 
 
 

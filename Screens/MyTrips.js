@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react'
 import { useIsFocused } from '@react-navigation/native';
 import { FirebaseFirestore } from '../firebase.js';
 import { Text, ArrowRightIcon } from '@gluestack-ui/themed';
-import CountdownNews from '../Components/CountdownNews.js';
+import CountdownTrips from '../Components/MyTripsComponents/CountdownTrips.js';
 import CustomButton from '../CustomElements/CustomButton.js';
 import CardPresentationTrip from '../Components/CardPresentationTrip.js';
 
@@ -67,7 +67,7 @@ const MyTrips = (props) => {
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <ScrollView style={{ flex: 1 }}>
-        {plans.length ? <CountdownNews plans={plans} /> :
+        {plans.length ? <CountdownTrips plans={plans} /> :
           <View style={styles.titleContainer}>
             <Text style={styles.appName}>Travel Bot</Text>
             <Text style={styles.slogan}>– Where Every Trip Finds Its Way 🌍</Text>

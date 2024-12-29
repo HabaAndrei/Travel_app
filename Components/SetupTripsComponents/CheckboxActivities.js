@@ -3,9 +3,9 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Spinner, Button, Icon, CheckIcon, Textarea, VStack, TextareaInput, AlertCircleIcon, Heading, Center, RadioGroup, HStack,
   Radio, RadioIndicator, RadioIcon, CircleIcon, RadioLabel, Card} from "@gluestack-ui/themed";
-import { address_function_activities } from '../diverse.js';
-import CustomButton from '../CustomElements/CustomButton.js';
-import { FirebaseFirestore } from '../firebase.js';
+import { address_function_activities } from '../../diverse.js';
+import CustomButton from '../../CustomElements/CustomButton.js';
+import { FirebaseFirestore } from '../../firebase.js';
 
 const CheckboxActivities = (props) => {
 

@@ -1,7 +1,7 @@
 import { View ,TextInput, Image, StyleSheet, Dimensions, Text } from 'react-native';
 import {useState, useEffect} from 'react'
 import ModalSearchDestination from './ModalSearchDestination.js';
-import { imagePath } from '../diverse.js';
+import { imagePath } from '../../diverse.js';
 
 const SearchDestination = (props) => {
 

@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import { View, Text, StyleSheet, ScrollView, Pressable } from 'react-native';
 import Notification from './Notification';
-import ModalDelete from './ModalDelete';
+import ModalDelete from './Modals/ModalDelete';
 import uuid from 'react-native-uuid';
 import LogIn from '../Screens/LogIn.js';
 import { StatusBar } from 'expo-status-bar';

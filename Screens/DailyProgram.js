@@ -2,7 +2,7 @@ import { useEffect, useState, useRef } from 'react';
 import { ScrollView, Pressable, View, Clipboard, StyleSheet, SafeAreaView } from 'react-native';
 import { ArrowLeftIcon, Card, Heading, Link, LinkText, Text, VStack, Divider, HStack, TrashIcon, CheckIcon,  Icon } from "@gluestack-ui/themed";
 import {addDataToAsyncStorage, getDataFromAsyncStorage} from '../diverse.js';
-import TimePicker from '../Components/TimePicker.js';
+import TimePicker from '../Components/Pickers/TimePicker.js';
 import ImageCarousel from '../Components/ImageCarousel.js';
 
 

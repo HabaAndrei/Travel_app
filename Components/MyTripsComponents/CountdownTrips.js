@@ -1,7 +1,7 @@
 import { StyleSheet, View, PanResponder } from 'react-native'
 import { useEffect, useState } from 'react'
 import { Card, Text, Heading } from '@gluestack-ui/themed';
-import {formatDateFromMilliseconds, getDays, getHours} from '../diverse.js';
+import {formatDateFromMilliseconds, getDays, getHours} from '../../diverse.js';
 
 const CountdownNews = (props) => {
 

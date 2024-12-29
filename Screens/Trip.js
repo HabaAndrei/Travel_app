@@ -6,10 +6,10 @@ import { Text, AccordionTitleText,  AccordionTrigger,  AccordionHeader, Accordio
 } from '@gluestack-ui/themed';
 import ImageCarousel from '../Components/ImageCarousel.js';
 import {FirebaseFirestore} from '../firebase.js';
-import TimePicker from '../Components/TimePicker.js';
-import DatePicker from '../Components/DatePicker';
+import TimePicker from '../Components/Pickers/TimePicker.js';
+import DatePicker from '../Components/Pickers/DatePicker';
 import { formatDateFromMilliseconds } from '../diverse';
-import ModalAddNewDay from '../Components/ModalAddNewDay.js';
+import ModalAddNewDay from '../Components/TripsComponents/ModalAddNewDay.js';
 import openMap from 'react-native-open-maps';
 
 const Trip = (props) => {
