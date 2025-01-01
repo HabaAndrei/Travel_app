@@ -1,6 +1,6 @@
 import { StyleSheet, View, Pressable, Text, TextInput, ScrollView, SafeAreaView, TouchableOpacity, ImageBackground } from 'react-native'
 import { useReducer, useState } from 'react'
-import { Icon, VStack, EyeIcon, EyeOffIcon } from '@gluestack-ui/themed'
+import { Icon, VStack, EyeIcon, EyeOffIcon, Spinner } from '@gluestack-ui/themed'
 import { FirebaseAuth, FirebaseFirestore } from '../firebase.js'
 import {isValidEmail, isValidPassword, deleteAllFromAsyncStorage, address_function_send_code_verification} from "../diverse.js"
 import uuid from 'react-native-uuid';
@@ -34,6 +34,7 @@ const LogIn = (props) => {
   const [isForgotPassword, setIsForgotPassword] = useState('');
   const [codeVerify, setCodeVerify] = useState('');
   const [isModalVisibleReAuth, setModalVisibleReAuth] = useState(false);
+  const [isLoadingSendEmail, setLoadingSendEmail] = useState(false);
 
   const firebaseAuth = new FirebaseAuth();
   const firebaseFirestore = new FirebaseFirestore();
@@ -115,10 +116,8 @@ const LogIn = (props) => {
   }
 
   async function deleteUser(){
-
     const response = await props.areYouSureDeleting();
     if (!response) return;
-
     const rez = await firebaseAuth._deleteUser();
     if(rez.isResolved){
       props.setUser(undefined);
@@ -134,21 +133,26 @@ const LogIn = (props) => {
 
   async function sendCodeToEmail(){
     try{
+      setLoadingSendEmail(true);
       const code = uuid.v4().slice(0, 6);
       const email = props.user.email;
       const rezStore = await firebaseFirestore.storeCodeAndEmail(code, email);
       if(!rezStore.isResolved){
+        setLoadingSendEmail(false);
         props.addNotification('error', "There was a problem sending the code by email");
         return;
       }
       const rezSend = await axios.post(address_function_send_code_verification, {code, email});
       if(!rezSend.data.isResolved){
+        setLoadingSendEmail(false);
         props.addNotification('error', "There was a problem sending the code by email");
         return;
       }
-      props.addNotification('success', "The email was successful. Please enter the code received on the email address in the input");
+      setLoadingSendEmail(false);
+      props.addNotification('success', "The email will arive immediately. Please enter the code received on the email address in the input");
     }catch(err){
       console.log(err);
+      setLoadingSendEmail(false);
       props.addNotification('error', "There was a problem sending the code by email");
     }
   }
@@ -193,6 +197,12 @@ const LogIn = (props) => {
 
       <ScrollView>
 
+        {isLoadingSendEmail ?
+          <View style={styles.spinnerContainer}>
+            <Spinner color="$indigo600" />
+          </View> : null
+        }
+
         <View style={styles.titleContainer}>
           <Text style={styles.appName}>Travel Bot</Text>
           <Text style={styles.slogan}>– Where Every Trip Finds Its Way 🌍</Text>
@@ -214,7 +224,7 @@ const LogIn = (props) => {
                 <View style={{margin: 10}} />
 
                 <View style={styles.inputContainer}>
-                  <TextInput style={styles.input} placeholder='Enter the code received via email' placeholderTextColor="white"
+                  <TextInput style={styles.input} placeholder='Enter the code from email' placeholderTextColor="white"
                     value={codeVerify}
                     onChangeText={(text) => setCodeVerify(text)}/>
                 </View>
@@ -222,8 +232,6 @@ const LogIn = (props) => {
                 <View style={{margin: 10}} />
 
                 <ButtonBlue name={'Verify code'} func={verifyCode} />
-
-
               </VStack>
 
               <View style={{ alignItems: 'center', marginTop: 50 }}>
@@ -417,17 +425,20 @@ const styles = StyleSheet.create({
     marginTop: 5,
   },
   inputContainer: {
-    width: '80%',
+    width: '90%',
     borderBottomWidth: 4,
     borderBottomColor: 'white',
+    alignSelf: 'center',
   },
   input: {
+    width: '80%',
     fontSize: 16,
     color: 'white',
-    paddingVertical: 5,
-    fontWeight: 'bold'
+    fontWeight: 'bold',
   },
   textPassword: {
+    width: '90%',
+    alignSelf: 'center',
     fontSize: 13,
     color: 'white',
     paddingVertical: 5,
@@ -443,5 +454,14 @@ const styles = StyleSheet.create({
     borderRadius: 3,
     alignSelf: 'flex-end',
   },
-
+  spinnerContainer: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 1000,
+  },
 })
