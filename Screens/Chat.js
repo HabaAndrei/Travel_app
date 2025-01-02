@@ -13,7 +13,7 @@ const Chat = (props) => {
   const [message, setMessage] = useState('');
   const [conversation , setConversation] = useState([]);
   const [conversations, setConversations] = useState([]);
-  const [selectedConversation, setSelectedConversation] = useState('');
+  const [idSelectedConversation, setIdSelectedConversation] = useState('');
 
   const firebaseFirestore = new FirebaseFirestore();
 
@@ -23,10 +23,10 @@ const Chat = (props) => {
   }, []);
 
   useEffect(()=>{
-    if(selectedConversation){getMess(selectedConversation)}
-  }, [selectedConversation])
+    if(idSelectedConversation){_getMessages(idSelectedConversation)}
+  }, [idSelectedConversation])
 
-  async function getMess(idConv){
+  async function _getMessages(idConv){
     const data = await firebaseFirestore.getMessages(idConv);
     if(data.isResolved){
       const mess = data?.data?.map((ob)=>{return {type: ob.type, mes: ob.mes}});
@@ -69,15 +69,15 @@ const Chat = (props) => {
       return [...conv];
     })
     const time = new Date().getTime();
-    let uuidConv = uuid.v4().slice(0, 5);
-    let name = conv[0].mes.slice(0, 15);
-    if(!selectedConversation){
+    let uuidConv = '';
+    if(!idSelectedConversation){
+      uuidConv = uuid.v4().slice(0, 5);
+      const name = conv[0].mes.slice(0, 15);
       setConversations((prev) => [...prev, {id: uuidConv, name}])
-      setSelectedConversation({id: uuidConv, name});
+      setIdSelectedConversation({id: uuidConv, name});
       firebaseFirestore.storeConv(uuidConv, name);
     }else{
-      uuidConv = selectedConversation.id;
-      name = selectedConversation.name;
+      uuidConv = idSelectedConversation;
     }
     getResponse(conv, uuidConv);
     firebaseFirestore.storeMes(uuidConv, 'user', message, time);
@@ -85,24 +85,23 @@ const Chat = (props) => {
   }
 
   async function _deleteChat(){
-    if(!selectedConversation)return;
+    if(!idSelectedConversation)return;
     const response = await props.areYouSureDeleting();
     if (!response) return;
-    firebaseFirestore.deleteChat(selectedConversation);
+    firebaseFirestore.deleteChat(idSelectedConversation);
     setConversations((prev)=>{
       let newConvs = [];
       prev.forEach((ob)=>{
-        if(ob.id != selectedConversation)newConvs.push(ob);
+        if(ob.id != idSelectedConversation)newConvs.push(ob);
       });
       return [...newConvs];
     })
-    setSelectedConversation('');
-    setConversation([]);
+    newChat();
   }
 
   function newChat(){
     setConversation([]);
-    setSelectedConversation('');
+    setIdSelectedConversation('');
     setMessage('');
   }
 
@@ -118,7 +117,7 @@ const Chat = (props) => {
           <Pressable onPress={_deleteChat} style={styles.sideButton}>
             <Text style={styles.buttonText}>Delete chat</Text>
           </Pressable>
-          <SelectConversation setSelectedConversation={setSelectedConversation} conversations={conversations} />
+          <SelectConversation setIdSelectedConversation={setIdSelectedConversation} conversations={conversations} />
           <Pressable onPress={newChat} style={styles.sideButton}>
             <Text style={styles.buttonText}>New chat</Text>
           </Pressable>

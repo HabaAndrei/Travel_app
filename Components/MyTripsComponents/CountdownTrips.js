@@ -92,11 +92,10 @@ const CountdownNews = (props) => {
   };
 
   return (
-
-    <View>
+    <>
     {newsToShow.length ?
-      <View style={styles.container} {...panResponder.panHandlers}>
-        <Card p="$5" borderRadius="$lg" maxWidth={600} m="$3">
+      <Card p="$5" borderRadius="$lg" maxWidth={600} m="$3" style={styles.container} {...panResponder.panHandlers}>
+        <View style={{backgroundColor: 'white'}} >
           <Heading style={styles.heading}>{newsToShow[newsNumber]?.title}</Heading>
           <Text style={styles.infoText}>{newsToShow[newsNumber]?.infTwo}</Text>
           <Text style={styles.description}>{newsToShow[newsNumber]?.infOne}</Text>
@@ -112,10 +111,10 @@ const CountdownNews = (props) => {
               />
             ))}
           </View>
-        </Card>
-      </View> : null
+        </View>
+      </Card> : null
     }
-    </View>
+    </>
   )
 }
 
@@ -150,8 +149,6 @@ const styles = StyleSheet.create({
   },
   dotsContainer: {
     flexDirection: 'row',
-    position: 'absolute',
-    bottom: 20,
     justifyContent: 'center',
     width: '100%',
   },

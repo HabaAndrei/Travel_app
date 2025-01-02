@@ -7,7 +7,7 @@ const SelectConversation = (props) => {
 
   return (
     <View style={{width: 100}} >
-      <Select onValueChange={props.setSelectedConversation}>
+      <Select onValueChange={props.setIdSelectedConversation}>
         <SelectTrigger  size="sm" >
           <SelectInput placeholder="Chats" />
           <SelectIcon mr="$3">
