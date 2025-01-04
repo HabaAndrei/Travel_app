@@ -116,13 +116,17 @@ const DailyProgram = (props) => {
                   </Text>
                 </Text> : <Text></Text>
               }
-              <Text size="m" style={{ marginTop: 10 }}>
-                <Text bold={true}>Info:</Text> {ob.info}
-              </Text>
-              <Text size="m" style={{ marginTop: 10 }}>
-                <Text bold={true}>Description: </Text>
-                {ob.description}
-              </Text>
+
+              {ob.info ?
+                <Text size="m" style={{ marginTop: 10 }}>
+                  <Text bold={true}>Info:</Text> {ob.info}
+                </Text> : null
+              }
+              {ob.description ?
+                <Text size="m" style={{ marginTop: 10 }}>
+                  <Text bold={true}>Description: </Text>{ob.description}
+                </Text> : null
+              }
 
               <View style={{ flex: 1, marginTop: 20 }}>
                 {ob.arrayWithLinkImages.length ?
