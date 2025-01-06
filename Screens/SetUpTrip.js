@@ -8,6 +8,7 @@ import CustomButton from '../CustomElements/CustomButton.js';
 
 const SetupTrip = (props) => {
 
+  const [isLocalPlaces, setLocalPlaces] = useState('false');
   const [destinationActivities, destinationActivitiesDispatch] = useReducer(destinationActivitiesReducer, {
     city: '',
     country: '',
@@ -45,20 +46,14 @@ const SetupTrip = (props) => {
     }
   }
 
-  const [checkBoxActivities, setCheckBoxActivities] = useState({isOpen: false, city: '', country: ''})
-  const [dataDestination, setDataDestination] = useState({country: '', city: ''});
-  const [checkbox, setCheckbox] = useState([]);
-  const [inputActivity, setInputActivity] = useState('');
-  const [isLocalPlaces, setLocalPlaces] = useState('false');
-  const [scaleVisit, setScaleVisit] = useState('');
 
   function verifyDestinationRequest(){
     if(!destinationActivities.city || !destinationActivities.country){
       props.addNotification("warning", "Please choose the city and country where you want to travel to provide you with the best data.");
       return false;
     }
-    const isSelect = checkbox?.find((ob)=>ob.selected === true);
-    const wordWithoutSpace = inputActivity?.replaceAll(' ', '');
+    const isSelect = destinationActivities.checkbox?.find((ob)=>ob.selected === true);
+    const wordWithoutSpace = destinationActivities.inputActivity?.replaceAll(' ', '');
     if(!isSelect && !wordWithoutSpace.length){
       props.addNotification("warning", "To go further, you must choose at least one activity, write what you want to visit in the input");
       return false;
@@ -69,23 +64,19 @@ const SetupTrip = (props) => {
   function goToProgramPage(){
     if(!verifyDestinationRequest())return;
     let newCheckbox = [];
-    checkbox.forEach((ob)=>{if(ob.selected)newCheckbox.push(ob.category)});
-
+    destinationActivities.checkbox.forEach((ob)=>{ if (ob.selected) newCheckbox.push(ob.category) });
+    const {country, city, scaleVisit,inputActivity } = destinationActivities;
     props.navigation.navigate('Locations', {
-      type: 'getAllDataAboutLocations' ,
-      country: dataDestination.country,
-      city: dataDestination.city,
+      country, city, isLocalPlaces, scaleVisit,
       checkbox: newCheckbox,
+      type: 'getAllDataAboutLocations' ,
       input: inputActivity,
-      isLocalPlaces,
-      scaleVisit
     })
   }
 
   function closeCheckbox(){
     destinationActivitiesDispatch({type: 'closeModalActivities'});
   }
-
 
   function openModalActivities(){
     if(destinationActivities.city && destinationActivities.country){
