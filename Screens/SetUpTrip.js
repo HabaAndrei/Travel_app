@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import { useState, useReducer } from 'react';
 import { StyleSheet, SafeAreaView, } from 'react-native';
 import { Card, CheckIcon, ArrowRightIcon, Heading, ScrollView, Center} from '@gluestack-ui/themed';
 import SearchDestination from '../Components/SetupTripsComponents/SearchDestination.js';
@@ -8,6 +8,43 @@ import CustomButton from '../CustomElements/CustomButton.js';
 
 const SetupTrip = (props) => {
 
+  const [destinationActivities, destinationActivitiesDispatch] = useReducer(destinationActivitiesReducer, {
+    city: '',
+    country: '',
+    isOpenModalActivities: false,
+    checkbox: [],
+    inputActivity: '',
+    scaleVisit: ''
+  })
+  function destinationActivitiesReducer(state, action){
+    const { type, payload } = action;
+    switch (type) {
+      case 'openModalActivities': {
+        return {...state, isOpenModalActivities: true }
+      }
+      case 'closeModalActivities': {
+        return {...state, isOpenModalActivities: false }
+      }
+      case 'setCountry': {
+        return {...state, country: payload}
+      }
+      case 'setCity': {
+        return {...state, city: payload}
+      }
+      case 'setCheckbox': {
+        return {...state, checkbox: payload}
+      }
+      case 'setInputActivity': {
+        return {...state, inputActivity: payload}
+      }
+      case 'setScaleVisit': {
+        return {...state, scaleVisit: payload}
+      }
+      default:
+        return state;
+    }
+  }
+
   const [checkBoxActivities, setCheckBoxActivities] = useState({isOpen: false, city: '', country: ''})
   const [dataDestination, setDataDestination] = useState({country: '', city: ''});
   const [checkbox, setCheckbox] = useState([]);
@@ -16,7 +53,7 @@ const SetupTrip = (props) => {
   const [scaleVisit, setScaleVisit] = useState('');
 
   function verifyDestinationRequest(){
-    if(!dataDestination.city || !dataDestination.country){
+    if(!destinationActivities.city || !destinationActivities.country){
       props.addNotification("warning", "Please choose the city and country where you want to travel to provide you with the best data.");
       return false;
     }
@@ -29,38 +66,30 @@ const SetupTrip = (props) => {
     return true;
   }
 
-
   function goToProgramPage(){
-
-    ///////////////////////////////////////////////////
-    // decomentez si sterg in prod =>>>>>>>>
-
     if(!verifyDestinationRequest())return;
     let newCheckbox = [];
     checkbox.forEach((ob)=>{if(ob.selected)newCheckbox.push(ob.category)});
 
-    props.navigation.navigate('Locations', {type: 'getAllDataAboutLocations' ,
-      country: dataDestination.country, city: dataDestination.city, checkbox: newCheckbox, input: inputActivity, isLocalPlaces, scaleVisit})
-
-    ///////////////////////////////////////////////////////////
-    // const city = 'Paris';
-    // const country = 'France';
-    // const checkbox = ["History and heritage", "Museums and exhibitions"];
-    // // const checkbox = [];
-    // props.navigation.navigate('Locations', {type: 'getAllDataAboutLocations', country, city, checkbox, input: inputActivity, isLocalPlaces})
-
-    // decomentez si sterg in prod <<<<<<===========
-    /////////////////////////////////////////////////////////////////////
+    props.navigation.navigate('Locations', {
+      type: 'getAllDataAboutLocations' ,
+      country: dataDestination.country,
+      city: dataDestination.city,
+      checkbox: newCheckbox,
+      input: inputActivity,
+      isLocalPlaces,
+      scaleVisit
+    })
   }
 
   function closeCheckbox(){
-    setCheckBoxActivities((prev)=>{return {isOpen:false}})
+    destinationActivitiesDispatch({type: 'closeModalActivities'});
   }
 
 
   function openModalActivities(){
-    if(dataDestination.city && dataDestination.country){
-      setCheckBoxActivities((prev)=>{return{isOpen:true}})
+    if(destinationActivities.city && destinationActivities.country){
+      destinationActivitiesDispatch({type: 'openModalActivities'});
     }else{
       props.addNotification("warning", "Please choose the city and country where you want to travel to provide you with the best data.");
     }
@@ -82,18 +111,19 @@ const SetupTrip = (props) => {
             Search your destination
           </Heading>
           <SearchDestination
-            setCheckBoxActivities={setCheckBoxActivities}  setCheckbox={setCheckbox}
+            destinationActivitiesDispatch={destinationActivitiesDispatch}
+            destinationActivities={destinationActivities}
             addNotification={props.addNotification}
-            dataDestination={dataDestination} setDataDestination={setDataDestination}
           />
         </Card>
 
         <CheckboxActivities
-          inputActivity={inputActivity} setInputActivity={setInputActivity}
-          dataDestination={dataDestination} setScaleVisit={setScaleVisit}
-          checkBoxActivities={checkBoxActivities} closeCheckbox={closeCheckbox}
-          checkbox={checkbox} setCheckbox={setCheckbox}  addNotification={props.addNotification}
-          isLocalPlaces={isLocalPlaces} setLocalPlaces={setLocalPlaces}
+          destinationActivitiesDispatch={destinationActivitiesDispatch}
+          destinationActivities={destinationActivities}
+          closeCheckbox={closeCheckbox}
+          addNotification={props.addNotification}
+          isLocalPlaces={isLocalPlaces}
+          setLocalPlaces={setLocalPlaces}
         />
 
         <CustomButton name={'Choose Activities'} icon={CheckIcon} func={openModalActivities} />

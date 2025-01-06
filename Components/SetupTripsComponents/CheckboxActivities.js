@@ -15,23 +15,23 @@ const CheckboxActivities = (props) => {
   const firebaseFirestore = new FirebaseFirestore();
 
   useEffect(() => {
-    const { city, country } = props.dataDestination;
-    const { isOpen } = props.checkBoxActivities;
-    if (isOpen) {
-      if (props.checkbox.length) return;
+    const { city, country } = props.destinationActivities;
+    if (props.destinationActivities.isOpenModalActivities) {
+      if (props.destinationActivities.checkbox.length) return;
       axios.post(`${address_function_activities}`, {city, country }).then((data) => {
         if (data.data.isResolved) {
           if(data?.data?.paramsLocation?.data){
             setParamsLocation(data?.data?.paramsLocation?.data?.local_places_and_tourist_places);
-            props.setScaleVisit(data?.data?.paramsLocation?.data?.scale_visit);
+            props.destinationActivitiesDispatch({type: 'setScaleVisit', payload: data?.data?.paramsLocation?.data?.scale_visit})
           }
 
           const parsedDate = typeof(data?.data?.data) === 'string' ? JSON.parse(data?.data?.data) : data?.data?.data;
           const {activities} = parsedDate;
-          props.setCheckbox(activities.map((a) => {
+          const checkbox = activities.map((a) => {
             let word = a[0]?.toUpperCase() + a.slice(1, a.length);
             return { selected: false, category: word };
-          }));
+          });
+          props.destinationActivitiesDispatch({type: 'setCheckbox', payload: checkbox})
         } else {
           props.closeCheckbox();
           props.addNotification("warning", "Unfortunately, we could not generate activities.");
@@ -43,122 +43,118 @@ const CheckboxActivities = (props) => {
         console.log(err);
       });
     }
-  }, [props.checkBoxActivities]);
+  }, [props.destinationActivities.isOpenModalActivities]);
 
   function pressOnOption(index) {
-    props.setCheckbox((prev) => {
-      const updatedCheckbox = [...prev];
-      updatedCheckbox[index].selected = !updatedCheckbox[index].selected;
-      return updatedCheckbox;
-    });
+    const updatedCheckbox = props.destinationActivities.checkbox;
+    updatedCheckbox[index].selected = !updatedCheckbox[index].selected;
+    props.destinationActivitiesDispatch({type: 'setCheckbox', payload: updatedCheckbox})
+  }
+
+  function setInputActivity(text){
+    props.destinationActivitiesDispatch({type: 'setInputActivity', payload: text})
   }
 
   return (
-    <View>
-      {props.checkBoxActivities.isOpen ?
-        <View style={styles.centeredView}>
-          <Modal
-            animationType="slide"
-            transparent={true}
-            visible={props.checkBoxActivities.isOpen}
-          >
-            {props.checkbox.length ?
-              <View style={styles.modalView}>
-                <ScrollView contentContainerStyle={styles.scrollViewContent}>
-                  <Center>
-                    <Heading>Choose your activities for the next trip</Heading>
-                  </Center>
-                  {props.checkbox.map((item, index) => {
-                    return (
-                      <Pressable
-                        key={index}
-                        style={[
-                          styles.pressable,
-                          item.selected && styles.pressableSelected
-                        ]}
-                        onPress={() => pressOnOption(index)}
-                      >
-                        <Text style={[styles.text, styles.textCenter]}>
-                          {item.category}
-                        </Text>
-                        {item.selected ?
-                          <Icon as={CheckIcon} style={styles.icon} />
-                          :
-                          <View style={styles.iconPlaceholder}></View>
-                        }
-                      </Pressable>
-                    );
-                  })}
-
-
-                  <View style={styles.viewCard}>
-                    <Pressable onPress={() => setShowDetails(!isShowDetails)} style={{
-                      flexDirection: 'row',
-                      alignItems: 'center',
-                      justifyContent: 'center'
-                    }}>
-                      <Text style={[styles.text, styles.textBold]}>Write your custom activities</Text>
-                      <Icon
-                        as={AlertCircleIcon}
-                        color="blue"
-                        $dark-color="$success300"
-                        style={{ marginLeft: 5 }}
-                      />
-                    </Pressable>
-                    <Text style={isShowDetails ? styles.explanationText : ''}>
-                      {isShowDetails ? 'Write here everything you want to visit, including activities or specific places' : ''}
+    <View style={styles.centeredView}>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={props.destinationActivities.isOpenModalActivities}
+      >
+        {props.destinationActivities.checkbox.length ?
+          <View style={styles.modalView}>
+            <ScrollView contentContainerStyle={styles.scrollViewContent}>
+              <Center>
+                <Heading>Choose your activities for the next trip</Heading>
+              </Center>
+              {props.destinationActivities.checkbox.map((item, index) => {
+                return (
+                  <Pressable
+                    key={index}
+                    style={[
+                      styles.pressable,
+                      item.selected && styles.pressableSelected
+                    ]}
+                    onPress={() => pressOnOption(index)}
+                  >
+                    <Text style={[styles.text, styles.textCenter]}>
+                      {item.category}
                     </Text>
-                    <KeyboardAvoidingView style={{ flex: 1, minWidth: 250 }} behavior="position">
-                      <Textarea style={{ backgroundColor: 'white', borderRadius: 15 }}>
-                        <TextareaInput
-                          placeholder="Example: The oldest breweries in the city"
-                          value={props.inputActivity}
-                          onChangeText={(text) => props.setInputActivity(text)}
-                        />
-                      </Textarea>
-                    </KeyboardAvoidingView>
+                    {item.selected ?
+                      <Icon as={CheckIcon} style={styles.icon} />
+                      :
+                      <View style={styles.iconPlaceholder}></View>
+                    }
+                  </Pressable>
+                );
+              })}
+
+              <View style={styles.viewCard}>
+                <Pressable onPress={() => setShowDetails(!isShowDetails)} style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}>
+                  <Text style={[styles.text, styles.textBold]}>Write your custom activities</Text>
+                  <Icon
+                    as={AlertCircleIcon}
+                    color="blue"
+                    $dark-color="$success300"
+                    style={{ marginLeft: 5 }}
+                  />
+                </Pressable>
+                <Text style={isShowDetails ? styles.explanationText : ''}>
+                  {isShowDetails ? 'Write here everything you want to visit, including activities or specific places' : ''}
+                </Text>
+                <KeyboardAvoidingView style={{ flex: 1, minWidth: 250 }} behavior="position">
+                  <Textarea style={{ backgroundColor: 'white', borderRadius: 15 }}>
+                    <TextareaInput
+                      placeholder="Example: The oldest breweries in the city"
+                      value={props.destinationActivities.inputActivity}
+                      onChangeText={(text) => setInputActivity(text)}
+                    />
+                  </Textarea>
+                </KeyboardAvoidingView>
+              </View>
+
+              {paramsLocation ?
+                <View style={styles.viewCard}>
+                  <View style={{alignItems: 'center', justifyContent: 'center' }} >
+                    <Text style={[styles.text, styles.textBold]}>Choose Your Experience</Text>
                   </View>
+                  <Center>
+                    <RadioGroup style={{marginTop: 10, marginBottom: 10}} value={props.isLocalPlaces} onChange={props.setLocalPlaces}>
+                      <VStack space="sm">
+                        <Radio value="true">
+                          <RadioIndicator mr="$2">
+                            <RadioIcon as={CircleIcon} />
+                          </RadioIndicator>
+                          <RadioLabel>Local Favorites</RadioLabel>
+                        </Radio>
+                        <Radio value="false">
+                          <RadioIndicator mr="$2">
+                            <RadioIcon as={CircleIcon} />
+                          </RadioIndicator>
+                          <RadioLabel>Popular Tourist Spots</RadioLabel>
+                        </Radio>
+                      </VStack>
+                    </RadioGroup>
+                  </Center>
+                </View> : null
+              }
 
-                  {paramsLocation ?
-                    <View style={styles.viewCard}>
-                      <View style={{alignItems: 'center', justifyContent: 'center' }} >
-                        <Text style={[styles.text, styles.textBold]}>Choose Your Experience</Text>
-                      </View>
-                      <Center>
-                        <RadioGroup style={{marginTop: 10, marginBottom: 10}} value={props.isLocalPlaces} onChange={props.setLocalPlaces}>
-                          <VStack space="sm">
-                            <Radio value="true">
-                              <RadioIndicator mr="$2">
-                                <RadioIcon as={CircleIcon} />
-                              </RadioIndicator>
-                              <RadioLabel>Local Favorites</RadioLabel>
-                            </Radio>
-                            <Radio value="false">
-                              <RadioIndicator mr="$2">
-                                <RadioIcon as={CircleIcon} />
-                              </RadioIndicator>
-                              <RadioLabel>Popular Tourist Spots</RadioLabel>
-                            </Radio>
-                          </VStack>
-                        </RadioGroup>
-                      </Center>
-                    </View> : null
-                  }
+            </ScrollView>
 
-                </ScrollView>
+            <CustomButton name={'Close'} func={props.closeCheckbox}/>
 
-                <CustomButton name={'Close'} func={props.closeCheckbox}/>
-
-              </View>
-              :
-              <View style={styles.spinnerContainer}>
-                <Spinner color="$indigo600" />
-              </View>
-            }
-          </Modal>
-        </View>
-      : <View></View>
-      }
+          </View>
+          :
+          <View style={styles.spinnerContainer}>
+            <Spinner color="$indigo600" />
+          </View>
+        }
+      </Modal>
     </View>
   );
 }

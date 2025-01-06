@@ -62,13 +62,13 @@ const App = () => {
       <NavigationContainer>
         <Stack.Navigator>
           <Stack.Screen
-            name="Chat"
-            component={customComponent(Chat)}
+            name="SetupTrip"
+            component={customComponent(SetupTrip)}
             options={{headerShown: false}}
           />
           <Stack.Screen
-            name="SetupTrip"
-            component={customComponent(SetupTrip)}
+            name="Chat"
+            component={customComponent(Chat)}
             options={{headerShown: false}}
           />
           <Stack.Screen

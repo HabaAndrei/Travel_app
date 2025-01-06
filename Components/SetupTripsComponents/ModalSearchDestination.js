@@ -9,7 +9,6 @@ import { FirebaseFirestore } from '../../firebase.js';
 const ModalSearchDestination = (props) => {
 
   const [isMessageNotFound, setMessageNotFound] = useState(false);
-
   const firebaseFirestore = new FirebaseFirestore();
 
   useEffect(() => {
@@ -33,14 +32,14 @@ const ModalSearchDestination = (props) => {
   }, [props.inputCountry]);
 
   useEffect(() => {
-    if (!props.dataDestination.country) return;
+    if (!props.destinationActivities.country) return;
     if (!props.inputCity.length) return;
     props.setModalVisible({ type: true, data: "city" });
 
     axios.post(`${address_function_fuzzy}`, {
       input: props.inputCity,
       value: "city",
-      country: props.dataDestination.country,
+      country: props.destinationActivities.country,
     })
     .then((data) => {
       openMessageNotFound(data.data);
@@ -63,16 +62,14 @@ const ModalSearchDestination = (props) => {
 
   function selectDestination(item) {
     if (item.type === "country") {
-      props.setDataDestination(() => ({ city: '', country: item.place }));
       props.setInputCountry('');
-      props.setCheckBoxActivities((prev) => ({ ...prev, country: item.place }));
+      props.destinationActivitiesDispatch({type: 'setCountry', payload: item.place})
     } else if (item.type === "city") {
-      props.setDataDestination((ob) => ({ ...ob, city: item.place }));
       props.setInputCity('');
-      props.setCheckBoxActivities((prev) => ({ ...prev, city: item.place }));
+      props.destinationActivitiesDispatch({type: 'setCity', payload: item.place})
     }
     props.setModalVisible({ type: false, data: '' });
-    props.setCheckbox([]);
+    props.destinationActivitiesDispatch({type: 'setCheckbox', payload: []})
   }
 
   function closeModal() {

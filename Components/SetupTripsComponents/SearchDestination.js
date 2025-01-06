@@ -14,9 +14,9 @@ const SearchDestination = (props) => {
   return (
     <View>
       <ModalSearchDestination
-        setCheckBoxActivities={props.setCheckBoxActivities} setCheckbox={props.setCheckbox}
+        destinationActivitiesDispatch={props.destinationActivitiesDispatch}
+        destinationActivities={props.destinationActivities}
         modalVisible={modalVisible} setModalVisible={setModalVisible}
-        dataDestination={props.dataDestination} setDataDestination={props.setDataDestination}
         inputCity={inputCity} setInputCity={setInputCity}
         inputCountry={inputCountry} setInputCountry={setInputCountry}
         suggestions={suggestions} setSuggestions={setSuggestions}
@@ -24,9 +24,9 @@ const SearchDestination = (props) => {
       />
 
       <TextInput
-        placeholder={!props.dataDestination.country ?
+        placeholder={!props.destinationActivities.country ?
           "Country" :
-          `Country - ${props.dataDestination.country}`
+          `Country - ${props.destinationActivities.country}`
         }
         value={inputCountry}
         onChangeText={(text) => setInputCountry(text)}
@@ -42,13 +42,13 @@ const SearchDestination = (props) => {
       </View>
 
       <TextInput
-        placeholder={!props.dataDestination.city ?
+        placeholder={!props.destinationActivities.city ?
           "City" :
-          `City - ${props.dataDestination.city}`
+          `City - ${props.destinationActivities.city}`
         }
         value={inputCity}
         onChangeText={(text) => {
-          if(!props.dataDestination.country)return;
+          if(!props.destinationActivities.country)return;
           setInputCity(text)}
         }
         style={styles.textInput}
