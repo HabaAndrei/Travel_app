@@ -149,7 +149,6 @@ const Chat = (props) => {
                 🚀 I’ll answer any questions about the app's features{"\n"}
                 📅 Provide details about your travel itinerary{"\n"}
                 💬 And much more!{"\n\n"}
-                👉 **Try me!** 👈
               </Text>
             </View>
           }

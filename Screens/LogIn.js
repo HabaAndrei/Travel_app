@@ -242,7 +242,7 @@ const LogIn = (props) => {
 
           {isLoadingSendEmail ?
             <View style={styles.spinnerContainer}>
-              <Spinner color="$indigo600" />
+              <Spinner size="large" color="white" />
             </View> : null
           }
 

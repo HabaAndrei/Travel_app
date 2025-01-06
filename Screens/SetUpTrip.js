@@ -27,7 +27,7 @@ const SetupTrip = (props) => {
         return {...state, isOpenModalActivities: false }
       }
       case 'setCountry': {
-        return {...state, country: payload}
+        return {...state, country: payload, city: ''}
       }
       case 'setCity': {
         return {...state, city: payload}

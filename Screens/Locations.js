@@ -39,13 +39,13 @@ const Locations = (props) => {
     let {city, country, checkbox, input, type, isLocalPlaces, scaleVisit} = props?.route?.params;
 
     if(type === "getAllDataAboutLocations"){
-      createLocationsAi(city, country, input, checkbox, isLocalPlaces, scaleVisit)
+      createLocationsAi({city, country, input, checkbox, isLocalPlaces, scaleVisit})
       return;
     }
 
   }, [isFocused]);
 
-  async function createLocationsAi(city, country, input, checkbox, isLocalPlaces, scaleVisit){
+  async function createLocationsAi({city, country, input, checkbox, isLocalPlaces, scaleVisit}){
     setLocations([]);
     setRecomandation(false)
     axios.post(`${address_function_locations}`,
@@ -195,7 +195,7 @@ const Locations = (props) => {
           {!locations?.length ? (
           <View style={{ marginTop: screenHeight / 3, }}>
             <Center  >
-              <Spinner color="$indigo600" />
+              <Spinner size="large" color="$indigo600" />
             </Center>
           </View>
           ) : (

@@ -151,7 +151,7 @@ const CheckboxActivities = (props) => {
           </View>
           :
           <View style={styles.spinnerContainer}>
-            <Spinner color="$indigo600" />
+            <Spinner size="large" color="$indigo600" />
           </View>
         }
       </Modal>
