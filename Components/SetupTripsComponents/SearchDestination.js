@@ -1,25 +1,52 @@
-import { View ,TextInput, Image, StyleSheet, Dimensions, Text } from 'react-native';
-import {useState, useEffect} from 'react'
+import { View ,TextInput, Image, StyleSheet, Dimensions } from 'react-native';
+import { useReducer } from 'react'
 import ModalSearchDestination from './ModalSearchDestination.js';
 import { imagePath } from '../../diverse.js';
 
 const SearchDestination = (props) => {
 
-  const [inputCity, setInputCity] = useState('');
-  const [inputCountry, setInputCountry] = useState('');
-  const [suggestions, setSuggestions] = useState([]);
-  const [modalVisible, setModalVisible] = useState({type: false, data:''});
   const { width } = Dimensions.get('window');
+  const [searchModal, searchModalDispatch] = useReducer(searchModalReducer, {
+    inputCity: '',
+    inputCountry: '',
+    suggestions: [],
+    isModalVisible: false,
+    modalData: '',
+  });
+  function searchModalReducer(state, action){
+    const { type, payload } = action;
+    switch (type) {
+      case 'setInputCity': {
+        return {...state, inputCity: payload }
+      }
+      case 'setInputCountry': {
+        return {...state, inputCountry: payload }
+      }
+      case 'setSuggestions': {
+        return {...state, suggestions: payload }
+      }
+      case 'openModalCity': {
+        return {...state, isModalVisible: true, modalData: 'city' }
+      }
+      case 'openModalCountry': {
+        return {...state, isModalVisible: true, modalData: 'country' }
+      }
+      case 'closeModal': {
+        return {...state, isModalVisible: false, modalData: '' }
+      }
+      case 'closeModalFull': {
+        return {...state, isModalVisible: false, inputCity: '', inputCountry: '' }
+      }
+    }
+  }
 
   return (
     <View>
       <ModalSearchDestination
-        destinationActivitiesDispatch={props.destinationActivitiesDispatch}
+        searchModal={searchModal}
+        searchModalDispatch={searchModalDispatch}
         destinationActivities={props.destinationActivities}
-        modalVisible={modalVisible} setModalVisible={setModalVisible}
-        inputCity={inputCity} setInputCity={setInputCity}
-        inputCountry={inputCountry} setInputCountry={setInputCountry}
-        suggestions={suggestions} setSuggestions={setSuggestions}
+        destinationActivitiesDispatch={props.destinationActivitiesDispatch}
         addNotification={props.addNotification}
       />
 
@@ -28,8 +55,8 @@ const SearchDestination = (props) => {
           "Country" :
           `Country - ${props.destinationActivities.country}`
         }
-        value={inputCountry}
-        onChangeText={(text) => setInputCountry(text)}
+        value={searchModal.inputCountry}
+        onChangeText={(text) => searchModalDispatch({type: 'setInputCountry', payload: text})}
         style={styles.textInput}
         placeholderTextColor="gray"
       />
@@ -46,10 +73,11 @@ const SearchDestination = (props) => {
           "City" :
           `City - ${props.destinationActivities.city}`
         }
-        value={inputCity}
+        value={searchModal.inputCity}
         onChangeText={(text) => {
-          if(!props.destinationActivities.country)return;
-          setInputCity(text)}
+          if (!props.destinationActivities.country) return;
+          searchModalDispatch({type: 'setInputCity', payload: text})
+          }
         }
         style={styles.textInput}
         placeholderTextColor="gray"

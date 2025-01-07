@@ -12,45 +12,45 @@ const ModalSearchDestination = (props) => {
   const firebaseFirestore = new FirebaseFirestore();
 
   useEffect(() => {
-    if (!props.inputCountry.length) return;
-    props.setModalVisible({ type: true, data: 'country' });
+    if (!props.searchModal.inputCountry.length) return;
+    props.searchModalDispatch({type: 'openModalCountry'})
 
     axios.post(`${address_function_fuzzy}`, {
-      input: props.inputCountry,
+      input: props.searchModal.inputCountry,
       value: "country",
-      country: props.inputCountry,
+      country: props.searchModal.inputCountry,
     })
     .then((data) => {
       openMessageNotFound(data.data);
       const list = data.data?.map((country) => ({ place: country, type: "country" }));
-      props.setSuggestions(list);
+      props.searchModalDispatch({type: 'setSuggestions', payload: list})
     })
     .catch((err) => {
       firebaseFirestore.storeErr(err.message);
       props.addNotification("warning", "System error occurred. Please try again later.");
     });
-  }, [props.inputCountry]);
+  }, [props.searchModal.inputCountry]);
 
   useEffect(() => {
     if (!props.destinationActivities.country) return;
-    if (!props.inputCity.length) return;
-    props.setModalVisible({ type: true, data: "city" });
+    if (!props.searchModal.inputCity.length) return;
+    props.searchModalDispatch({type: 'openModalCity'})
 
     axios.post(`${address_function_fuzzy}`, {
-      input: props.inputCity,
+      input: props.searchModal.inputCity,
       value: "city",
       country: props.destinationActivities.country,
     })
     .then((data) => {
       openMessageNotFound(data.data);
       const list = data.data?.map((country) => ({ place: country, type: "city" }));
-      props.setSuggestions(list);
+      props.searchModalDispatch({type: 'setSuggestions', payload: list})
     })
     .catch((err) => {
       firebaseFirestore.storeErr(err.message);
       props.addNotification("warning", "System error occurred. Please try again later.");
     });
-  }, [props.inputCity]);
+  }, [props.searchModal.inputCity]);
 
   function openMessageNotFound(data) {
     if (!data?.length) {
@@ -62,20 +62,18 @@ const ModalSearchDestination = (props) => {
 
   function selectDestination(item) {
     if (item.type === "country") {
-      props.setInputCountry('');
+      props.searchModalDispatch({type: 'setInputCountry', payload: ''});
       props.destinationActivitiesDispatch({type: 'setCountry', payload: item.place})
     } else if (item.type === "city") {
-      props.setInputCity('');
+      props.searchModalDispatch({type: 'setInputCity', payload: ''});
       props.destinationActivitiesDispatch({type: 'setCity', payload: item.place})
     }
-    props.setModalVisible({ type: false, data: '' });
+    props.searchModalDispatch({type: 'closeModal'});
     props.destinationActivitiesDispatch({type: 'setCheckbox', payload: []})
   }
 
   function closeModal() {
-    props.setModalVisible({ type: false, data: '' });
-    props.setInputCity('');
-    props.setInputCountry('');
+    props.searchModalDispatch({type: 'closeModalFull'});
   }
 
   return (
@@ -84,33 +82,33 @@ const ModalSearchDestination = (props) => {
         <Modal
           animationType="slide"
           transparent={true}
-          visible={props.modalVisible.type}
-          onRequestClose={() => props.setModalVisible({ type: false, data: '' })}>
+          visible={props.searchModal.isModalVisible}
+          onRequestClose={() => props.searchModalDispatch({type: 'closeModal'})}>
           <View style={styles.centeredView}>
             <View style={styles.modalView}>
-              {props.modalVisible.data === 'country' && (
+              {props.searchModal.modalData === 'country' && (
                 <TextInput
                   placeholder="Country"
-                  value={props.inputCountry}
-                  onChangeText={(text) => props.setInputCountry(text)}
+                  value={props.searchModal.inputCountry}
+                  onChangeText={(text) => props.searchModalDispatch({type: 'setInputCountry', payload: text})}
                   style={styles.textInput}
                   placeholderTextColor="gray"
                 />
               )}
 
-              {props.modalVisible.data === 'city' && (
+              {props.searchModal.modalData === 'city' && (
                 <TextInput
                   placeholder="City"
-                  value={props.inputCity}
-                  onChangeText={(text) => props.setInputCity(text)}
+                  value={props.searchModal.inputCity}
+                  onChangeText={(text) => props.searchModalDispatch({type: 'setInputCity', payload: text})}
                   style={styles.textInput}
                   placeholderTextColor="gray"
                 />
               )}
 
-              {props.suggestions.length ? (
+              {props.searchModal.suggestions.length ? (
                 <FlatList
-                  data={props.suggestions}
+                  data={props.searchModal.suggestions}
                   keyExtractor={(item, index) => index.toString()}
                   renderItem={({ item }) => (
                     <Pressable style={styles.suggestion} onPress={() => selectDestination(item)}>
@@ -119,7 +117,7 @@ const ModalSearchDestination = (props) => {
                   )}
                   style={styles.suggestionsList}
                 />
-              ) : isMessageNotFound && !props.suggestions.length ? (
+              ) : isMessageNotFound && !props.searchModal.suggestions.length ? (
                 <View style={styles.spinnerContainer}>
                   <Text>This location was not found</Text>
                 </View>
