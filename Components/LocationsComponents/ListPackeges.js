@@ -1,7 +1,6 @@
 import { StyleSheet, Text, View, Pressable } from 'react-native'
 
 const ListPackeges = (props) => {
-
   return (
     <View>
       {props?.dataTimeLocation?.packages ? (
@@ -10,7 +9,7 @@ const ListPackeges = (props) => {
             const isSelected = ob.selected;
             return (
               <Pressable
-                onPress={()=>props.selectPackage(props.indexLocation, index)}
+                onPress={() => props.selectPackage(props.indexLocation, index)}
                 key={index}
                 style={[
                   styles.navButton,
@@ -23,7 +22,7 @@ const ListPackeges = (props) => {
                     isSelected ? styles.selectedText : styles.unselectedText,
                   ]}
                 >
-                  {ob.name}
+                  {ob?.package_description}
                 </Text>
                 <Text
                   style={[
@@ -46,23 +45,21 @@ export default ListPackeges;
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
+    flexDirection: 'column',
     padding: 10,
   },
   navButton: {
-    alignItems: 'center',
+    alignItems: 'flex-start',
     justifyContent: 'center',
-    paddingVertical: 10,
+    paddingVertical: 20,
     paddingHorizontal: 15,
     borderRadius: 10,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
     shadowRadius: 3,
-    height: 140,
-    width: '45%',
+    height: 'auto',
+    width: '100%',
     marginVertical: 10,
   },
   selectedButton: {
@@ -74,7 +71,7 @@ const styles = StyleSheet.create({
     borderColor: '#0B3D91',
   },
   nameText: {
-    fontSize: 15,
+    fontSize: 16,
     fontWeight: 'bold',
     marginBottom: 5,
   },

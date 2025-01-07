@@ -33,9 +33,9 @@ const App = () => {
     onAuthStateChanged(auth, async (_user) => {
       if (_user) {
         const uid = _user.uid;
-        const rezEmailVerified = await firebaseFirestore.verifyEmailVerifiedDB(uid);
-        if (rezEmailVerified.isResolved) {
-          setUser({..._user, email_verified: true});
+        const userDetails = await firebaseFirestore.getDetailsUser(uid);
+        if (userDetails?.data?.email_verified) {
+          setUser({..._user, userDetails: userDetails.data});
         } else {
           setUser(_user);
         }
@@ -62,6 +62,11 @@ const App = () => {
       <NavigationContainer>
         <Stack.Navigator>
           <Stack.Screen
+            name="UserSettings"
+            component={customComponent(UserSettings)}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
             name="SetupTrip"
             component={customComponent(SetupTrip)}
             options={{headerShown: false}}
@@ -79,11 +84,6 @@ const App = () => {
           <Stack.Screen
             name="Locations"
             component={customComponent(Locations)}
-            options={{headerShown: false}}
-          />
-          <Stack.Screen
-            name="UserSettings"
-            component={customComponent(UserSettings)}
             options={{headerShown: false}}
           />
           <Stack.Screen

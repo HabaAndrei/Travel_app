@@ -163,15 +163,12 @@ class FirebaseFirestore{
     })
   }
 
-  async verifyEmailVerifiedDB(uid){
+  async getDetailsUser(uid){
     return this._storeErr(async ()=>{
       const docRef = doc(db, "users", uid);
       const dataFromDB = await getDoc(docRef);
       const data = dataFromDB.data();
-      if(data.email_verified != true){
-        return {isResolved: false};
-      }
-      return {isResolved: true};
+      return {data};
     })
   }
 

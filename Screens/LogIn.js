@@ -217,7 +217,7 @@ const LogIn = (props) => {
         return;
     }
     props.setUser((prev)=>{
-        return {...prev, email_verified: true};
+        return {...prev, userDetails: {email_verified: true}};
     });
 
     props.navigation.navigate('SetupTrip');
