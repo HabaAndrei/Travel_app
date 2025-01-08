@@ -18,8 +18,6 @@ const Layout = ({ children, navigation, route, user, setUser}) => {
   const [notification, setNotification] = useState([]);
   const [deletePromise, setDeletePromise] = useState(null);
 
-
-
   function addNotification(type, mes){
     setNotification((prev)=>{
       return [...prev, {id: uuid.v4().slice(0, 5), type, mes}];

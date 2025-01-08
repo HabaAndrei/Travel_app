@@ -131,7 +131,6 @@ class FirebaseFirestore{
       });
       return {isResolved: true};
     })
-
   }
 
   async storeCodeAndEmail(code, email){
@@ -313,6 +312,16 @@ class FirebaseFirestore{
     })
   }
 
+  async updateUserInformation(field, value){
+    const {uid} = auth.currentUser;
+    return this._storeErr(async () => {
+      const ref = doc(db, 'users', uid);
+      const rez = await updateDoc(ref, {
+        [`${field}`]: value,
+      });
+      return {isResolved: true};
+    })
+  }
 
 }
 

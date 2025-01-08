@@ -5,6 +5,7 @@ import { FirebaseAuth } from '../firebase.js';
 import {deleteAllFromAsyncStorage} from '../diverse.js';
 import ModalReAuth from '../Components/Modals/ModalReAuth.js';
 import CardFeedback from '../Components/UserSettingsComponents/CardFeedback.js';
+import DetailsUserView from '../Components/UserSettingsComponents/DetailsUserView.js';
 
 const UserSettings = (props) => {
 
@@ -41,6 +42,8 @@ const UserSettings = (props) => {
     }
   }
 
+  console.log(props.user);
+
   return (
     <SafeAreaView style={{flex: 1}} >
       <ScrollView style={{marginTop: 20}} >
@@ -52,6 +55,7 @@ const UserSettings = (props) => {
           </HStack>
         </Center>
 
+        <DetailsUserView user={props.user} addNotification={props.addNotification} />
 
         <ModalReAuth  isModalVisibleReAuth={isModalVisibleReAuth} setModalVisibleReAuth={setModalVisibleReAuth} />
 
