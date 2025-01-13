@@ -41,18 +41,12 @@ const DetailsUserView = (props) => {
     const { type, payload } = action;
     switch (type) {
       case 'setFirstName': {
-        if (payload.trim() != props?.user?.userDetails?.firstName) {
-          return { ...state, firstName: payload, isModifiedFirstName: true };
-        }else{
-          return { ...state, firstName: payload, isModifiedFirstName: false };
-        }
+        const resultCondition = payload.trim() != props?.user?.userDetails?.firstName;
+        return { ...state, firstName: payload, isModifiedFirstName: resultCondition };
       }
       case 'setSecondName': {
-        if (payload.trim() != props?.user?.userDetails?.secondName) {
-          return { ...state, secondName: payload, isModifiedSecondName: true };
-        }else{
-          return { ...state, secondName: payload, isModifiedSecondName: false };
-        }
+        const resultCondition = payload.trim() != props?.user?.userDetails?.secondName;
+        return { ...state, secondName: payload, isModifiedSecondName: resultCondition };
       }
       case 'setModifiedFirstName': {
         return { ...state, isModifiedFirstName: payload };
@@ -60,41 +54,48 @@ const DetailsUserView = (props) => {
       case 'setModifiedSecondName': {
         return { ...state, isModifiedSecondName: payload };
       }
+      case 'cancelChangeFirstName': {
+        return {...state, isModifiedFirstName: false, firstName: props.user.userDetails.firstName}
+      }
+      case 'cancelChangeSecondName': {
+        return {...state, isModifiedSecondName: false, secondName: props.user.userDetails.secondName}
+      }
       default:
         return state;
     }
   }
 
   function cancelChangeName(type){
-    if (type === 'firstName') {
-      detailsUserDispatch({ type: 'setFirstName', payload: props.user.userDetails.firstName })
-      detailsUserDispatch({type: 'setModifiedFirstName', payload: false});
-    } else if (type === 'secondName') {
-      detailsUserDispatch({ type: 'setSecondName', payload: props.user.userDetails.secondName })
-      detailsUserDispatch({type: 'setModifiedSecondName', payload: false});
-    }
+    const keysWithComands = {
+      'firstName': 'cancelChangeFirstName',
+      'secondName': 'cancelChangeSecondName',
+    };
+    detailsUserDispatch({type: keysWithComands[type] })
   }
 
   async function saveChangeName(type){
-    if (type === 'firstName') {
-      detailsUserDispatch({type: 'setModifiedFirstName', payload: false});
-      const data = await firebaseFirestore.updateUserInformation('firstName', detailsUser.firstName)
-      if (data.isResolved){
-        const firstName = detailsUser.firstName.trim();
-        props.user.userDetails.firstName = firstName;
-        detailsUserDispatch({ type: 'setFirstName', payload: firstName})
-      }
-    } else if (type === 'secondName') {
-      detailsUserDispatch({type: 'setModifiedSecondName', payload: false});
-      const data = await firebaseFirestore.updateUserInformation('secondName', detailsUser.secondName)
-      if (data.isResolved){
-        const secondName = detailsUser.secondName.trim();
-        props.user.userDetails.secondName = secondName;
-        detailsUserDispatch({ type: 'setSecondName', payload: secondName})
+    const typeAction = {
+      firstName: {
+        firstDispatchName: 'setModifiedFirstName',
+        userDetails: 'firstName',
+        secondDispatchName: 'setFirstName',
+      },
+      secondName: {
+        firstDispatchName: 'setModifiedSecondName',
+        userDetails: 'secondName',
+        secondDispatchName: 'setSecondName',
       }
     }
-  }
+    const {firstDispatchName, userDetails, secondDispatchName} = typeAction[type];
 
+    detailsUserDispatch({type: firstDispatchName, payload: false});
+    const value = detailsUser[userDetails].trim();
+    const data = await firebaseFirestore.updateUserInformation(userDetails, value)
+    if (data.isResolved){
+      props.user.userDetails[userDetails] = value;
+      detailsUserDispatch({ type: secondDispatchName, payload: value})
+    }
+  }
 
   return (
     <View style={styles.container}>

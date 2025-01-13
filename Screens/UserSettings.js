@@ -42,8 +42,6 @@ const UserSettings = (props) => {
     }
   }
 
-  console.log(props.user);
-
   return (
     <SafeAreaView style={{flex: 1}} >
       <ScrollView style={{marginTop: 20}} >
