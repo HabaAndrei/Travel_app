@@ -34,11 +34,11 @@ const Program = (props) => {
 
     if (props?.route?.params?.type === "keepProgram") return;
 
-    const {from, to, city, country} = props?.route?.params?.locationParam;
+    const {from, to, city, country, urlImageCity} = props?.route?.params?.locationParam;
     const {locations, type} = props?.route?.params;
 
     if(type === "createProgram"){
-      createProgramAi(from, to, city, country, locations);
+      createProgramAi(from, to, city, country, locations, urlImageCity);
     }
   }, [isFocused]);
 
@@ -59,12 +59,12 @@ const Program = (props) => {
   async function regenerateProgram(){
     const rez = await getDataFromAsyncStorage("travelParameter");
     if(!rez.isResolved)return
-    let {from, to, city, country, locations} = rez.data;
+    let {from, to, city, country, locations, urlImageCity} = rez.data;
     setProgram([]);
-    createProgramAi(from, to, city, country, locations)
+    createProgramAi(from, to, city, country, locations, urlImageCity)
   }
 
-  async function createProgramAi(from, to, city, country, locations){
+  async function createProgramAi(from, to, city, country, locations, urlImageCity){
     setRecomandation(false);
     setProgram([]);
     axios.post(`${address_function_program}`,
@@ -74,7 +74,7 @@ const Program = (props) => {
         const days = data.data.data;
         setProgram([...days]);
         multiSetFromAsyncStorage([['travelProgram', [...days]],
-          ["travelParameter", {from, to, city, country, locations}]]);
+          ["travelParameter", {from, to, city, country, locations, urlImageCity}]]);
       }else{
         console.log("eroare la functia getProgram ", data.data);
         props.addNotification("warning", "Unfortunately, we could not generate your program.")
@@ -138,12 +138,12 @@ const Program = (props) => {
 
     const travelProgram =   JSON.parse(rez.data[0][1]);
     const travelParameter = JSON.parse(rez.data[1][1]);
-    const {city, country } = travelParameter;
+    const {city, country, urlImageCity } = travelParameter;
     const from = travelProgram[0].date;
     const to = travelProgram[travelProgram.length - 1].date;
     const programDaysString = JSON.stringify(travelProgram);
     const uid = props.user.uid;
-    const rezAddInDb = await firebaseFirestore.addProgramIntoDb(city, country, from , to, programDaysString, uid)
+    const rezAddInDb = await firebaseFirestore.addProgramIntoDb({city, country, from , to, programDaysString, uid, urlImageCity})
     if(!rezAddInDb.isResolved){
       props.addNotification("error", "Unfortunately we could not save the program for you")
       console.log(rezAddInDb.err);

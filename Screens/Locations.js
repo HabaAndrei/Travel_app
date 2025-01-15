@@ -52,13 +52,14 @@ const Locations = (props) => {
       {city, country, input, checkbox, isLocalPlaces, scaleVisit}
     ).then((data)=>{
       if(data.data.isResolved){
+        const urlImageCity = data?.data?.urlImageCity;
         const arrayWithLocations = data.data.data;
         const arraySelected = arrayWithLocations.map((ob)=>{
           return {...ob, selected: false}
         });
         setLocations(arraySelected);
         multiSetFromAsyncStorage([['arrayLocationsToTravel', [...arraySelected]],
-          ["locationsParameter", {city, country, input, checkbox, scaleVisit}]]);
+          ["locationsParameter", {city, country, input, checkbox, scaleVisit, urlImageCity}]]);
       }else{
         console.log("eroare la functia createLocationsAi ", data);
       }
