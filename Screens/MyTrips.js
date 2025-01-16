@@ -2,10 +2,11 @@ import { StyleSheet, ScrollView, SafeAreaView, View } from 'react-native'
 import { useState, useEffect } from 'react'
 import { useIsFocused } from '@react-navigation/native';
 import { FirebaseFirestore } from '../firebase.js';
-import { Text, ArrowRightIcon } from '@gluestack-ui/themed';
+import { Text, ArrowRightIcon, HStack, Heading, Center } from '@gluestack-ui/themed';
 import CountdownTrips from '../Components/MyTripsComponents/CountdownTrips.js';
 import CustomButton from '../CustomElements/CustomButton.js';
 import CardPresentationTrip from '../Components/CardPresentationTrip.js';
+import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 
 const MyTrips = (props) => {
   const isFocused = useIsFocused();
@@ -67,6 +68,14 @@ const MyTrips = (props) => {
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <ScrollView style={{ flex: 1 }}>
+
+        <Center>
+          <HStack alignItems="center">
+            <Heading>My tripts</Heading>
+            <FontAwesome6 name="earth-americas" style={{margin: 4}} size={15} color="black" />
+          </HStack>
+        </Center>
+
         {plans.length ? <CountdownTrips plans={plans} /> :
           <View style={styles.titleContainer}>
             <Text style={styles.appName}>Travel Bot</Text>
@@ -82,6 +91,7 @@ const MyTrips = (props) => {
           <CardPresentationTrip
             key={index}
             index={index}
+            image={plan?.urlImageCity}
             textDate={`From: ${formatTime(plan.from)} | To: ${formatTime(plan.to)}`}
             deleteFunction={deleteTrip}
             deleteFunctionParameters={[index]}

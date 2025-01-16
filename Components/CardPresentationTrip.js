@@ -1,9 +1,21 @@
 import { StyleSheet, Pressable } from 'react-native'
 import React from 'react'
-import { ArrowRightIcon, Card, Heading, Link, LinkText, Text, HStack, TrashIcon,  Icon } from "@gluestack-ui/themed";
+import { ArrowRightIcon, Card, Image, Heading, Link, LinkText, Text, HStack, TrashIcon,  Icon } from "@gluestack-ui/themed";
 
 const CardPresentationTrip = (props) => (
-  <Card  p="$5" borderRadius="$lg" maxWidth={800} m="$3">
+  <Card borderRadius="$lg" maxWidth={800} m="$3">
+
+    {props?.image ?
+      <Image
+        mb="$6"
+        h={200}
+        width="$full"
+        borderRadius="$md"
+        source={{
+          uri: props.image,
+        }}
+      /> : null
+    }
 
     <HStack justifyContent="space-between" alignItems="center">
       <Text fontSize="$sm"  fontStyle="normal"  fontFamily="$heading"  fontWeight="$normal"  lineHeight="$sm"  mb="$2"  sx={{  color: "$textLight700" }} >
