@@ -1,14 +1,17 @@
-import { View, ScrollView, Dimensions  } from 'react-native'
+import { View, ScrollView, Dimensions, StyleSheet, TextInput } from 'react-native'
 import { HStack, Heading, Center, Text, Divider, Spinner, ArrowLeftIcon, CheckIcon, Icon } from '@gluestack-ui/themed';
 import { getDataFromAsyncStorage, addDataToAsyncStorage, formatDateFromMilliseconds} from '../../diverse';
 import { useState } from 'react';
 import CardDatePicker from './CardDatePicker.js';
 import LocationCard from './LocationCard.js';
 
+
 const ListLocations = (props) => {
 
   const [dateFrom, setDateFrom] = useState();
   const [dateTo, setDateTo] = useState();
+  const [hotelAddress, setHotelAddress] = useState('');
+
   const screenHeight = Dimensions.get('window').height;
 
   function pressOnLocations(index_){
@@ -88,7 +91,7 @@ const ListLocations = (props) => {
     // locationParam.to = formatDateFromMilliseconds(dateTo)
     locationParam.from = formatDateFromMilliseconds(1707602400000);
     locationParam.to = formatDateFromMilliseconds(1718053200000)
-    props.navigation.navigate('Program', {type: 'createProgram', locations: data, locationParam});
+    props.navigation.navigate('Program', {type: 'createProgram', locations: data, locationParam, hotelAddress});
 
     // fac si aici schimbarea in pod <<<<<<<<<<===========
     /////////////////////////////////////////////////////////////////
@@ -119,6 +122,20 @@ const ListLocations = (props) => {
       </View>
     ) : (
       <View>
+
+        <View style={styles.inputContainer}>
+          <Text style={styles.label}>Hotel Address</Text>
+            <View style={styles.inputWrapper}>
+              <TextInput
+                placeholder='Write here your hotel address'
+                value={hotelAddress}
+                onChangeText={(text) => setHotelAddress(text)}
+                style={styles.textInput}
+                placeholderTextColor="gray"
+              />
+          </View>
+        </View>
+
         <Center>
           <Heading size="md" fontFamily="$heading" mb="$4">
             Select the locations you would like to visit
@@ -155,6 +172,7 @@ const ListLocations = (props) => {
             </HStack>
           </HStack>
         </View>
+
       </View>
     )}
 
@@ -163,3 +181,30 @@ const ListLocations = (props) => {
 }
 
 export default ListLocations;
+
+
+const styles = StyleSheet.create({
+  inputContainer: {
+    margin: 15
+  },
+  label: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: 'black',
+    marginBottom: 5,
+  },
+  inputWrapper: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: 'gray',
+    borderRadius: 8,
+    backgroundColor: 'white',
+  },
+  textInput: {
+    flex: 1,
+    padding: 10,
+    fontSize: 16,
+    color: 'black',
+  },
+});

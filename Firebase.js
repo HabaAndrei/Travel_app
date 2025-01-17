@@ -98,9 +98,9 @@ class FirebaseFirestore{
   }
 
 
-  async addProgramIntoDb({city, country, from , to, programDaysString, uid, urlImageCity}){
+  async addProgramIntoDb({city, country, from , to, programDaysString, uid, urlImageCity, hotelAddress}){
     return this._storeErr(async ()=>{
-      await addDoc(collection(db, "programs"), {city, country, from , to, programDaysString, uid, urlImageCity});
+      await addDoc(collection(db, "programs"), {city, country, from , to, programDaysString, uid, urlImageCity, hotelAddress});
       return {isResolved: true};
     })
   }
