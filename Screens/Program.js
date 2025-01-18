@@ -75,7 +75,7 @@ const Program = (props) => {
     setRecomandation(false);
     setProgram([]);
     axios.post(`${address_function_program}`,
-      {from, to, city, country, locations}
+      {from, to, city, country, locations, hotelAddress}
     ).then((data)=>{
       if(data.data.isResolved){
         const days = data.data.data;
