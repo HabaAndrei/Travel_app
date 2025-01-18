@@ -62,13 +62,18 @@ const App = () => {
       <NavigationContainer>
         <Stack.Navigator>
           <Stack.Screen
-            name="Locations"
-            component={customComponent(Locations)}
+            name="Program"
+            component={customComponent(Program)}
             options={{headerShown: false}}
           />
           <Stack.Screen
             name="MyTrips"
             component={customComponent(MyTrips)}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="Locations"
+            component={customComponent(Locations)}
             options={{headerShown: false}}
           />
           <Stack.Screen
@@ -89,11 +94,6 @@ const App = () => {
           <Stack.Screen
             name="Trip"
             component={customComponent(Trip)}
-            options={{headerShown: false}}
-          />
-          <Stack.Screen
-            name="Program"
-            component={customComponent(Program)}
             options={{headerShown: false}}
           />
           <Stack.Screen

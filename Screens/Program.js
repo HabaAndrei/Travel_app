@@ -9,6 +9,7 @@ import {FirebaseFirestore} from '../firebase.js';
 import axios from 'axios';
 import NavbarProgram from '../Components/NavbarProgram.js';
 import CardPresentationTrip from '../Components/CardPresentationTrip.js';
+import InputHotelAddress from '../Components/ProgramComponents/InputHotelAddress.js';
 
 const Program = (props) => {
 
@@ -19,6 +20,7 @@ const Program = (props) => {
   const isFocused = useIsFocused();
   const [program, setProgram] = useState([]);
   const [isRecomandation, setRecomandation] = useState(false);
+  const [hotelAddress, setHotelAddress] = useState('');
 
   const firebaseFirestore = new FirebaseFirestore();
   const screenHeight = Dimensions.get('window').height;
@@ -123,10 +125,6 @@ const Program = (props) => {
   }
 
   async function saveProgramInDb(){
-    if(!props.user){
-      props.addNotification("error", "You must be logged in as a user to be able to save.");
-      return;
-    }
     const rez = await multiGetFromAsyncStorage(["travelProgram", "travelParameter"]);
     if(!rez.isResolved){
       props.addNotification("error", "Unfortunately we could not save the program for you")
@@ -179,6 +177,11 @@ const Program = (props) => {
               </View> :
 
               <View>
+
+                <InputHotelAddress
+                  hotelAddress={hotelAddress}
+                  setHotelAddress={setHotelAddress}
+                />
 
                 <Center>
                   <Heading>

@@ -1,31 +1,7 @@
-import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { useReducer } from 'react';
-import AntDesign from '@expo/vector-icons/AntDesign';
 import { FirebaseFirestore } from '../../firebase.js';
-
-const InputWithAction = (props) => (
-  <View style={styles.inputContainer}>
-    <Text style={styles.label}>{props.title}</Text>
-    <View style={styles.inputWrapper}>
-      <TextInput
-        value={props.value}
-        onChangeText={(text) => props.onChange(text)}
-        style={styles.textInput}
-        placeholderTextColor="gray"
-      />
-      {props.isModified ?
-        <>
-        <TouchableOpacity onPress={()=>props.pressOnSave(props.param)} >
-          <AntDesign name="check" size={24} color="green" style={styles.icon} />
-        </TouchableOpacity>
-        <TouchableOpacity onPress={()=>props.pressOnCancel(props.param)} >
-          <AntDesign name="close" size={24} color="red" style={styles.icon} />
-        </TouchableOpacity>
-        </> : null
-      }
-    </View>
-  </View>
-)
+import InputChanges from '../InputChanges.js';
 
 const DetailsUserView = (props) => {
 
@@ -100,7 +76,7 @@ const DetailsUserView = (props) => {
   return (
     <View style={styles.container}>
 
-      <InputWithAction
+      <InputChanges
         title={'First name'}
         onChange={(text)=>detailsUserDispatch({ type: 'setFirstName', payload: text })}
         value={detailsUser.firstName}
@@ -110,7 +86,7 @@ const DetailsUserView = (props) => {
         isModified={detailsUser.isModifiedFirstName}
       />
 
-      <InputWithAction
+      <InputChanges
         title={'Second name'}
         onChange={(text)=>detailsUserDispatch({ type: 'setSecondName', payload: text })}
         value={detailsUser.secondName}
@@ -129,31 +105,5 @@ export default DetailsUserView;
 const styles = StyleSheet.create({
   container: {
     padding: 20,
-  },
-  inputContainer: {
-    marginBottom: 20,
-  },
-  label: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: 'black',
-    marginBottom: 5,
-  },
-  inputWrapper: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    borderWidth: 1,
-    borderColor: 'gray',
-    borderRadius: 8,
-    backgroundColor: 'white',
-  },
-  textInput: {
-    flex: 1,
-    padding: 10,
-    fontSize: 16,
-    color: 'black',
-  },
-  icon: {
-    paddingHorizontal: 10,
   },
 });
