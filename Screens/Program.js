@@ -45,12 +45,19 @@ const Program = (props) => {
   }, [isFocused]);
 
   async function getProgramFromAsyncStorage(){
-    const program = await getDataFromAsyncStorage("travelProgram");
-    if(!program.isResolved){
+    const rez = await multiGetFromAsyncStorage(["travelProgram", "travelParameter"]);
+    if(!rez.isResolved){
       props.addNotification("error", "Unfortunately, we got an system error")
+      return;
     }
-    if(program?.data?.length){
-      setProgram([...program.data])
+
+    const travelProgram =   JSON.parse(rez.data[0][1]);
+    const travelParameter = JSON.parse(rez.data[1][1]);
+    const address = travelParameter?.hotelAddress;
+
+    if(travelProgram?.length){
+      setProgram([...travelProgram]);
+      setHotelAddress(address);
     }else{
       setRecomandation(true);
     }
