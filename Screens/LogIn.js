@@ -225,8 +225,12 @@ const LogIn = (props) => {
     props.setUser((prev)=>{
         return {...prev, userDetails: {email_verified: true}};
     });
-
     props.navigation.navigate('SetupTrip');
+    // get details about user from database
+    const userDetails = await firebaseFirestore.getDetailsUser(props?.user?.uid);
+    props.setUser((prevUser)=>{
+      return {...prevUser, userDetails: userDetails.data};
+    })
   }
 
   function createAcc(){
