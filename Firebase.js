@@ -97,7 +97,6 @@ class FirebaseFirestore{
     })
   }
 
-
   async addProgramIntoDb({city, country, from , to, programDaysString, uid, urlImageCity, hotelAddress}){
     return this._storeErr(async ()=>{
       await addDoc(collection(db, "programs"), {city, country, from , to, programDaysString, uid, urlImageCity, hotelAddress});
@@ -148,16 +147,6 @@ class FirebaseFirestore{
       if(code != codeInput){
         return {isResolved: false, mes: 'The code does not correspond to the code sent by e-mail last time'}
       }
-      return {isResolved: true};
-    })
-  }
-
-  async updateEmailVerificationDB(uid){
-    return this._storeErr(async ()=>{
-      const ref = doc(db, "users", uid);
-      await updateDoc(ref, {
-        email_verified: true
-      });
       return {isResolved: true};
     })
   }
@@ -323,11 +312,11 @@ class FirebaseFirestore{
     })
   }
 
-  async updateSingleColumnDatabase({database, id, cloumn, value}){
+  async updateSingleColumnDatabase({database, id, column, value}){
     return this._storeErr(async () => {
       const ref = doc(db, database, id);
       const rez = await updateDoc(ref, {
-        [`${cloumn}`]: value,
+        [`${column}`]: value,
       });
       return {isResolved: true};
     })

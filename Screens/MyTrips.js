@@ -69,14 +69,17 @@ const MyTrips = (props) => {
     <SafeAreaView style={{ flex: 1 }}>
       <ScrollView style={{ flex: 1 }}>
 
-        <Center>
-          <HStack alignItems="center">
-            <Heading>My tripts</Heading>
-            <FontAwesome6 name="earth-americas" style={{margin: 4}} size={15} color="black" />
-          </HStack>
-        </Center>
-
-        {plans.length ? <CountdownTrips plans={plans} /> :
+        {plans.length ?
+          <>
+            <Center>
+              <HStack alignItems="center">
+                <Heading>My tripts</Heading>
+                <FontAwesome6 name="earth-americas" style={{margin: 4}} size={15} color="black" />
+              </HStack>
+            </Center>
+            <CountdownTrips plans={plans} />
+          </>
+        :
           <View style={styles.titleContainer}>
             <Text style={styles.appName}>Travel Bot</Text>
             <Text style={styles.slogan}>– Where Every Trip Finds Its Way 🌍</Text>

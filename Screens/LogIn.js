@@ -210,8 +210,14 @@ const LogIn = (props) => {
       props.addNotification('error', 'There was a problem verifying the code');
       return
     }
-
-    const rezUpdateDB = await firebaseFirestore.updateEmailVerificationDB(props.user.uid);
+    const rezUpdateDB = await firebaseFirestore.updateSingleColumnDatabase(
+      {
+        database: 'users',
+        id: props.user.uid,
+        column: 'email_verified',
+        value: true
+      }
+    );
     if(!rezUpdateDB.isResolved){
         props.addNotification('error', 'Please retry the operation and generate a new code');
         return;
