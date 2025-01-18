@@ -11,6 +11,7 @@ import DatePicker from '../Components/Pickers/DatePicker';
 import { formatDateFromMilliseconds } from '../diverse';
 import ModalAddNewDay from '../Components/TripsComponents/ModalAddNewDay.js';
 import openMap from 'react-native-open-maps';
+import InputHotelAddress from '../Components/TripsComponents/InputHotelAddress.js';
 
 const Trip = (props) => {
 
@@ -19,14 +20,16 @@ const Trip = (props) => {
   const [isModalVisible, setModalVisible] = useState({ type: false });
   const indexDay = useRef(0);
   const indexActivityRef = useRef(0);
+  const [hotelAddressTrip, setHotelAddressTrip] = useState('');
 
   const firebaseFirestore = new FirebaseFirestore();
 
   useEffect(() => {
-    if (!isFocused) return;
-    let { city, country, from, to, id, program } = props.route.params;
+    if (!isFocused || !props?.route?.params?.program) return;
+    let { city, country, from, to, id, program, hotelAddress } = props.route.params;
     if (typeof program === 'string') program = JSON.parse(program);
     setTripProgram(program);
+    setHotelAddressTrip(hotelAddress);
   }, [isFocused]);
 
   const copyInClipboard = (text) => {
@@ -172,19 +175,29 @@ const Trip = (props) => {
     }
   }
 
-return (
+  return (
   <SafeAreaView style={{ flex: 1 }}>
 
     <ScrollView>
-
-      <ModalAddNewDay saveNewLocation={saveNewLocation} addNotification={props.addNotification}
-        isModalVisible={isModalVisible} setModalVisible={setModalVisible} />
 
       <View style={styles.container}>
         <Text style={styles.title}>
           {props.route.params.country} - {props.route.params.city}
         </Text>
       </View>
+
+      <InputHotelAddress
+        hotelAddress={hotelAddressTrip}
+        setHotelAddress={setHotelAddressTrip}
+        idFromDatabase={props.route.params?.id}
+      />
+
+      <ModalAddNewDay
+        saveNewLocation={saveNewLocation}
+        addNotification={props.addNotification}
+        isModalVisible={isModalVisible}
+        setModalVisible={setModalVisible}
+      />
 
       <Accordion width="100%" maxWidth={900} shadowColor="transparent">
         {tripProgram.map((dayProgram, index) => {

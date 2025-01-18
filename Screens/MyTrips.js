@@ -62,7 +62,7 @@ const MyTrips = (props) => {
   }
 
   function goToTripScreen(plan){
-    props.navigation.navigate('Trip', { from: plan.from, to: plan.to, city: plan.city, country: plan.country, program: plan.programDaysString, id: plan.id })
+    props.navigation.navigate('Trip', { from: plan?.from, to: plan?.to, city: plan?.city, country: plan?.country, program: plan?.programDaysString, id: plan?.id, hotelAddress: plan?.hotelAddress })
   }
 
   return (

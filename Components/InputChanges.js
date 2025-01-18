@@ -11,6 +11,7 @@ const InputChanges = (props) => {
         onChangeText={(text) => props.onChange(text)}
         style={styles.textInput}
         placeholderTextColor="gray"
+        placeholder={props?.placeholder}
       />
       {props.isModified ?
         <>

@@ -84,6 +84,7 @@ const DetailsUserView = (props) => {
         pressOnCancel={(type)=>cancelChangeName(type)}
         param={'firstName'}
         isModified={detailsUser.isModifiedFirstName}
+        placeholder={'First name'}
       />
 
       <InputChanges
@@ -94,6 +95,7 @@ const DetailsUserView = (props) => {
         pressOnCancel={(type)=>cancelChangeName(type)}
         param={'secondName'}
         isModified={detailsUser.isModifiedSecondName}
+        placeholder={'Second name'}
       />
 
     </View>
@@ -104,6 +106,6 @@ export default DetailsUserView;
 
 const styles = StyleSheet.create({
   container: {
-    padding: 20,
+    padding: 14,
   },
 });

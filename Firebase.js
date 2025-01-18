@@ -323,6 +323,16 @@ class FirebaseFirestore{
     })
   }
 
+  async updateSingleColumnDatabase({database, id, cloumn, value}){
+    return this._storeErr(async () => {
+      const ref = doc(db, database, id);
+      const rez = await updateDoc(ref, {
+        [`${cloumn}`]: value,
+      });
+      return {isResolved: true};
+    })
+  }
+
 }
 
 

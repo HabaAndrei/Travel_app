@@ -41,6 +41,7 @@ const Program = (props) => {
 
     if(type === "createProgram"){
       createProgramAi({from, to, city, country, locations, urlImageCity, hotelAddress});
+      setHotelAddress(hotelAddress)
     }
   }, [isFocused]);
 

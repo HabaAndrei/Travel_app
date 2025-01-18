@@ -1,35 +1,47 @@
 import { View } from 'react-native'
 import { useEffect, useState } from 'react'
 import InputChanges from '../InputChanges.js';
-import { getDataFromAsyncStorage, addDataToAsyncStorage } from '../../diverse.js';
+import { FirebaseFirestore } from '../../firebase.js';
 
 const InputHotelAddress = (props) => {
 
   const [address, setAddress] = useState(props.hotelAddress || '');
   const [isModified, setIsModified] = useState(false);
 
+  const firebaseFirestore = new FirebaseFirestore();
+
   useEffect(()=>{
-    if ( address?.trim() != props.hotelAddress ) {
+    if ( address.trim() != props.hotelAddress ) {
       setIsModified(true);
     } else {
       setIsModified(false);
     }
   }, [address]);
 
+  useEffect(()=>{
+    if (props.hotelAddress === address) return;
+    setAddress(props.hotelAddress);
+  }, [props.hotelAddress])
+
+
   async function saveHotelAddress(){
-    const rez = await getDataFromAsyncStorage("travelParameter");
-    if(!rez.isResolved)return
-    console.log({...rez.data});
-    addDataToAsyncStorage("travelParameter", { ...rez.data, hotelAddress: address.trim()});
-    props.setHotelAddress(address.trim());
+    const trimAddress = address.trim();
+    props.setHotelAddress(trimAddress);
     setIsModified(false);
-    setAddress((prev)=>prev.trim());
+    setAddress(trimAddress);
+    const result = await firebaseFirestore.updateSingleColumnDatabase({
+      database: 'programs',
+      id: props.idFromDatabase,
+      cloumn: 'hotelAddress',
+      value: trimAddress,
+    });
   }
 
   function cancelSave(){
-    setIsModified(true);
+    setIsModified(false);
     setAddress(props.hotelAddress);
   }
+
 
   return (
     <View style={{paddingRight: 14, paddingLeft: 14, marginTop: 10}}>
