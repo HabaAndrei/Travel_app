@@ -87,6 +87,7 @@ const Locations = (props) => {
           locations={locations}
           setLocations={setLocations}
           navigation={props.navigation}
+          addNotification={props.addNotification}
         />
       }
 

@@ -19,7 +19,6 @@ const InputHotelAddress = (props) => {
   async function saveHotelAddress(){
     const rez = await getDataFromAsyncStorage("travelParameter");
     if(!rez.isResolved)return
-    console.log({...rez.data});
     addDataToAsyncStorage("travelParameter", { ...rez.data, hotelAddress: address.trim()});
     props.setHotelAddress(address.trim());
     setIsModified(false);
