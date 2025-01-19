@@ -15,11 +15,11 @@ const ModalSearchDestination = (props) => {
     if (!props.searchModal.inputCountry.length) return;
     props.searchModalDispatch({type: 'openModalCountry'})
 
-    axios.post(`${address_function_fuzzy}`, {
+    axios.get(`${address_function_fuzzy}`, {params: {
       input: props.searchModal.inputCountry,
       value: "country",
       country: props.searchModal.inputCountry,
-    })
+    }})
     .then((data) => {
       openMessageNotFound(data.data);
       const list = data.data?.map((country) => ({ place: country, type: "country" }));
@@ -36,11 +36,11 @@ const ModalSearchDestination = (props) => {
     if (!props.searchModal.inputCity.length) return;
     props.searchModalDispatch({type: 'openModalCity'})
 
-    axios.post(`${address_function_fuzzy}`, {
+    axios.get(`${address_function_fuzzy}`, {params: {
       input: props.searchModal.inputCity,
       value: "city",
       country: props.destinationActivities.country,
-    })
+    }})
     .then((data) => {
       openMessageNotFound(data.data);
       const list = data.data?.map((country) => ({ place: country, type: "city" }));
