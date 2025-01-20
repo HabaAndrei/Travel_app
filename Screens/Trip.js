@@ -5,7 +5,7 @@ import { Text, AccordionTitleText,  AccordionTrigger,  AccordionHeader, Accordio
 	AccordionItem, Accordion, AddIcon, Card, Heading, Icon, TrashIcon, HStack, VStack, LinkText, Link, Divider, Center, RemoveIcon
 } from '@gluestack-ui/themed';
 import ImageCarousel from '../Components/ImageCarousel.js';
-import {FirebaseFirestore} from '../firebase.js';
+import {FirebaseFirestore} from '../Firebase.js';
 import TimePicker from '../Components/Pickers/TimePicker.js';
 import DatePicker from '../Components/Pickers/DatePicker';
 import { formatDateFromMilliseconds } from '../diverse';
@@ -146,7 +146,12 @@ const Trip = (props) => {
     });
     const from = formatDateFromMilliseconds(new Date(program[0].date).getTime());
     const to = formatDateFromMilliseconds(new Date(program[program.length - 1].date).getTime());
-    const rez = await firebaseFirestore.updateProgram(idProgramIntoDb, from, to, program);
+    // update program in database
+    const rez = await firebaseFirestore.updateMultipleColumnsDatabase({
+      database: 'programs',
+      id: idProgramIntoDb,
+      columnsWithVales: { from, to,  programDaysString: JSON.stringify(program) }
+    });
     if (!rez.isResolved) {
       console.log('Error saving program:', rez.err);
     }

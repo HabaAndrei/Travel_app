@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View, Pressable, ScrollView, SafeAreaView } from 'react-native'
 import { useState } from 'react';
 import {VStack, HStack, Button, ButtonText, Divider, Heading, Center, Icon, SettingsIcon} from '@gluestack-ui/themed'
-import { FirebaseAuth } from '../firebase.js';
+import { FirebaseAuth } from '../Firebase.js';
 import {deleteAllFromAsyncStorage} from '../diverse.js';
 import ModalReAuth from '../Components/Modals/ModalReAuth.js';
 import CardFeedback from '../Components/UserSettingsComponents/CardFeedback.js';

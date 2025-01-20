@@ -14,6 +14,7 @@ const CardPresentationTrip = (props) => (
         source={{
           uri: props.image,
         }}
+        alt={props.image}
       /> : null
     }
 

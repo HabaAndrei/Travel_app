@@ -27,63 +27,6 @@ const auth = initializeAuth(app, {
   persistence: getReactNativePersistence(AsyncStorage),
 });
 
-
-class FirebaseAuth {
-
-  constructor(){
-    this.firebaseFirestore = new FirebaseFirestore();
-  }
-
-  async _createUserWithEmailAndPassword(email, password, firstName, secondName){
-    return this.firebaseFirestore._storeErr(async ()=>{
-      const rez = await createUserWithEmailAndPassword(auth, email, password);
-      const {uid} = rez.user;
-      const {createdAt} = rez.user.metadata;
-      await this.firebaseFirestore.addUserIntoDb(uid, createdAt, email, password, firstName, secondName);
-      return {isResolved: true, data: rez};
-    })
-  }
-
-  async _signInWithEmailAndPassword(email, password){
-    return this.firebaseFirestore._storeErr(async ()=>{
-      const rez = await signInWithEmailAndPassword(auth, email, password)
-      return {isResolved: true, data: rez};
-    })
-  }
-
-  async reAuth(password){
-    return this.firebaseFirestore._storeErr(async ()=>{
-      const user = auth.currentUser;
-      const {email} = user;
-      const credential = EmailAuthProvider.credential(email, password)
-      await reauthenticateWithCredential(user, credential);
-      return {isResolved: true};
-    })
-  }
-
-  async _deleteUser(){
-    return this.firebaseFirestore._storeErr(async ()=>{
-      const user = auth.currentUser;
-      const rez = await deleteUser(user);
-      return {isResolved: true};
-    })
-  }
-
-  async _signOut(){
-    return this.firebaseFirestore._storeErr(async ()=>{
-      const rez = await signOut(auth);
-      return {isResolved: true};
-    })
-  }
-
-  async _sendPasswordResetEmail(email){
-    return this.firebaseFirestore._storeErr(async ()=>{
-      const rez = await sendPasswordResetEmail(auth, email)
-      return {isResolved: true};
-    })
-  }
-};
-
 /////////////////////////////////
 
 class FirebaseFirestore{
@@ -116,19 +59,6 @@ class FirebaseFirestore{
         programs.push(data);
       });
       return {isResolved:true, data: programs};
-    })
-  }
-
-  async updateProgram(id, from, to, program){
-    return this._storeErr(async ()=>{
-      if(typeof(program) != 'string')program = JSON.stringify(program);
-      const ref = doc(db, 'programs', id);
-      const rez = await updateDoc(ref, {
-        from: from,
-        to: to,
-        programDaysString: program
-      });
-      return {isResolved: true};
     })
   }
 
@@ -301,18 +231,8 @@ class FirebaseFirestore{
     })
   }
 
-  async updateUserInformation(field, value){
-    const {uid} = auth.currentUser;
-    return this._storeErr(async () => {
-      const ref = doc(db, 'users', uid);
-      const rez = await updateDoc(ref, {
-        [`${field}`]: value,
-      });
-      return {isResolved: true};
-    })
-  }
-
   async updateSingleColumnDatabase({database, id, column, value}){
+    console.log({database, id, column, value});
     return this._storeErr(async () => {
       const ref = doc(db, database, id);
       const rez = await updateDoc(ref, {
@@ -322,7 +242,69 @@ class FirebaseFirestore{
     })
   }
 
+  async updateMultipleColumnsDatabase({database, id, columnsWithVales}){
+    return this._storeErr(async ()=>{
+      const ref = doc(db, database, id);
+      const rez = await updateDoc(ref, columnsWithVales);
+      return {isResolved: true};
+    })
+  }
+
 }
+
+/////////////////////////////////////
+
+class FirebaseAuth extends FirebaseFirestore {
+
+  async _createUserWithEmailAndPassword(email, password, firstName, secondName){
+    return this._storeErr(async ()=>{
+      const rez = await createUserWithEmailAndPassword(auth, email, password);
+      const {uid} = rez.user;
+      const {createdAt} = rez.user.metadata;
+      await this.addUserIntoDb(uid, createdAt, email, password, firstName, secondName);
+      return {isResolved: true, data: rez};
+    })
+  }
+
+  async _signInWithEmailAndPassword(email, password){
+    return this._storeErr(async ()=>{
+      const rez = await signInWithEmailAndPassword(auth, email, password)
+      return {isResolved: true, data: rez};
+    })
+  }
+
+  async reAuth(password){
+    return this._storeErr(async ()=>{
+      const user = auth.currentUser;
+      const {email} = user;
+      const credential = EmailAuthProvider.credential(email, password)
+      await reauthenticateWithCredential(user, credential);
+      return {isResolved: true};
+    })
+  }
+
+  async _deleteUser(){
+    return this._storeErr(async ()=>{
+      const user = auth.currentUser;
+      const rez = await deleteUser(user);
+      return {isResolved: true};
+    })
+  }
+
+  async _signOut(){
+    return this._storeErr(async ()=>{
+      const rez = await signOut(auth);
+      return {isResolved: true};
+    })
+  }
+
+  async _sendPasswordResetEmail(email){
+    return this._storeErr(async ()=>{
+      const rez = await sendPasswordResetEmail(auth, email)
+      return {isResolved: true};
+    })
+  }
+};
 
 
 ///////////////////////////////////////////////////////////////////////////////

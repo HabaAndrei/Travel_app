@@ -6,7 +6,7 @@ import axios from 'axios';
 import { Text } from '@gluestack-ui/themed';
 import NavbarProgram from '../Components/NavbarProgram';
 import ListLocations from '../Components/LocationsComponents/ListLocations.js';
-import { FirebaseFirestore } from '../firebase.js';
+import { FirebaseFirestore } from '../Firebase.js';
 
 const Locations = (props) => {
 

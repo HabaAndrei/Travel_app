@@ -11,7 +11,7 @@ import Locations from './Screens/Locations.js';
 import Trip from './Screens/Trip.js';
 import Chat from './Screens/Chat.js';
 import Layout from './Components/Layout.js';
-import {auth, FirebaseFirestore} from './firebase.js';
+import {auth, FirebaseFirestore} from './Firebase.js';
 import { GluestackUIProvider } from "@gluestack-ui/themed"
 import { config } from "@gluestack-ui/config"
 import {onAuthStateChanged} from 'firebase/auth';

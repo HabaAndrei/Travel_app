@@ -16,7 +16,6 @@ const DailyProgram = (props) => {
     setDailyProgram({ data, index });
   }, []);
 
-
   const copyInClipboard = (text) => {
     Clipboard.setString(text);
   };
@@ -55,7 +54,6 @@ const DailyProgram = (props) => {
     props.navigation.navigate('Program', {type: "keepProgram"});
   }
 
-
   function getTime(time){
     const timestamp = new Date(time).getTime();
     let hour = new Date(timestamp).getHours();
@@ -72,8 +70,6 @@ const DailyProgram = (props) => {
       return {...prev};
     })
   }
-
-
 
   return (
     <SafeAreaView style={{flex: 1}} >

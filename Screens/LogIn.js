@@ -1,7 +1,7 @@
 import { StyleSheet, View, Pressable, Text, TextInput, ScrollView, SafeAreaView, TouchableOpacity, ImageBackground } from 'react-native'
 import { useReducer, useState } from 'react'
 import { Icon, VStack, EyeIcon, EyeOffIcon, Spinner } from '@gluestack-ui/themed'
-import { FirebaseAuth, FirebaseFirestore } from '../firebase.js'
+import { FirebaseAuth, FirebaseFirestore } from '../Firebase.js'
 import {isValidEmail, isValidPassword, deleteAllFromAsyncStorage, address_function_send_code_verification} from "../diverse.js"
 import uuid from 'react-native-uuid';
 import axios from 'axios';
@@ -48,8 +48,6 @@ function ViewClientSignUp(props){
     </>
   )
 }
-
-
 
 const LogIn = (props) => {
 
@@ -202,8 +200,8 @@ const LogIn = (props) => {
 
   async function verifyCode(){
     if(codeVerify.length != 6){
-        props.addNotification('error', 'The code must have 6 characters, without spaces');
-        return;
+      props.addNotification('error', 'The code must have 6 characters, without spaces');
+      return;
     }
     const rezDB = await firebaseFirestore.verifyCodeDB(codeVerify, props.user.email);
     if(!rezDB.isResolved){
@@ -219,11 +217,11 @@ const LogIn = (props) => {
       }
     );
     if(!rezUpdateDB.isResolved){
-        props.addNotification('error', 'Please retry the operation and generate a new code');
-        return;
+      props.addNotification('error', 'Please retry the operation and generate a new code');
+      return;
     }
     props.setUser((prev)=>{
-        return {...prev, userDetails: {email_verified: true}};
+      return {...prev, userDetails: {email_verified: true}};
     });
     props.navigation.navigate('SetupTrip');
     // get details about user from database

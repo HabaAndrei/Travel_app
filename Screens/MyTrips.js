@@ -1,7 +1,7 @@
 import { StyleSheet, ScrollView, SafeAreaView, View } from 'react-native'
 import { useState, useEffect } from 'react'
 import { useIsFocused } from '@react-navigation/native';
-import { FirebaseFirestore } from '../firebase.js';
+import { FirebaseFirestore } from '../Firebase.js';
 import { Text, ArrowRightIcon, HStack, Heading, Center } from '@gluestack-ui/themed';
 import CountdownTrips from '../Components/MyTripsComponents/CountdownTrips.js';
 import CustomButton from '../CustomElements/CustomButton.js';

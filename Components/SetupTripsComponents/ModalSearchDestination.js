@@ -4,7 +4,7 @@ import axios from 'axios';
 import { address_function_fuzzy } from '../../diverse.js';
 import { Spinner } from "@gluestack-ui/themed";
 import CustomButton from '../../CustomElements/CustomButton.js';
-import { FirebaseFirestore } from '../../firebase.js';
+import { FirebaseFirestore } from '../../Firebase.js';
 
 const ModalSearchDestination = (props) => {
 

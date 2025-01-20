@@ -5,7 +5,7 @@ import { Spinner, Button, Icon, CheckIcon, Textarea, VStack, TextareaInput, Aler
   Radio, RadioIndicator, RadioIcon, CircleIcon, RadioLabel, Card} from "@gluestack-ui/themed";
 import { address_function_activities } from '../../diverse.js';
 import CustomButton from '../../CustomElements/CustomButton.js';
-import { FirebaseFirestore } from '../../firebase.js';
+import { FirebaseFirestore } from '../../Firebase.js';
 
 const CheckboxActivities = (props) => {
 

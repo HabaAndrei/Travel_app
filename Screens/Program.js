@@ -5,7 +5,7 @@ import {address_function_program, formatDateFromMilliseconds, removeItemFromAsyn
   multiGetFromAsyncStorage, multiRemoveFromAsyncStorage} from '../diverse.js';
 import { Spinner, Center, Heading, Text, Divider, HStack, TrashIcon,RepeatIcon, CheckIcon,  Icon } from "@gluestack-ui/themed";
 import { useIsFocused } from '@react-navigation/native';
-import {FirebaseFirestore} from '../firebase.js';
+import {FirebaseFirestore} from '../Firebase.js';
 import axios from 'axios';
 import NavbarProgram from '../Components/NavbarProgram.js';
 import CardPresentationTrip from '../Components/CardPresentationTrip.js';

@@ -2,7 +2,7 @@ import { StyleSheet, View } from 'react-native'
 import {useState} from 'react'
 import { Card, Heading, Select, SelectInput, Icon, ChevronDownIcon, SelectIcon, SelectItem,
   SelectTrigger, SelectPortal, SelectBackdrop, SelectContent, SelectDragIndicator, SelectDragIndicatorWrapper, TextareaInput, Textarea  } from '@gluestack-ui/themed';
-import {FirebaseFirestore} from '../../firebase.js';
+import {FirebaseFirestore} from '../../Firebase.js';
 import CustomButton from '../../CustomElements/CustomButton.js';
 
 const CardFeedback = (props) => {

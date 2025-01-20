@@ -1,7 +1,7 @@
 import {ADDRESS_FUNCTION_CHAT, ADDRESS_FUNCTION_FUZZY, ADDRESS_FUNCTION_ACTIVITIES, ADDRESS_FUNCTION_LOCATIONS,
   ADDRESS_FUNCTION_PROGRAM, ADDRESS_FUNCTION_SEND_CODE_VERIFICATION} from '@env';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { FirebaseFirestore } from './firebase';
+import { FirebaseFirestore } from './Firebase';
 
 const address_function_chat = ADDRESS_FUNCTION_CHAT;
 const address_function_activities = ADDRESS_FUNCTION_ACTIVITIES;

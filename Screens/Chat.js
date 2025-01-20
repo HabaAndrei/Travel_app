@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import {View, Text, ScrollView, StyleSheet, TouchableOpacity, TextInput, KeyboardAvoidingView,
   Platform, Keyboard, Pressable} from 'react-native';
-import {FirebaseFirestore} from '../firebase.js';
+import {FirebaseFirestore} from '../Firebase.js';
 import SelectConversation from '../Components/ChatComponents/SelectConversation.js';
 import { useIsFocused } from '@react-navigation/native';
 import uuid from 'react-native-uuid';

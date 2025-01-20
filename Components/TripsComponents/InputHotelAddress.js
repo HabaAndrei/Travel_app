@@ -1,7 +1,7 @@
 import { View } from 'react-native'
 import { useEffect, useState } from 'react'
 import InputChanges from '../InputChanges.js';
-import { FirebaseFirestore } from '../../firebase.js';
+import { FirebaseFirestore } from '../../Firebase.js';
 
 const InputHotelAddress = (props) => {
 

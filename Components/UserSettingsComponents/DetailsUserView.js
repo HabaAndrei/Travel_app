@@ -1,6 +1,6 @@
 import { StyleSheet, View } from 'react-native';
 import { useReducer } from 'react';
-import { FirebaseFirestore } from '../../firebase.js';
+import { FirebaseFirestore } from '../../Firebase.js';
 import InputChanges from '../InputChanges.js';
 
 const DetailsUserView = (props) => {
@@ -66,8 +66,15 @@ const DetailsUserView = (props) => {
 
     detailsUserDispatch({type: firstDispatchName, payload: false});
     const value = detailsUser[userDetails].trim();
-    const data = await firebaseFirestore.updateUserInformation(userDetails, value)
-    if (data.isResolved){
+
+    // update User Information
+    const resultUpdate = await firebaseFirestore.updateSingleColumnDatabase({
+      database: 'users',
+      id: props.user.uid,
+      column: userDetails,
+      value
+    });
+    if (resultUpdate.isResolved){
       props.user.userDetails[userDetails] = value;
       detailsUserDispatch({ type: secondDispatchName, payload: value})
     }
