@@ -147,7 +147,7 @@ const Trip = (props) => {
     const from = formatDateFromMilliseconds(new Date(program[0].date).getTime());
     const to = formatDateFromMilliseconds(new Date(program[program.length - 1].date).getTime());
     // update program in database
-    const rez = await firebaseFirestore.updateMultipleColumnsDatabase({
+    const rez = await firebaseFirestore.updateColumnsDatabase({
       database: 'programs',
       id: idProgramIntoDb,
       columnsWithVales: { from, to,  programDaysString: JSON.stringify(program) }

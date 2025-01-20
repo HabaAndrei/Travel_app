@@ -29,11 +29,13 @@ const InputHotelAddress = (props) => {
     props.setHotelAddress(trimAddress);
     setIsModified(false);
     setAddress(trimAddress);
-    const result = await firebaseFirestore.updateSingleColumnDatabase({
+    // {database, id, columnsWithValues}
+    const result = await firebaseFirestore.updateColumnsDatabase({
       database: 'programs',
       id: props.idFromDatabase,
-      column: 'hotelAddress',
-      value: trimAddress,
+      columnsWithValues: {
+        'hotelAddress': trimAddress
+      }
     });
   }
 

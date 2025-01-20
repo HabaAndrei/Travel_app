@@ -68,11 +68,12 @@ const DetailsUserView = (props) => {
     const value = detailsUser[userDetails].trim();
 
     // update User Information
-    const resultUpdate = await firebaseFirestore.updateSingleColumnDatabase({
+    const resultUpdate = await firebaseFirestore.updateColumnsDatabase({
       database: 'users',
       id: props.user.uid,
-      column: userDetails,
-      value
+      columnsWithValues: {
+        [`${userDetails}`]: value
+      }
     });
     if (resultUpdate.isResolved){
       props.user.userDetails[userDetails] = value;

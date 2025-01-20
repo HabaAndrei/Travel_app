@@ -204,8 +204,8 @@ class FirebaseFirestore{
     }catch(err){
       const uid = auth?.currentUser?.uid;
       const {modelName, modelId, brand} = Device;
-      await addDoc(collection(db, "errors"), {uid: uid || 'user not connected', modelName, modelId, brand, mesErr: err.message});
       console.log('we catch an error', {err});
+      addDoc(collection(db, "errors"), {uid: uid || 'user not connected', modelName, modelId, brand, mesErr: err.message});
       return {isResolved: false, err: err.message}
     }
   }
@@ -231,21 +231,10 @@ class FirebaseFirestore{
     })
   }
 
-  async updateSingleColumnDatabase({database, id, column, value}){
-    console.log({database, id, column, value});
-    return this._storeErr(async () => {
-      const ref = doc(db, database, id);
-      const rez = await updateDoc(ref, {
-        [`${column}`]: value,
-      });
-      return {isResolved: true};
-    })
-  }
-
-  async updateMultipleColumnsDatabase({database, id, columnsWithVales}){
+  async updateColumnsDatabase({database, id, columnsWithValues}){
     return this._storeErr(async ()=>{
       const ref = doc(db, database, id);
-      const rez = await updateDoc(ref, columnsWithVales);
+      const rez = await updateDoc(ref, columnsWithValues);
       return {isResolved: true};
     })
   }

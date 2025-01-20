@@ -208,12 +208,13 @@ const LogIn = (props) => {
       props.addNotification('error', 'There was a problem verifying the code');
       return
     }
-    const rezUpdateDB = await firebaseFirestore.updateSingleColumnDatabase(
+    const rezUpdateDB = await firebaseFirestore.updateColumnsDatabase(
       {
         database: 'users',
         id: props.user.uid,
-        column: 'email_verified',
-        value: true
+        columnsWithValues: {
+          'email_verified': true
+        }
       }
     );
     if(!rezUpdateDB.isResolved){
