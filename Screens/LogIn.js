@@ -100,13 +100,10 @@ const LogIn = (props) => {
     if(!rez.isResolved){
       if(rez.err?.message?.includes("auth/email-already-in-use")){
         props.addNotification('error',"This email address is already in use");
-        return;
       }else{
         props.addNotification('error', "Unfortunately I could not create the account ");
-        return;
       }
     }
-    props.navigation.navigate('SetupTrip');
   }
 
   async function logIn(){
@@ -152,7 +149,6 @@ const LogIn = (props) => {
     }else{
       console.log(rez.err);
       props.addNotification('error', "Unfortunately, we couldn't log you out");
-      return;
     }
   }
 
@@ -177,7 +173,11 @@ const LogIn = (props) => {
       setLoadingSendEmail(true);
       const code = uuid.v4().slice(0, 6);
       const email = props.user.email;
-      const rezStore = await firebaseFirestore.storeCodeAndEmail(code, email);
+      const rezStore = await firebaseFirestore.addIntoDatabase({
+        database: 'code_verification',
+        id: email,
+        columnsWithValues: { 'code': code }
+      });
       if(!rezStore.isResolved){
         setLoadingSendEmail(false);
         props.addNotification('error', "There was a problem sending the code by email");

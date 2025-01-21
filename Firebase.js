@@ -31,22 +31,6 @@ const auth = initializeAuth(app, {
 
 class FirebaseFirestore{
 
-  async addUserIntoDb(uid, createdAt, email, password, firstName, secondName){
-    return this._storeErr(async ()=>{
-      await setDoc(doc(db, "users", uid), {
-        uid, email, firstName, secondName, createdAt, email_verified: false
-      });
-      return {isResolved: true};
-    })
-  }
-
-  async addProgramIntoDb({city, country, from , to, programDaysString, uid, urlImageCity, hotelAddress}){
-    return this._storeErr(async ()=>{
-      await addDoc(collection(db, "programs"), {city, country, from , to, programDaysString, uid, urlImageCity, hotelAddress});
-      return {isResolved: true};
-    })
-  }
-
   async getPlansFromDbWithUid(uid){
     return this._storeErr(async ()=>{
       const q = query(collection(db, "programs"), where("uid", "==", uid), orderBy("from"));
@@ -59,13 +43,6 @@ class FirebaseFirestore{
         programs.push(data);
       });
       return {isResolved:true, data: programs};
-    })
-  }
-
-  async storeCodeAndEmail(code, email){
-    return this._storeErr(async ()=>{
-      await setDoc(doc(db, "code_verification", email), {code});
-      return {isResolved: true};
     })
   }
 
@@ -89,15 +66,6 @@ class FirebaseFirestore{
       return {data};
     })
   }
-
-  async store_feedback(feedback, feedbackCategory){
-    return this._storeErr(async ()=>{
-      const {uid} = auth.currentUser;
-      await addDoc(collection(db, "feedback"), {uid, feedback, feedbackCategory});
-      return {isResolved: true};
-    })
-  }
-
 
   async askQuestion(histoyConv){
     return this._storeErr(async ()=>{
@@ -135,22 +103,6 @@ class FirebaseFirestore{
       }
     })
   };
-
-  async storeConv(id, name){
-    return this._storeErr(async ()=>{
-      const {uid} = auth.currentUser;
-      await addDoc(collection(db, "conversations"), {uid, id, name});
-      return {isResolved: true};
-    })
-  }
-
-  async storeMes(idConv, type, mes, time){
-    return this._storeErr(async ()=>{
-      const {uid} = auth.currentUser;
-      await addDoc(collection(db, "messages"), {uid, idConv, type, mes, time});
-      return {isResolved: true};
-    })
-  }
 
   async getConversations(){
     return this._storeErr(async ()=>{
@@ -239,6 +191,19 @@ class FirebaseFirestore{
     })
   }
 
+  async addIntoDatabase({database, id, columnsWithValues}){
+    return this._storeErr(async ()=>{
+      console.log(database, id, columnsWithValues);
+      if (id) {
+        await setDoc(doc(db, database, id), columnsWithValues);
+      }else{
+        await addDoc(collection(db, database), columnsWithValues);
+      }
+      return {isResolved: true};
+    })
+  }
+
+
 }
 
 /////////////////////////////////////
@@ -250,7 +215,13 @@ class FirebaseAuth extends FirebaseFirestore {
       const rez = await createUserWithEmailAndPassword(auth, email, password);
       const {uid} = rez.user;
       const {createdAt} = rez.user.metadata;
-      await this.addUserIntoDb(uid, createdAt, email, password, firstName, secondName);
+      await this.addIntoDatabase({
+        database: 'users',
+        id: uid,
+        columnsWithValues: {
+          uid, createdAt, email, password, firstName, secondName, email_verified: false
+        }
+      });
       return {isResolved: true, data: rez};
     })
   }

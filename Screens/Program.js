@@ -147,7 +147,13 @@ const Program = (props) => {
     const to = travelProgram[travelProgram.length - 1].date;
     const programDaysString = JSON.stringify(travelProgram);
     const uid = props.user.uid;
-    const rezAddInDb = await firebaseFirestore.addProgramIntoDb({city, country, from , to, programDaysString, uid, urlImageCity, hotelAddress})
+    const rezAddInDb = await firebaseFirestore.addIntoDatabase({
+      database: 'programs',
+      id: false,
+      columnsWithValues: {
+        city, country, from, to, programDaysString, uid, urlImageCity, hotelAddress
+      }
+    })
     if(!rezAddInDb.isResolved){
       props.addNotification("error", "Unfortunately we could not save the program for you")
       console.log(rezAddInDb.err);

@@ -53,7 +53,11 @@ const Chat = (props) => {
         return [...newConv];
       })
       const time = new Date().getTime();
-      firebaseFirestore.storeMes(idConv, 'ai', data?.data, time);
+      firebaseFirestore.addIntoDatabase({
+        database: 'messages',
+        id: false,
+        columnsWithValues: {uid: props.user.uid, idConv, type: 'ai', mes: data?.data, time}
+      });
     }else{
       props.addNotification("warning", "An error occurred while generating the message");
       console.log('we catch err', data.err);
@@ -75,12 +79,22 @@ const Chat = (props) => {
       const name = conv[0].mes.slice(0, 15);
       setConversations((prev) => [...prev, {id: uuidConv, name}])
       setIdSelectedConversation({id: uuidConv, name});
-      firebaseFirestore.storeConv(uuidConv, name);
+      firebaseFirestore.addIntoDatabase({
+        database: 'conversations',
+        id: false,
+        columnsWithValues: {uid: props.user.uid, id: uuidConv, name}
+      });
     }else{
       uuidConv = idSelectedConversation;
     }
     getResponse(conv, uuidConv);
-    firebaseFirestore.storeMes(uuidConv, 'user', message, time);
+
+    firebaseFirestore.addIntoDatabase({
+      database: 'messages',
+      id: false,
+      columnsWithValues: {uid: props.user.uid, idConv: uuidConv, type: 'user', mes: message, time}
+    });
+
     setMessage('');
   }
 

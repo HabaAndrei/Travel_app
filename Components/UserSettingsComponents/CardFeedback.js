@@ -26,13 +26,17 @@ const CardFeedback = (props) => {
 
   async function sendFeedback(){
     if(!verifyFields())return;
-    const rez = await firebaseFirestore.store_feedback(feedback, feedbackCategoryState);
+    const rez = await firebaseFirestore.addIntoDatabase({
+      database: 'feedback',
+      id: false,
+      columnsWithValues: {uid: props.user.uid, feedback, feedbackCategory: feedbackCategoryState}
+    });
+
     if(rez.err){
       console.log(rez.err);
       props.addNotification('error', 'Unfortunately, the feedback could not be sent')
       return;
     }
-    setFeedbackCategoryState('');
     setFeedback('');
     props.addNotification('success', 'Thank you for your feedback');
   }
