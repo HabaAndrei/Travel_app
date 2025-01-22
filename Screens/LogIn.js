@@ -7,6 +7,7 @@ import uuid from 'react-native-uuid';
 import axios from 'axios';
 import ModalReAuth from '../Components/Modals/ModalReAuth.js';
 import {ButtonWhite, ButtonBlue} from '../CustomElements/buttonsTwoColors.js';
+import { arrayUnion } from "firebase/firestore";
 
 
 function ViewIfSignUpMethod(props){
@@ -173,11 +174,11 @@ const LogIn = (props) => {
       setLoadingSendEmail(true);
       const code = uuid.v4().slice(0, 6);
       const email = props.user.email;
-      const rezStore = await firebaseFirestore.addIntoDatabase({
+      const rezStore = await firebaseFirestore.updateColumnsDatabase({
         database: 'code_verification',
-        id: email,
-        columnsWithValues: { 'code': code }
-      });
+        id: props.user.email,
+        columnsWithValues: {'codes': arrayUnion(code)}
+      })
       if(!rezStore.isResolved){
         setLoadingSendEmail(false);
         props.addNotification('error', "There was a problem sending the code by email");
@@ -204,9 +205,9 @@ const LogIn = (props) => {
       return;
     }
     const rezDB = await firebaseFirestore.verifyCodeDB(codeVerify, props.user.email);
-    if(!rezDB.isResolved){
-      props.addNotification('error', 'There was a problem verifying the code');
-      return
+    if(!rezDB.isResolved ){
+      props.addNotification('error', rezDB?.mes ? rezDB?.mes : 'There was a problem verifying the code');
+      return;
     }
     const rezUpdateDB = await firebaseFirestore.updateColumnsDatabase(
       {

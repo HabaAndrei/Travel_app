@@ -50,9 +50,9 @@ class FirebaseFirestore{
     return this._storeErr(async ()=>{
       const docRef = doc(db, "code_verification", email);
       const dataFromDB = await getDoc(docRef);
-      const {code} = dataFromDB.data();
-      if(code != codeInput){
-        return {isResolved: false, mes: 'The code does not correspond to the code sent by e-mail last time'}
+      const {codes} = dataFromDB.data();
+      if(!codes.includes(codeInput)){
+        return {isResolved: false, mes: 'The code does not correspond to the code sent by e-mail'}
       }
       return {isResolved: true};
     })
@@ -193,7 +193,6 @@ class FirebaseFirestore{
 
   async addIntoDatabase({database, id, columnsWithValues}){
     return this._storeErr(async ()=>{
-      console.log(database, id, columnsWithValues);
       if (id) {
         await setDoc(doc(db, database, id), columnsWithValues);
       }else{
@@ -221,6 +220,11 @@ class FirebaseAuth extends FirebaseFirestore {
         columnsWithValues: {
           uid, createdAt, email, password, firstName, secondName, email_verified: false
         }
+      });
+      this.addIntoDatabase({
+        database: 'code_verification',
+        id: email,
+        columnsWithValues: {'codes': []}
       });
       return {isResolved: true, data: rez};
     })
