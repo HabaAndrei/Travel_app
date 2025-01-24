@@ -150,7 +150,7 @@ const Trip = (props) => {
     const rez = await firebaseFirestore.updateColumnsDatabase({
       database: 'programs',
       id: idProgramIntoDb,
-      columnsWithVales: { from, to,  programDaysString: JSON.stringify(program) }
+      columnsWithValues: { from, to,  programDaysString: JSON.stringify(program) }
     });
     if (!rez.isResolved) {
       console.log('Error saving program:', rez.err);
