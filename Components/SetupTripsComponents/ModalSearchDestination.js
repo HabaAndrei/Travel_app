@@ -13,8 +13,17 @@ const ModalSearchDestination = (props) => {
 
   useEffect(() => {
     if (!props.searchModal.inputCountry.length) return;
-    props.searchModalDispatch({type: 'openModalCountry'})
+    getCountries();
+  }, [props.searchModal.inputCountry]);
 
+  useEffect(() => {
+    if (!props.destinationActivities.country) return;
+    if (!props.searchModal.inputCity.length) return;
+    getCities();
+  }, [props.searchModal.inputCity]);
+
+  function getCountries(){
+    props.searchModalDispatch({type: 'openModalCountry'})
     axios.get(`${address_function_fuzzy}`, {params: {
       input: props.searchModal.inputCountry,
       value: "country",
@@ -29,13 +38,10 @@ const ModalSearchDestination = (props) => {
       firebaseFirestore.storeErr(err.message);
       props.addNotification("warning", "System error occurred. Please try again later.");
     });
-  }, [props.searchModal.inputCountry]);
+  }
 
-  useEffect(() => {
-    if (!props.destinationActivities.country) return;
-    if (!props.searchModal.inputCity.length) return;
+  function getCities(){
     props.searchModalDispatch({type: 'openModalCity'})
-
     axios.get(`${address_function_fuzzy}`, {params: {
       input: props.searchModal.inputCity,
       value: "city",
@@ -50,7 +56,7 @@ const ModalSearchDestination = (props) => {
       firebaseFirestore.storeErr(err.message);
       props.addNotification("warning", "System error occurred. Please try again later.");
     });
-  }, [props.searchModal.inputCity]);
+  }
 
   function openMessageNotFound(data) {
     if (!data?.length) {
@@ -61,13 +67,13 @@ const ModalSearchDestination = (props) => {
   }
 
   function selectDestination(item) {
-    if (item.type === "country") {
-      props.searchModalDispatch({type: 'setInputCountry', payload: ''});
-      props.destinationActivitiesDispatch({type: 'setCountry', payload: item.place})
-    } else if (item.type === "city") {
-      props.searchModalDispatch({type: 'setInputCity', payload: ''});
-      props.destinationActivitiesDispatch({type: 'setCity', payload: item.place})
+    if ( !['country', 'city'].includes(item.type) ) return;
+    const comands = {
+      'country' : { first: 'setInputCountry', second: 'setCountry' },
+      'city' : { first: 'setInputCity', second: 'setCity' },
     }
+    props.searchModalDispatch({type: comands[item.type].first, payload: ''});
+    props.destinationActivitiesDispatch({type: comands[item.type].second, payload: item.place})
     props.searchModalDispatch({type: 'closeModal'});
     props.destinationActivitiesDispatch({type: 'setCheckbox', payload: []})
   }
