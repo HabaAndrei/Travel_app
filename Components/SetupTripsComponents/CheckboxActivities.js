@@ -1,49 +1,68 @@
-import { Modal, View, ScrollView, Text, Pressable, StyleSheet, Platform, KeyboardAvoidingView } from 'react-native';
+import { Modal, View, ScrollView, Text, Pressable, StyleSheet, KeyboardAvoidingView } from 'react-native';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Spinner, Button, Icon, CheckIcon, Textarea, VStack, TextareaInput, AlertCircleIcon, Heading, Center, RadioGroup, HStack,
-  Radio, RadioIndicator, RadioIcon, CircleIcon, RadioLabel, Card} from "@gluestack-ui/themed";
+import { Spinner, Icon, CheckIcon, Textarea, VStack, TextareaInput, AlertCircleIcon, Heading, Center, RadioGroup,
+  Radio, RadioIndicator, RadioIcon, CircleIcon, RadioLabel } from "@gluestack-ui/themed";
 import { address_function_activities } from '../../diverse.js';
 import CustomButton from '../../CustomElements/CustomButton.js';
 import { FirebaseFirestore } from '../../Firebase.js';
+
+function ViewSpinner(props) {
+  return (
+    <>
+      {!props.isActivities ? (
+        <View style={styles.spinnerContainer}>
+          <Spinner size="large" color="$indigo600" />
+        </View>
+      ) : null}
+    </>
+  );
+}
+
+function ViewActivities(props){
+  return (
+    <>
+      {props.isActivities ? props.children : null}
+    </>
+  )
+}
 
 const CheckboxActivities = (props) => {
 
   const [isShowDetails, setShowDetails] = useState(false);
   const [paramsLocation, setParamsLocation] = useState(false)
-
   const firebaseFirestore = new FirebaseFirestore();
 
   useEffect(() => {
-    const { city, country } = props.destinationActivities;
-    if (props.destinationActivities.isOpenModalActivities) {
-      if (props.destinationActivities.checkbox.length) return;
-      axios.post(`${address_function_activities}`, {city, country }).then((data) => {
-        if (data.data.isResolved) {
-          if(data?.data?.paramsLocation?.data){
-            setParamsLocation(data?.data?.paramsLocation?.data?.local_places_and_tourist_places);
-            props.destinationActivitiesDispatch({type: 'setScaleVisit', payload: data?.data?.paramsLocation?.data?.scale_visit})
-          }
-
-          const parsedDate = typeof(data?.data?.data) === 'string' ? JSON.parse(data?.data?.data) : data?.data?.data;
-          const {activities} = parsedDate;
-          const checkbox = activities.map((a) => {
-            let word = a[0]?.toUpperCase() + a.slice(1, a.length);
-            return { selected: false, category: word };
-          });
-          props.destinationActivitiesDispatch({type: 'setCheckbox', payload: checkbox})
-        } else {
-          props.closeCheckbox();
-          props.addNotification("warning", "Unfortunately, we could not generate activities.");
-        }
-      }).catch((err) => {
-        firebaseFirestore.storeErr(err.message)
-        props.closeCheckbox();
-        props.addNotification("warning", "Unfortunately, we could not generate activities. System error!");
-        console.log(err);
-      });
-    }
+    createActivities();
   }, [props.destinationActivities.isOpenModalActivities]);
+
+  function createActivities(){
+    const { city, country } = props.destinationActivities;
+    if (!props.destinationActivities.isOpenModalActivities || props.destinationActivities.checkbox.length) return;
+    axios.post(`${address_function_activities}`, {city, country }).then((data) => {
+      if (data.data.isResolved) {
+        if(data?.data?.paramsLocation?.data){
+          setParamsLocation(data?.data?.paramsLocation?.data?.local_places_and_tourist_places);
+          props.destinationActivitiesDispatch({type: 'setScaleVisit', payload: data?.data?.paramsLocation?.data?.scale_visit})
+        }
+
+        const parsedDate = typeof(data?.data?.data) === 'string' ? JSON.parse(data?.data?.data) : data?.data?.data;
+        const checkbox = parsedDate.activities.map((a) => {
+          let word = a[0]?.toUpperCase() + a.slice(1, a.length);
+          return { selected: false, category: word };
+        });
+        props.destinationActivitiesDispatch({type: 'setCheckbox', payload: checkbox})
+      } else {
+        props.closeCheckbox();
+        props.addNotification("warning", "Unfortunately, we could not generate activities.");
+      }
+    }).catch((err) => {
+      firebaseFirestore.storeErr(err.message)
+      props.closeCheckbox();
+      props.addNotification("warning", "Unfortunately, we could not generate activities. System error!");
+    });
+  }
 
   function pressOnOption(index) {
     const updatedCheckbox = props.destinationActivities.checkbox;
@@ -62,7 +81,13 @@ const CheckboxActivities = (props) => {
         transparent={true}
         visible={props.destinationActivities.isOpenModalActivities}
       >
-        {props.destinationActivities.checkbox.length ?
+
+        <ViewSpinner
+          style={styles.spinnerContainer}
+          isActivities={props.destinationActivities.checkbox.length}
+        />
+
+        <ViewActivities isActivities={props.destinationActivities.checkbox.length} >
           <View style={styles.modalView}>
             <ScrollView contentContainerStyle={styles.scrollViewContent}>
               <Center>
@@ -143,17 +168,13 @@ const CheckboxActivities = (props) => {
                   </Center>
                 </View> : null
               }
-
             </ScrollView>
 
             <CustomButton name={'Close'} func={props.closeCheckbox}/>
 
           </View>
-          :
-          <View style={styles.spinnerContainer}>
-            <Spinner size="large" color="$indigo600" />
-          </View>
-        }
+        </ViewActivities>
+
       </Modal>
     </View>
   );
