@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingVertical: 20,
     paddingHorizontal: 15,
-    borderRadius: 10,
+    borderRadius: 15,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
@@ -61,6 +61,9 @@ const styles = StyleSheet.create({
     height: 'auto',
     width: '100%',
     marginVertical: 10,
+    backgroundColor: '#fff',
+    borderWidth: 1,
+    borderColor: '#E0E0E0',
   },
   selectedButton: {
     backgroundColor: '#0B3D91',
@@ -71,12 +74,14 @@ const styles = StyleSheet.create({
     borderColor: '#0B3D91',
   },
   nameText: {
-    fontSize: 16,
+    fontSize: 15,
     fontWeight: 'bold',
     marginBottom: 5,
+    color: '#333',
   },
   averageTimeText: {
-    fontSize: 14,
+    fontSize: 16,
+    color: '#666',
   },
   selectedText: {
     color: '#fff',

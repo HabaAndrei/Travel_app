@@ -46,13 +46,17 @@ const InputHotelAddress = (props) => {
 
 
   return (
-    <View style={{paddingRight: 14, paddingLeft: 14, marginTop: 10}}>
+    <View style={{
+      paddingRight: 14,
+      paddingLeft: 14,
+      marginTop: 10,
+    }}>
       <InputChanges
         title={'Hotel address'}
-        onChange={(text)=>setAddress(text)}
+        onChange={(text) => setAddress(text)}
         value={address}
-        pressOnSave={()=>saveHotelAddress()}
-        pressOnCancel={()=>cancelSave()}
+        pressOnSave={() => saveHotelAddress()}
+        pressOnCancel={() => cancelSave()}
         isModified={isModified}
         placeholder='Write here your hotel address'
       />

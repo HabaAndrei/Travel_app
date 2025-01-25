@@ -351,6 +351,7 @@ const styles = StyleSheet.create({
 		fontSize: 16,
 		fontWeight: 'bold',
 		marginTop: 10,
+		color: '#007AFF',
 	},
 	container: {
 		padding: 10,

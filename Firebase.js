@@ -67,7 +67,7 @@ class FirebaseFirestore{
     })
   }
 
-  async askQuestion(histoyConv){
+  async askQuestion(historyConv){
     return this._storeErr(async ()=>{
       const {uid} = auth.currentUser;
       const data = await this.getPlansFromDbWithUid(uid);
@@ -95,7 +95,7 @@ class FirebaseFirestore{
         })
         information = JSON.stringify(rez);
       }
-      const rezQuery =  await axios.post(`${address_function_chat}`, { histoyConv, information});
+      const rezQuery =  await axios.post(`${address_function_chat}`, { historyConv, information});
       if(rezQuery?.data?.isResolved){
         return {isResolved: true, data: rezQuery?.data?.data};
       }else{

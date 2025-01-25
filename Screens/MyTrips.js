@@ -73,7 +73,7 @@ const MyTrips = (props) => {
           <>
             <Center>
               <HStack alignItems="center">
-                <Heading style={{color: '#009B77'}} >My trips</Heading>
+                <Heading>My trips</Heading>
                 <FontAwesome6 name="earth-americas" style={{margin: 4}} size={15} color="black" />
               </HStack>
             </Center>
@@ -137,24 +137,27 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginVertical: 20,
+    backgroundColor: '#f0f0f0',
+    borderRadius: 10,
+    padding: 20,
   },
   appName: {
     fontSize: 36,
     fontWeight: 'bold',
-    color: '#007AFF',
-    shadowColor: '#007AFF',
+    color: '#333',
+    shadowColor: '#333',
     shadowOpacity: 0.3,
   },
   slogan: {
     fontSize: 16,
     fontStyle: 'italic',
-    color: '#007AFF',
+    color: '#555',
     marginTop: 5,
   },
   noTripsMessage: {
     fontSize: 16,
     textAlign: 'center',
-    color: 'rgba(0, 0, 0, 0.75)',
+    color: '#777',
     marginTop: 80,
     paddingHorizontal: 20,
     lineHeight: 22,

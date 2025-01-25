@@ -14,7 +14,7 @@ const CardFeedback = (props) => {
 
   function verifyFields(){
     if(!feedbackCategoryState.length){
-      props.addNotification('error', 'Please choose a category to your feedback');
+      props.addNotification('error', 'Please choose a category for your feedback');
       return false;
     }else if(!feedback.replaceAll(' ', '').length){
       props.addNotification('error', 'Please write your feedback')
@@ -49,13 +49,13 @@ const CardFeedback = (props) => {
         </Heading>
         <View>
           <Select onValueChange={setFeedbackCategoryState}>
-            <SelectTrigger variant="outline" size="md" >
+            <SelectTrigger variant="outline" size="md" style={styles.selectTrigger}>
               <SelectInput placeholder="Select option" />
               <SelectIcon mr="$3">
                 <Icon as={ChevronDownIcon} />
               </SelectIcon>
             </SelectTrigger>
-            <SelectPortal >
+            <SelectPortal>
               <SelectBackdrop/>
               <SelectContent >
                 <SelectDragIndicatorWrapper>
@@ -70,7 +70,7 @@ const CardFeedback = (props) => {
         </View>
 
         <View>
-          <Textarea style={{ backgroundColor: 'white', marginTop: 10 }}>
+          <Textarea style={styles.textarea}>
             <TextareaInput
               placeholder="Write your feedback here"
               value={feedback}
@@ -79,9 +79,7 @@ const CardFeedback = (props) => {
           </Textarea>
         </View>
 
-        <CustomButton name={'Send feedback'} func={sendFeedback}/>
-
-
+        <CustomButton name={'Send feedback'} func={sendFeedback} style={styles.button}/>
       </Card>
     </View>
   )
@@ -89,4 +87,19 @@ const CardFeedback = (props) => {
 
 export default CardFeedback
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+  selectTrigger: {
+    borderColor: '#ccc',
+    borderWidth: 1,
+    borderRadius: 10,
+    padding: 10,
+  },
+  textarea: {
+    backgroundColor: '#fff',
+    marginTop: 10,
+    borderColor: '#ccc',
+    borderWidth: 1,
+    borderRadius: 10,
+    padding: 10,
+  },
+})
