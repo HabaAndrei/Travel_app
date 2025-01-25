@@ -73,7 +73,7 @@ const MyTrips = (props) => {
           <>
             <Center>
               <HStack alignItems="center">
-                <Heading>My tripts</Heading>
+                <Heading style={{color: '#009B77'}} >My trips</Heading>
                 <FontAwesome6 name="earth-americas" style={{margin: 4}} size={15} color="black" />
               </HStack>
             </Center>
