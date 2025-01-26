@@ -1,6 +1,6 @@
-import { StyleSheet, View, Pressable, Text, TextInput, ScrollView, SafeAreaView, TouchableOpacity, ImageBackground } from 'react-native'
+import { StyleSheet, View, Pressable, Text, ScrollView, SafeAreaView, ImageBackground } from 'react-native'
 import { useReducer, useState } from 'react'
-import { Icon, VStack, EyeIcon, EyeOffIcon, Spinner } from '@gluestack-ui/themed'
+import { VStack, Spinner } from '@gluestack-ui/themed'
 import { FirebaseAuth, FirebaseFirestore } from '../Firebase.js'
 import {isValidEmail, isValidPassword, deleteAllFromAsyncStorage, address_function_send_code_verification} from "../diverse.js"
 import uuid from 'react-native-uuid';
@@ -8,7 +8,7 @@ import axios from 'axios';
 import ModalReAuth from '../Components/Modals/ModalReAuth.js';
 import {ButtonWhite, ButtonBlue} from '../CustomElements/buttonsTwoColors.js';
 import { arrayUnion } from "firebase/firestore";
-
+import InputComponent from '../Components/LogInComponents/InputComponent.js';
 
 function ViewIfSignUpMethod(props){
   return (
@@ -42,7 +42,7 @@ function ViewIfUserForgotsPassword(props){
   )
 }
 
-function ViewClientSignUp(props){
+function SignInSignUpView(props){
   return (
     <>
       {!props.isForgotsPassword ? props.children : null}
@@ -245,9 +245,7 @@ const LogIn = (props) => {
 
   return (
     <SafeAreaView style={{flex: 1}} >
-
       <ImageBackground   style={styles.backgroundImage}  source={require('../img/background.jpg')}>
-
         <ScrollView>
 
           {isLoadingSendEmail ?
@@ -266,7 +264,7 @@ const LogIn = (props) => {
           <ViewIfUserExistsWithoutEmailVerified user={props.user}  emailVerified_code={props.user?.emailVerified_code}>
             <View >
 
-              <VStack >
+              <VStack style={{ marginBottom: 40, marginRight: 20,  marginLeft: 20}} >
                 <Text style={styles.actionNameLow}>The next step is to verify your email address</Text>
 
                 <View style={{margin: 10}} />
@@ -275,11 +273,12 @@ const LogIn = (props) => {
 
                 <View style={{margin: 10}} />
 
-                <View style={styles.inputContainer}>
-                  <TextInput style={styles.input} placeholder='Enter the code from email' placeholderTextColor="white"
-                    value={codeVerify}
-                    onChangeText={(text) => setCodeVerify(text)}/>
-                </View>
+                <InputComponent
+                  name={'Code from email'}
+                  placeholder={'Enter the code from email'}
+                  value={codeVerify}
+                  onChange={(text)=>setCodeVerify(text)}
+                />
 
                 <View style={{margin: 10}} />
 
@@ -298,90 +297,71 @@ const LogIn = (props) => {
           </ViewIfUserExistsWithoutEmailVerified>
 
           <ViewIfUserDoesntExist user={props.user} >
-            <View >
+            <View  style={{ marginBottom: 40, marginRight: 20,  marginLeft: 20}} >
 
-              <View  style={{ marginBottom: 40, marginRight: 20,  marginLeft: 20}} >
+              <ViewIfUserForgotsPassword isForgotsPassword={isForgotsPassword} >
+                <InputComponent
+                  name={'Email to reset the password'}
+                  placeholder={'Email to reset the password'}
+                  value={inputEmail}
+                  onChange={(text)=>setInputEmail(text)}
+                />
+                <ButtonBlue name={"Send email"} func={forgotThePassword} />
+              </ViewIfUserForgotsPassword>
 
-                <ViewIfUserForgotsPassword isForgotsPassword={isForgotsPassword} >
-                  <View  >
+              <SignInSignUpView isForgotsPassword={isForgotsPassword} >
 
-                    <View style={styles.inputContainer}>
-                      <TextInput style={styles.input} placeholder='Email to reset the password'
-                        placeholderTextColor="white"
-                        value={inputEmail} onChangeText={(text) => setInputEmail(text)}/>
-                    </View>
+                <Text style={styles.actionName}>{signInOrUp === "signup" ? "Create accout" :  "Log in"  }</Text>
 
-                    <View style={{margin:10}} />
+                <ViewIfSignUpMethod signInOrUp={signInOrUp} >
+                  <InputComponent
+                    name={'First name'}
+                    placeholder={'First name'}
+                    value={inputFirstName}
+                    onChange={(text)=>setInputFirstName(text)}
+                  />
+                  <InputComponent
+                    name={'Second name'}
+                    placeholder={'Second name'}
+                    value={inputSecondName}
+                    onChange={(text)=>setInputSecondName(text)}
+                  />
+                </ViewIfSignUpMethod>
 
-                    <View style={styles.buttonContainer}>
-                      <TouchableOpacity style={styles.button}
-                        onPress={forgotThePassword}>
-                        <Text style={styles.buttonText}>Send email</Text>
-                      </TouchableOpacity>
-                    </View>
+                <InputComponent
+                  name={'Email'}
+                  placeholder={'Email'}
+                  value={inputEmail}
+                  onChange={(text)=>setInputEmail(text)}
+                />
 
-                  </View>
-                </ViewIfUserForgotsPassword>
+                <InputComponent
+                  name={'Password'}
+                  placeholder={'Password'}
+                  value={inputPassword.input}
+                  description={'The password must have at least seven characters, two of which must be numbers'}
+                  onChange={(text) => passwordDispatch({type: 'changeInput', payload: text})}
+                  secureTextEntry={!inputPassword.showState}
+                  showEyeIcon={true}
+                  onEyePress={()=>passwordDispatch({type: 'showState'})}
+                />
 
-                <ViewClientSignUp isForgotsPassword={isForgotsPassword} >
-                  <VStack space="xl">
-                    <Text style={styles.actionName}>{signInOrUp === "signup" ? "Create accout" :  "Log in"  }</Text>
+                <Pressable onPress={()=>setIsForgotsPassword(true)}>
+                  <Text style={styles.textForgot}>
+                    Forgot your password? Click here
+                  </Text>
+                </Pressable>
 
-                    <ViewIfSignUpMethod signInOrUp={signInOrUp} >
-                      <View style={styles.inputContainer}>
-                        <TextInput style={styles.input} placeholder='Name' placeholderTextColor="white"
-                          value={inputFirstName}  onChangeText={(text) => setInputFirstName(text)}/>
-                      </View>
-                      <View style={styles.inputContainer}>
-                        <TextInput style={styles.input} placeholder='Second name' placeholderTextColor="white"
-                          value={inputSecondName}  onChangeText={(text) => setInputSecondName(text)}/>
-                      </View>
-                    </ViewIfSignUpMethod>
+                <ButtonBlue name={signInOrUp === "signup" ? "Create" : "Authenticate"} func={signInOrUp === "signup" ? createAccount : logIn} />
 
-                    <View style={styles.inputContainer}>
-                      <TextInput style={styles.input} placeholder='Email' placeholderTextColor="white"
-                        value={inputEmail}  onChangeText={(text) => setInputEmail(text)}/>
-                    </View>
+              </SignInSignUpView>
 
-                    <View style={styles.inputContainer}>
-                      <TouchableOpacity
-                          onPress={() => passwordDispatch({type: 'showState'})}
-                        >
-                          <Icon
-                            as={inputPassword.showState ? EyeIcon : EyeOffIcon}
-                            color="$darkBlue500"
-                          />
-                        </TouchableOpacity>
-                      <TextInput style={styles.input} placeholder='Password' placeholderTextColor="white"
-                        value={inputPassword.input} onChangeText={(text) => passwordDispatch({type: 'changeInput', payload: text})}
-                        secureTextEntry={!inputPassword.showState}
-                        />
-                    </View>
+            </View>
 
-                    <ViewIfSignUpMethod signInOrUp={signInOrUp}>
-                      <Text  style={styles.textPassword}>
-                        The password must have at least seven characters, two of which must be numbers
-                      </Text>
-                    </ViewIfSignUpMethod>
-
-                    <Pressable onPress={()=>setIsForgotsPassword(true)}>
-                      <Text style={styles.textForgot}>
-                        Forgot your password? Click here
-                      </Text>
-                    </Pressable>
-
-                    <ButtonBlue name={signInOrUp === "signup" ? "Create" : "Log in"} func={signInOrUp === "signup" ? createAccount : logIn} />
-
-                  </VStack>
-                </ViewClientSignUp>
-
-              </View>
-
-              <View style={{ alignItems: 'center', marginTop: 50 }}>
-                <ButtonWhite func={createAcc} name={'Create accout'}/>
-                <View style={styles.separator} />
-                <ButtonWhite func={logInMethod} name={'Log in'}/>
-              </View>
+            <View style={{ alignItems: 'center', marginTop: 50 }}>
+              <ButtonWhite func={createAcc} name={'Create accout'}/>
+              <View style={styles.separator} />
+              <ButtonWhite func={logInMethod} name={'Log in'}/>
             </View>
 
           </ViewIfUserDoesntExist>
@@ -403,30 +383,6 @@ const styles = StyleSheet.create({
     resizeMode: 'cover',
     justifyContent: 'center',
   },
-  button: {
-    backgroundColor: 'rgba(0, 0, 255, 0.45)',
-    padding: 15,
-    borderRadius: 30,
-    alignItems: 'center',
-    minWidth: 200
-  },
-  buttonText: {
-    color: 'white',
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-  buttonWhite:{
-    padding: 15,
-    borderRadius: 30,
-    alignItems: 'center',
-    minWidth: 200,
-    backgroundColor: 'rgba(255, 255, 255, 0.7)',
-  },
-  buttonTextWhite: {
-    color: 'rgba(0, 0, 255, 10)',
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
   separator: {
     borderBottomWidth: 1,
     borderBottomColor: 'white',
@@ -444,13 +400,14 @@ const styles = StyleSheet.create({
     color: 'white',
   },
   actionName:{
-    fontSize: 28,
+    fontSize: 25,
     fontWeight: 'bold',
     color: 'rgba(0, 0, 255, 10)',
     backgroundColor: 'rgba(255, 255, 255, 0.7)',
     borderRadius: 8,
     paddingHorizontal: 5,
     alignSelf: 'flex-start',
+    marginBottom: 10
   },
   actionNameLow:{
     fontSize: 20,
@@ -467,26 +424,6 @@ const styles = StyleSheet.create({
     color: 'white',
     marginTop: 5,
   },
-  inputContainer: {
-    width: '90%',
-    borderBottomWidth: 4,
-    borderBottomColor: 'white',
-    alignSelf: 'center',
-  },
-  input: {
-    width: '80%',
-    fontSize: 16,
-    color: 'white',
-    fontWeight: 'bold',
-  },
-  textPassword: {
-    width: '90%',
-    alignSelf: 'center',
-    fontSize: 13,
-    color: 'white',
-    paddingVertical: 5,
-    fontWeight: 'bold'
-  },
   textForgot: {
     color: 'white',
     backgroundColor: 'rgba(0, 0, 255, 0.5)',
@@ -496,6 +433,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 5,
     borderRadius: 3,
     alignSelf: 'flex-end',
+    marginBottom: 10
   },
   spinnerContainer: {
     position: 'absolute',
