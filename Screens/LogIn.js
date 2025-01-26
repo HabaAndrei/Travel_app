@@ -1,4 +1,4 @@
-import { StyleSheet, View, Pressable, Text, ScrollView, SafeAreaView, ImageBackground } from 'react-native'
+import { StyleSheet, View, Pressable, Text, ScrollView, SafeAreaView, ImageBackground, KeyboardAvoidingView, Platform } from 'react-native'
 import { useReducer, useState } from 'react'
 import { VStack, Spinner } from '@gluestack-ui/themed'
 import { FirebaseAuth, FirebaseFirestore } from '../Firebase.js'
@@ -245,129 +245,135 @@ const LogIn = (props) => {
 
   return (
     <SafeAreaView style={{flex: 1}} >
-      <ImageBackground   style={styles.backgroundImage}  source={require('../img/background.jpg')}>
-        <ScrollView>
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 60 : 0}
+      >
+        <ImageBackground   style={styles.backgroundImage}  source={require('../img/background.jpg')}>
+          <ScrollView keyboardShouldPersistTaps="handled" >
 
-          {isLoadingSendEmail ?
-            <View style={styles.spinnerContainer}>
-              <Spinner size="large" color="white" />
-            </View> : null
-          }
+            {isLoadingSendEmail ?
+              <View style={styles.spinnerContainer}>
+                <Spinner size="large" color="white" />
+              </View> : null
+            }
 
-          <View style={styles.titleContainer}>
-            <Text style={styles.appName}>Travel Bot</Text>
-            <Text style={styles.slogan}>– Where Every Trip Finds Its Way 🌍</Text>
-          </View>
+            <View style={styles.titleContainer}>
+              <Text style={styles.appName}>Travel Bot</Text>
+              <Text style={styles.slogan}>– Where Every Trip Finds Its Way 🌍</Text>
+            </View>
 
-          <ModalReAuth  isModalVisibleReAuth={isModalVisibleReAuth} setModalVisibleReAuth={setModalVisibleReAuth} />
+            <ModalReAuth  isModalVisibleReAuth={isModalVisibleReAuth} setModalVisibleReAuth={setModalVisibleReAuth} />
 
-          <ViewIfUserExistsWithoutEmailVerified user={props.user}  emailVerified_code={props.user?.emailVerified_code}>
-            <View >
+            <ViewIfUserExistsWithoutEmailVerified user={props.user}  emailVerified_code={props.user?.emailVerified_code}>
+              <View >
 
-              <VStack style={{ marginBottom: 40, marginRight: 20,  marginLeft: 20}} >
-                <Text style={styles.actionNameLow}>The next step is to verify your email address</Text>
+                <VStack style={{ marginBottom: 40, marginRight: 20,  marginLeft: 20}} >
+                  <Text style={styles.actionNameLow}>The next step is to verify your email address</Text>
 
-                <View style={{margin: 10}} />
+                  <View style={{margin: 10}} />
 
-                <ButtonBlue name={'Send code to email'} func={sendCodeToEmail} />
+                  <ButtonBlue name={'Send code to email'} func={sendCodeToEmail} />
 
-                <View style={{margin: 10}} />
+                  <View style={{margin: 10}} />
 
-                <InputComponent
-                  name={'Code from email'}
-                  placeholder={'Enter the code from email'}
-                  value={codeVerify}
-                  onChange={(text)=>setCodeVerify(text)}
-                />
+                  <InputComponent
+                    name={'Code from email'}
+                    placeholder={'Enter the code from email'}
+                    value={codeVerify}
+                    onChange={(text)=>setCodeVerify(text)}
+                  />
 
-                <View style={{margin: 10}} />
+                  <View style={{margin: 10}} />
 
-                <ButtonBlue name={'Verify code'} func={verifyCode} />
-              </VStack>
+                  <ButtonBlue name={'Verify code'} func={verifyCode} />
+                </VStack>
 
-              <View style={{ alignItems: 'center', marginTop: 50 }}>
-                <ButtonWhite name={'Log out'} func={signOut} />
+                <View style={{ alignItems: 'center', marginTop: 50 }}>
+                  <ButtonWhite name={'Log out'} func={signOut} />
 
-                <View style={styles.separator} />
+                  <View style={styles.separator} />
 
-                <ButtonWhite name={'Delete account'} func={deleteUser} />
+                  <ButtonWhite name={'Delete account'} func={deleteUser} />
+                </View>
+
+              </View>
+            </ViewIfUserExistsWithoutEmailVerified>
+
+            <ViewIfUserDoesntExist user={props.user} >
+              <View  style={{ marginBottom: 40, marginRight: 20,  marginLeft: 20}} >
+
+                <ViewIfUserForgotsPassword isForgotsPassword={isForgotsPassword} >
+                  <InputComponent
+                    name={'Email to reset the password'}
+                    placeholder={'Email to reset the password'}
+                    value={inputEmail}
+                    onChange={(text)=>setInputEmail(text)}
+                  />
+                  <ButtonBlue name={"Send email"} func={forgotThePassword} />
+                </ViewIfUserForgotsPassword>
+
+                <SignInSignUpView isForgotsPassword={isForgotsPassword} >
+
+                  <Text style={styles.actionName}>{signInOrUp === "signup" ? "Create accout" :  "Log in"  }</Text>
+
+                  <ViewIfSignUpMethod signInOrUp={signInOrUp} >
+                    <InputComponent
+                      name={'First name'}
+                      placeholder={'First name'}
+                      value={inputFirstName}
+                      onChange={(text)=>setInputFirstName(text)}
+                    />
+                    <InputComponent
+                      name={'Second name'}
+                      placeholder={'Second name'}
+                      value={inputSecondName}
+                      onChange={(text)=>setInputSecondName(text)}
+                    />
+                  </ViewIfSignUpMethod>
+
+                  <InputComponent
+                    name={'Email'}
+                    placeholder={'Email'}
+                    value={inputEmail}
+                    onChange={(text)=>setInputEmail(text)}
+                  />
+
+                  <InputComponent
+                    name={'Password'}
+                    placeholder={'Password'}
+                    value={inputPassword.input}
+                    description={'The password must have at least seven characters, two of which must be numbers'}
+                    onChange={(text) => passwordDispatch({type: 'changeInput', payload: text})}
+                    secureTextEntry={!inputPassword.showState}
+                    showEyeIcon={true}
+                    onEyePress={()=>passwordDispatch({type: 'showState'})}
+                  />
+
+                  <Pressable onPress={()=>setIsForgotsPassword(true)}>
+                    <Text style={styles.textForgot}>
+                      Forgot your password? Click here
+                    </Text>
+                  </Pressable>
+
+                  <ButtonBlue name={signInOrUp === "signup" ? "Create" : "Authenticate"} func={signInOrUp === "signup" ? createAccount : logIn} />
+
+                </SignInSignUpView>
+
               </View>
 
-            </View>
-          </ViewIfUserExistsWithoutEmailVerified>
+              <View style={{ alignItems: 'center', marginTop: 50 }}>
+                <ButtonWhite func={createAcc} name={'Create accout'}/>
+                <View style={styles.separator} />
+                <ButtonWhite func={logInMethod} name={'Log in'}/>
+              </View>
 
-          <ViewIfUserDoesntExist user={props.user} >
-            <View  style={{ marginBottom: 40, marginRight: 20,  marginLeft: 20}} >
+            </ViewIfUserDoesntExist>
 
-              <ViewIfUserForgotsPassword isForgotsPassword={isForgotsPassword} >
-                <InputComponent
-                  name={'Email to reset the password'}
-                  placeholder={'Email to reset the password'}
-                  value={inputEmail}
-                  onChange={(text)=>setInputEmail(text)}
-                />
-                <ButtonBlue name={"Send email"} func={forgotThePassword} />
-              </ViewIfUserForgotsPassword>
-
-              <SignInSignUpView isForgotsPassword={isForgotsPassword} >
-
-                <Text style={styles.actionName}>{signInOrUp === "signup" ? "Create accout" :  "Log in"  }</Text>
-
-                <ViewIfSignUpMethod signInOrUp={signInOrUp} >
-                  <InputComponent
-                    name={'First name'}
-                    placeholder={'First name'}
-                    value={inputFirstName}
-                    onChange={(text)=>setInputFirstName(text)}
-                  />
-                  <InputComponent
-                    name={'Second name'}
-                    placeholder={'Second name'}
-                    value={inputSecondName}
-                    onChange={(text)=>setInputSecondName(text)}
-                  />
-                </ViewIfSignUpMethod>
-
-                <InputComponent
-                  name={'Email'}
-                  placeholder={'Email'}
-                  value={inputEmail}
-                  onChange={(text)=>setInputEmail(text)}
-                />
-
-                <InputComponent
-                  name={'Password'}
-                  placeholder={'Password'}
-                  value={inputPassword.input}
-                  description={'The password must have at least seven characters, two of which must be numbers'}
-                  onChange={(text) => passwordDispatch({type: 'changeInput', payload: text})}
-                  secureTextEntry={!inputPassword.showState}
-                  showEyeIcon={true}
-                  onEyePress={()=>passwordDispatch({type: 'showState'})}
-                />
-
-                <Pressable onPress={()=>setIsForgotsPassword(true)}>
-                  <Text style={styles.textForgot}>
-                    Forgot your password? Click here
-                  </Text>
-                </Pressable>
-
-                <ButtonBlue name={signInOrUp === "signup" ? "Create" : "Authenticate"} func={signInOrUp === "signup" ? createAccount : logIn} />
-
-              </SignInSignUpView>
-
-            </View>
-
-            <View style={{ alignItems: 'center', marginTop: 50 }}>
-              <ButtonWhite func={createAcc} name={'Create accout'}/>
-              <View style={styles.separator} />
-              <ButtonWhite func={logInMethod} name={'Log in'}/>
-            </View>
-
-          </ViewIfUserDoesntExist>
-
-        </ScrollView>
-      </ImageBackground>
+          </ScrollView>
+        </ImageBackground>
+      </KeyboardAvoidingView>
     </SafeAreaView>
 
   )
