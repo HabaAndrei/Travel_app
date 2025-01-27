@@ -1,6 +1,7 @@
 import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native';
 import { Icon, EyeIcon, EyeOffIcon } from '@gluestack-ui/themed';
 
+/** Input Component with styling */
 const InputComponent = (props) => {
   return (
     <View style={styles.container}>

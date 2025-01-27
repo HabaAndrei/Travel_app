@@ -5,7 +5,7 @@ import { useState } from 'react';
 import CardDatePicker from './CardDatePicker.js';
 import LocationCard from './LocationCard.js';
 
-
+/** Component that represents a list of locations that can be picked to visit */
 const ListLocations = (props) => {
 
   const [dateFrom, setDateFrom] = useState();
@@ -14,6 +14,7 @@ const ListLocations = (props) => {
 
   const screenHeight = Dimensions.get('window').height;
 
+  // When you press on a location, you can select or deselect it
   function pressOnLocations(index_){
     props.setLocations((prev)=>{
       const newAr = prev.map((ob, index)=>{
@@ -31,6 +32,7 @@ const ListLocations = (props) => {
     props.navigation.navigate('SetupTrip');
   }
 
+  // This function verifies the existence of all parameters needed to create the program
   function verifyDestinationRequest(){
     if(!dateFrom || !dateTo){
       props.addNotification("warning", "Please choose the start and end date of the trip.");
@@ -43,36 +45,39 @@ const ListLocations = (props) => {
     return true;
   }
 
-
+  // Store data in async storage and redirect to the program screen
   async function goToCreateProgram(){
-    ////////////////////////////////////////////////////////////////
-    // decomentez aceasta in prod ==>>>
-
+    // Uncomment this in production ==>>>
     // if(!verifyDestinationRequest())return;
 
-    // decomentez aceasta in prod  <<<<=======
+    // Uncomment this in production <<<<=======
+    ////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////
     addDataToAsyncStorage('arrayLocationsToTravel', props.locations)
     const newLocationReference = JSON.parse(JSON.stringify(props.locations));
+    // get only the selected location
     const selectedLocations = [...newLocationReference].filter((place)=>place.selected);
     if(!selectedLocations.length){
       props.addNotification('warning', 'You do not have any location selected to make the trip');
       return;
     }
+    // for each selected location create time to stay to visit that location
     const data = [...selectedLocations].map((ob)=>{
+      // if the packages doesn t exist send return the ob as it is
       const {dataTimeLocation} = ob;
       if(!dataTimeLocation)return ob;
       const {packages} = dataTimeLocation;
       if(!packages || !packages.length)return ob;
       let hours = 0;
+      // sum the time for every slected packages
       const selectedPackeges = packages.filter((ob)=>{
         if (!ob.selected) return false;
         hours += ob?.average_visiting_hours || 0;
         return true;
       })
-
+      // if the sum (hours) is biger than 0 put the time in object
       if (hours > 0) ob.dataTimeLocation.average_hours_visiting_full_location = hours;
-
+      // edit the object only with selected packages
       ob.dataTimeLocation.packages = selectedPackeges;
       return ob;
     })
@@ -85,7 +90,7 @@ const ListLocations = (props) => {
     const locationParam = dataParam.data;
     ////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////
-    // fac si aici schimbarea in pod =>>>>>>>>>>
+    // Make the change here in production =>>>>>>>>>>
 
     // locationParam.from = formatDateFromMilliseconds(dateFrom);
     // locationParam.to = formatDateFromMilliseconds(dateTo)
@@ -93,12 +98,13 @@ const ListLocations = (props) => {
     locationParam.to = formatDateFromMilliseconds(1718053200000)
     props.navigation.navigate('Program', {type: 'createProgram', locations: data, locationParam, hotelAddress});
 
-    // fac si aici schimbarea in pod <<<<<<<<<<===========
+    // Make the change here in production <<<<<<<<<<===========
     /////////////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////////////
 
   }
 
+  // Select or deselect the packages
   function selectPackage(indexLocation, indexPackage){
     try{
       props.setLocations((prev)=>{
@@ -117,7 +123,7 @@ const ListLocations = (props) => {
     {!props.locations?.length ? (
       <View style={{ marginTop: screenHeight / 3, }}>
         <Center  >
-          <Spinner size="large" color="$indigo600" />
+          <Spinner size="large" color="blue" />
         </Center>
       </View>
     ) : (

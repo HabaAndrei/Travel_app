@@ -43,7 +43,7 @@ const MyTrips = (props) => {
   }
 
   async function deleteTrip(indexTrip){
-    const response = await props.areYouSureDeleting();
+    const response = await props.areYouSure();
     if (!response) return;
     const idTrip = plans[indexTrip].id;
     const responseFirestore = await firebaseFirestore.deleteTrip(idTrip);

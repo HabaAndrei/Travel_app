@@ -26,7 +26,7 @@ const UserSettings = (props) => {
 
   async function deleteUser(){
 
-    const response = await props.areYouSureDeleting();
+    const response = await props.areYouSure();
     if (!response) return;
 
     const rez = await firebaseAuth._deleteUser();

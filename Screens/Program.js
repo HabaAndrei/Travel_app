@@ -95,7 +95,7 @@ const Program = (props) => {
   }
 
   async function deleteDayFromProgram(index) {
-    const response = await props.areYouSureDeleting();
+    const response = await props.areYouSure();
     if (!response) return;
     setProgram((prev)=>{
       const firstPart = prev.slice(0, index);
@@ -119,7 +119,7 @@ const Program = (props) => {
 
 
   async function deleteAllProgram(){
-    const response = await props.areYouSureDeleting();
+    const response = await props.areYouSure();
     if (response) {
       const rez = await removeItemFromAsyncStorage('travelProgram');
       if(!rez.isResolved)return;
@@ -186,7 +186,7 @@ const Program = (props) => {
             {!program?.length ?
               <View  style={{ marginTop: screenHeight / 3 }} >
                 <Center  >
-                  <Spinner size="large" color="$indigo600" />
+                  <Spinner size="large" color="blue" />
                 </Center>
               </View> :
 

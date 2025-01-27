@@ -4,6 +4,7 @@ import ImageCarousel from '../ImageCarousel';
 import CustomButton from '../../CustomElements/CustomButton.js';
 import ListPackeges from './ListPackeges.js';
 
+/** This component represents a presentation of a location */
 const LocationCard = (props) => {
   return (
     <Card

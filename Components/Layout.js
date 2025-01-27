@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import { View, Text, StyleSheet, ScrollView, Pressable } from 'react-native';
 import Notification from './Notification';
-import ModalDelete from './Modals/ModalDelete';
+import ConfirmActionModal from './Modals/ConfirmActionModal';
 import uuid from 'react-native-uuid';
 import LogIn from '../Screens/LogIn.js';
 import { StatusBar } from 'expo-status-bar';
@@ -14,7 +14,7 @@ import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 const Layout = ({ children, navigation, route, user, setUser}) => {
 
   const insets = useSafeAreaInsets();
-  const [modalDelete, setModalDelete] = useState(false);
+  const [isConfirmActionModal, setConfirmActionModal] = useState(false);
   const [notification, setNotification] = useState([]);
   const [deletePromise, setDeletePromise] = useState(null);
 
@@ -24,10 +24,10 @@ const Layout = ({ children, navigation, route, user, setUser}) => {
     })
   }
 
-  async function areYouSureDeleting() {
+  async function areYouSure() {
     return new Promise((resolve) => {
       setDeletePromise(() => resolve);
-      setModalDelete(true);
+      setConfirmActionModal(true);
     });
   }
 
@@ -41,7 +41,7 @@ const Layout = ({ children, navigation, route, user, setUser}) => {
   const renderChildrenWithProps = () => {
     return React.Children.map(children, child => {
       return React.cloneElement(child, {
-        route, notification, setNotification, addNotification, areYouSureDeleting, navigation,
+        route, notification, setNotification, addNotification, areYouSure, navigation,
         user, setUser
       });
     });
@@ -54,7 +54,7 @@ const Layout = ({ children, navigation, route, user, setUser}) => {
 
       <StatusBar style="light"/>
 
-      <ModalDelete   modalDelete={modalDelete} setModalDelete={setModalDelete} handleModalResponse={handleModalResponse} />
+      <ConfirmActionModal   isConfirmActionModal={isConfirmActionModal} setConfirmActionModal={setConfirmActionModal} handleModalResponse={handleModalResponse} />
 
       <Notification  notification={notification} setNotification={setNotification}  />
 
@@ -66,7 +66,7 @@ const Layout = ({ children, navigation, route, user, setUser}) => {
         </View>
         :
         <LogIn   user={user} setUser={setUser} addNotification={addNotification}
-          areYouSureDeleting={areYouSureDeleting}  navigation={navigation} />
+          areYouSure={areYouSure}  navigation={navigation} />
       }
 
 

@@ -1,5 +1,6 @@
 import { StyleSheet, Text, View, Pressable } from 'react-native'
 
+/** This component represents a list of packages for each location */
 const ListPackeges = (props) => {
   return (
     <View>

@@ -37,7 +37,7 @@ const Trip = (props) => {
   };
 
   async function deleteActivity(index, indexActivity) {
-    const response = await props.areYouSureDeleting();
+    const response = await props.areYouSure();
     if (!response) return;
     let newProgram = [...tripProgram];
     let { activities } = newProgram[index];

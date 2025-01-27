@@ -3,6 +3,7 @@ import {  Select, SelectInput, Icon, ChevronDownIcon, SelectIcon, SelectItem,
   SelectTrigger, SelectPortal, SelectBackdrop, SelectContent, SelectDragIndicator,
   SelectDragIndicatorWrapper, } from '@gluestack-ui/themed';
 
+/** Component that represents a custom select element */
 const SelectConversation = (props) => {
 
   return (

@@ -21,7 +21,7 @@ const DailyProgram = (props) => {
   };
 
   async function  deleteActivity(indexActivity){
-    const response = await props.areYouSureDeleting();
+    const response = await props.areYouSure();
     if (!response)return
     setDailyProgram((obiectDailyProgram)=>{
       const {activities} = obiectDailyProgram.data;

@@ -100,7 +100,7 @@ const Chat = (props) => {
 
   async function _deleteChat(){
     if(!idSelectedConversation)return;
-    const response = await props.areYouSureDeleting();
+    const response = await props.areYouSure();
     if (!response) return;
     firebaseFirestore.deleteChat(idSelectedConversation);
     setConversations((prev)=>{

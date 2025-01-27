@@ -3,8 +3,7 @@ import {formatDateFromMilliseconds} from '../../diverse.js';
 import { Card} from '@gluestack-ui/themed';
 import DatePicker from '../Pickers/DatePicker.js';
 
-
-
+/** Date picker that helps to create the program */
 const CardDatePicker = (props) => {
 
   return (

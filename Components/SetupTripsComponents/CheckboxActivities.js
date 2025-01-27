@@ -12,7 +12,7 @@ function ViewSpinner(props) {
     <>
       {!props.isActivities ? (
         <View style={styles.spinnerContainer}>
-          <Spinner size="large" color="$indigo600" />
+          <Spinner size="large" color="blue" />
         </View>
       ) : null}
     </>

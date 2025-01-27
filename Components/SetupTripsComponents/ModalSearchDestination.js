@@ -129,7 +129,7 @@ const ModalSearchDestination = (props) => {
                 </View>
               ) : (
                 <View style={styles.spinnerContainer}>
-                  <Spinner size="large" color="$indigo600" />
+                  <Spinner size="large" color="blue" />
                 </View>
               )}
               <CustomButton name="Close" func={closeModal} />

@@ -1,15 +1,16 @@
 import { StyleSheet, Text, View, Modal, Pressable } from 'react-native';
 
-const ModalDelete = (props) => {
+/** Modal that represent a verification for client to think if they realy want to do that operation */
+const ConfirmActionModal = (props) => {
 
   const closeWithResponse = (response) => {
     props.handleModalResponse(response);
-    props.setModalDelete(false);
+    props.setConfirmActionModal(false);
   };
 
   return (
    <View>
-    {props.modalDelete ?
+    {props.isConfirmActionModal ?
 
       <View style={styles.centeredView}>
         <Modal
@@ -19,7 +20,7 @@ const ModalDelete = (props) => {
         <View style={styles.centeredView}>
             <View style={styles.modalView}>
             <Text style={styles.modalText}>
-                Are you sure you want to delete ?
+                Are you sure you want to do this ?
             </Text>
 
             <View style={styles.buttonContainer}>
@@ -45,7 +46,7 @@ const ModalDelete = (props) => {
   );
 };
 
-export default ModalDelete;
+export default ConfirmActionModal;
 
 const styles = StyleSheet.create({
   centeredView: {
