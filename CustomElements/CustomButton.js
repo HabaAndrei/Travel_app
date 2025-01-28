@@ -1,6 +1,7 @@
 import { StyleSheet, Text, View } from 'react-native';
 import { Button, Icon } from "@gluestack-ui/themed";
 
+/** Custom button with action to be imported and used throughout the entire app */
 const CustomButton = (props) => {
 
   return (
@@ -16,9 +17,8 @@ const CustomButton = (props) => {
       >
         <Text style={styles.buttonText}>{props.name}</Text>
         {props.icon ?
-        <Icon as={props.icon} color="white" style={styles.icon} />
-        :
-        null
+          <Icon as={props.icon} color="white" style={styles.icon} />
+        : null
         }
       </Button>
     </View>

@@ -27,6 +27,7 @@ function ViewActivities(props){
   )
 }
 
+/** Component that displays all activities a tourist can do in a specific location */
 const CheckboxActivities = (props) => {
 
   const [isShowDetails, setShowDetails] = useState(false);
@@ -37,6 +38,7 @@ const CheckboxActivities = (props) => {
     createActivities();
   }, [props.destinationActivities.isOpenModalActivities]);
 
+  // Create activities using AI
   function createActivities(){
     const { city, country } = props.destinationActivities;
     if (!props.destinationActivities.isOpenModalActivities || props.destinationActivities.checkbox.length) return;
@@ -64,12 +66,14 @@ const CheckboxActivities = (props) => {
     });
   }
 
+  // Select or deselect the activity
   function pressOnOption(index) {
     const updatedCheckbox = props.destinationActivities.checkbox;
     updatedCheckbox[index].selected = !updatedCheckbox[index].selected;
     props.destinationActivitiesDispatch({type: 'setCheckbox', payload: updatedCheckbox})
   }
 
+  // The client has the option to write in an input the activities they want to visit, a custom activity
   function setInputActivity(text){
     props.destinationActivitiesDispatch({type: 'setInputActivity', payload: text})
   }

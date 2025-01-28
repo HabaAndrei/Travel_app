@@ -11,11 +11,12 @@ import NavbarProgram from '../Components/NavbarProgram.js';
 import CardPresentationTrip from '../Components/CardPresentationTrip.js';
 import InputHotelAddress from '../Components/ProgramComponents/InputHotelAddress.js';
 
+/** Program screen => where the client can see the generated program */
 const Program = (props) => {
 
-  // createProgram => creez date din azure
-  // getProgramAsync => iau date din async storage
-  // keepProgram => pastram programul din useState
+  // createProgram => create a program
+  // getProgramAsync => get data from async storage
+  // keepProgram => retain the program from useState
 
   const isFocused = useIsFocused();
   const [program, setProgram] = useState([]);
@@ -24,7 +25,6 @@ const Program = (props) => {
 
   const firebaseFirestore = new FirebaseFirestore();
   const screenHeight = Dimensions.get('window').height;
-
 
   useEffect(()=>{
     if (!isFocused) return
@@ -48,7 +48,7 @@ const Program = (props) => {
   async function getProgramFromAsyncStorage(){
     const rez = await multiGetFromAsyncStorage(["travelProgram", "travelParameter"]);
     if(!rez.isResolved){
-      props.addNotification("error", "Unfortunately, we got an system error")
+      props.addNotification("error", "Unfortunately, we encountered a system error")
       return;
     }
 
@@ -84,13 +84,13 @@ const Program = (props) => {
         multiSetFromAsyncStorage([['travelProgram', [...days]],
           ["travelParameter", {from, to, city, country, locations, urlImageCity, hotelAddress}]]);
       }else{
-        console.log("eroare la functia getProgram ", data.data);
+        console.log("Error in getProgram function ", data.data);
         props.addNotification("warning", "Unfortunately, we could not generate your program.")
       }
     }).catch((err)=>{
       firebaseFirestore.storeErr(err.message)
-      props.addNotification("error", "Unfortunately, we could not generate program")
-      console.log('eroare de la getProgram',err);
+      props.addNotification("error", "Unfortunately, we could not generate the program")
+      console.log('Error from getProgram',err);
     })
   }
 
@@ -117,7 +117,6 @@ const Program = (props) => {
     })
   }
 
-
   async function deleteAllProgram(){
     const response = await props.areYouSure();
     if (response) {
@@ -135,7 +134,7 @@ const Program = (props) => {
   async function saveProgramInDb(){
     const rez = await multiGetFromAsyncStorage(["travelProgram", "travelParameter"]);
     if(!rez.isResolved){
-      props.addNotification("error", "Unfortunately we could not save the program for you")
+      props.addNotification("error", "Unfortunately, we could not save the program for you")
       console.log(rez.err);
       return;
     }
@@ -155,7 +154,7 @@ const Program = (props) => {
       }
     })
     if(!rezAddInDb.isResolved){
-      props.addNotification("error", "Unfortunately we could not save the program for you")
+      props.addNotification("error", "Unfortunately, we could not save the program for you")
       console.log(rezAddInDb.err);
       return;
     }
@@ -166,7 +165,6 @@ const Program = (props) => {
     setRecomandation(true);
     props.navigation.navigate('MyTrips');
   }
-
 
   return (
     <SafeAreaView style={{flex: 1}}>
@@ -248,7 +246,6 @@ const Program = (props) => {
     </SafeAreaView>
   )
 }
-
 
 export default Program
 

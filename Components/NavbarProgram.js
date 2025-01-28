@@ -1,5 +1,6 @@
 import { View, Text, Pressable, StyleSheet } from 'react-native';
 
+/** Navbar for steps to create the trip program */
 const NavbarProgram = (props) => {
 
   function navigateSetUpTrip() {

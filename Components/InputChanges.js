@@ -1,6 +1,7 @@
 import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native'
 import AntDesign from '@expo/vector-icons/AntDesign';
 
+/** General input that can be easily edited and saved */
 const InputChanges = (props) => {
   return (
   <View style={styles.inputContainer}>

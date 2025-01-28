@@ -5,7 +5,7 @@ import {addDataToAsyncStorage, getDataFromAsyncStorage} from '../diverse.js';
 import TimePicker from '../Components/Pickers/TimePicker.js';
 import ImageCarousel from '../Components/ImageCarousel.js';
 
-
+/** Daily Program screen => program created but not saved in database */
 const DailyProgram = (props) => {
 
   const [dailyProgram, setDailyProgram] = useState({data: {}, index: ''});

@@ -3,6 +3,7 @@ import { useState } from 'react';
 import TimePicker from '../Pickers/TimePicker.js';
 import { Center } from '@gluestack-ui/themed';
 
+/** Modal to add a new day in the Trip program */
 const ModalAddNewDay = (props) => {
 
   const [name, setName] = useState('');

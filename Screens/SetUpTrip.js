@@ -6,6 +6,7 @@ import CheckboxActivities from '../Components/SetupTripsComponents/CheckboxActiv
 import NavbarProgram from '../Components/NavbarProgram.js';
 import CustomButton from '../CustomElements/CustomButton.js';
 
+/** SetupTrip screen => where client inputs the initial elements to create locations */
 const SetupTrip = (props) => {
 
   const [isLocalPlaces, setLocalPlaces] = useState('false');

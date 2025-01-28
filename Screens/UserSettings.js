@@ -7,6 +7,7 @@ import ModalReAuth from '../Components/Modals/ModalReAuth.js';
 import CardFeedback from '../Components/UserSettingsComponents/CardFeedback.js';
 import DetailsUserView from '../Components/UserSettingsComponents/DetailsUserView.js';
 
+/** UserSettings screen => where the client can adjust app settings */
 const UserSettings = (props) => {
 
   const [isModalVisibleReAuth, setModalVisibleReAuth] = useState(false);

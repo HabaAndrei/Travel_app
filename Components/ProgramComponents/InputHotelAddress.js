@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import InputChanges from '../InputChanges.js';
 import { getDataFromAsyncStorage, addDataToAsyncStorage } from '../../diverse.js';
 
+// Input hotel address from the program screen
 const InputHotelAddress = (props) => {
 
   const [address, setAddress] = useState(props.hotelAddress || '');

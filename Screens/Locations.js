@@ -8,6 +8,7 @@ import NavbarProgram from '../Components/NavbarProgram';
 import ListLocations from '../Components/LocationsComponents/ListLocations.js';
 import { FirebaseFirestore } from '../Firebase.js';
 
+/** Location screen => where the user sees generated locations */
 const Locations = (props) => {
 
   const isFocused = useIsFocused();

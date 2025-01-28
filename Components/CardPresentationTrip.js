@@ -1,7 +1,8 @@
-import { StyleSheet, Pressable } from 'react-native'
+import { Pressable } from 'react-native'
 import React from 'react'
 import { ArrowRightIcon, Card, Image, Heading, Link, LinkText, Text, HStack, TrashIcon,  Icon } from "@gluestack-ui/themed";
 
+/** General card representing a presentation for a Trip */
 const CardPresentationTrip = (props) => (
   <Card borderRadius="$lg" maxWidth={800} m="$3">
 

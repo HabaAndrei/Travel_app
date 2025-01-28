@@ -4,6 +4,7 @@ import { Input, InputField, Heading, Text } from '@gluestack-ui/themed';
 import { FirebaseAuth } from '../../Firebase.js';
 import CustomButton from '../../CustomElements/CustomButton.js';
 
+/** Modal that re-authenticates the user */
 const ModalReAuth = (props) => {
   const [password, setPassword] = useState('');
   const [err, setErr] = useState('');

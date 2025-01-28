@@ -13,6 +13,7 @@ import ModalAddNewDay from '../Components/TripsComponents/ModalAddNewDay.js';
 import openMap from 'react-native-open-maps';
 import InputHotelAddress from '../Components/TripsComponents/InputHotelAddress.js';
 
+/** Trip screen => where the client can see a selected trip */
 const Trip = (props) => {
 
   const isFocused = useIsFocused();

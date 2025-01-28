@@ -6,6 +6,7 @@ import { Spinner } from "@gluestack-ui/themed";
 import CustomButton from '../../CustomElements/CustomButton.js';
 import { FirebaseFirestore } from '../../Firebase.js';
 
+/** Modal that allows the client to search for destinations to visit - country and city */
 const ModalSearchDestination = (props) => {
 
   const [isMessageNotFound, setMessageNotFound] = useState(false);

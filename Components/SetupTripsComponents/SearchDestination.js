@@ -3,6 +3,7 @@ import { useReducer } from 'react'
 import ModalSearchDestination from './ModalSearchDestination.js';
 import { imagePath } from '../../diverse.js';
 
+/** Card that represents the search destination. When the user adds data in the input, the modal will open to show the options */
 const SearchDestination = (props) => {
 
   const { width } = Dimensions.get('window');

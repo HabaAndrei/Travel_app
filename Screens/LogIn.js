@@ -50,6 +50,7 @@ function SignInSignUpView(props){
   )
 }
 
+/** The Login screen */
 const LogIn = (props) => {
 
   const [inputPassword, passwordDispatch] = useReducer(passwordReducer, {

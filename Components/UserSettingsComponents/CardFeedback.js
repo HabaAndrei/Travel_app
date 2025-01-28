@@ -5,6 +5,7 @@ import { Card, Heading, Select, SelectInput, Icon, ChevronDownIcon, SelectIcon, 
 import {FirebaseFirestore} from '../../Firebase.js';
 import CustomButton from '../../CustomElements/CustomButton.js';
 
+/** Component to provide feedback */
 const CardFeedback = (props) => {
 
   const [feedback, setFeedback] = useState('');
@@ -22,7 +23,6 @@ const CardFeedback = (props) => {
     }
     return true;
   }
-
 
   async function sendFeedback(){
     if(!verifyFields())return;

@@ -3,6 +3,7 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 import {HStack, LinkText, Link } from '@gluestack-ui/themed';
 import { useState } from 'react';
 
+/** Native time picker for each device */
 const TimePicker = (props) => {
 
   const [timePickerVisibility, setTimePickerVisibility] = useState(false);

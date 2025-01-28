@@ -3,6 +3,7 @@ import { useReducer } from 'react';
 import { FirebaseFirestore } from '../../Firebase.js';
 import InputChanges from '../InputChanges.js';
 
+/** This component shows details about the user (first name, last name) that can be edited */
 const DetailsUserView = (props) => {
 
   const firebaseFirestore = new FirebaseFirestore();

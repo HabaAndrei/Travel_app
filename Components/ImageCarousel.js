@@ -1,11 +1,13 @@
 import { StyleSheet, View, Image, PanResponder, Dimensions } from 'react-native';
 import { useState } from 'react';
 
+/** This component creates a custom image carousel */
 const ImageCarousel = (props) => {
   const [imageNumber, setImageNumber] = useState(0);
   const [startX, setStartX] = useState(0);
   const { width } = Dimensions.get('window');
 
+  // Function that interprets if the user wants to slide to the left or right
   const panResponder = PanResponder.create({
     onStartShouldSetPanResponder: () => true,
     onPanResponderGrant: (evt) => {

@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import InputChanges from '../InputChanges.js';
 import { FirebaseFirestore } from '../../Firebase.js';
 
+/** Input for hotel address from the Trip Screen */
 const InputHotelAddress = (props) => {
 
   const [address, setAddress] = useState(props.hotelAddress || '');
@@ -29,7 +30,6 @@ const InputHotelAddress = (props) => {
     props.setHotelAddress(trimAddress);
     setIsModified(false);
     setAddress(trimAddress);
-    // {database, id, columnsWithValues}
     const result = await firebaseFirestore.updateColumnsDatabase({
       database: 'programs',
       id: props.idFromDatabase,

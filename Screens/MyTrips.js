@@ -8,6 +8,7 @@ import CustomButton from '../CustomElements/CustomButton.js';
 import CardPresentationTrip from '../Components/CardPresentationTrip.js';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 
+/** My trips screen => where the client can see their saved trips */
 const MyTrips = (props) => {
   const isFocused = useIsFocused();
   const [plans, setPlans] = useState([]);
@@ -84,7 +85,7 @@ const MyTrips = (props) => {
             <Text style={styles.appName}>Travel Bot</Text>
             <Text style={styles.slogan}>– Where Every Trip Finds Its Way 🌍</Text>
             <Text style={styles.noTripsMessage}>
-              Your next adventure is just a few clicks away! Start scheduling your dream trip now and make unforgettable memories. Don’t let the world wait—explore, discover, and wander!
+              Your next adventure is just a few clicks away! Start scheduling your dream trip now and make unforgettable memories. Don't let the world wait—explore, discover, and wander!
             </Text>
             <CustomButton name={'Setup trip'} icon={ArrowRightIcon} func={navigateSetUpTrip} />
           </View>

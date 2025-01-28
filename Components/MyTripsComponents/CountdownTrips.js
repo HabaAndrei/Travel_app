@@ -3,12 +3,14 @@ import { useEffect, useState } from 'react'
 import { Card, Text, Heading } from '@gluestack-ui/themed';
 import {formatDateFromMilliseconds, getDays, getHours} from '../../diverse.js';
 
+/** Component that provides notifications about locations that will be visited by the user */
 const CountdownNews = (props) => {
 
   const [newsToShow, setNewToShow] = useState([])
   const [newsNumber, setNewsNumber] = useState(0);
   const [startX, setStartX] = useState(0);
 
+  // Function that interprets if the user wants to slide to the left or right
   const panResponder = PanResponder.create({
     onStartShouldSetPanResponder: () => true,
     onPanResponderGrant: (evt) => {
@@ -35,6 +37,7 @@ const CountdownNews = (props) => {
     createNews();
   }, [props.plans]);
 
+  // Create the content for each valid location
   function returnNewsFromActivities(programDay, actualDate, actualHour, actualMinutes) {
     const { activities, date } = programDay;
     const news = [];
@@ -69,8 +72,7 @@ const CountdownNews = (props) => {
     return news;
   }
 
-
-
+  // Create the news only with locations that will be visited
   function createNews(){
     const actualDate = formatDateFromMilliseconds(new Date().getTime());
     const actualHour = new Date().getHours();

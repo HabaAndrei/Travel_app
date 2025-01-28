@@ -11,6 +11,7 @@ import Feather from '@expo/vector-icons/Feather';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 
+/** The main layout for the entire application */
 const Layout = ({ children, navigation, route, user, setUser}) => {
 
   const insets = useSafeAreaInsets();
@@ -18,12 +19,14 @@ const Layout = ({ children, navigation, route, user, setUser}) => {
   const [notification, setNotification] = useState([]);
   const [deletePromise, setDeletePromise] = useState(null);
 
+  // This function adds a notification for the entire application
   function addNotification(type, mes){
     setNotification((prev)=>{
       return [...prev, {id: uuid.v4().slice(0, 5), type, mes}];
     })
   }
 
+  // Function that allows the user to confirm their action
   async function areYouSure() {
     return new Promise((resolve) => {
       setDeletePromise(() => resolve);
@@ -38,6 +41,7 @@ const Layout = ({ children, navigation, route, user, setUser}) => {
     }
   }
 
+  // for each screen create the layout
   const renderChildrenWithProps = () => {
     return React.Children.map(children, child => {
       return React.cloneElement(child, {
@@ -49,7 +53,7 @@ const Layout = ({ children, navigation, route, user, setUser}) => {
 
   return (
     <View style={styles.container}>
-      {/* backgroundColor for statusBar */}
+      {/* Background color for statusBar */}
       <View style={{ height: insets.top, backgroundColor: '#040404',}} />
 
       <StatusBar style="light"/>
