@@ -67,6 +67,11 @@ const App = () => {
             options={{headerShown: false}}
           />
           <Stack.Screen
+            name="SetupTrip"
+            component={customComponent(SetupTrip)}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
             name="Program"
             component={customComponent(Program)}
             options={{headerShown: false}}
@@ -84,11 +89,6 @@ const App = () => {
           <Stack.Screen
             name="UserSettings"
             component={customComponent(UserSettings)}
-            options={{headerShown: false}}
-          />
-          <Stack.Screen
-            name="SetupTrip"
-            component={customComponent(SetupTrip)}
             options={{headerShown: false}}
           />
           <Stack.Screen

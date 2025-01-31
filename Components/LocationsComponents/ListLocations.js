@@ -92,10 +92,10 @@ const ListLocations = (props) => {
     ////////////////////////////////////////////////////////////////
     // Make the change here in production =>>>>>>>>>>
 
-    // locationParam.from = formatDateFromMilliseconds(dateFrom);
-    // locationParam.to = formatDateFromMilliseconds(dateTo)
-    locationParam.from = formatDateFromMilliseconds(1707602400000);
-    locationParam.to = formatDateFromMilliseconds(1718053200000)
+    // locationParam.startDate = formatDateFromMilliseconds(dateFrom);
+    // locationParam.endDate = formatDateFromMilliseconds(dateTo)
+    locationParam.startDate = formatDateFromMilliseconds(1707602400000);
+    locationParam.endDate = formatDateFromMilliseconds(1718053200000)
     props.navigation.navigate('Program', {type: 'createProgram', locations: data, locationParam, hotelAddress});
 
     // Make the change here in production <<<<<<<<<<===========

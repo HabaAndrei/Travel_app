@@ -1,7 +1,7 @@
 import { StyleSheet, View, PanResponder } from 'react-native'
 import { useEffect, useState } from 'react'
 import { Card, Text, Heading } from '@gluestack-ui/themed';
-import {formatDateFromMilliseconds, getDays, getHours} from '../../diverse.js';
+import {formatDateFromMilliseconds, getDays, getHours, toMinutes} from '../../diverse.js';
 
 /** Component that provides notifications about locations that will be visited by the user */
 const CountdownNews = (props) => {
@@ -49,16 +49,17 @@ const CountdownNews = (props) => {
       const { address, info, time, urlLocation, website, place } = activity;
       const infOne = `Good to know: ${info}`;
       const title = place;
-
       if (date === actualDate) {
-        if (`${actualHour}:${actualMinutes}` < time) {
+        if (toMinutes(`${actualHour}:${actualMinutes}`) < toMinutes(time)) {
           const { minutes, hours } = getHours(`${actualHour}:${actualMinutes}`, time);
           const infTwo = formatTimeMessage(hours, minutes, address);
           news.push({ title, infOne, infTwo, urlLocation, website, address });
         }
       } else {
-        const days = getDays(new Date(actualDate).getTime(), new Date(date).getTime());
-
+        const days = getDays({
+          startDate: new Date(actualDate).getTime(),
+          endDate: new Date(date).getTime()
+        });
         if (days === 1) {
           const { minutes, hours } = getHours(`${actualHour}:${actualMinutes}`, time);
           const infTwo = formatTimeMessage(hours, minutes, address);
@@ -80,14 +81,14 @@ const CountdownNews = (props) => {
     if(actualHour.length === 1)actualHour = "0" + actualHour;
     if(actualMinutes.length === 1)actualMinutes = "0" + actualMinutes;
 
-    const firstTriptToVisit = props.plans.find((ob)=>ob.to >= actualDate);
+    const firstTriptToVisit = props.plans.find((ob)=>ob.endDate >= actualDate);
     if(!firstTriptToVisit)return;
     const programDays = JSON.parse(firstTriptToVisit.programDaysString);
     const indexFirstDayToVisit = programDays.findIndex((ob)=>ob.date >= actualDate);
-    const arNews = returnNewsFromActivities(programDays[indexFirstDayToVisit], actualDate, actualHour, actualMinutes)
-    if(arNews.length <5 && programDays[indexFirstDayToVisit + 1]){
+    let arNews = returnNewsFromActivities(programDays[indexFirstDayToVisit], actualDate, actualHour, actualMinutes)
+    if((arNews.length < 5) && programDays[indexFirstDayToVisit + 1]){
       const arNewsTwo = returnNewsFromActivities(programDays[indexFirstDayToVisit + 1], actualDate, actualHour, actualMinutes)
-      arNews.concat(arNewsTwo);
+      arNews = arNews.concat(arNewsTwo);
     }
     setNewToShow(arNews);
 

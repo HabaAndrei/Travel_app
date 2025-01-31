@@ -33,16 +33,21 @@ function isValidPassword(password) {
   return digitCount >= 2;
 }
 
-function getDays(from, to) {
-  const days = to - from;
+function getDays({startDate, endDate}) {
+  const days = endDate - startDate;
   return days / 86400000;
 }
 
-function getHours(from, to) {
-  const getHoursFrom = from.slice(0, 2);
-  const getHoursTo = to.slice(0, 2);
-  const getMinutesFrom = from.slice(3, 5);
-  const getMinutesTo = to.slice(3, 5);
+function toMinutes(time) {
+  let [hours, minutes] = time.split(':').map(Number);
+  return hours * 60 + minutes;
+}
+
+function getHours(startDate, endDate) {
+  const getHoursFrom = startDate.slice(0, 2);
+  const getHoursTo = endDate.slice(0, 2);
+  const getMinutesFrom = startDate.slice(3, 5);
+  const getMinutesTo = endDate.slice(3, 5);
   let hours = getHoursTo - getHoursFrom;
   let minutes = getMinutesTo - getMinutesFrom;
 
@@ -169,7 +174,7 @@ switch(random){
 export {
   isValidPassword, isValidEmail, removeItemFromAsyncStorage, getDataFromAsyncStorage, addDataToAsyncStorage,
   multiRemoveFromAsyncStorage, multiSetFromAsyncStorage, getAllKeysFromAsyncStorage, multiGetFromAsyncStorage,
-  formatDateFromMilliseconds, deleteAllFromAsyncStorage, getDays, getHours, address_function_chat,
+  formatDateFromMilliseconds, deleteAllFromAsyncStorage, getDays, getHours, toMinutes, address_function_chat,
   address_function_activities, address_function_locations, address_function_program,
   address_function_fuzzy, address_function_send_code_verification, imagePath
 };

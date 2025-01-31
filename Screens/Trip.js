@@ -27,7 +27,7 @@ const Trip = (props) => {
 
   useEffect(() => {
     if (!isFocused || !props?.route?.params?.program) return;
-    let { city, country, from, to, id, program, hotelAddress } = props.route.params;
+    let { city, country, startDate, endDate, id, program, hotelAddress } = props.route.params;
     if (typeof program === 'string') program = JSON.parse(program);
     setTripProgram(program);
     setHotelAddressTrip(hotelAddress);
@@ -145,13 +145,13 @@ const Trip = (props) => {
       obDay.activities = activitiesSorted;
       return obDay;
     });
-    const from = formatDateFromMilliseconds(new Date(program[0].date).getTime());
-    const to = formatDateFromMilliseconds(new Date(program[program.length - 1].date).getTime());
+    const startDate = formatDateFromMilliseconds(new Date(program[0].date).getTime());
+    const endDate = formatDateFromMilliseconds(new Date(program[program.length - 1].date).getTime());
     // update program in database
     const rez = await firebaseFirestore.updateColumnsDatabase({
       database: 'programs',
       id: idProgramIntoDb,
-      columnsWithValues: { from, to,  programDaysString: JSON.stringify(program) }
+      columnsWithValues: { startDate, endDate,  programDaysString: JSON.stringify(program) }
     });
     if (!rez.isResolved) {
       console.log('Error saving program:', rez.err);

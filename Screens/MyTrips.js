@@ -63,7 +63,8 @@ const MyTrips = (props) => {
   }
 
   function goToTripScreen(plan){
-    props.navigation.navigate('Trip', { from: plan?.from, to: plan?.to, city: plan?.city, country: plan?.country, program: plan?.programDaysString, id: plan?.id, hotelAddress: plan?.hotelAddress })
+    const {startDate, endDate, city, country, programDaysString, id, hotelAddress} = plan;
+    props.navigation.navigate('Trip', { startDate, endDate, city, country, program: programDaysString, id, hotelAddress })
   }
 
   return (
@@ -96,7 +97,7 @@ const MyTrips = (props) => {
             key={index}
             index={index}
             image={plan?.urlImageCity}
-            textDate={`From: ${formatTime(plan.from)} | To: ${formatTime(plan.to)}`}
+            textDate={`From: ${formatTime(plan.startDate)} | To: ${formatTime(plan.endDate)}`}
             deleteFunction={deleteTrip}
             deleteFunctionParameters={[index]}
             title={`${plan.country} - ${plan.city}`}

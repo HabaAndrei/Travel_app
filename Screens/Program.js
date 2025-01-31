@@ -36,11 +36,11 @@ const Program = (props) => {
 
     if (props?.route?.params?.type === "keepProgram") return;
 
-    const {from, to, city, country, urlImageCity} = props?.route?.params?.locationParam;
+    const {startDate, endDate, city, country, urlImageCity} = props?.route?.params?.locationParam;
     const {locations, type, hotelAddress} = props?.route?.params;
 
     if(type === "createProgram"){
-      createProgramAi({from, to, city, country, locations, urlImageCity, hotelAddress});
+      createProgramAi({startDate, endDate, city, country, locations, urlImageCity, hotelAddress});
       setHotelAddress(hotelAddress)
     }
   }, [isFocused]);
@@ -67,22 +67,22 @@ const Program = (props) => {
   async function regenerateProgram(){
     const rez = await getDataFromAsyncStorage("travelParameter");
     if(!rez.isResolved)return
-    let {from, to, city, country, locations, urlImageCity, hotelAddress} = rez.data;
+    let {startDate, endDate, city, country, locations, urlImageCity, hotelAddress} = rez.data;
     setProgram([]);
-    createProgramAi({from, to, city, country, locations, urlImageCity, hotelAddress})
+    createProgramAi({startDate, endDate, city, country, locations, urlImageCity, hotelAddress})
   }
 
-  async function createProgramAi({from, to, city, country, locations, urlImageCity, hotelAddress}){
+  async function createProgramAi({startDate, endDate, city, country, locations, urlImageCity, hotelAddress}){
     setRecomandation(false);
     setProgram([]);
     axios.post(`${address_function_program}`,
-      {from, to, city, country, locations, hotelAddress}
+      {startDate, endDate, city, country, locations, hotelAddress}
     ).then((data)=>{
       if(data.data.isResolved){
         const days = data.data.data;
         setProgram([...days]);
         multiSetFromAsyncStorage([['travelProgram', [...days]],
-          ["travelParameter", {from, to, city, country, locations, urlImageCity, hotelAddress}]]);
+          ["travelParameter", {startDate, endDate, city, country, locations, urlImageCity, hotelAddress}]]);
       }else{
         console.log("Error in getProgram function ", data.data);
         props.addNotification("warning", "Unfortunately, we could not generate your program.")
@@ -142,15 +142,15 @@ const Program = (props) => {
     const travelProgram =   JSON.parse(rez.data[0][1]);
     const travelParameter = JSON.parse(rez.data[1][1]);
     const {city, country, urlImageCity, hotelAddress } = travelParameter;
-    const from = travelProgram[0].date;
-    const to = travelProgram[travelProgram.length - 1].date;
+    const startDate = travelProgram[0].date;
+    const endDate = travelProgram[travelProgram.length - 1].date;
     const programDaysString = JSON.stringify(travelProgram);
     const uid = props.user.uid;
     const rezAddInDb = await firebaseFirestore.addIntoDatabase({
       database: 'programs',
       id: false,
       columnsWithValues: {
-        city, country, from, to, programDaysString, uid, urlImageCity, hotelAddress
+        city, country, startDate, endDate, programDaysString, uid, urlImageCity, hotelAddress
       }
     })
     if(!rezAddInDb.isResolved){

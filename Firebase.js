@@ -33,7 +33,7 @@ class FirebaseFirestore{
 
   async getPlansFromDbWithUid(uid){
     return this._storeErr(async ()=>{
-      const q = query(collection(db, "programs"), where("uid", "==", uid), orderBy("from"));
+      const q = query(collection(db, "programs"), where("uid", "==", uid), orderBy("startDate"));
       const querySnapshot = await getDocs(q);
       let programs = [];
       querySnapshot.forEach((doc) => {
@@ -77,7 +77,7 @@ class FirebaseFirestore{
       let information = '';
       if(data.data.length){
         const rez = data.data.map((trip)=>{
-          let {city, country, from, to, programDaysString} = trip;
+          let {city, country, startDate, endDate, programDaysString} = trip;
           programDaysString = JSON.parse(programDaysString);
           const daysWithInfo = programDaysString.map((full_day)=>{
             let {day, date, activities} = full_day;
@@ -91,7 +91,7 @@ class FirebaseFirestore{
             })
             return {day, date, info_activities};
           })
-          return {city, country, from, to, daysWithInfo};
+          return {city, country, startDate, endDate, daysWithInfo};
         })
         information = JSON.stringify(rez);
       }
