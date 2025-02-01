@@ -15,7 +15,7 @@ const SetupTrip = (props) => {
     country: '',
     isOpenModalActivities: false,
     checkbox: [],
-    inputActivity: '',
+    customActivity: '',
     scaleVisit: ''
   })
   function destinationActivitiesReducer(state, action){
@@ -36,8 +36,8 @@ const SetupTrip = (props) => {
       case 'setCheckbox': {
         return {...state, checkbox: payload}
       }
-      case 'setInputActivity': {
-        return {...state, inputActivity: payload}
+      case 'setCustomActivity': {
+        return {...state, customActivity: payload}
       }
       case 'setScaleVisit': {
         return {...state, scaleVisit: payload}
@@ -54,7 +54,7 @@ const SetupTrip = (props) => {
       return false;
     }
     const isSelect = destinationActivities.checkbox?.find((ob)=>ob.selected === true);
-    const wordWithoutSpace = destinationActivities.inputActivity?.replaceAll(' ', '');
+    const wordWithoutSpace = destinationActivities.customActivity?.replaceAll(' ', '');
     if(!isSelect && !wordWithoutSpace.length){
       props.addNotification("warning", "To go further, you must choose at least one activity, write what you want to visit in the input");
       return false;
@@ -64,14 +64,15 @@ const SetupTrip = (props) => {
 
   function goToProgramPage(){
     if(!verifyDestinationRequest())return;
-    let newCheckbox = [];
-    destinationActivities.checkbox.forEach((ob)=>{ if (ob.selected) newCheckbox.push(ob.category) });
-    const {country, city, scaleVisit,inputActivity } = destinationActivities;
+
+    const selectedActivities = destinationActivities.checkbox
+      .filter(ob => ob.selected)
+      .map(ob => ob.category);
+
+    const {country, city, scaleVisit, customActivity } = destinationActivities;
     props.navigation.navigate('Locations', {
-      country, city, isLocalPlaces, scaleVisit,
-      checkbox: newCheckbox,
-      type: 'getAllDataAboutLocations' ,
-      input: inputActivity,
+      country, city, isLocalPlaces, scaleVisit, selectedActivities, customActivity,
+      type: 'getAllDataAboutLocations',
     })
   }
 

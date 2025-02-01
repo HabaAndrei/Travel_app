@@ -74,8 +74,8 @@ const CheckboxActivities = (props) => {
   }
 
   // The client has the option to write in an input the activities they want to visit, a custom activity
-  function setInputActivity(text){
-    props.destinationActivitiesDispatch({type: 'setInputActivity', payload: text})
+  function setCustomActivity(text){
+    props.destinationActivitiesDispatch({type: 'setCustomActivity', payload: text})
   }
 
   return (
@@ -140,8 +140,8 @@ const CheckboxActivities = (props) => {
                   <Textarea style={{ backgroundColor: 'white', borderRadius: 15 }}>
                     <TextareaInput
                       placeholder="Example: The oldest breweries in the city"
-                      value={props.destinationActivities.inputActivity}
-                      onChangeText={(text) => setInputActivity(text)}
+                      value={props.destinationActivities.customActivity}
+                      onChangeText={(text) => setCustomActivity(text)}
                     />
                   </Textarea>
                 </KeyboardAvoidingView>

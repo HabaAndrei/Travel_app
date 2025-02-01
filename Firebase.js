@@ -74,7 +74,7 @@ class FirebaseFirestore{
       if(!data.isResolved){
         return {isResolved: false, err: data.err};
       }
-      let information = '';
+      let tripsData = '';
       if(data.data.length){
         const rez = data.data.map((trip)=>{
           let {city, country, startDate, endDate, programDaysString} = trip;
@@ -93,9 +93,9 @@ class FirebaseFirestore{
           })
           return {city, country, startDate, endDate, daysWithInfo};
         })
-        information = JSON.stringify(rez);
+        tripsData = JSON.stringify(rez);
       }
-      const rezQuery =  await axios.post(`${address_function_chat}`, { historyConv, information});
+      const rezQuery =  await axios.post(`${address_function_chat}`, { historyConv, tripsData});
       if(rezQuery?.data?.isResolved){
         return {isResolved: true, data: rezQuery?.data?.data};
       }else{

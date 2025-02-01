@@ -26,20 +26,20 @@ const Locations = (props) => {
       return;
     };
 
-    let {city, country, checkbox, input, type, isLocalPlaces, scaleVisit} = props?.route?.params;
+    let {city, country, selectedActivities, customActivity, type, isLocalPlaces, scaleVisit} = props?.route?.params;
 
     if(type === "getAllDataAboutLocations"){
-      createLocationsAi({city, country, input, checkbox, isLocalPlaces, scaleVisit})
+      createLocationsAi({city, country, customActivity, selectedActivities, isLocalPlaces, scaleVisit})
       return;
     }
 
   }, [isFocused]);
 
-  async function createLocationsAi({city, country, input, checkbox, isLocalPlaces, scaleVisit}){
+  async function createLocationsAi({city, country, customActivity, selectedActivities, isLocalPlaces, scaleVisit}){
     setLocations([]);
     setRecomandation(false)
     axios.post(`${address_function_locations}`,
-      {city, country, input, checkbox, isLocalPlaces, scaleVisit}
+      {city, country, customActivity, selectedActivities, isLocalPlaces, scaleVisit}
     ).then((data)=>{
       if(data.data.isResolved){
         const urlImageCity = data?.data?.urlImageCity;
@@ -49,7 +49,7 @@ const Locations = (props) => {
         });
         setLocations(arraySelected);
         multiSetFromAsyncStorage([['arrayLocationsToTravel', [...arraySelected]],
-          ["locationsParameter", {city, country, input, checkbox, scaleVisit, urlImageCity}]]);
+          ["locationsParameter", {city, country, customActivity, selectedActivities, scaleVisit, urlImageCity}]]);
       }else{
         console.log("eroare la functia createLocationsAi ", data);
       }
