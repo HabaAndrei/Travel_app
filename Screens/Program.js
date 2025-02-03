@@ -1,5 +1,5 @@
-import { StyleSheet, View, ScrollView, Dimensions, Pressable, SafeAreaView } from 'react-native'
-import {useState, useEffect} from 'react'
+import { StyleSheet, View, ScrollView, Dimensions, SafeAreaView } from 'react-native'
+import {useState, useEffect, useRef} from 'react'
 import {address_function_program, formatDateFromMilliseconds, removeItemFromAsyncStorage,
   addDataToAsyncStorage, multiSetFromAsyncStorage, getDataFromAsyncStorage,
   multiGetFromAsyncStorage, multiRemoveFromAsyncStorage} from '../diverse.js';
@@ -22,6 +22,7 @@ const Program = (props) => {
   const [program, setProgram] = useState([]);
   const [isRecomandation, setRecomandation] = useState(false);
   const [hotelAddress, setHotelAddress] = useState('');
+  const isSavingProgram = useRef(false);
 
   const firebaseFirestore = new FirebaseFirestore();
   const screenHeight = Dimensions.get('window').height;
@@ -132,10 +133,13 @@ const Program = (props) => {
   }
 
   async function saveProgramInDb(){
+    if ( isSavingProgram.current ) return;
+    isSavingProgram.current = true;
     const rez = await multiGetFromAsyncStorage(["travelProgram", "travelParameter"]);
     if(!rez.isResolved){
       props.addNotification("error", "Unfortunately, we could not save the program for you")
       console.log(rez.err);
+      isSavingProgram.current = false;
       return;
     }
 
@@ -156,13 +160,18 @@ const Program = (props) => {
     if(!rezAddInDb.isResolved){
       props.addNotification("error", "Unfortunately, we could not save the program for you")
       console.log(rezAddInDb.err);
+      isSavingProgram.current = false;
       return;
     }
 
     const rezDeleteAsyncStorage = await multiRemoveFromAsyncStorage(["travelProgram", "travelParameter"])
-    if (!rezDeleteAsyncStorage.isResolved) return;
+    if (!rezDeleteAsyncStorage.isResolved) {
+      isSavingProgram.current = false;
+      return;
+    }
     setProgram([]);
     setRecomandation(true);
+    isSavingProgram.current = false;
     props.navigation.navigate('MyTrips');
   }
 
