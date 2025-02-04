@@ -1,17 +1,16 @@
-import { StyleSheet, View, Pressable, ScrollView, Clipboard, SafeAreaView } from 'react-native';
+import { StyleSheet, View, ScrollView, Clipboard, SafeAreaView } from 'react-native';
 import { useEffect, useState, useRef } from 'react';
 import { useIsFocused } from '@react-navigation/native';
 import { Text, AccordionTitleText,  AccordionTrigger,  AccordionHeader, AccordionContent,
-	AccordionItem, Accordion, AddIcon, Card, Heading, Icon, TrashIcon, HStack, VStack, LinkText, Link, Divider, Center, RemoveIcon
+	AccordionItem, Accordion, AddIcon, Heading, Icon, HStack, LinkText, Link, Center, RemoveIcon
 } from '@gluestack-ui/themed';
-import ImageCarousel from '../Components/ImageCarousel.js';
 import {FirebaseFirestore} from '../Firebase.js';
-import TimePicker from '../Components/Pickers/TimePicker.js';
 import DatePicker from '../Components/Pickers/DatePicker';
 import { formatDateFromMilliseconds } from '../diverse';
 import ModalAddNewDay from '../Components/TripsComponents/ModalAddNewDay.js';
 import openMap from 'react-native-open-maps';
 import InputHotelAddress from '../Components/TripsComponents/InputHotelAddress.js';
+import LocationCard from '../Components/LocationCard.js';
 
 /** Trip screen => where the client can see a selected trip */
 const Trip = (props) => {
@@ -257,85 +256,31 @@ const Trip = (props) => {
                 </Link>
               </View>
 
-              {dayProgram.activities.map((obActivity, indexActivity) => {
-                return <Card key={indexActivity} maxWidth={800} style={{ marginBottom: 15 }}>
-                  <HStack justifyContent="space-between" alignItems="center">
-                    <Heading mb="$1" size="md">
-                      {obActivity.place}
-                    </Heading>
-                    <Pressable onPress={() => { deleteActivity(index, indexActivity) }}>
-                      <Icon as={TrashIcon} m="$2" w="$6" h="$6" />
-                    </Pressable>
-                  </HStack>
-
-                  <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                    <Text style={{ marginRight: 30 }} fontSize="$sm" fontStyle="normal" fontWeight="$normal" lineHeight="$sm" mb="$2" sx={{ color: "$textLight700" }}>
-                      {obActivity.time}
-                    </Text>
-                    <TimePicker
-                      getTime={handleConfirmTime}
-                      extraFunction={()=>{
-                        indexActivityRef.current = indexActivity;
-                        indexDay.current = index;
-                      }}
-                    />
-                  </View>
-
-                  {obActivity?.address ?
-                    <Text size="m" style={{ marginTop: 10 }}>
-                      <Text bold={true}>Address: </Text> {obActivity.address}
-                      <Text style={styles.buttonText} onPress={() => copyInClipboard(`${obActivity.address}`)}>
-                        {' '}
-                        Copy
-                      </Text>
-                    </Text> : <Text></Text>
-                  }
-
-                  {obActivity.info ?
-                    <Text size="m" style={{ marginTop: 10 }}>
-                      <Text bold={true}>Info:</Text>
-                      {obActivity.info}
-                    </Text> : <Text></Text>
-                  }
-
-                  {obActivity.description ?
-                    <Text size="m" style={{ marginTop: 10 }}>
-                      <Text bold={true}>Description: </Text>
-                      {obActivity.description}
-                    </Text> : <Text></Text>
-                  }
-
-                  <View style={{ flex: 1, marginTop: 20 }}>
-                    {obActivity?.arrayWithLinkImages?.length ?
-                      <ImageCarousel imageUrls={obActivity.arrayWithLinkImages} /> :
-                      <View></View>
-                    }
-                  </View>
-
-                  <VStack space="md" justifyContent='center' alignItems='center'>
-                    <HStack h='$10' justifyContent='center' alignItems='center'>
-                      <Link href={obActivity.website ? obActivity.website : ''} isExternal>
-                        <HStack alignItems="center">
-                          <LinkText size="sm" fontFamily="$heading" fontWeight="$semibold" color="$primary600" textDecorationLine="none">
-                            {obActivity.website ? 'Visit their website' : ''}
-                          </LinkText>
-                        </HStack>
-                      </Link>
-                      {obActivity?.urlLocation && obActivity?.website ?
-                        <Divider orientation="vertical" mx='$2.5' bg='$emerald500' h={15} /> :
-                        <View></View>
-                      }
-                      <Link href={obActivity?.urlLocation ? obActivity.urlLocation : ''} isExternal>
-                        <HStack alignItems="center">
-                          <LinkText size="sm" fontFamily="$heading" fontWeight="$semibold" color="$primary600" textDecorationLine="none">
-                            {obActivity.urlLocation ? 'Google location' : ''}
-                          </LinkText>
-                        </HStack>
-                      </Link>
-                    </HStack>
-                  </VStack>
-                </Card>
+              {dayProgram?.activities?.map((activity, indexActivity) => {
+                return (
+                  <LocationCard
+                    key={indexActivity}
+                    place={activity.place}
+                    time={activity.time}
+                    address={activity.address}
+                    info={activity.info}
+                    description={activity.description}
+                    arrayWithLinkImages={activity.arrayWithLinkImages}
+                    website={activity.website}
+                    urlLocation={activity.urlLocation}
+                    deleteActivity={deleteActivity}
+                    deleteActivityParams={[index, indexActivity]}
+                    getTime={handleConfirmTime}
+                    extraFunction={()=>{
+                      indexActivityRef.current = indexActivity;
+                      indexDay.current = index;
+                    }}
+                    copyInClipboard={()=>copyInClipboard(activity.address)}
+                    changeDefaultStyle={true}
+                  />
+                )
               })}
+
             </AccordionContent>
           </AccordionItem>
         })}

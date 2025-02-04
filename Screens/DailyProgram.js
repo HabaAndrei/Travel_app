@@ -1,9 +1,8 @@
 import { useEffect, useState, useRef } from 'react';
-import { ScrollView, Pressable, View, Clipboard, StyleSheet, SafeAreaView } from 'react-native';
-import { ArrowLeftIcon, Card, Heading, Link, LinkText, Text, VStack, Divider, HStack, TrashIcon, CheckIcon,  Icon } from "@gluestack-ui/themed";
+import { ScrollView, View, Clipboard, StyleSheet, SafeAreaView } from 'react-native';
+import { ArrowLeftIcon, Text, Divider, HStack, CheckIcon,  Icon } from "@gluestack-ui/themed";
 import {addDataToAsyncStorage, getDataFromAsyncStorage} from '../diverse.js';
-import TimePicker from '../Components/Pickers/TimePicker.js';
-import ImageCarousel from '../Components/ImageCarousel.js';
+import LocationCard from '../Components/LocationCard.js';
 
 /** Daily Program screen => program created but not saved in database */
 const DailyProgram = (props) => {
@@ -83,78 +82,26 @@ const DailyProgram = (props) => {
             <Text style={styles.dayText}>Day {dailyProgram.data.day}</Text>
           </View>
 
-          {dailyProgram?.data?.activities?.map((ob, index) => {
-            return <Card key={index} p="$5" borderRadius="$lg" maxWidth={400} m="$3">
-              <HStack justifyContent="space-between" alignItems="center">
-                <Heading mb="$1" size="md">
-                  {ob.place}
-                </Heading>
-                <Pressable onPress={() => {deleteActivity(index)}}>
-                  <Icon as={TrashIcon} m="$2" w="$6" h="$6" />
-                </Pressable>
-              </HStack>
-
-              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                <Text  style={{marginRight: 30}} fontSize="$sm" fontStyle="normal" fontWeight="$normal" lineHeight="$sm" mb="$2" sx={{ color: "$textLight700" }}>
-                  {ob.time}
-                </Text>
-                <TimePicker
-                  getTime={getTime} extraFunction={()=>{indexActivity.current = index}}
-                />
-              </View>
-
-              {ob.address ?
-                <Text size="m" style={{ marginTop: 10 }}>
-                  <Text bold={true}>Address: </Text> {ob.address}
-                  <Text style={styles.buttonText} onPress={() => copyInClipboard(`${ob.address}`)}>
-                    {' '}
-                    Copy
-                  </Text>
-                </Text> : <Text></Text>
-              }
-
-              {ob.info ?
-                <Text size="m" style={{ marginTop: 10 }}>
-                  <Text bold={true}>Info:</Text> {ob.info}
-                </Text> : null
-              }
-              {ob.description ?
-                <Text size="m" style={{ marginTop: 10 }}>
-                  <Text bold={true}>Description: </Text>{ob.description}
-                </Text> : null
-              }
-
-              <View style={{ flex: 1, marginTop: 20 }}>
-                {ob.arrayWithLinkImages.length ?
-                <ImageCarousel   imageUrls={ob.arrayWithLinkImages }/> :
-                <View></View>
-                }
-              </View>
-
-              <VStack space="md" justifyContent='center' alignItems='center'>
-                <HStack h='$10' justifyContent='center' alignItems='center'>
-                  <Link href={ob.website ? ob.website : ''} isExternal>
-                    <HStack alignItems="center">
-                      <LinkText size="sm" fontFamily="$heading" fontWeight="$semibold" color="$primary600" textDecorationLine="none">
-                        {ob.website ? 'Visit their website' : '' }
-                      </LinkText>
-                    </HStack>
-                  </Link>
-                  {ob.urlLocation && ob.website ?
-                  <Divider orientation="vertical" mx='$2.5' bg='$emerald500' h={15} />:
-                  <View></View>
-                  }
-                  <Link href={ob.urlLocation ? ob.urlLocation : ''} isExternal>
-                    <HStack alignItems="center">
-                      <LinkText size="sm" fontFamily="$heading" fontWeight="$semibold" color="$primary600" textDecorationLine="none">
-                        {ob.urlLocation ? 'Google location' : ''}
-                      </LinkText>
-                    </HStack>
-                  </Link>
-                </HStack>
-              </VStack>
-            </Card>
-            })}
+          {dailyProgram?.data?.activities?.map((activity, index) => {
+            return (
+              <LocationCard
+                key={index}
+                place={activity.place}
+                time={activity.time}
+                address={activity.address}
+                info={activity.info}
+                description={activity.description}
+                arrayWithLinkImages={activity.arrayWithLinkImages}
+                website={activity.website}
+                urlLocation={activity.urlLocation}
+                deleteActivity={deleteActivity}
+                deleteActivityParams={[index]}
+                getTime={getTime}
+                extraFunction={()=>{indexActivity.current = index}}
+                copyInClipboard={()=>copyInClipboard(activity.address)}
+              />
+            )
+          })}
         </View>
 
         <View>
@@ -179,12 +126,6 @@ const DailyProgram = (props) => {
 };
 
 const styles = StyleSheet.create({
-  buttonText: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    marginTop: 10,
-    color: '#007AFF',
-  },
   title: {
     fontSize: 28,
     fontWeight: 'bold',
