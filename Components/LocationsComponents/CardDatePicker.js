@@ -1,19 +1,25 @@
 import { StyleSheet, Text, View } from 'react-native';
 import {formatDateFromMilliseconds} from '../../diverse.js';
-import { Card} from '@gluestack-ui/themed';
+import { Card } from '@gluestack-ui/themed';
 import DatePicker from '../Pickers/DatePicker.js';
 
 /** Date picker that helps to create the program */
 const CardDatePicker = (props) => {
-
+  const date = (data) => new Date(formatDateFromMilliseconds(data)).toString().slice(0, 15)
   return (
     <View style={{ alignItems: 'center' }}>
-      <Card style={styles.shadow} size="md" variant="elevated" m="$3" maxWidth={600}>
+      <Card
+        style={styles.shadow}
+        size="md"
+        variant="elevated"
+        m="$3"
+        maxWidth={600}
+      >
         <View style={styles.row}>
           <View style={styles.buttonContainer}>
             {props.dateFrom ? (
               <Text style={styles.centeredBoldText}>
-                From: {new Date(formatDateFromMilliseconds(props.dateFrom)).toString().slice(0, 15)}
+                From: {date(props.dateFrom)}
               </Text>
             ) : (
               <Text></Text>
@@ -29,7 +35,7 @@ const CardDatePicker = (props) => {
           <View style={styles.buttonContainer}>
             {props.dateTo ? (
               <Text style={styles.centeredBoldText}>
-                To: {new Date(formatDateFromMilliseconds(props.dateTo)).toString().slice(0, 15)}
+                To: {date(props.dateTo)}
               </Text>
             ) : (
               <Text></Text>

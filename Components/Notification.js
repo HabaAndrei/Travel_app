@@ -17,11 +17,25 @@ const Notification = (props) => {
   return (
     <Center style={styles.centerContainer}>
       {props.notification.map((ob, index) => (
-        <Alert key={index} mx="$2.5" action={ob.type} variant="solid" style={styles.alertContainer}>
-          <AlertIcon as={InfoIcon} mr="$3" />
+        <Alert
+          key={index}
+          mx="$2.5"
+          action={ob.type}
+          variant="solid"
+          style={styles.alertContainer}
+        >
+          <AlertIcon
+            as={InfoIcon}
+            mr="$3"
+          />
           <AlertText>{ob.mes}</AlertText>
           <Pressable onPress={() => deleteNotification(ob.id)}>
-            <Icon as={CloseIcon} m="$2" w="$4" h="$4" />
+            <Icon
+              as={CloseIcon}
+              m="$2"
+              w="$4"
+              h="$4"
+            />
           </Pressable>
         </Alert>
       ))}

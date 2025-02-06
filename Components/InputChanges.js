@@ -17,10 +17,20 @@ const InputChanges = (props) => {
       {props.isModified ?
         <>
         <TouchableOpacity onPress={()=>props.pressOnSave(props.param)} >
-          <AntDesign name="check" size={24} color="green" style={styles.icon} />
+          <AntDesign
+            name="check"
+            size={24}
+            color="green"
+            style={styles.icon}
+          />
         </TouchableOpacity>
         <TouchableOpacity onPress={()=>props.pressOnCancel(props.param)} >
-          <AntDesign name="close" size={24} color="red" style={styles.icon} />
+          <AntDesign
+            name="close"
+            size={24}
+            color="red"
+            style={styles.icon}
+          />
         </TouchableOpacity>
         </> : null
       }

@@ -5,7 +5,6 @@ import {  Select, SelectInput, Icon, ChevronDownIcon, SelectIcon, SelectItem,
 
 /** Component that represents a custom select element */
 const SelectConversation = (props) => {
-
   return (
     <View style={{width: 100}} >
       <Select onValueChange={props.setIdSelectedConversation}>

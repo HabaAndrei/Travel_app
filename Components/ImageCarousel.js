@@ -31,7 +31,10 @@ const ImageCarousel = (props) => {
 
   return (
     <View style={styles.container} {...panResponder.panHandlers}>
-      <Image source={{ uri: props.imageUrls[imageNumber] }}  style={{ width: width * 0.85, height: 450, alignSelf: 'center'}} />
+      <Image
+        source={{ uri: props.imageUrls[imageNumber] }}
+        style={{ width: width * 0.85, height: 450, alignSelf: 'center'}}
+      />
       <View style={styles.dotsContainer}>
         {props.imageUrls.map((_, index) => (
           <View

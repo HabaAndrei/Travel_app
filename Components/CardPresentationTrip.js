@@ -4,7 +4,11 @@ import { ArrowRightIcon, Card, Image, Heading, Link, LinkText, Text, HStack, Tra
 
 /** General card representing a presentation for a Trip */
 const CardPresentationTrip = (props) => (
-  <Card borderRadius="$lg" maxWidth={800} m="$3">
+  <Card
+    borderRadius="$lg"
+    maxWidth={800}
+    m="$3"
+  >
 
     {props?.image ?
       <Image
@@ -19,25 +23,59 @@ const CardPresentationTrip = (props) => (
       /> : null
     }
 
-    <HStack justifyContent="space-between" alignItems="center">
-      <Text fontSize="$sm"  fontStyle="normal"  fontFamily="$heading"  fontWeight="$normal"  lineHeight="$sm"  mb="$2"  sx={{  color: "$textLight700" }} >
+    <HStack
+      justifyContent="space-between"
+      alignItems="center"
+    >
+      <Text
+        fontSize="$sm"
+        fontStyle="normal"
+        fontFamily="$heading"
+        fontWeight="$normal"
+        lineHeight="$sm"
+        mb="$2"
+        sx={{  color: "$textLight700" }}
+      >
         {props.textDate}
       </Text>
       <Pressable onPress={()=>{props.deleteFunction(...props.deleteFunctionParameters)}} >
-        <Icon as={TrashIcon} m="$2" w="$6" h="$6" />
+        <Icon
+          as={TrashIcon}
+          m="$2"
+          w="$6"
+          h="$6"
+        />
       </Pressable>
     </HStack>
 
-    <Heading size="md" fontFamily="$heading" mb="$4">
+    <Heading
+      size="md"
+      fontFamily="$heading"
+      mb="$4"
+    >
       {props.title}
     </Heading>
 
     <Link onPress={()=>{props.functionRedirect(...props.functionRedirectParameters)}}>
       <HStack alignItems="center">
-        <LinkText    size="sm"  fontFamily="$heading"  fontWeight="$semibold"  color="$primary600"  $dark-color="$primary300"  textDecorationLine="none" >
+        <LinkText
+          size="sm"
+          fontFamily="$heading"
+          fontWeight="$semibold"
+          color="$primary600"
+          $dark-color="$primary300"
+          textDecorationLine="none"
+        >
             {props.nameRedirect}
         </LinkText>
-        <Icon as={ArrowRightIcon}  size="sm"  color="$primary600"  mt="$0.5"  ml="$0.5"  $dark-color="$primary300"/>
+        <Icon
+          as={ArrowRightIcon}
+          size="sm"
+          color="$primary600"
+          mt="$0.5"
+          ml="$0.5"
+          $dark-color="$primary300"
+        />
       </HStack>
     </Link>
 
