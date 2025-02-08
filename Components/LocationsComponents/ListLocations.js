@@ -1,9 +1,10 @@
 import { View, ScrollView, Dimensions, StyleSheet, TextInput } from 'react-native'
-import { HStack, Heading, Center, Text, Divider, Spinner, ArrowLeftIcon, CheckIcon, Icon } from '@gluestack-ui/themed';
+import { Heading, Center, Text, Spinner } from '@gluestack-ui/themed';
 import { getDataFromAsyncStorage, addDataToAsyncStorage, formatDateFromMilliseconds} from '../../diverse';
 import { useState } from 'react';
 import CardDatePicker from './CardDatePicker.js';
 import LocationCard from './LocationCard.js';
+import NavigationDivider from '../NavigationDivider.js';
 
 /** Component that represents a list of locations that can be picked to visit */
 const ListLocations = (props) => {
@@ -163,21 +164,12 @@ const ListLocations = (props) => {
           setDateFrom={setDateFrom} dateFrom={dateFrom}
         />
 
-        <View>
-          <HStack h="$10" justifyContent="center" alignItems="center">
-            <HStack alignItems="center"  >
-              <Icon as={ArrowLeftIcon} m="$2" w="$6" h="$6" />
-              <Text bold={true} onPress={()=>pressOnCancel()} >Go back</Text>
-            </HStack>
-
-            <Divider  style={{ margin: 15 }}  orientation="vertical"  mx="$2.5"  bg="$indigo500"  h={25}  $dark-bg="$indigo400"/>
-
-            <HStack alignItems="center">
-              <Text bold={true} onPress={()=>goToCreateProgram()} >Create program</Text>
-              <Icon as={CheckIcon} m="$2" w="$6" h="$6" />
-            </HStack>
-          </HStack>
-        </View>
+        <NavigationDivider
+         firstFunction={pressOnCancel}
+         firstFunctionName={'Go back'}
+         secondFunction={goToCreateProgram}
+         secondFunctionName={'Create program'}
+        />
 
       </View>
     )}

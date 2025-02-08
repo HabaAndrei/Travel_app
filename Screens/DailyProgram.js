@@ -1,8 +1,9 @@
 import { useEffect, useState, useRef } from 'react';
 import { ScrollView, View, Clipboard, StyleSheet, SafeAreaView } from 'react-native';
-import { ArrowLeftIcon, Text, Divider, HStack, CheckIcon,  Icon } from "@gluestack-ui/themed";
+import { Text } from "@gluestack-ui/themed";
 import {addDataToAsyncStorage, getDataFromAsyncStorage} from '../diverse.js';
 import LocationCard from '../Components/LocationCard.js';
+import NavigationDivider from '../Components/NavigationDivider.js';
 
 /** Daily Program screen => program created but not saved in database */
 const DailyProgram = (props) => {
@@ -104,21 +105,13 @@ const DailyProgram = (props) => {
           })}
         </View>
 
-        <View>
-          <HStack h="$10" justifyContent="center" alignItems="center">
-            <HStack alignItems="center"  >
-              <Icon as={ArrowLeftIcon} m="$2" w="$6" h="$6" />
-              <Text bold={true} onPress={()=>pressOnCancel()} >Go back</Text>
-            </HStack>
+        <NavigationDivider
+         firstFunction={pressOnCancel}
+         firstFunctionName={'Go back'}
+         secondFunction={pressOnSave}
+         secondFunctionName={'Save changes'}
+        />
 
-            <Divider  style={{ margin: 15 }}  orientation="vertical"  mx="$2.5"  bg="$indigo500"  h={25}  $dark-bg="$indigo400"/>
-
-            <HStack alignItems="center">
-              <Text bold={true} onPress={()=>pressOnSave()} >Save changes</Text>
-              <Icon as={CheckIcon} m="$2" w="$6" h="$6" />
-            </HStack>
-          </HStack>
-        </View>
       </ScrollView>
     </SafeAreaView >
 
