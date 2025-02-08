@@ -1,4 +1,4 @@
-import { StyleSheet, View, Pressable, Text, ScrollView, SafeAreaView, ImageBackground, KeyboardAvoidingView, Platform } from 'react-native'
+import { StyleSheet, View, Text, ScrollView, SafeAreaView, ImageBackground, KeyboardAvoidingView, Platform } from 'react-native'
 import { useReducer, useState } from 'react'
 import { Spinner } from '@gluestack-ui/themed'
 import { FirebaseAuth, FirebaseFirestore } from '../Firebase.js'
@@ -10,14 +10,7 @@ import {ButtonWhite, ButtonBlue} from '../CustomElements/buttonsTwoColors.js';
 import { arrayUnion } from "firebase/firestore";
 import InputComponent from '../Components/LogInComponents/InputComponent.js';
 import ViewIfUserExistsWithoutEmailVerified from '../Components/LogInComponents/ViewIfUserExistsWithoutEmailVerified.js';
-
-function ViewIfSignUpMethod(props){
-  return (
-    <>
-      {props.signInOrUp === "signup" ? props.children : null}
-    </>
-  )
-}
+import SignInSignUpView from '../Components/LogInComponents/SignInSignUpView.js';
 
 
 function ViewIfUserDoesntExist(props){
@@ -36,13 +29,6 @@ function ViewIfUserForgotsPassword(props){
   )
 }
 
-function SignInSignUpView(props){
-  return (
-    <>
-      {!props.isForgotsPassword ? props.children : null}
-    </>
-  )
-}
 
 /** The Login screen */
 const LogIn = (props) => {
@@ -285,52 +271,21 @@ const LogIn = (props) => {
                   <ButtonBlue name={"Send email"} func={forgotThePassword} />
                 </ViewIfUserForgotsPassword>
 
-                <SignInSignUpView isForgotsPassword={isForgotsPassword} >
-
-                  <Text style={styles.actionName}>{signInOrUp === "signup" ? "Create accout" :  "Log in"  }</Text>
-
-                  <ViewIfSignUpMethod signInOrUp={signInOrUp} >
-                    <InputComponent
-                      name={'First name'}
-                      placeholder={'First name'}
-                      value={inputFirstName}
-                      onChange={(text)=>setInputFirstName(text)}
-                    />
-                    <InputComponent
-                      name={'Second name'}
-                      placeholder={'Second name'}
-                      value={inputSecondName}
-                      onChange={(text)=>setInputSecondName(text)}
-                    />
-                  </ViewIfSignUpMethod>
-
-                  <InputComponent
-                    name={'Email'}
-                    placeholder={'Email'}
-                    value={inputEmail}
-                    onChange={(text)=>setInputEmail(text)}
-                  />
-
-                  <InputComponent
-                    name={'Password'}
-                    placeholder={'Password'}
-                    value={inputPassword.input}
-                    description={'The password must have at least seven characters, two of which must be numbers'}
-                    onChange={(text) => passwordDispatch({type: 'changeInput', payload: text})}
-                    secureTextEntry={!inputPassword.showState}
-                    showEyeIcon={true}
-                    onEyePress={()=>passwordDispatch({type: 'showState'})}
-                  />
-
-                  <Pressable onPress={()=>setIsForgotsPassword(true)}>
-                    <Text style={styles.textForgot}>
-                      Forgot your password? Click here
-                    </Text>
-                  </Pressable>
-
-                  <ButtonBlue name={signInOrUp === "signup" ? "Create" : "Authenticate"} func={signInOrUp === "signup" ? createAccount : logIn} />
-
-                </SignInSignUpView>
+                <SignInSignUpView
+                  isForgotsPassword={isForgotsPassword}
+                  setIsForgotsPassword={setIsForgotsPassword}
+                  signInOrUp={signInOrUp}
+                  inputFirstName={inputFirstName}
+                  setInputFirstName={setInputFirstName}
+                  inputSecondName={inputSecondName}
+                  setInputSecondName={setInputSecondName}
+                  inputEmail={inputEmail}
+                  setInputEmail={setInputEmail}
+                  inputPassword={inputPassword}
+                  passwordDispatch={passwordDispatch}
+                  createAccount={createAccount}
+                  logIn={logIn}
+                />
 
               </View>
 
@@ -346,7 +301,6 @@ const LogIn = (props) => {
         </ImageBackground>
       </KeyboardAvoidingView>
     </SafeAreaView>
-
   )
 }
 
@@ -376,32 +330,11 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: 'white',
   },
-  actionName:{
-    fontSize: 25,
-    fontWeight: 'bold',
-    color: 'rgba(0, 0, 255, 10)',
-    backgroundColor: 'rgba(255, 255, 255, 0.7)',
-    borderRadius: 8,
-    paddingHorizontal: 5,
-    alignSelf: 'flex-start',
-    marginBottom: 10
-  },
   slogan: {
     fontSize: 16,
     fontStyle: 'italic',
     color: 'white',
     marginTop: 5,
-  },
-  textForgot: {
-    color: 'white',
-    backgroundColor: 'rgba(0, 0, 255, 0.5)',
-    fontSize: 14,
-    textAlign: 'center',
-    lineHeight: 20,
-    paddingHorizontal: 5,
-    borderRadius: 3,
-    alignSelf: 'flex-end',
-    marginBottom: 10
   },
   spinnerContainer: {
     position: 'absolute',
