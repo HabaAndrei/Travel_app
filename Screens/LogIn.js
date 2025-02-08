@@ -1,6 +1,6 @@
 import { StyleSheet, View, Pressable, Text, ScrollView, SafeAreaView, ImageBackground, KeyboardAvoidingView, Platform } from 'react-native'
 import { useReducer, useState } from 'react'
-import { VStack, Spinner } from '@gluestack-ui/themed'
+import { Spinner } from '@gluestack-ui/themed'
 import { FirebaseAuth, FirebaseFirestore } from '../Firebase.js'
 import {isValidEmail, isValidPassword, deleteAllFromAsyncStorage, address_function_send_code_verification} from "../diverse.js"
 import uuid from 'react-native-uuid';
@@ -9,6 +9,7 @@ import ModalReAuth from '../Components/Modals/ModalReAuth.js';
 import {ButtonWhite, ButtonBlue} from '../CustomElements/buttonsTwoColors.js';
 import { arrayUnion } from "firebase/firestore";
 import InputComponent from '../Components/LogInComponents/InputComponent.js';
+import ViewIfUserExistsWithoutEmailVerified from '../Components/LogInComponents/ViewIfUserExistsWithoutEmailVerified.js';
 
 function ViewIfSignUpMethod(props){
   return (
@@ -18,13 +19,6 @@ function ViewIfSignUpMethod(props){
   )
 }
 
-function ViewIfUserExistsWithoutEmailVerified(props){
-  return (
-    <>
-      {props.user && !props.emailVerified_code ? props.children : null}
-    </>
-  )
-}
 
 function ViewIfUserDoesntExist(props){
   return (
@@ -267,40 +261,16 @@ const LogIn = (props) => {
 
             <ModalReAuth  isModalVisibleReAuth={isModalVisibleReAuth} setModalVisibleReAuth={setModalVisibleReAuth} />
 
-            <ViewIfUserExistsWithoutEmailVerified user={props.user}  emailVerified_code={props.user?.emailVerified_code}>
-              <View >
-
-                <VStack style={{ marginBottom: 40, marginRight: 20,  marginLeft: 20}} >
-                  <Text style={styles.actionNameLow}>The next step is to verify your email address</Text>
-
-                  <View style={{margin: 10}} />
-
-                  <ButtonBlue name={'Send code to email'} func={sendCodeToEmail} />
-
-                  <View style={{margin: 10}} />
-
-                  <InputComponent
-                    name={'Code from email'}
-                    placeholder={'Enter the code from email'}
-                    value={codeVerify}
-                    onChange={(text)=>setCodeVerify(text)}
-                  />
-
-                  <View style={{margin: 10}} />
-
-                  <ButtonBlue name={'Verify code'} func={verifyCode} />
-                </VStack>
-
-                <View style={{ alignItems: 'center', marginTop: 50 }}>
-                  <ButtonWhite name={'Log out'} func={signOut} />
-
-                  <View style={styles.separator} />
-
-                  <ButtonWhite name={'Delete account'} func={deleteUser} />
-                </View>
-
-              </View>
-            </ViewIfUserExistsWithoutEmailVerified>
+            <ViewIfUserExistsWithoutEmailVerified
+              user={props.user}
+              emailVerified_code={props.user?.emailVerified_code}
+              sendCodeToEmail={sendCodeToEmail}
+              setCodeVerify={setCodeVerify}
+              codeVerify={codeVerify}
+              verifyCode={verifyCode}
+              signOut={signOut}
+              deleteUser={deleteUser}
+            />
 
             <ViewIfUserDoesntExist user={props.user} >
               <View  style={{ marginBottom: 40, marginRight: 20,  marginLeft: 20}} >
@@ -415,15 +385,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 5,
     alignSelf: 'flex-start',
     marginBottom: 10
-  },
-  actionNameLow:{
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: 'rgba(0, 0, 255, 10)',
-    backgroundColor: 'rgba(255, 255, 255, 0.7)',
-    borderRadius: 8,
-    paddingHorizontal: 5,
-    alignSelf: 'flex-start',
   },
   slogan: {
     fontSize: 16,
