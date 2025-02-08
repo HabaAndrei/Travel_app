@@ -3,14 +3,13 @@ import { VStack } from '@gluestack-ui/themed'
 import {ButtonWhite, ButtonBlue} from '../../CustomElements/buttonsTwoColors.js';
 import InputComponent from './InputComponent';
 
-
 const ViewIfUserExistsWithoutEmailVerified = (props) => {
   return (
     <>
       {
         props.user && !props.emailVerified_code ?
           <TheView
-            data={{...props}}
+            {...props}
           />
         : null
       }
@@ -27,28 +26,28 @@ const TheView = (props) => {
 
         <View style={{margin: 10}} />
 
-        <ButtonBlue name={'Send code to email'} func={props.data.sendCodeToEmail} />
+        <ButtonBlue name={'Send code to email'} func={props.sendCodeToEmail} />
 
         <View style={{margin: 10}} />
 
         <InputComponent
           name={'Code from email'}
           placeholder={'Enter the code from email'}
-          value={props.data.codeVerify}
-          onChange={(text)=>props.data.setCodeVerify(text)}
+          value={props.codeVerify}
+          onChange={(text)=>props.setCodeVerify(text)}
         />
 
         <View style={{margin: 10}} />
 
-        <ButtonBlue name={'Verify code'} func={props.data.verifyCode} />
+        <ButtonBlue name={'Verify code'} func={props.verifyCode} />
       </VStack>
 
       <View style={{ alignItems: 'center', marginTop: 50 }}>
-        <ButtonWhite name={'Log out'} func={props.data.signOut} />
+        <ButtonWhite name={'Log out'} func={props.signOut} />
 
         <View style={styles.separator} />
 
-        <ButtonWhite name={'Delete account'} func={props.data.deleteUser} />
+        <ButtonWhite name={'Delete account'} func={props.deleteUser} />
       </View>
 
     </View>
