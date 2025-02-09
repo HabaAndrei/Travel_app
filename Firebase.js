@@ -209,7 +209,7 @@ class FirebaseFirestore{
 
 class FirebaseAuth extends FirebaseFirestore {
 
-  async _createUserWithEmailAndPassword(email, password, firstName, secondName){
+  async _createUserWithEmailAndPassword({email, password, firstName, secondName}){
     return this._storeErr(async ()=>{
       const rez = await createUserWithEmailAndPassword(auth, email, password);
       const {uid} = rez.user;

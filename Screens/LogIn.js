@@ -63,7 +63,10 @@ const LogIn = (props) => {
   const firebaseFirestore = new FirebaseFirestore();
 
   async function createAccount(){
-    if(!inputEmail?.length || !inputPassword?.input?.length || !inputFirstName?.length || !inputSecondName?.length){
+    if(
+      !inputEmail?.trim()?.length || !inputPassword?.input?.trim()?.length ||
+      !inputFirstName?.trim()?.length || !inputSecondName?.trim()?.length
+    ){
       props.addNotification('warning', "Please complete all inputs");
       return;
     }
@@ -78,9 +81,14 @@ const LogIn = (props) => {
       return;
     }
 
-    const rez = await firebaseAuth._createUserWithEmailAndPassword(inputEmail, inputPassword.input, inputFirstName, inputSecondName);
-    if(!rez.isResolved){
-      if(rez.err?.message?.includes("auth/email-already-in-use")){
+    const resultCreateAccount = await firebaseAuth._createUserWithEmailAndPassword({
+      email: inputEmail.trim(),
+      password: inputPassword.input.trim(),
+      firstName: inputFirstName.trim(),
+      secondName: inputSecondName.trim()
+    });
+    if(!resultCreateAccount.isResolved){
+      if(resultCreateAccount.err?.message?.includes("auth/email-already-in-use")){
         props.addNotification('error',"This email address is already in use");
       }else{
         props.addNotification('error', "Unfortunately I could not create the account ");
