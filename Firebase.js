@@ -67,7 +67,7 @@ class FirebaseFirestore{
     })
   }
 
-  async askQuestion(historyConv){
+  async askQuestion(messagesConversation){
     return this._storeErr(async ()=>{
       const {uid} = auth.currentUser;
       const data = await this.getPlansFromDbWithUid(uid);
@@ -95,7 +95,7 @@ class FirebaseFirestore{
         })
         tripsData = JSON.stringify(rez);
       }
-      const rezQuery =  await axios.post(`${address_function_chat}`, { historyConv, tripsData});
+      const rezQuery =  await axios.post(`${address_function_chat}`, { messagesConversation, tripsData});
       if(rezQuery?.data?.isResolved){
         return {isResolved: true, data: rezQuery?.data?.data};
       }else{

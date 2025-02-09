@@ -44,8 +44,8 @@ const Chat = (props) => {
     }
   }
 
-  async function getResponse(conv, idConv){
-    const data = await firebaseFirestore.askQuestion(conv);
+  async function getResponse(messages, idConv){
+    const data = await firebaseFirestore.askQuestion(messages);
     if(data.isResolved){
       setConversation((prev)=>{
         const newConv = prev.map((ob)=>{
