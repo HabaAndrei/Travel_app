@@ -55,6 +55,7 @@ const Locations = (props) => {
       }
     }).catch((err)=>{
       firebaseFirestore.storeErr(err.message)
+      props.addNotification('warning', 'Unfortunately, we could not generate locations. System error!');
       console.log('eroare de la createLocationsAi', err, ' <<== eroare');
     })
   }
