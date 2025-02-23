@@ -1,12 +1,8 @@
-import {ADDRESS_FUNCTION_CHAT, ADDRESS_FUNCTION_FUZZY, ADDRESS_FUNCTION_ACTIVITIES, ADDRESS_FUNCTION_LOCATIONS,
-  ADDRESS_FUNCTION_PROGRAM, ADDRESS_FUNCTION_SEND_CODE_VERIFICATION} from '@env';
+import {ADDRESS_FUNCTION_FUZZY, ADDRESS_FUNCTION_AI_GENERATION, ADDRESS_FUNCTION_SEND_CODE_VERIFICATION} from '@env';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { FirebaseFirestore } from './Firebase';
 
-const address_function_chat = ADDRESS_FUNCTION_CHAT;
-const address_function_activities = ADDRESS_FUNCTION_ACTIVITIES;
-const address_function_locations = ADDRESS_FUNCTION_LOCATIONS;
-const address_function_program = ADDRESS_FUNCTION_PROGRAM;
+const address_function_ai_generation = ADDRESS_FUNCTION_AI_GENERATION;
 
 const address_function_fuzzy = ADDRESS_FUNCTION_FUZZY;
 const address_function_send_code_verification = ADDRESS_FUNCTION_SEND_CODE_VERIFICATION;
@@ -174,7 +170,6 @@ switch(random){
 export {
   isValidPassword, isValidEmail, removeItemFromAsyncStorage, getDataFromAsyncStorage, addDataToAsyncStorage,
   multiRemoveFromAsyncStorage, multiSetFromAsyncStorage, getAllKeysFromAsyncStorage, multiGetFromAsyncStorage,
-  formatDateFromMilliseconds, deleteAllFromAsyncStorage, getDays, getHours, toMinutes, address_function_chat,
-  address_function_activities, address_function_locations, address_function_program,
-  address_function_fuzzy, address_function_send_code_verification, imagePath
+  formatDateFromMilliseconds, deleteAllFromAsyncStorage, getDays, getHours, toMinutes, imagePath,
+  address_function_ai_generation, address_function_fuzzy, address_function_send_code_verification
 };

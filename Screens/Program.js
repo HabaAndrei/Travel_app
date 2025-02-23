@@ -1,6 +1,6 @@
 import { StyleSheet, View, ScrollView, Dimensions, SafeAreaView } from 'react-native'
 import {useState, useEffect, useRef} from 'react'
-import {address_function_program, formatDateFromMilliseconds, removeItemFromAsyncStorage,
+import {address_function_ai_generation, formatDateFromMilliseconds, removeItemFromAsyncStorage,
   addDataToAsyncStorage, multiSetFromAsyncStorage, getDataFromAsyncStorage,
   multiGetFromAsyncStorage, multiRemoveFromAsyncStorage} from '../diverse.js';
 import { Spinner, Center, Heading, Text, Divider, HStack, TrashIcon,RepeatIcon, CheckIcon,  Icon } from "@gluestack-ui/themed";
@@ -76,8 +76,8 @@ const Program = (props) => {
   async function createProgramAi({startDate, endDate, city, country, locations, urlImageCity, hotelAddress}){
     setRecomandation(false);
     setProgram([]);
-    axios.post(`${address_function_program}`,
-      {startDate, endDate, city, country, locations, hotelAddress}
+    axios.post(address_function_ai_generation,
+      {generationType: 'generateProgram', startDate, endDate, city, country, locations, hotelAddress}
     ).then((data)=>{
       if(data.data.isResolved){
         const days = data.data.data;

@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Spinner, Icon, CheckIcon, Textarea, VStack, TextareaInput, AlertCircleIcon, Heading, Center, RadioGroup,
   Radio, RadioIndicator, RadioIcon, CircleIcon, RadioLabel } from "@gluestack-ui/themed";
-import { address_function_activities } from '../../diverse.js';
+import { address_function_ai_generation } from '../../diverse.js';
 import CustomButton from '../../CustomElements/CustomButton.js';
 import { FirebaseFirestore } from '../../Firebase.js';
 
@@ -42,7 +42,9 @@ const CheckboxActivities = (props) => {
   function createActivities(){
     const { city, country } = props.destinationActivities;
     if (!props.destinationActivities.isOpenModalActivities || props.destinationActivities.checkbox.length) return;
-    axios.post(`${address_function_activities}`, {city, country }).then((data) => {
+    axios.post(address_function_ai_generation, {
+      generationType: 'generateActivities', city, country
+    }).then((data) => {
       if (data.data.isResolved) {
         if(data?.data?.paramsLocation?.data){
           setParamsLocation(data?.data?.paramsLocation?.data?.local_places_and_tourist_places);
@@ -188,7 +190,6 @@ export default CheckboxActivities;
 
 const styles = StyleSheet.create({
   viewCard: {
-    flex: 1,
     padding: 20,
     margin: 10,
     borderRadius: 15,
