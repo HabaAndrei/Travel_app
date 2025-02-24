@@ -103,8 +103,6 @@ const Layout = ({ children, navigation, route, user, setUser}) => {
             <Text style={styles.pressableText}>Assistant</Text>
           </Pressable>
 
-
-
         </ScrollView>
       </View> : <View
         style={styles.footerContainerClear}
@@ -138,7 +136,9 @@ const styles = StyleSheet.create({
   footerContent: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center',
     paddingHorizontal: 10,
+    minWidth: '100%',
   },
   pressable: {
     flexDirection: 'column',
