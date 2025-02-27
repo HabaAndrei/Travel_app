@@ -188,7 +188,7 @@ class FirebaseFirestore{
   async updateColumnsDatabase({database, id, columnsWithValues}){
     return this._storeErr(async ()=>{
       const ref = doc(db, database, id);
-      const rez = await updateDoc(ref, columnsWithValues);
+      await updateDoc(ref, columnsWithValues);
       return {isResolved: true};
     })
   }
@@ -252,21 +252,21 @@ class FirebaseAuth extends FirebaseFirestore {
   async _deleteUser(){
     return this._storeErr(async ()=>{
       const user = auth.currentUser;
-      const rez = await deleteUser(user);
+      await deleteUser(user);
       return {isResolved: true};
     })
   }
 
   async _signOut(){
     return this._storeErr(async ()=>{
-      const rez = await signOut(auth);
+      await signOut(auth);
       return {isResolved: true};
     })
   }
 
   async _sendPasswordResetEmail(email){
     return this._storeErr(async ()=>{
-      const rez = await sendPasswordResetEmail(auth, email)
+      await sendPasswordResetEmail(auth, email)
       return {isResolved: true};
     })
   }
