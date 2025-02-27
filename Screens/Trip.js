@@ -26,7 +26,7 @@ const Trip = (props) => {
 
   useEffect(() => {
     if (!isFocused || !props?.route?.params?.program) return;
-    let { city, country, startDate, endDate, id, program, hotelAddress } = props.route.params;
+    let { program, hotelAddress } = props.route.params;
     if (typeof program === 'string') program = JSON.parse(program);
     setTripProgram(program);
     setHotelAddressTrip(hotelAddress);
@@ -51,9 +51,7 @@ const Trip = (props) => {
       return;
     }
     saveProgramIntoDB(id, newProgram);
-    setTripProgram((prev) => {
-      return [...newProgram];
-    });
+    setTripProgram([...newProgram]);
   }
 
 
@@ -71,9 +69,7 @@ const Trip = (props) => {
       return;
     }
     saveProgramIntoDB(id, program);
-    setTripProgram((prev) => {
-      return [...program];
-    });
+    setTripProgram([...program]);
   };
 
   async function confimNewDate(date) {
@@ -86,9 +82,7 @@ const Trip = (props) => {
       return;
     }
     saveProgramIntoDB(id, newProgram);
-    setTripProgram((prev) => {
-      return [...newProgram];
-    });
+    setTripProgram([...newProgram]);
   }
 
   function saveNewLocation(name, address, info, description, time) {
@@ -158,7 +152,7 @@ const Trip = (props) => {
   }
 
   function strLatLngMaps(ob) {
-    const { lat, lng } = ob?.geometry_location;
+    const { lat, lng } = ob?.geometry_location || {};
     return [lat, lng].join(',');
   }
 

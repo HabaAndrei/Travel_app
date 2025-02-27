@@ -37,8 +37,8 @@ const Program = (props) => {
 
     if (props?.route?.params?.type === "keepProgram") return;
 
-    const {startDate, endDate, city, country, urlImageCity} = props?.route?.params?.locationParam;
-    const {locations, type, hotelAddress} = props?.route?.params;
+    const {startDate, endDate, city, country, urlImageCity} = props?.route?.params?.locationParam || {};
+    const {locations, type, hotelAddress} = props?.route?.params || {};
 
     if(type === "createProgram"){
       createProgramAi({startDate, endDate, city, country, locations, urlImageCity, hotelAddress});

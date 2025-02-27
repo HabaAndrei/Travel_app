@@ -113,7 +113,7 @@ const ListLocations = (props) => {
         prev[indexLocation].dataTimeLocation.packages[indexPackage].selected = !selected;
         return [...prev];
       })
-    }catch(err){
+    }catch{
       props.addNotification('error', 'There was a problem selecting the package');
     }
   }

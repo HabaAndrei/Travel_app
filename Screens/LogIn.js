@@ -109,7 +109,6 @@ const LogIn = (props) => {
 
     const rez = await firebaseAuth._signInWithEmailAndPassword(inputEmail, inputPassword.input);
     if(rez.isResolved){
-      const user = rez.data;
       props.navigation.navigate('SetupTrip');
     }else{
       props.addNotification('error', "Invalid login credentials");

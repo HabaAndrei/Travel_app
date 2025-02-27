@@ -160,8 +160,8 @@ const Chat = (props) => {
             </ScrollView> :
             <View style={styles.viewText}>
               <Text style={styles.greetingText}>
-                ✨ Hey, I'm your personal assistant Eric! ✨{"\n\n"}
-                🚀 I'll answer any questions about the app's features{"\n"}
+                ✨ Hey, I`m your personal assistant Eric! ✨{"\n\n"}
+                🚀 I`ll answer any questions about the app`s features{"\n"}
                 📅 Provide details about your travel itinerary{"\n"}
                 💬 And much more!{"\n\n"}
               </Text>

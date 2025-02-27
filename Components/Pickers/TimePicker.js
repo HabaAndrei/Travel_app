@@ -1,4 +1,4 @@
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import {HStack, LinkText, Link } from '@gluestack-ui/themed';
 import { useState } from 'react';
@@ -38,6 +38,4 @@ const TimePicker = (props) => {
 
 }
 
-export default TimePicker
-
-const styles = StyleSheet.create({})
+export default TimePicker;

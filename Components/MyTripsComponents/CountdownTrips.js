@@ -76,8 +76,8 @@ const CountdownNews = (props) => {
   // Create the news only with locations that will be visited
   function createNews(){
     const actualDate = formatDateFromMilliseconds(new Date().getTime());
-    const actualHour = new Date().getHours();
-    const actualMinutes = new Date().getMinutes();
+    let actualHour = new Date().getHours();
+    let actualMinutes = new Date().getMinutes();
     if(actualHour.length === 1)actualHour = "0" + actualHour;
     if(actualMinutes.length === 1)actualMinutes = "0" + actualMinutes;
 

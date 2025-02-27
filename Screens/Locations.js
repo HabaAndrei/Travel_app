@@ -26,7 +26,7 @@ const Locations = (props) => {
       return;
     };
 
-    let {city, country, selectedActivities, customActivity, type, isLocalPlaces, scaleVisit} = props?.route?.params;
+    let {city, country, selectedActivities, customActivity, type, isLocalPlaces, scaleVisit} = props?.route?.params || {};
 
     if(type === "getAllDataAboutLocations"){
       createLocationsAi({city, country, customActivity, selectedActivities, isLocalPlaces, scaleVisit})

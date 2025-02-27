@@ -45,7 +45,7 @@ const DailyProgram = (props) => {
       const secondPart = actualProgram?.slice(dailyProgram.index + 1, actualProgram.length);
       firstPart?.push(midPartOb);
       const newProgram = firstPart?.concat(secondPart);
-      const rez = await addDataToAsyncStorage("travelProgram", newProgram);
+      await addDataToAsyncStorage("travelProgram", newProgram);
       props.navigation.navigate('Program', {type: "getProgramAsync"});
     }
   }

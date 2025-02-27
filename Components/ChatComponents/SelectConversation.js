@@ -1,7 +1,7 @@
-import { StyleSheet, View } from 'react-native'
+import { View } from 'react-native'
 import {  Select, SelectInput, Icon, ChevronDownIcon, SelectIcon, SelectItem,
   SelectTrigger, SelectPortal, SelectBackdrop, SelectContent, SelectDragIndicator,
-  SelectDragIndicatorWrapper, } from '@gluestack-ui/themed';
+  SelectDragIndicatorWrapper } from '@gluestack-ui/themed';
 
 /** Component that represents a custom select element */
 const SelectConversation = (props) => {
@@ -30,6 +30,4 @@ const SelectConversation = (props) => {
   )
 }
 
-export default SelectConversation
-
-const styles = StyleSheet.create({})
+export default SelectConversation;
