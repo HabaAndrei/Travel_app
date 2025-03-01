@@ -51,6 +51,7 @@ const Locations = (props) => {
         multiSetFromAsyncStorage([['arrayLocationsToTravel', [...arraySelected]],
           ["locationsParameter", {city, country, customActivity, selectedActivities, scaleVisit, urlImageCity}]]);
       }else{
+        props.addNotification('warning', 'Unfortunately, we could not generate locations. Api error!');
         console.log("eroare la functia createLocationsAi ", data);
       }
     }).catch((err)=>{
