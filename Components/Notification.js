@@ -29,7 +29,7 @@ const Notification = (props) => {
             mr="$3"
           />
           <AlertText>{ob.mes}</AlertText>
-          <Pressable onPress={() => deleteNotification(ob.id)}>
+          <Pressable onPress={() => deleteNotification(ob.id)} testID={`close-button-${ob.id}`} >
             <Icon
               as={CloseIcon}
               m="$2"
