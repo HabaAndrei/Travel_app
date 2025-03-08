@@ -152,8 +152,8 @@ const Trip = (props) => {
   }
 
   function strLatLngMaps(ob) {
-    const { lat, lng } = ob?.geometry_location || {};
-    return [lat, lng].join(',');
+    const { latitude, longitude } = ob?.geometry_location || {};
+    return [latitude, longitude].join(',');
   }
 
   function _openMap(indexLocation) {
