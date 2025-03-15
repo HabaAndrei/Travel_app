@@ -65,7 +65,7 @@ const SearchDestination = (props) => {
       <View style={styles.img}>
         <Image
           style={{height: 150,  width: width * 0.85, borderRadius: 10,}}
-            source={imagePath}
+          source={imagePath}
         />
       </View>
 

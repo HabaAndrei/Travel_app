@@ -1,5 +1,6 @@
 import { StyleSheet, View, Image, PanResponder, Dimensions } from 'react-native';
 import { useState } from 'react';
+import { getUrlImage } from '../diverse.js';
 
 /** This component creates a custom image carousel */
 const ImageCarousel = (props) => {
@@ -32,7 +33,7 @@ const ImageCarousel = (props) => {
   return (
     <View style={styles.container} {...panResponder.panHandlers}>
       <Image
-        source={{ uri: props.imageUrls[imageNumber] }}
+        source={{ uri: getUrlImage(props.imageUrls[imageNumber]) }}
         style={{ width: width * 0.85, height: 450, alignSelf: 'center'}}
       />
       <View style={styles.dotsContainer}>
