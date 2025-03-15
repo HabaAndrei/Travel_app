@@ -1,5 +1,6 @@
 import { Pressable } from 'react-native'
 import { ArrowRightIcon, Card, Image, Heading, Link, LinkText, Text, HStack, TrashIcon,  Icon } from "@gluestack-ui/themed";
+import { getUrlImage } from '../diverse.js';
 
 /** General card representing a presentation for a Trip */
 const CardPresentationTrip = (props) => (
@@ -16,7 +17,7 @@ const CardPresentationTrip = (props) => (
         width="$full"
         borderRadius="$md"
         source={{
-          uri: props.image,
+          uri: getUrlImage(props.image),
         }}
         alt={props.image}
       /> : null

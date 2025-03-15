@@ -1,9 +1,9 @@
-import {ADDRESS_FUNCTION_FUZZY, ADDRESS_FUNCTION_AI_GENERATION, ADDRESS_FUNCTION_SEND_CODE_VERIFICATION} from '@env';
+import {ADDRESS_FUNCTION_FUZZY, ADDRESS_FUNCTION_AI_GENERATION, ADDRESS_FUNCTION_SEND_CODE_VERIFICATION, SERVER_ADDRESS_IMAGES} from '@env';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { FirebaseFirestore } from './Firebase';
 
 const address_function_ai_generation = ADDRESS_FUNCTION_AI_GENERATION;
-
+const server_address_images = SERVER_ADDRESS_IMAGES;
 const address_function_fuzzy = ADDRESS_FUNCTION_FUZZY;
 const address_function_send_code_verification = ADDRESS_FUNCTION_SEND_CODE_VERIFICATION;
 const firebaseFirestore = new FirebaseFirestore();
@@ -167,9 +167,14 @@ switch(random){
   case 10: imagePath = require('./img/10.jpg');
 }
 
+function getUrlImage(name){
+  return `${server_address_images}${name}.jpg`;
+}
+
 export {
   isValidPassword, isValidEmail, removeItemFromAsyncStorage, getDataFromAsyncStorage, addDataToAsyncStorage,
   multiRemoveFromAsyncStorage, multiSetFromAsyncStorage, getAllKeysFromAsyncStorage, multiGetFromAsyncStorage,
   formatDateFromMilliseconds, deleteAllFromAsyncStorage, getDays, getHours, toMinutes, imagePath,
-  address_function_ai_generation, address_function_fuzzy, address_function_send_code_verification
+  address_function_ai_generation, address_function_fuzzy, address_function_send_code_verification,
+  server_address_images, getUrlImage
 };
