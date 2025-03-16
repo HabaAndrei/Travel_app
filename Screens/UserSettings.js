@@ -17,7 +17,8 @@ const UserSettings = (props) => {
   async function signOut(){
     const rez = await firebaseAuth._signOut();
     if(rez.isResolved){
-      props.setUser(undefined)
+      props.setUser(undefined);
+      deleteAllFromAsyncStorage();
     }else{
       console.log(rez.err);
       props.addNotification('error', "Unfortunately, we couldn't log you out");
@@ -33,7 +34,7 @@ const UserSettings = (props) => {
     const rez = await firebaseAuth._deleteUser();
     if(rez.isResolved){
       props.setUser(undefined);
-      deleteAllFromAsyncStorage()
+      deleteAllFromAsyncStorage();
     }else{
       if(rez?.err?.includes('auth/requires-recent-login')){
         setModalVisibleReAuth(true);
@@ -72,15 +73,6 @@ const UserSettings = (props) => {
               </Button>
             </HStack>
           </VStack>
-
-
-          <View  >
-            <Pressable onPress={()=>deleteAllFromAsyncStorage()} >
-              <Text style={{margin: 50, backgroundColor: 'blue'}}  >
-                Delete all from Async Storage
-              </Text>
-            </Pressable>
-          </View>
         </View>
 
       </ScrollView>
