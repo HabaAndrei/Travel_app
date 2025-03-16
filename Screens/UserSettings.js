@@ -1,4 +1,4 @@
-import { Text, View, Pressable, ScrollView, SafeAreaView } from 'react-native'
+import { View, ScrollView, SafeAreaView } from 'react-native'
 import { useState } from 'react';
 import {VStack, HStack, Button, ButtonText, Divider, Heading, Center, Icon, SettingsIcon} from '@gluestack-ui/themed'
 import { FirebaseAuth } from '../Firebase.js';
