@@ -1,12 +1,21 @@
 import { StyleSheet, View, Image, PanResponder, Dimensions } from 'react-native';
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { getUrlImage } from '../diverse.js';
+
+const ImageMemo = ({ link }) => {
+  const { width } = Dimensions.get('window');
+  return (
+    <Image
+      source={{ uri: link }}
+      style={{ width: width * 0.85, height: 450, alignSelf: 'center'}}
+    />
+  );
+};
 
 /** This component creates a custom image carousel */
 const ImageCarousel = (props) => {
   const [imageNumber, setImageNumber] = useState(0);
   const [startX, setStartX] = useState(0);
-  const { width } = Dimensions.get('window');
 
   // Function that interprets if the user wants to slide to the left or right
   const panResponder = PanResponder.create({
@@ -30,12 +39,11 @@ const ImageCarousel = (props) => {
     }
   });
 
+  const ImageCustom = useMemo(() => <ImageMemo link={getUrlImage(props.imageUrls[imageNumber])} />, [props.imageUrls, imageNumber]);
+
   return (
     <View style={styles.container} {...panResponder.panHandlers}>
-      <Image
-        source={{ uri: getUrlImage(props.imageUrls[imageNumber]) }}
-        style={{ width: width * 0.85, height: 450, alignSelf: 'center'}}
-      />
+      {ImageCustom}
       <View style={styles.dotsContainer}>
         {props.imageUrls.map((_, index) => (
           <View
