@@ -31,6 +31,12 @@
         "projectId": "c7c58597-1248-43c8-9622-f728ad207573"
       }
     },
-    "owner": "haba03"
+    "owner": "haba03",
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/c7c58597-1248-43c8-9622-f728ad207573"
+    }
   }
 }
