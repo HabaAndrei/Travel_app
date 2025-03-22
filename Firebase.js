@@ -1,24 +1,22 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore, collection, addDoc, doc, setDoc ,updateDoc, query, where, deleteDoc,
   getDocs, getDoc, orderBy } from "firebase/firestore";
-import {MEASUREMENT_ID, APIKEY, AUTH_DOMAIN, PROJECT_ID, STORAGE_BUCKET, MESSAGING_SENDER_ID, APP_ID} from '@env';
 import {signOut,  deleteUser, initializeAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword,
   sendPasswordResetEmail, reauthenticateWithCredential, EmailAuthProvider  } from "firebase/auth";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getReactNativePersistence } from '@firebase/auth/dist/rn/index.js';
-import {address_function_ai_generation} from './diverse.js';
 import axios from 'axios';
 import * as Device from 'expo-device';
-
+import {EnvConfig} from './providers/EnvConfig';
 
 const firebaseConfig = {
-  apiKey: APIKEY,
-  authDomain: AUTH_DOMAIN,
-  projectId: PROJECT_ID,
-  storageBucket: STORAGE_BUCKET,
-  messagingSenderId: MESSAGING_SENDER_ID,
-  appId: APP_ID,
-  measurementId: MEASUREMENT_ID
+  apiKey: EnvConfig.getInstance().get('apiKey'),
+  authDomain: EnvConfig.getInstance().get('auth_domain'),
+  projectId: EnvConfig.getInstance().get('project_id'),
+  storageBucket:EnvConfig.getInstance().get('storage_bucket') ,
+  messagingSenderId: EnvConfig.getInstance().get('messaging_sender_id'),
+  appId: EnvConfig.getInstance().get('app_id'),
+  measurementId: EnvConfig.getInstance().get('measurement_id')
 };
 
 const app = initializeApp(firebaseConfig);
@@ -95,7 +93,7 @@ class FirebaseFirestore{
         })
         tripsData = JSON.stringify(rez);
       }
-      const rezQuery =  await axios.post(address_function_ai_generation, {
+      const rezQuery =  await axios.post(EnvConfig.getInstance().get('address_function_ai_generation'), {
         messagesConversation, tripsData, generationType: 'generateChatResponse'
       });
       if(rezQuery?.data?.isResolved){
@@ -158,7 +156,6 @@ class FirebaseFirestore{
     }catch(err){
       const uid = auth?.currentUser?.uid;
       const {modelName, modelId, brand} = Device;
-      console.log('we catch an error', {err});
       addDoc(collection(db, "errors"), {uid: uid || 'user not connected', modelName, modelId, brand, mesErr: err.message});
       return {isResolved: false, err: err.message}
     }
