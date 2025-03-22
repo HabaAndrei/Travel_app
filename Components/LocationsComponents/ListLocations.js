@@ -48,7 +48,12 @@ const ListLocations = (props) => {
 
   // Store data in async storage and redirect to the program screen
   async function goToCreateProgram(){
-    if (!verifyDestinationRequest()) return;
+    // Uncomment this in production ==>>>
+    // if(!verifyDestinationRequest())return;
+
+    // Uncomment this in production <<<<=======
+    ////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////
     addDataToAsyncStorage('arrayLocationsToTravel', props.locations)
     const newLocationReference = JSON.parse(JSON.stringify(props.locations));
     // get only the selected location
@@ -84,11 +89,20 @@ const ListLocations = (props) => {
       return;
     }
     const locationParam = dataParam.data;
+    ////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////
+    // Make the change here in production =>>>>>>>>>>
 
-    locationParam.startDate = formatDateFromMilliseconds(dateFrom);
-    locationParam.endDate = formatDateFromMilliseconds(dateTo)
-
+    // locationParam.startDate = formatDateFromMilliseconds(dateFrom);
+    // locationParam.endDate = formatDateFromMilliseconds(dateTo)
+    locationParam.startDate = formatDateFromMilliseconds(1707602400000);
+    locationParam.endDate = formatDateFromMilliseconds(1718053200000)
     props.navigation.navigate('Program', {type: 'createProgram', locations: data, locationParam, hotelAddress});
+
+    // Make the change here in production <<<<<<<<<<===========
+    /////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////
+
   }
 
   // Select or deselect the packages
