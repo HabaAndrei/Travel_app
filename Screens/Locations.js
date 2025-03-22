@@ -1,12 +1,13 @@
 import { StyleSheet,SafeAreaView, View, ScrollView } from 'react-native'
 import { useState, useEffect } from 'react'
 import { useIsFocused } from '@react-navigation/native';
-import { address_function_ai_generation, getDataFromAsyncStorage, multiSetFromAsyncStorage } from '../diverse';
+import { getDataFromAsyncStorage, multiSetFromAsyncStorage } from '../diverse';
 import axios from 'axios';
 import { Text } from '@gluestack-ui/themed';
 import NavbarProgram from '../Components/NavbarProgram';
 import ListLocations from '../Components/LocationsComponents/ListLocations.js';
 import { FirebaseFirestore } from '../Firebase.js';
+import { EnvConfig } from '../providers/EnvConfig.js';
 
 /** Location screen => where the user sees generated locations */
 const Locations = (props) => {
@@ -38,7 +39,7 @@ const Locations = (props) => {
   async function createLocationsAi({city, country, customActivity, selectedActivities, isLocalPlaces, scaleVisit}){
     setLocations([]);
     setRecomandation(false)
-    axios.post(address_function_ai_generation, { generationType: 'generateLocations',
+    axios.post(EnvConfig.getInstance().get('address_function_ai_generation'), { generationType: 'generateLocations',
       city, country, customActivity, selectedActivities, isLocalPlaces, scaleVisit
     }).then((data)=>{
       if(data.data.isResolved){

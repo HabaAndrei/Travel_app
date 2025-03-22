@@ -61,7 +61,6 @@ const Chat = (props) => {
       });
     }else{
       props.addNotification("warning", "An error occurred while generating the message");
-      console.log('we catch err', data.err);
     }
 
   }
