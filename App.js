@@ -25,7 +25,11 @@ const App = () => {
   const firebaseFirestore = new FirebaseFirestore();
 
   useEffect(()=>{
-    reloadUser();
+    try{
+      reloadUser();
+    }catch(err){
+      firebaseFirestore.storeErr(err.message);
+    };
   }, [])
 
   function reloadUser(){
@@ -38,10 +42,8 @@ const App = () => {
         } else {
           setUser(_user);
         }
-        console.log('user connected')
       } else {
         setUser(undefined);
-        console.log('user disconnected')
       }
     });
   }
