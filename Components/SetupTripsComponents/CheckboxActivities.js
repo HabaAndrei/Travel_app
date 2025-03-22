@@ -3,9 +3,9 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Spinner, Icon, CheckIcon, Textarea, VStack, TextareaInput, AlertCircleIcon, Heading, Center, RadioGroup,
   Radio, RadioIndicator, RadioIcon, CircleIcon, RadioLabel } from "@gluestack-ui/themed";
-import { address_function_ai_generation } from '../../diverse.js';
 import CustomButton from '../../CustomElements/CustomButton.js';
 import { FirebaseFirestore } from '../../Firebase.js';
+import { EnvConfig } from '../../providers/EnvConfig.js';
 
 function ViewSpinner(props) {
   return (
@@ -42,7 +42,7 @@ const CheckboxActivities = (props) => {
   function createActivities(){
     const { city, country } = props.destinationActivities;
     if (!props.destinationActivities.isOpenModalActivities || props.destinationActivities.checkbox.length) return;
-    axios.post(address_function_ai_generation, {
+    axios.post(EnvConfig.getInstance().get('address_function_ai_generation'), {
       generationType: 'generateActivities', city, country
     }).then((data) => {
       if (data.data.isResolved) {

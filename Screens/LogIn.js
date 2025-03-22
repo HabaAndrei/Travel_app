@@ -2,7 +2,7 @@ import { StyleSheet, View, Text, ScrollView, SafeAreaView, ImageBackground, Keyb
 import { useReducer, useState } from 'react'
 import { Spinner } from '@gluestack-ui/themed'
 import { FirebaseAuth, FirebaseFirestore } from '../Firebase.js'
-import {isValidEmail, isValidPassword, deleteAllFromAsyncStorage, address_function_send_code_verification} from "../diverse.js"
+import { isValidEmail, isValidPassword, deleteAllFromAsyncStorage } from "../diverse.js"
 import uuid from 'react-native-uuid';
 import axios from 'axios';
 import ModalReAuth from '../Components/Modals/ModalReAuth.js';
@@ -11,7 +11,7 @@ import { arrayUnion } from "firebase/firestore";
 import InputComponent from '../Components/LogInComponents/InputComponent.js';
 import ViewIfUserExistsWithoutEmailVerified from '../Components/LogInComponents/ViewIfUserExistsWithoutEmailVerified.js';
 import SignInSignUpView from '../Components/LogInComponents/SignInSignUpView.js';
-
+import { EnvConfig } from '../providers/EnvConfig.js';
 
 function ViewIfUserDoesntExist(props){
   return (
@@ -172,7 +172,7 @@ const LogIn = (props) => {
         props.addNotification('error', "There was a problem sending the code by email");
         return;
       }
-      const rezSend = await axios.post(address_function_send_code_verification, {code, email});
+      const rezSend = await axios.post(EnvConfig.getInstance().get('address_function_send_code_verification'), {code, email});
       if(!rezSend.data.isResolved){
         setLoadingSendEmail(false);
         props.addNotification('error', "There was a problem sending the code by email");

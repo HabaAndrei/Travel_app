@@ -1,6 +1,6 @@
 import { StyleSheet, View, ScrollView, Dimensions, SafeAreaView } from 'react-native'
 import {useState, useEffect, useRef} from 'react'
-import {address_function_ai_generation, formatDateFromMilliseconds, removeItemFromAsyncStorage,
+import { formatDateFromMilliseconds, removeItemFromAsyncStorage,
   addDataToAsyncStorage, multiSetFromAsyncStorage, getDataFromAsyncStorage,
   multiGetFromAsyncStorage, multiRemoveFromAsyncStorage} from '../diverse.js';
 import { Spinner, Center, Heading, Text, Divider, HStack, TrashIcon,RepeatIcon, CheckIcon,  Icon } from "@gluestack-ui/themed";
@@ -10,6 +10,7 @@ import axios from 'axios';
 import NavbarProgram from '../Components/NavbarProgram.js';
 import CardPresentationTrip from '../Components/CardPresentationTrip.js';
 import InputHotelAddress from '../Components/ProgramComponents/InputHotelAddress.js';
+import { EnvConfig } from '../providers/EnvConfig.js';
 
 /** Program screen => where the client can see the generated program */
 const Program = (props) => {
@@ -76,7 +77,7 @@ const Program = (props) => {
   async function createProgramAi({startDate, endDate, city, country, locations, urlImageCity, hotelAddress}){
     setRecomandation(false);
     setProgram([]);
-    axios.post(address_function_ai_generation,
+    axios.post(EnvConfig.getInstance().get('address_function_ai_generation'),
       {generationType: 'generateProgram', startDate, endDate, city, country, locations, hotelAddress}
     ).then((data)=>{
       if(data.data.isResolved){

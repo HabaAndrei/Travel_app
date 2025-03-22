@@ -1,10 +1,10 @@
 import { FlatList, Modal, StyleSheet, Text, Pressable, View, TextInput, SafeAreaView } from 'react-native';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { address_function_fuzzy } from '../../diverse.js';
 import { Spinner } from "@gluestack-ui/themed";
 import CustomButton from '../../CustomElements/CustomButton.js';
 import { FirebaseFirestore } from '../../Firebase.js';
+import {EnvConfig} from '../../providers/EnvConfig.js';
 
 /** Modal that allows the client to search for destinations to visit - country and city */
 const ModalSearchDestination = (props) => {
@@ -25,7 +25,7 @@ const ModalSearchDestination = (props) => {
 
   function getCountries(){
     props.searchModalDispatch({type: 'openModalCountry'})
-    axios.get(`${address_function_fuzzy}`, {params: {
+    axios.get(EnvConfig.getInstance().get('address_function_fuzzy'), {params: {
       input: props.searchModal.inputCountry,
       value: "country",
       country: props.searchModal.inputCountry,
@@ -43,7 +43,7 @@ const ModalSearchDestination = (props) => {
 
   function getCities(){
     props.searchModalDispatch({type: 'openModalCity'})
-    axios.get(`${address_function_fuzzy}`, {params: {
+    axios.get(EnvConfig.getInstance().get('address_function_fuzzy'), {params: {
       input: props.searchModal.inputCity,
       value: "city",
       country: props.destinationActivities.country,
