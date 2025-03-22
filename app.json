@@ -2,7 +2,8 @@
   "expo": {
     "name": "Travel Bot",
     "icon": "./assets/icon.png",
-    "version": "1.0.0",
+    "version"
+    : "1.0.0",
     "slug": "expo_app",
     "orientation": "portrait",
     "userInterfaceStyle": "automatic",
