@@ -1,3 +1,6 @@
+import globals from "globals";
+import pluginJs from "@eslint/js";
+import pluginReact from "eslint-plugin-react";
 
 // npx eslint yourfile.js
 
