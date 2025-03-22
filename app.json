@@ -37,6 +37,18 @@
     },
     "updates": {
       "url": "https://u.expo.dev/c7c58597-1248-43c8-9622-f728ad207573"
-    }
+    },
+    "plugins": [
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "enableProguardInReleaseBuilds": true,
+            "extraProguardRules": "-keep public class com.horcrux.svg.** {*;}",
+            "allowBackup": false
+          }
+        }
+      ]
+    ]
   }
 }
