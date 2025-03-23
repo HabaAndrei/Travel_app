@@ -9,7 +9,7 @@ class EnvConfig {
                 address_function_ai_generation: process.env.EXPO_PUBLIC_ADDRESS_FUNCTION_AI_GENERATION,
                 address_function_send_code_verification: process.env.EXPO_PUBLIC_ADDRESS_FUNCTION_SEND_CODE_VERIFICATION,
                 measurement_id: process.env.EXPO_PUBLIC_MEASUREMENT_ID,
-                api_key: process.env.EXPO_PUBLIC_APIKEY,
+                api_key: process.env.EXPO_PUBLIC_API_KEY,
                 auth_domain: process.env.EXPO_PUBLIC_AUTH_DOMAIN,
                 project_id: process.env.EXPO_PUBLIC_PROJECT_ID,
                 storage_bucket: process.env.EXPO_PUBLIC_STORAGE_BUCKET,
