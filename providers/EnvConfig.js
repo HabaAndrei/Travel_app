@@ -1,24 +1,20 @@
-import {ADDRESS_FUNCTION_FUZZY, ADDRESS_FUNCTION_AI_GENERATION, ADDRESS_FUNCTION_SEND_CODE_VERIFICATION, SERVER_ADDRESS_IMAGES,
-    MEASUREMENT_ID, APIKEY, AUTH_DOMAIN, PROJECT_ID, STORAGE_BUCKET, MESSAGING_SENDER_ID, APP_ID
-} from '@env';
-
 /** getter with singleton */
 class EnvConfig {
     static getInstance(){
         if (!this.instance){
             this.instance = new EnvConfig();
             this.instance.config = {
-                address_function_fuzzy: ADDRESS_FUNCTION_FUZZY,
-                address_function_ai_generation: ADDRESS_FUNCTION_AI_GENERATION,
-                address_function_send_code_verification: ADDRESS_FUNCTION_SEND_CODE_VERIFICATION,
-                server_address_images: SERVER_ADDRESS_IMAGES,
-                measurement_id: MEASUREMENT_ID,
-                apiKey: APIKEY,
-                auth_domain: AUTH_DOMAIN,
-                project_id: PROJECT_ID,
-                storage_bucket: STORAGE_BUCKET,
-                messaging_sender_id: MESSAGING_SENDER_ID,
-                app_id: APP_ID
+                server_address_images: process.env.EXPO_PUBLIC_SERVER_ADDRESS_IMAGES,
+                address_function_fuzzy: process.env.EXPO_PUBLIC_ADDRESS_FUNCTION_FUZZY,
+                address_function_ai_generation: process.env.EXPO_PUBLIC_ADDRESS_FUNCTION_AI_GENERATION,
+                address_function_send_code_verification: process.env.EXPO_PUBLIC_ADDRESS_FUNCTION_SEND_CODE_VERIFICATION,
+                measurement_id: process.env.EXPO_PUBLIC_MEASUREMENT_ID,
+                api_key: process.env.EXPO_PUBLIC_APIKEY,
+                auth_domain: process.env.EXPO_PUBLIC_AUTH_DOMAIN,
+                project_id: process.env.EXPO_PUBLIC_PROJECT_ID,
+                storage_bucket: process.env.EXPO_PUBLIC_STORAGE_BUCKET,
+                messaging_sender_id: process.env.EXPO_PUBLIC_MESSAGING_SENDER_ID,
+                app_id: process.env.EXPO_PUBLIC_APP_ID
             };
         }
         return this.instance;
