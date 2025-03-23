@@ -7,10 +7,10 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getReactNativePersistence } from '@firebase/auth/dist/rn/index.js';
 import axios from 'axios';
 import * as Device from 'expo-device';
-import {EnvConfig} from './providers/EnvConfig';
+import { EnvConfig } from './providers/EnvConfig';
 
 const firebaseConfig = {
-  apiKey: EnvConfig.getInstance().get('apiKey'),
+  apiKey: EnvConfig.getInstance().get('api_key'),
   authDomain: EnvConfig.getInstance().get('auth_domain'),
   projectId: EnvConfig.getInstance().get('project_id'),
   storageBucket:EnvConfig.getInstance().get('storage_bucket') ,
