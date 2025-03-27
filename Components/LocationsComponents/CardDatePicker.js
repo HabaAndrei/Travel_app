@@ -15,6 +15,7 @@ const CardDatePicker = (props) => {
         m="$3"
         maxWidth={600}
       >
+        <Text style={styles.title}>Select Your Date Range</Text>
         <View style={styles.row}>
           <View style={styles.buttonContainer}>
             {props.dateFrom ? (
@@ -80,5 +81,12 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.5,
     shadowRadius: 4,
     elevation: 5,
+  },
+  title: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginBottom: 10,
+    color: '#333',
   },
 })
