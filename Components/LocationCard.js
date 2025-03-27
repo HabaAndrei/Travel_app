@@ -2,8 +2,12 @@ import { Pressable, View, StyleSheet } from 'react-native';
 import { Card, Heading, Link, LinkText, Text, VStack, Divider, HStack, TrashIcon,  Icon } from "@gluestack-ui/themed";
 import TimePicker from './Pickers/TimePicker.js';
 import ImageCarousel from './ImageCarousel.js';
+import CenteredDividerLinks from './CenteredDividerLinks.js';
 
 const LocationCard = (props) => {
+
+  const existsTwoNavigation = !!(props.website && props.urlLocation);
+
   return (
   <Card
     maxWidth={800}
@@ -80,59 +84,69 @@ const LocationCard = (props) => {
       }
     </View>
 
-    <VStack
-      space="md"
-      justifyContent='center'
-      alignItems='center'
-    >
-      <HStack
-        h='$10'
+
+    {
+      existsTwoNavigation ?
+        <CenteredDividerLinks
+          website={props.website}
+          urlLocation={props.urlLocation}
+        / >
+      :
+      <VStack
+        space="md"
         justifyContent='center'
         alignItems='center'
       >
-        <Link
-          href={props.website ? props.website : ''}
-          isExternal
+        <HStack
+          h='$10'
+          justifyContent='center'
+          alignItems='center'
         >
-          <HStack alignItems="center">
-            <LinkText
-              size="sm"
-              fontFamily="$heading"
-              fontWeight="$semibold"
-              color="$primary600"
-              textDecorationLine="none"
-            >
-              {props.website ? 'Visit their website' : '' }
-            </LinkText>
-          </HStack>
-        </Link>
-        {props.urlLocation && props.website ?
-          <Divider
-            orientation="vertical"
-            mx='$2.5'
-            bg='$emerald500'
-            h={15}
-          />
-          : null
-        }
-        <Link
-          href={props.urlLocation ? props.urlLocation : ''}
-          isExternal
-        >
-          <HStack alignItems="center">
-            <LinkText
-              size="sm"
-              fontFamily="$heading"
-              fontWeight="$semibold"
-              color="$primary600"
-              textDecorationLine="none"
-            >
-              {props.urlLocation ? 'Google location' : ''}
-            </LinkText>
-          </HStack>
-        </Link>
-      </HStack>
-    </VStack>
+          <Link
+            href={props.website ? props.website : ''}
+            isExternal
+          >
+            <HStack alignItems="center">
+              <LinkText
+                size="sm"
+                fontFamily="$heading"
+                fontWeight="$semibold"
+                color="$primary600"
+                textDecorationLine="none"
+              >
+                {props.website ? 'Visit their website' : '' }
+              </LinkText>
+            </HStack>
+          </Link>
+          {props.urlLocation && props.website ?
+            <Divider
+              orientation="vertical"
+              mx='$2.5'
+              bg='$emerald500'
+              h={15}
+            />
+            : null
+          }
+          <Link
+            href={props.urlLocation ? props.urlLocation : ''}
+            isExternal
+          >
+            <HStack alignItems="center">
+              <LinkText
+                size="sm"
+                fontFamily="$heading"
+                fontWeight="$semibold"
+                color="$primary600"
+                textDecorationLine="none"
+              >
+                {props.urlLocation ? 'Google location' : ''}
+              </LinkText>
+            </HStack>
+          </Link>
+        </HStack>
+      </VStack>
+    }
+
   </Card>
   )
 }
