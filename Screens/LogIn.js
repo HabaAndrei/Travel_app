@@ -63,35 +63,34 @@ const LogIn = (props) => {
   const firebaseFirestore = new FirebaseFirestore();
 
   async function createAccount(){
-    if(
-      !inputEmail?.trim()?.length || !inputPassword?.input?.trim()?.length ||
-      !inputFirstName?.trim()?.length || !inputSecondName?.trim()?.length
-    ){
+    const email = inputEmail?.trim();
+    const password = inputPassword?.input.trim();
+    const firstName = inputFirstName?.trim();
+    const secondName = inputSecondName?.trim();
+
+    if( !email?.length || !password?.length || !firstName?.length || !secondName?.length ){
       props.addNotification('warning', "Please complete all inputs");
       return;
     }
 
-    if(!isValidEmail(inputEmail)){
+    if(!isValidEmail(email)){
       props.addNotification('error', "The email address is not valid");
       return;
     }
 
-    if(!isValidPassword(inputPassword.input)){
+    if(!isValidPassword(password)){
       props.addNotification('error', "The password must have at least seven characters, two of which must be numbers");
       return;
     }
 
-    const resultCreateAccount = await firebaseAuth._createUserWithEmailAndPassword({
-      email: inputEmail.trim(),
-      password: inputPassword.input.trim(),
-      firstName: inputFirstName.trim(),
-      secondName: inputSecondName.trim()
-    });
+    const resultCreateAccount = await firebaseAuth._createUserWithEmailAndPassword(
+      { email, password, firstName, secondName }
+    );
     if(!resultCreateAccount.isResolved){
-      if(resultCreateAccount.err?.message?.includes("auth/email-already-in-use")){
-        props.addNotification('error',"This email address is already in use");
-      }else{
-        props.addNotification('error', "Unfortunately I could not create the account ");
+      if(resultCreateAccount.err?.includes("email-already-in-use")){
+        props.addNotification('error', "This email is already registered. Try logging in or use a different email.");
+      } else {
+        props.addNotification('error', "Account creation failed. Please check your details and try again.");
       }
     }
   }
