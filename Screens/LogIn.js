@@ -179,7 +179,7 @@ const LogIn = (props) => {
         return;
       }
       setLoadingSendEmail(false);
-      props.addNotification('success', "The email will arive immediately. Please enter the code received on the email address in the input");
+      props.addNotification('success', 'Enter the code sent to your email. Check spam if needed.');
     }catch(err){
       console.log(err);
       setLoadingSendEmail(false);
