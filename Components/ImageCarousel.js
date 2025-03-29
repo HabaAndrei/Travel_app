@@ -16,27 +16,32 @@ const ImageMemo = ({ link }) => {
 const ImageCarousel = (props) => {
   const [imageNumber, setImageNumber] = useState(0);
   const [startX, setStartX] = useState(0);
+  const [startY, setStartY] = useState(0);
 
-  // Function that interprets if the user wants to slide to the left or right
   const panResponder = PanResponder.create({
-    onStartShouldSetPanResponder: () => true,
+    onMoveShouldSetPanResponder: (evt, gestureState) => {
+      return Math.abs(gestureState.dx) > Math.abs(gestureState.dy); // Detectăm dacă swipe-ul este orizontal
+    },
     onPanResponderGrant: (evt) => {
       setStartX(evt.nativeEvent.pageX);
+      setStartY(evt.nativeEvent.pageY);
     },
     onPanResponderRelease: (evt) => {
       const endX = evt.nativeEvent.pageX;
-      if (startX - endX > 20) {
-        setImageNumber((number)=>{
-          if(number >= props.imageUrls.length - 1 )return number;
-          else return number +=1;
-        })
-      } else if (endX - startX > 20) {
-        setImageNumber((number)=>{
-          if(number <= 0 )return number;
-          else return number -=1;
-        })
+      const endY = evt.nativeEvent.pageY;
+      const diffX = startX - endX;
+      const diffY = startY - endY;
+
+      if (Math.abs(diffX) > Math.abs(diffY)) {
+        if (diffX > 20) {
+          setImageNumber((number) =>
+            number >= props.imageUrls.length - 1 ? number : number + 1
+          );
+        } else if (diffX < -20) {
+          setImageNumber((number) => (number <= 0 ? number : number - 1));
+        }
       }
-    }
+    },
   });
 
   const ImageCustom = useMemo(() => <ImageMemo link={getUrlImage(props.imageUrls[imageNumber])} />, [props.imageUrls, imageNumber]);

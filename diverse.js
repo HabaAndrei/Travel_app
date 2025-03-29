@@ -35,19 +35,30 @@ function toMinutes(time) {
   return hours * 60 + minutes;
 }
 
-function getHours(startDate, endDate) {
-  const getHoursFrom = startDate.slice(0, 2);
-  const getHoursTo = endDate.slice(0, 2);
-  const getMinutesFrom = startDate.slice(3, 5);
-  const getMinutesTo = endDate.slice(3, 5);
-  let hours = getHoursTo - getHoursFrom;
-  let minutes = getMinutesTo - getMinutesFrom;
+function getHours(startTime, endTime) {
 
+  // Find the index of the colon that separates hours and minutes
+  const colonIndexStart = startTime.indexOf(':');
+  const colonIndexEnd = endTime.indexOf(':');
+
+  // Extract the hours
+  const startHour = startTime.slice(0, colonIndexStart);
+  const endHour = endTime.slice(0, colonIndexEnd);
+
+  // Extract the minutes
+  const startMinutes = startTime.slice(colonIndexStart + 1, startTime.length);
+  const endMinutes = endTime.slice(colonIndexEnd + 1, endTime.length);
+
+  // Calculate the difference in hours and minutes
+  let hours = endHour - startHour;
+  let minutes = endMinutes - startMinutes;
+
+  // Adjust for negative values (crossing midnight)
   if (Number(hours) < 0) {
-    hours = (24 - Number(getHoursFrom)) + Number(getHoursTo);
+    hours = (24 - Number(startHour)) + Number(endHour);
   }
   if (Number(minutes) < 0) {
-    minutes = (60 - Number(getMinutesFrom)) + Number(getMinutesTo);
+    minutes = (60 - Number(startMinutes)) + Number(endMinutes);
     hours -= 1;
   }
   return { minutes, hours };

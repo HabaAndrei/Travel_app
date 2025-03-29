@@ -100,6 +100,7 @@ const ModalSearchDestination = (props) => {
                   onChangeText={(text) => props.searchModalDispatch({type: 'setInputCountry', payload: text})}
                   style={styles.textInput}
                   placeholderTextColor="gray"
+                  autoFocus
                 />
               )}
 
@@ -110,6 +111,7 @@ const ModalSearchDestination = (props) => {
                   onChangeText={(text) => props.searchModalDispatch({type: 'setInputCity', payload: text})}
                   style={styles.textInput}
                   placeholderTextColor="gray"
+                  autoFocus
                 />
               )}
 

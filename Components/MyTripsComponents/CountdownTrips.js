@@ -42,7 +42,7 @@ const CountdownNews = (props) => {
     const { activities, date } = programDay;
     const news = [];
 
-    const formatTimeMessage = (hours, minutes, address) =>
+    const formatTimeMessage = ({hours, minutes, address}) =>
       `In ${hours > 0 ? `${hours} hours` : ''} ${hours > 0 && minutes > 0 ? 'and' : ''} ${minutes > 0 ? `${minutes} minutes` : ''} you have to be at address ${address}.`;
 
     activities.forEach(activity => {
@@ -52,7 +52,7 @@ const CountdownNews = (props) => {
       if (date === actualDate) {
         if (toMinutes(`${actualHour}:${actualMinutes}`) < toMinutes(time)) {
           const { minutes, hours } = getHours(`${actualHour}:${actualMinutes}`, time);
-          const infTwo = formatTimeMessage(hours, minutes, address);
+          const infTwo = formatTimeMessage({hours, minutes, address});
           news.push({ title, infOne, infTwo, urlLocation, website, address });
         }
       } else {
@@ -62,7 +62,7 @@ const CountdownNews = (props) => {
         });
         if (days === 1) {
           const { minutes, hours } = getHours(`${actualHour}:${actualMinutes}`, time);
-          const infTwo = formatTimeMessage(hours, minutes, address);
+          const infTwo = formatTimeMessage({hours, minutes, address});
           news.push({ title, infOne, infTwo, urlLocation, website, address });
         } else {
           const infTwo = `In ${days} days you have to be at address ${address}.`;
