@@ -28,7 +28,7 @@
     "production": {
       "android": {
         "serviceAccountKeyPath": "./db-db-9bbfe-ca1d76e14561.json",
-        "track": "internal"
+        "track": "production"
       }
     }
   }
