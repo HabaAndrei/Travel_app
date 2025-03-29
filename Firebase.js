@@ -217,7 +217,7 @@ class FirebaseAuth extends FirebaseFirestore {
         database: 'users',
         id: uid,
         columnsWithValues: {
-          uid, createdAt, email, password, firstName, secondName, email_verified: false
+          uid, createdAt, email, firstName, secondName, email_verified: false
         }
       });
       this.addIntoDatabase({
