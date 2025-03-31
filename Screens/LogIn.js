@@ -1,5 +1,5 @@
 import { StyleSheet, View, Text, ScrollView, SafeAreaView, ImageBackground, KeyboardAvoidingView, Platform } from 'react-native'
-import { useReducer, useState } from 'react'
+import { useReducer, useState, useRef } from 'react'
 import { Spinner } from '@gluestack-ui/themed'
 import { FirebaseAuth, FirebaseFirestore } from '../Firebase.js'
 import { isValidEmail, isValidPassword, deleteAllFromAsyncStorage } from "../diverse.js"
@@ -58,11 +58,15 @@ const LogIn = (props) => {
   const [codeVerify, setCodeVerify] = useState('');
   const [isModalVisibleReAuth, setModalVisibleReAuth] = useState(false);
   const [isLoadingSendEmail, setLoadingSendEmail] = useState(false);
+  const isCreatingAccount = useRef(false);
 
   const firebaseAuth = new FirebaseAuth();
   const firebaseFirestore = new FirebaseFirestore();
 
   async function createAccount(){
+
+    if (isCreatingAccount.current) return;
+
     const email = inputEmail?.trim();
     const password = inputPassword?.input.trim();
     const firstName = inputFirstName?.trim();
@@ -83,9 +87,11 @@ const LogIn = (props) => {
       return;
     }
 
+    isCreatingAccount.current = true;
     const resultCreateAccount = await firebaseAuth._createUserWithEmailAndPassword(
       { email, password, firstName, secondName }
     );
+    isCreatingAccount.current = false;
     if(!resultCreateAccount.isResolved){
       if(resultCreateAccount.err?.includes("email-already-in-use")){
         props.addNotification('error', "This email is already registered. Try logging in or use a different email.");
