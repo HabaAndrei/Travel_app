@@ -173,9 +173,17 @@ const LogIn = (props) => {
         columnsWithValues: {'codes': arrayUnion(code)}
       })
       if(!rezStore.isResolved){
-        setLoadingSendEmail(false);
-        props.addNotification('error', "There was a problem sending the code by email");
-        return;
+        // If the update cannot be done, the store is probably not created, and we need to create that database with IDs
+        const createDatabase = await firebaseFirestore.addIntoDatabase({
+          database: 'code_verification',
+          id: props.user.email,
+          columnsWithValues: {'codes': arrayUnion(code)}
+        })
+        if (!createDatabase.isResolved){
+          setLoadingSendEmail(false);
+          props.addNotification('error', "There was a problem sending the code by email");
+          return;
+        }
       }
       const rezSend = await axios.post(EnvConfig.getInstance().get('address_function_send_code_verification'), {code, email});
       if(!rezSend.data.isResolved){
