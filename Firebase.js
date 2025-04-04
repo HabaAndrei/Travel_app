@@ -156,7 +156,14 @@ class FirebaseFirestore{
     }catch(err){
       const uid = auth?.currentUser?.uid;
       const {modelName, modelId, brand} = Device;
-      addDoc(collection(db, "errors"), {uid: uid || 'user not connected', modelName, modelId, brand, mesErr: err.message});
+      addDoc(collection(db, "errors"), {
+        uid: uid || 'user not connected',
+        modelName,
+        modelId,
+        brand,
+        mesErr: err.message,
+        createdAt: new Date()
+      });
       return {isResolved: false, err: err.message}
     }
   }
