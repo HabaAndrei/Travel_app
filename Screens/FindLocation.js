@@ -1,10 +1,22 @@
 import { StyleSheet, Text, View, SafeAreaView, ScrollView, Image, Pressable } from 'react-native';
-import { Heading, Center } from '@gluestack-ui/themed';
+import { Heading, Center, Spinner } from '@gluestack-ui/themed';
 import { useState } from 'react';
 import axios from 'axios';
 import * as ImagePicker from 'expo-image-picker';
 import { EnvConfig } from '../providers/EnvConfig.js';
 import CustomButton from '../CustomElements/CustomButton.js';
+
+function ViewSpinner(props) {
+  return (
+    <>
+      {props.isLoading ? (
+        <View style={styles.spinnerContainer} >
+          <Spinner size="large" color="blue" />
+        </View>
+      ) : null}
+    </>
+  );
+}
 
 const FindLocation = (props) => {
 
@@ -29,6 +41,8 @@ const FindLocation = (props) => {
   async function analyseImage(){
     if (!image) return;
     setLoading(true);
+    setDetails({});
+    setImageNotFoud(false);
     const data = await axios.post(
       EnvConfig.getInstance().get('address_function_find_location'),
       {image}, { headers: { "Content-Type": "application/json"}}
@@ -37,11 +51,14 @@ const FindLocation = (props) => {
     if (!data.data.isResolved) {
       props.addNotification("warning", "System error! Try again later");
     }
+    if (data.data.data.isFoundPlace == false) setImageNotFoud(true);
     setDetails(data?.data?.data)
   }
 
   return (
-    <SafeAreaView style={{flex: 1}} >
+    <SafeAreaView style={{flex: 1, paddingBottom: 20}} >
+      <ViewSpinner style={styles.spinnerContainer} isLoading={isLoading} />
+
       <ScrollView>
 
         <Center>
@@ -68,7 +85,13 @@ const FindLocation = (props) => {
             {details?.place && <Text style={styles.detailsText}>📍 Place: {details.place}</Text>}
             {details?.description && <Text style={styles.detailsText}>📝 Description: {details.description}</Text>}
           </View>
-        ) : null}
+        ) : null }
+
+        {isImageNotFound ?
+          <View style={styles.detailsContainer}>
+            <Text style={styles.detailsTitle}>Please add an image of a place with more context</Text>
+          </View>
+        : null}
 
       </ScrollView>
     </SafeAreaView>
@@ -119,5 +142,15 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#444',
     marginBottom: 5
-  }
+  },
+  spinnerContainer: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 9999,
+  },
 });
