@@ -66,7 +66,8 @@
     "react-native-web": "^0.19.13",
     "twrnc": "^4.5.1",
     "typescript": "~5.3.3",
-    "undefined": "@/components/icon"
+    "undefined": "@/components/icon",
+    "expo-image-picker": "~16.0.6"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
