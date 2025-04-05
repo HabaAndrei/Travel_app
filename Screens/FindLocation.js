@@ -2,6 +2,7 @@ import { StyleSheet, Text, View, SafeAreaView, ScrollView, Button, Image } from 
 import {useState, useEffect} from 'react';
 import axios from 'axios';
 import * as ImagePicker from 'expo-image-picker';
+import { EnvConfig } from '../providers/EnvConfig.js';
 
 const FindLocation = () => {
 
@@ -27,7 +28,8 @@ const FindLocation = () => {
       return;
     }
 
-    const data = await axios.post('http://localhost:5050/find-image-location',
+
+    const data = await axios.post(EnvConfig.getInstance().get('address_function_find_location'),
       {image},
         {
           headers: {
