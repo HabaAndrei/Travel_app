@@ -5,6 +5,7 @@ import axios from 'axios';
 import * as ImagePicker from 'expo-image-picker';
 import { EnvConfig } from '../providers/EnvConfig.js';
 import CustomButton from '../CustomElements/CustomButton.js';
+import { FirebaseAuth } from '../Firebase.js';
 
 function ViewSpinner(props) {
   return (
@@ -25,6 +26,8 @@ const FindLocation = (props) => {
   const [isImageNotFound, setImageNotFoud] = useState(false);
   const [isLoading, setLoading] = useState(false);
 
+  const firebaseAuth = new FirebaseAuth();
+
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ['images'],
@@ -43,9 +46,11 @@ const FindLocation = (props) => {
     setLoading(true);
     setDetails({});
     setImageNotFoud(false);
+
+    const user_token = await firebaseAuth.getAuthToken();
     const data = await axios.post(
       EnvConfig.getInstance().get('address_function_find_location'),
-      {image}, { headers: { "Content-Type": "application/json"}}
+      {image, user_token}, { headers: { "Content-Type": "application/json"}}
     );
     setLoading(false);
     if (!data.data.isResolved) {
