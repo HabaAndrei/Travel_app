@@ -196,7 +196,7 @@ const Program = (props) => {
             {!program?.length ?
               <View  style={{ marginTop: screenHeight / 3 }} >
                 <Center  >
-                  <Spinner size="large" color="blue" />
+                  <Spinner size="large" color="blue" bg="rgba(0, 0, 0, 0.43)" />
                 </Center>
               </View> :
 
