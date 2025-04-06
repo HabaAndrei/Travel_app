@@ -12,7 +12,7 @@ function ViewSpinner(props) {
     <>
       {props.isLoading ? (
         <View style={styles.spinnerContainer} >
-          <Spinner size="large" color="blue" />
+          <Spinner size="large" color="blue" bg="rgba(0, 0, 0, 0.43)" />
         </View>
       ) : null}
     </>
@@ -48,20 +48,26 @@ const FindLocation = (props) => {
     setImageNotFoud(false);
 
     const user_token = await firebaseAuth.getAuthToken();
-    const data = await axios.post(
-      EnvConfig.getInstance().get('address_function_find_location'),
-      {image, user_token}, { headers: { "Content-Type": "application/json"}}
-    );
-    setLoading(false);
-    if (!data.data.isResolved) {
+    try {
+      const data = await axios.post(
+        EnvConfig.getInstance().get('address_function_find_location'),
+        {image, user_token}, { headers: { "Content-Type": "application/json"}}
+      );
+      setLoading(false);
+      if (!data?.data?.isResolved) {
+        props.addNotification("warning", "System error! Try again later");
+      }
+      if (data?.data?.data?.isFoundPlace == false) setImageNotFoud(true);
+      setDetails(data?.data?.data)
+    }catch(err){
+      console.log(err);
       props.addNotification("warning", "System error! Try again later");
     }
-    if (data.data.data.isFoundPlace == false) setImageNotFoud(true);
-    setDetails(data?.data?.data)
   }
 
   return (
     <SafeAreaView style={{flex: 1, paddingBottom: 20}} >
+
       <ViewSpinner style={styles.spinnerContainer} isLoading={isLoading} />
 
       <ScrollView>
@@ -71,13 +77,13 @@ const FindLocation = (props) => {
         </Center>
 
         <Pressable onPress={pickImage} >
-          {image ? (
+          {image ?
             <Image source={{ uri: image }} style={{width: '90%', height: 450, alignSelf: 'center', borderRadius: 10, borderWidth: 1, borderColor: '#a9a9a9'}} />
-          ) : (
+           :
             <View style={styles.noImageContainer} >
               <Text style={styles.noImageText}>You don’t have an image added</Text>
             </View>
-          )}
+          }
         </Pressable>
 
         <CustomButton name={'Analyse image'} func={analyseImage} />
@@ -85,10 +91,10 @@ const FindLocation = (props) => {
         {details?.isFoundPlace ? (
           <View style={styles.detailsContainer}>
             <Text style={styles.detailsTitle}>Location Details</Text>
-            {details?.country && <Text style={styles.detailsText}>🌍 Country: {details.country}</Text>}
-            {details?.city && <Text style={styles.detailsText}>🏙️ City: {details.city}</Text>}
-            {details?.place && <Text style={styles.detailsText}>📍 Place: {details.place}</Text>}
-            {details?.description && <Text style={styles.detailsText}>📝 Description: {details.description}</Text>}
+            {details?.country ? <Text style={styles.detailsText}>🌍 Country: {details.country}</Text>: null }
+            {details?.city ? <Text style={styles.detailsText}>🏙️ City: {details.city}</Text>: null }
+            {details?.place ? <Text style={styles.detailsText}>📍 Place: {details.place}</Text>: null }
+            {details?.description ? <Text style={styles.detailsText}>📝 Description: {details.description}</Text>: null }
           </View>
         ) : null }
 
