@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, SafeAreaView, ScrollView, Image, Pressable } from 'react-native';
+import { StyleSheet, Text, View, SafeAreaView, ScrollView, Image, Pressable, Dimensions } from 'react-native';
 import { Heading, Center, Spinner } from '@gluestack-ui/themed';
 import { useState } from 'react';
 import axios from 'axios';
@@ -7,21 +7,18 @@ import { EnvConfig } from '../providers/EnvConfig.js';
 import CustomButton from '../CustomElements/CustomButton.js';
 import { FirebaseAuth } from '../Firebase.js';
 
+const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
+
 function ViewSpinner(props) {
-  return (
-    <>
-      {props.isLoading ? (
-        <View style={styles.spinnerContainer} >
-          <Spinner size="large" color="blue" bg="rgba(0, 0, 0, 0.43)" />
-        </View>
-      ) : null}
-    </>
-  );
+  return props.isLoading ? (
+    <View style={styles.spinnerContainer}>
+      <Spinner size="large" color="blue" bg="rgba(0, 0, 0, 0.43)" />
+    </View>
+  ) : null;
 }
 
 const FindLocation = (props) => {
-
-  const [image, setImage] = useState('');
+  const [image, setImage] = useState(null);
   const [details, setDetails] = useState({});
   const [isImageNotFound, setImageNotFoud] = useState(false);
   const [isLoading, setLoading] = useState(false);
@@ -35,13 +32,33 @@ const FindLocation = (props) => {
       aspect: [4, 3],
       quality: 1,
     });
+    if (result.canceled) return;
 
-    if (!result.canceled) {
-      setImage(result.assets[0].uri);
+    const { height, width } = result.assets[0];
+
+    const maxWidth = screenWidth * 0.9;
+    const maxHeight = screenHeight * 0.5;
+    let newWidth = width;
+    let newHeight = height;
+
+    if (width > maxWidth) {
+      newWidth = maxWidth;
+      newHeight = (height / width) * newWidth;
     }
+
+    if (newHeight > maxHeight) {
+      newHeight = maxHeight;
+      newWidth = (width / height) * newHeight;
+    }
+
+    setImage({
+      uri: result.assets[0].uri,
+      width: newWidth,
+      height: newHeight,
+    });
   };
 
-  async function analyseImage(){
+  async function analyseImage() {
     if (!image) return;
     setLoading(true);
     setDetails({});
@@ -51,67 +68,89 @@ const FindLocation = (props) => {
     try {
       const data = await axios.post(
         EnvConfig.getInstance().get('address_function_find_location'),
-        {image, user_token}, { headers: { "Content-Type": "application/json"}}
+        { image: image.uri, user_token },
+        { headers: { "Content-Type": "application/json" } }
       );
       setLoading(false);
       if (!data?.data?.isResolved) {
         props.addNotification("warning", "System error! Try again later");
       }
-      if (data?.data?.data?.isFoundPlace == false) setImageNotFoud(true);
-      setDetails(data?.data?.data)
-    }catch(err){
+      if (data?.data?.data?.isFoundPlace === false) setImageNotFoud(true);
+      setDetails(data?.data?.data);
+    } catch (err) {
       console.log(err);
       props.addNotification("warning", "System error! Try again later");
     }
   }
 
   return (
-    <SafeAreaView style={{flex: 1, paddingBottom: 20}} >
-
-      <ViewSpinner style={styles.spinnerContainer} isLoading={isLoading} />
-
+    <SafeAreaView style={{ flex: 1, paddingBottom: 20 }}>
+      <ViewSpinner isLoading={isLoading} />
       <ScrollView>
-
-        <Center>
-          <Heading>Find a place</Heading>
+        <Center style={styles.centerContainer}>
+          <Heading>Find a Place</Heading>
+          <Text style={styles.centerText}>
+            Find a place based on an image that includes a building, landscape, or something that we can research about that place.
+          </Text>
         </Center>
 
-        <Pressable onPress={pickImage} >
-          {image ?
-            <Image source={{ uri: image }} style={{width: '90%', height: 450, alignSelf: 'center', borderRadius: 10, borderWidth: 1, borderColor: '#a9a9a9'}} />
-           :
-            <View style={styles.noImageContainer} >
+        <Pressable onPress={pickImage}>
+          {image ? (
+            <Image
+              source={{ uri: image.uri }}
+              style={{
+                width: image.width,
+                height: image.height,
+                alignSelf: 'center',
+                borderRadius: 10,
+                borderWidth: 1,
+                borderColor: '#a9a9a9',
+              }}
+            />
+          ) : (
+            <View style={styles.noImageContainer}>
               <Text style={styles.noImageText}>You don’t have an image added</Text>
             </View>
-          }
+          )}
         </Pressable>
 
         <CustomButton name={'Analyse image'} func={analyseImage} />
 
-        {details?.isFoundPlace ? (
+        {details?.isFoundPlace && (
           <View style={styles.detailsContainer}>
             <Text style={styles.detailsTitle}>Location Details</Text>
-            {details?.country ? <Text style={styles.detailsText}>🌍 Country: {details.country}</Text>: null }
-            {details?.city ? <Text style={styles.detailsText}>🏙️ City: {details.city}</Text>: null }
-            {details?.place ? <Text style={styles.detailsText}>📍 Place: {details.place}</Text>: null }
-            {details?.description ? <Text style={styles.detailsText}>📝 Description: {details.description}</Text>: null }
+            {details?.country && <Text style={styles.detailsText}>🌍 Country: {details.country}</Text>}
+            {details?.city && <Text style={styles.detailsText}>🏙️ City: {details.city}</Text>}
+            {details?.place && <Text style={styles.detailsText}>📍 Place: {details.place}</Text>}
+            {details?.description && <Text style={styles.detailsText}>📝 Description: {details.description}</Text>}
           </View>
-        ) : null }
+        )}
 
-        {isImageNotFound ?
+        {isImageNotFound && (
           <View style={styles.detailsContainer}>
             <Text style={styles.detailsTitle}>Please add an image of a place with more context</Text>
           </View>
-        : null}
-
+        )}
       </ScrollView>
     </SafeAreaView>
-  )
-}
+  );
+};
 
-export default FindLocation
+export default FindLocation;
 
 const styles = StyleSheet.create({
+  centerContainer: {
+    marginTop: 20,
+    marginBottom: 10,
+    alignItems: 'center',
+    paddingHorizontal: 20,
+  },
+  centerText: {
+    fontSize: 16,
+    textAlign: 'center',
+    color: '#555',
+    marginTop: 5,
+  },
   noImageContainer: {
     width: '90%',
     height: 450,
@@ -121,12 +160,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 10,
     borderWidth: 1,
-    borderColor: '#a9a9a9'
+    borderColor: '#a9a9a9',
   },
   noImageText: {
     color: '#555',
     fontSize: 16,
-    fontWeight: 'bold'
+    fontWeight: 'bold',
   },
   detailsContainer: {
     marginTop: 20,
@@ -140,19 +179,19 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
-    elevation: 3
+    elevation: 3,
   },
   detailsTitle: {
     fontSize: 18,
     fontWeight: 'bold',
     marginBottom: 10,
     color: '#333',
-    textAlign: 'center'
+    textAlign: 'center',
   },
   detailsText: {
     fontSize: 16,
     color: '#444',
-    marginBottom: 5
+    marginBottom: 5,
   },
   spinnerContainer: {
     position: 'absolute',
