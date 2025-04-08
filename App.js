@@ -64,13 +64,13 @@ const App = () => {
       <NavigationContainer>
         <Stack.Navigator>
           <Stack.Screen
-            name="FindLocation"
-            component={customComponent(FindLocation)}
+            name="SetupTrip"
+            component={customComponent(SetupTrip)}
             options={{headerShown: false}}
           />
           <Stack.Screen
-            name="SetupTrip"
-            component={customComponent(SetupTrip)}
+            name="FindLocation"
+            component={customComponent(FindLocation)}
             options={{headerShown: false}}
           />
           <Stack.Screen
