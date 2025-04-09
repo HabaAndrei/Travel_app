@@ -6,6 +6,8 @@ import * as ImagePicker from 'expo-image-picker';
 import { EnvConfig } from '../providers/EnvConfig.js';
 import CustomButton from '../CustomElements/CustomButton.js';
 import { FirebaseAuth } from '../Firebase.js';
+import { isBase64 } from '../diverse.js';
+import * as FileSystem from 'expo-file-system';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
@@ -51,8 +53,19 @@ const FindLocation = (props) => {
       newWidth = (width / height) * newHeight;
     }
 
+    let image = result.assets[0].uri;
+
+    if ( !isBase64(image) ) {
+      let base64 = await FileSystem.readAsStringAsync(image, { encoding: 'base64' });
+      if (!base64.includes('data:image/jpeg;base64,')) {
+        image = 'data:image/jpeg;base64,' + base64
+      } else {
+        image = base64;
+      }
+    }
+
     setImage({
-      uri: result.assets[0].uri,
+      uri: image,
       width: newWidth,
       height: newHeight,
     });
