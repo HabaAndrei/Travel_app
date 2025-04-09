@@ -179,9 +179,18 @@ function getUrlImage(name){
   return `${server_address_images}${name}.jpg`;
 }
 
+function isBase64(str) {
+  if (typeof str !== "string") {
+    return false;
+  }
+  str = str.replace('data:image/jpeg;base64,', '')
+  const base64Regex = /^(?:[A-Za-z0-9+\/]{4})*(?:[A-Za-z0-9+\/]{2}==|[A-Za-z0-9+\/]{3}=)?$/;
+  return base64Regex.test(str);
+}
+
 export {
   isValidPassword, isValidEmail, removeItemFromAsyncStorage, getDataFromAsyncStorage, addDataToAsyncStorage,
   multiRemoveFromAsyncStorage, multiSetFromAsyncStorage, getAllKeysFromAsyncStorage, multiGetFromAsyncStorage,
   formatDateFromMilliseconds, deleteAllFromAsyncStorage, getDays, getHours, toMinutes, imagePath,
-  getUrlImage
+  getUrlImage, isBase64
 };
