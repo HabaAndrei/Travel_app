@@ -56,6 +56,8 @@ function getHours(startTime, endTime) {
   // Adjust for negative values (crossing midnight)
   if (Number(hours) < 0) {
     hours = (24 - Number(startHour)) + Number(endHour);
+  } else if (Number(hours) == 0) {
+    hours = 24
   }
   if (Number(minutes) < 0) {
     minutes = (60 - Number(startMinutes)) + Number(endMinutes);
