@@ -1,8 +1,8 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore, collection, addDoc, doc, setDoc ,updateDoc, query, where, deleteDoc,
   getDocs, getDoc, orderBy } from "firebase/firestore";
-import {signOut,  deleteUser, initializeAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword,
-  sendPasswordResetEmail, reauthenticateWithCredential, EmailAuthProvider  } from "firebase/auth";
+import {signOut, deleteUser, initializeAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword,
+  sendPasswordResetEmail, reauthenticateWithCredential, EmailAuthProvider, getAuth  } from "firebase/auth";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getReactNativePersistence } from '@firebase/auth/dist/rn/index.js';
 import axios from 'axios';
@@ -65,7 +65,7 @@ class FirebaseFirestore{
     })
   }
 
-  async askQuestion(messagesConversation){
+  async askQuestion(messagesConversation, user_token){
     return this._storeErr(async ()=>{
       const {uid} = auth.currentUser;
       const data = await this.getPlansFromDbWithUid(uid);
@@ -94,7 +94,7 @@ class FirebaseFirestore{
         tripsData = JSON.stringify(rez);
       }
       const rezQuery =  await axios.post(EnvConfig.getInstance().get('address_function_ai_generation'), {
-        messagesConversation, tripsData, generationType: 'generateChatResponse'
+        messagesConversation, tripsData, generationType: 'generateChatResponse', user_token
       });
       if(rezQuery?.data?.isResolved){
         return {isResolved: true, data: rezQuery?.data?.data};
@@ -156,7 +156,14 @@ class FirebaseFirestore{
     }catch(err){
       const uid = auth?.currentUser?.uid;
       const {modelName, modelId, brand} = Device;
-      addDoc(collection(db, "errors"), {uid: uid || 'user not connected', modelName, modelId, brand, mesErr: err.message});
+      addDoc(collection(db, "errors"), {
+        uid: uid || 'user not connected',
+        modelName,
+        modelId,
+        brand,
+        mesErr: err.message,
+        createdAt: new Date()
+      });
       return {isResolved: false, err: err.message}
     }
   }
@@ -207,6 +214,11 @@ class FirebaseFirestore{
 /////////////////////////////////////
 
 class FirebaseAuth extends FirebaseFirestore {
+
+  async getAuthToken(){
+    let token = await getAuth().currentUser.getIdToken(true);
+    return token;
+  }
 
   async _createUserWithEmailAndPassword({email, password, firstName, secondName}){
     return this._storeErr(async ()=>{

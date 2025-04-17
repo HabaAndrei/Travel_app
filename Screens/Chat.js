@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import {View, Text, ScrollView, StyleSheet, TouchableOpacity, TextInput, KeyboardAvoidingView,
   Platform, Keyboard, Pressable} from 'react-native';
-import {FirebaseFirestore} from '../Firebase.js';
+import {FirebaseFirestore, FirebaseAuth} from '../Firebase.js';
 import SelectConversation from '../Components/ChatComponents/SelectConversation.js';
 import { useIsFocused } from '@react-navigation/native';
 import uuid from 'react-native-uuid';
@@ -17,6 +17,7 @@ const Chat = (props) => {
   const [idSelectedConversation, setIdSelectedConversation] = useState('');
 
   const firebaseFirestore = new FirebaseFirestore();
+  const firebaseAuth = new FirebaseAuth();
 
   useEffect(()=>{
     if(!isFocused)return;
@@ -45,7 +46,8 @@ const Chat = (props) => {
   }
 
   async function getResponse(messages, idConv){
-    const data = await firebaseFirestore.askQuestion(messages);
+    const user_token = await firebaseAuth.getAuthToken();
+    const data = await firebaseFirestore.askQuestion(messages, user_token);
     if(data.isResolved){
       setConversation((prev)=>{
         const newConv = prev.map((ob)=>{

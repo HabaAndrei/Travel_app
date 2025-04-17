@@ -56,6 +56,8 @@ function getHours(startTime, endTime) {
   // Adjust for negative values (crossing midnight)
   if (Number(hours) < 0) {
     hours = (24 - Number(startHour)) + Number(endHour);
+  } else if (Number(hours) == 0) {
+    hours = 24
   }
   if (Number(minutes) < 0) {
     minutes = (60 - Number(startMinutes)) + Number(endMinutes);
@@ -179,9 +181,18 @@ function getUrlImage(name){
   return `${server_address_images}${name}.jpg`;
 }
 
+function isBase64(str) {
+  if (typeof str !== "string") {
+    return false;
+  }
+  str = str.replace('data:image/jpeg;base64,', '')
+  const base64Regex = /^(?:[A-Za-z0-9+\/]{4})*(?:[A-Za-z0-9+\/]{2}==|[A-Za-z0-9+\/]{3}=)?$/;
+  return base64Regex.test(str);
+}
+
 export {
   isValidPassword, isValidEmail, removeItemFromAsyncStorage, getDataFromAsyncStorage, addDataToAsyncStorage,
   multiRemoveFromAsyncStorage, multiSetFromAsyncStorage, getAllKeysFromAsyncStorage, multiGetFromAsyncStorage,
   formatDateFromMilliseconds, deleteAllFromAsyncStorage, getDays, getHours, toMinutes, imagePath,
-  getUrlImage
+  getUrlImage, isBase64
 };

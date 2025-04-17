@@ -5,7 +5,7 @@ import { formatDateFromMilliseconds, removeItemFromAsyncStorage,
   multiGetFromAsyncStorage, multiRemoveFromAsyncStorage} from '../diverse.js';
 import { Spinner, Center, Heading, Text, Divider, HStack, TrashIcon,RepeatIcon, CheckIcon,  Icon } from "@gluestack-ui/themed";
 import { useIsFocused } from '@react-navigation/native';
-import {FirebaseFirestore} from '../Firebase.js';
+import {FirebaseFirestore, FirebaseAuth} from '../Firebase.js';
 import axios from 'axios';
 import NavbarProgram from '../Components/NavbarProgram.js';
 import CardPresentationTrip from '../Components/CardPresentationTrip.js';
@@ -26,6 +26,7 @@ const Program = (props) => {
   const isSavingProgram = useRef(false);
 
   const firebaseFirestore = new FirebaseFirestore();
+  const firebaseAuth = new FirebaseAuth();
   const screenHeight = Dimensions.get('window').height;
 
   useEffect(()=>{
@@ -77,8 +78,9 @@ const Program = (props) => {
   async function createProgramAi({startDate, endDate, city, country, locations, urlImageCity, hotelAddress}){
     setRecomandation(false);
     setProgram([]);
+    const user_token = await firebaseAuth.getAuthToken();
     axios.post(EnvConfig.getInstance().get('address_function_ai_generation'),
-      {generationType: 'generateProgram', startDate, endDate, city, country, locations, hotelAddress}
+      {generationType: 'generateProgram', startDate, endDate, city, country, locations, hotelAddress, user_token}
     ).then((data)=>{
       if(data.data.isResolved){
         const days = data.data.data;
@@ -194,7 +196,7 @@ const Program = (props) => {
             {!program?.length ?
               <View  style={{ marginTop: screenHeight / 3 }} >
                 <Center  >
-                  <Spinner size="large" color="blue" />
+                  <Spinner size="large" color="blue" bg="rgba(0, 0, 0, 0.43)" />
                 </Center>
               </View> :
 

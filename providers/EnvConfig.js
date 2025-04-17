@@ -8,6 +8,7 @@ class EnvConfig {
                 address_function_fuzzy: process.env.EXPO_PUBLIC_ADDRESS_FUNCTION_FUZZY,
                 address_function_ai_generation: process.env.EXPO_PUBLIC_ADDRESS_FUNCTION_AI_GENERATION,
                 address_function_send_code_verification: process.env.EXPO_PUBLIC_ADDRESS_FUNCTION_SEND_CODE_VERIFICATION,
+                address_function_find_location: process.env.EXPO_PUBLIC_SERVER_ADDRESS_FIND_LOCATION,
                 measurement_id: process.env.EXPO_PUBLIC_MEASUREMENT_ID,
                 api_key: process.env.EXPO_PUBLIC_API_KEY,
                 auth_domain: process.env.EXPO_PUBLIC_AUTH_DOMAIN,
