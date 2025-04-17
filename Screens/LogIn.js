@@ -1,5 +1,5 @@
 import { StyleSheet, View, Text, ScrollView, SafeAreaView, ImageBackground, KeyboardAvoidingView, Platform } from 'react-native'
-import { useReducer, useState } from 'react'
+import { useReducer, useState, useRef } from 'react'
 import { Spinner } from '@gluestack-ui/themed'
 import { FirebaseAuth, FirebaseFirestore } from '../Firebase.js'
 import { isValidEmail, isValidPassword, deleteAllFromAsyncStorage } from "../diverse.js"
@@ -58,11 +58,15 @@ const LogIn = (props) => {
   const [codeVerify, setCodeVerify] = useState('');
   const [isModalVisibleReAuth, setModalVisibleReAuth] = useState(false);
   const [isLoadingSendEmail, setLoadingSendEmail] = useState(false);
+  const isCreatingAccount = useRef(false);
 
   const firebaseAuth = new FirebaseAuth();
   const firebaseFirestore = new FirebaseFirestore();
 
   async function createAccount(){
+
+    if (isCreatingAccount.current) return;
+
     const email = inputEmail?.trim();
     const password = inputPassword?.input.trim();
     const firstName = inputFirstName?.trim();
@@ -83,9 +87,11 @@ const LogIn = (props) => {
       return;
     }
 
+    isCreatingAccount.current = true;
     const resultCreateAccount = await firebaseAuth._createUserWithEmailAndPassword(
       { email, password, firstName, secondName }
     );
+    isCreatingAccount.current = false;
     if(!resultCreateAccount.isResolved){
       if(resultCreateAccount.err?.includes("email-already-in-use")){
         props.addNotification('error', "This email is already registered. Try logging in or use a different email.");
@@ -167,9 +173,17 @@ const LogIn = (props) => {
         columnsWithValues: {'codes': arrayUnion(code)}
       })
       if(!rezStore.isResolved){
-        setLoadingSendEmail(false);
-        props.addNotification('error', "There was a problem sending the code by email");
-        return;
+        // If the update cannot be done, the store is probably not created, and we need to create that database with IDs
+        const createDatabase = await firebaseFirestore.addIntoDatabase({
+          database: 'code_verification',
+          id: props.user.email,
+          columnsWithValues: {'codes': arrayUnion(code)}
+        })
+        if (!createDatabase.isResolved){
+          setLoadingSendEmail(false);
+          props.addNotification('error', "There was a problem sending the code by email");
+          return;
+        }
       }
       const rezSend = await axios.post(EnvConfig.getInstance().get('address_function_send_code_verification'), {code, email});
       if(!rezSend.data.isResolved){

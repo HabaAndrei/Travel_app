@@ -4,7 +4,7 @@ import axios from 'axios';
 import { Spinner, Icon, CheckIcon, Textarea, VStack, TextareaInput, AlertCircleIcon, Heading, Center, RadioGroup,
   Radio, RadioIndicator, RadioIcon, CircleIcon, RadioLabel } from "@gluestack-ui/themed";
 import CustomButton from '../../CustomElements/CustomButton.js';
-import { FirebaseFirestore } from '../../Firebase.js';
+import { FirebaseFirestore, FirebaseAuth } from '../../Firebase.js';
 import { EnvConfig } from '../../providers/EnvConfig.js';
 
 function ViewSpinner(props) {
@@ -12,7 +12,7 @@ function ViewSpinner(props) {
     <>
       {!props.isActivities ? (
         <View style={styles.spinnerContainer}>
-          <Spinner size="large" color="blue" />
+          <Spinner size="large" color="blue" bg="rgba(0, 0, 0, 0.43)" />
         </View>
       ) : null}
     </>
@@ -33,17 +33,19 @@ const CheckboxActivities = (props) => {
   const [isShowDetails, setShowDetails] = useState(false);
   const [paramsLocation, setParamsLocation] = useState(false)
   const firebaseFirestore = new FirebaseFirestore();
+  const firebaseAuth = new FirebaseAuth();
 
   useEffect(() => {
     createActivities();
   }, [props.destinationActivities.isOpenModalActivities]);
 
   // Create activities using AI
-  function createActivities(){
+  async function createActivities(){
     const { city, country } = props.destinationActivities;
     if (!props.destinationActivities.isOpenModalActivities || props.destinationActivities.checkbox.length) return;
+    const user_token = await firebaseAuth.getAuthToken();
     axios.post(EnvConfig.getInstance().get('address_function_ai_generation'), {
-      generationType: 'generateActivities', city, country
+      generationType: 'generateActivities', city, country, user_token
     }).then((data) => {
       if (data.data.isResolved) {
         if(data?.data?.paramsLocation?.data){

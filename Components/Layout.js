@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState, useCallback } from 'react';
 import { View, Text, StyleSheet, ScrollView, Pressable } from 'react-native';
 import Notification from './Notification';
 import ConfirmActionModal from './Modals/ConfirmActionModal';
@@ -10,6 +10,8 @@ import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import Feather from '@expo/vector-icons/Feather';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
+import Entypo from '@expo/vector-icons/Entypo';
+import { useFocusEffect } from '@react-navigation/native';
 
 /** The main layout for the entire application */
 const Layout = ({ children, navigation, route, user, setUser}) => {
@@ -18,6 +20,16 @@ const Layout = ({ children, navigation, route, user, setUser}) => {
   const [isConfirmActionModal, setConfirmActionModal] = useState(false);
   const [notification, setNotification] = useState([]);
   const [deletePromise, setDeletePromise] = useState(null);
+  const [navigationPath, setNavigationPath] = useState('SetupTrip')
+
+  useFocusEffect(
+    useCallback(() => {
+      const currentRoute = route?.name;
+      if (currentRoute) {
+        setNavigationPath(currentRoute);
+      }
+    }, [route?.name])
+  );
 
   // This function adds a notification for the entire application
   function addNotification(type, mes){
@@ -84,23 +96,28 @@ const Layout = ({ children, navigation, route, user, setUser}) => {
           contentContainerStyle={styles.footerContent}
         >
           <Pressable style={styles.pressable} onPress={() => navigation.navigate('MyTrips')} >
-            <FontAwesome6 name="earth-americas" size={24} color="white" />
+            <FontAwesome6 name="earth-americas" size={navigationPath === 'MyTrips' ? 27 : 22} color="white" />
             <Text style={styles.pressableText}>My Trips</Text>
           </Pressable>
 
+          <Pressable style={styles.pressable} onPress={() => navigation.navigate('FindLocation')} >
+            <FontAwesome name="search" size={navigationPath === 'FindLocation' ? 27 : 22} color="white" />
+            <Text style={styles.pressableText}>Find place</Text>
+          </Pressable>
+
           <Pressable style={styles.pressable} onPress={() => navigation.navigate('SetupTrip')} >
-            <FontAwesome name="calendar" size={24} color="white" />
+            <Entypo name="circle-with-plus" size={navigationPath === 'SetupTrip' ? 27 : 22} color="white" />
             <Text style={styles.pressableText}>New trip</Text>
           </Pressable>
 
-          <Pressable style={styles.pressable} onPress={() => navigation.navigate('UserSettings')} >
-            <Feather name="settings" size={24} color="white" />
-            <Text style={styles.pressableText}>Settings</Text>
+          <Pressable style={styles.pressable} onPress={() => navigation.navigate('Chat')} >
+            <MaterialCommunityIcons name="robot-outline" size={navigationPath === 'Chat' ? 27 : 22} color="white" />
+            <Text style={styles.pressableText}>Assistant</Text>
           </Pressable>
 
-          <Pressable style={styles.pressable} onPress={() => navigation.navigate('Chat')} >
-            <MaterialCommunityIcons name="robot-outline" size={24} color="white" />
-            <Text style={styles.pressableText}>Assistant</Text>
+          <Pressable style={styles.pressable} onPress={() => navigation.navigate('UserSettings')} >
+            <Feather name="settings" size={navigationPath === 'UserSettings' ? 27 : 22} color="white" />
+            <Text style={styles.pressableText}>Settings</Text>
           </Pressable>
 
         </ScrollView>
@@ -113,7 +130,6 @@ const Layout = ({ children, navigation, route, user, setUser}) => {
 };
 
 const styles = StyleSheet.create({
-
   container: {
     flex: 1,
     backgroundColor: '#AAAABAD',
@@ -144,9 +160,9 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
-    marginHorizontal: 10,
-    padding: 10,
-    borderRadius: 8,
+    marginHorizontal: 5,
+    padding: 5,
+    borderRadius: 5,
   },
   pressableText: {
     marginTop: 4,
