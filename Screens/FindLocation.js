@@ -30,9 +30,9 @@ const FindLocation = (props) => {
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ['images'],
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 1,
+      allowsEditing: false,
+      aspect: [7, 7],
+      quality: 0,
     });
     if (result.canceled) return;
 
@@ -91,6 +91,7 @@ const FindLocation = (props) => {
       if (data?.data?.data?.isFoundPlace === false) setImageNotFoud(true);
       setDetails(data?.data?.data);
     } catch (err) {
+      setLoading(false);
       console.log(err);
       props.addNotification("warning", "System error! Try again later");
     }
