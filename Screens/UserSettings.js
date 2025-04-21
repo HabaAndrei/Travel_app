@@ -12,7 +12,7 @@ const UserLogged = ({user, children}) => {
   return (
     <>
       {
-        user ? children : null
+        user?.emailVerified ? children : null
       }
     </>
   )
@@ -22,7 +22,7 @@ const UserDisconnected = ({user, children}) => {
   return (
     <>
       {
-        !user ? children : null
+        !user?.emailVerified ? children : null
       }
     </>
   )
@@ -36,7 +36,7 @@ const UserSettings = (props) => {
   const firebaseAuth = new FirebaseAuth();
 
   async function signOut(){
-    if (!props.user) return
+    if (!props.user?.emailVerified) return
     const rez = await firebaseAuth._signOut();
     if(rez.isResolved){
       props.setUser(undefined);
@@ -49,7 +49,7 @@ const UserSettings = (props) => {
   }
 
   async function deleteUser(){
-    if (!props.user) return
+    if (!props.user?.emailVerified) return
     const response = await props.areYouSure();
     if (!response) return;
 
@@ -81,14 +81,14 @@ const UserSettings = (props) => {
           </HStack>
         </Center>
 
-        <UserLogged>
+        <UserLogged user={props.user} >
           <DetailsUserView user={props.user} addNotification={props.addNotification} />
           <ModalReAuth  isModalVisibleReAuth={isModalVisibleReAuth} setModalVisibleReAuth={setModalVisibleReAuth} />
         </UserLogged>
 
         <CardFeedback addNotification={props.addNotification} user={props.user} />
 
-        <UserLogged>
+        <UserLogged user={props.user} >
           <View style={{ alignItems: 'center' }}>
             <VStack space="2xl">
               <HStack  px="$3"  h="$8"  rounded="$sm"  borderWidth="$2"  borderColor="$backgroundLight300"  alignItems="center"  justifyContent="center"   $dark-borderColor="$backgroundDark700"  >
@@ -104,7 +104,7 @@ const UserSettings = (props) => {
           </View>
         </UserLogged>
 
-        <UserDisconnected>
+        <UserDisconnected user={props.user} >
           <CustomButton name={'Log in'} func={logIn} />
         </UserDisconnected>
 
