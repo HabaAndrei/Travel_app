@@ -6,6 +6,27 @@ import {deleteAllFromAsyncStorage} from '../diverse.js';
 import ModalReAuth from '../Components/Modals/ModalReAuth.js';
 import CardFeedback from '../Components/UserSettingsComponents/CardFeedback.js';
 import DetailsUserView from '../Components/UserSettingsComponents/DetailsUserView.js';
+import CustomButton from '../CustomElements/CustomButton.js';
+
+const UserLogged = ({user, children}) => {
+  return (
+    <>
+      {
+        user ? children : null
+      }
+    </>
+  )
+}
+
+const UserDisconnected = ({user, children}) => {
+  return (
+    <>
+      {
+        !user ? children : null
+      }
+    </>
+  )
+}
 
 /** UserSettings screen => where the client can adjust app settings */
 const UserSettings = (props) => {
@@ -15,6 +36,7 @@ const UserSettings = (props) => {
   const firebaseAuth = new FirebaseAuth();
 
   async function signOut(){
+    if (!props.user) return
     const rez = await firebaseAuth._signOut();
     if(rez.isResolved){
       props.setUser(undefined);
@@ -27,7 +49,7 @@ const UserSettings = (props) => {
   }
 
   async function deleteUser(){
-
+    if (!props.user) return
     const response = await props.areYouSure();
     if (!response) return;
 
@@ -44,6 +66,10 @@ const UserSettings = (props) => {
     }
   }
 
+  function logIn(){
+    props.navigation.navigate('LogIn');
+  }
+
   return (
     <SafeAreaView style={{flex: 1}} >
       <ScrollView style={{marginTop: 20}} >
@@ -55,25 +81,32 @@ const UserSettings = (props) => {
           </HStack>
         </Center>
 
-        <DetailsUserView user={props.user} addNotification={props.addNotification} />
-
-        <ModalReAuth  isModalVisibleReAuth={isModalVisibleReAuth} setModalVisibleReAuth={setModalVisibleReAuth} />
+        <UserLogged>
+          <DetailsUserView user={props.user} addNotification={props.addNotification} />
+          <ModalReAuth  isModalVisibleReAuth={isModalVisibleReAuth} setModalVisibleReAuth={setModalVisibleReAuth} />
+        </UserLogged>
 
         <CardFeedback addNotification={props.addNotification} user={props.user} />
 
-        <View style={{ alignItems: 'center' }}>
-          <VStack space="2xl">
-            <HStack  px="$3"  h="$8"  rounded="$sm"  borderWidth="$2"  borderColor="$backgroundLight300"  alignItems="center"  justifyContent="center"   $dark-borderColor="$backgroundDark700"  >
-              <Button onPress={()=>signOut()} variant="link" size="xl">
-                <ButtonText>Log out</ButtonText>
-              </Button>
-              <Divider orientation="vertical" h="50%" mx="$2.5" style={{margin: 20}} />
-              <Button  onPress={()=>deleteUser()} variant="link" size="xl">
-                <ButtonText>Delete accout</ButtonText>
-              </Button>
-            </HStack>
-          </VStack>
-        </View>
+        <UserLogged>
+          <View style={{ alignItems: 'center' }}>
+            <VStack space="2xl">
+              <HStack  px="$3"  h="$8"  rounded="$sm"  borderWidth="$2"  borderColor="$backgroundLight300"  alignItems="center"  justifyContent="center"   $dark-borderColor="$backgroundDark700"  >
+                <Button onPress={()=>signOut()} variant="link" size="xl">
+                  <ButtonText>Log out</ButtonText>
+                </Button>
+                <Divider orientation="vertical" h="50%" mx="$2.5" style={{margin: 20}} />
+                <Button  onPress={()=>deleteUser()} variant="link" size="xl">
+                  <ButtonText>Delete accout</ButtonText>
+                </Button>
+              </HStack>
+            </VStack>
+          </View>
+        </UserLogged>
+
+        <UserDisconnected>
+          <CustomButton name={'Log in'} func={logIn} />
+        </UserDisconnected>
 
       </ScrollView>
     </SafeAreaView>
