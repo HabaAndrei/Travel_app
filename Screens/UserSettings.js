@@ -12,7 +12,7 @@ const UserLogged = ({user, children}) => {
   return (
     <>
       {
-        user?.emailVerified ? children : null
+        user?.userDetails?.email_verified ? children : null
       }
     </>
   )
@@ -22,7 +22,7 @@ const UserDisconnected = ({user, children}) => {
   return (
     <>
       {
-        !user?.emailVerified ? children : null
+        !user?.userDetails?.email_verified ? children : null
       }
     </>
   )
@@ -36,7 +36,7 @@ const UserSettings = (props) => {
   const firebaseAuth = new FirebaseAuth();
 
   async function signOut(){
-    if (!props.user?.emailVerified) return
+    if (!props.user?.userDetails?.email_verified) return
     const rez = await firebaseAuth._signOut();
     if(rez.isResolved){
       props.setUser(undefined);
@@ -49,7 +49,7 @@ const UserSettings = (props) => {
   }
 
   async function deleteUser(){
-    if (!props.user?.emailVerified) return
+    if (!props.user?.userDetails?.email_verified) return
     const response = await props.areYouSure();
     if (!response) return;
 
