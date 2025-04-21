@@ -10,6 +10,7 @@ import Locations from './Screens/Locations.js';
 import Trip from './Screens/Trip.js';
 import Chat from './Screens/Chat.js';
 import FindLocation from './Screens/FindLocation.js';
+import LogIn from './Screens/LogIn.js';
 import Layout from './Components/Layout.js';
 import {auth, FirebaseFirestore} from './Firebase.js';
 import { GluestackUIProvider } from "@gluestack-ui/themed"
@@ -69,6 +70,16 @@ const App = () => {
             options={{headerShown: false}}
           />
           <Stack.Screen
+            name="Chat"
+            component={customComponent(Chat)}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="UserSettings"
+            component={customComponent(UserSettings)}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
             name="FindLocation"
             component={customComponent(FindLocation)}
             options={{headerShown: false}}
@@ -94,18 +105,13 @@ const App = () => {
             options={{headerShown: false}}
           />
           <Stack.Screen
-            name="UserSettings"
-            component={customComponent(UserSettings)}
-            options={{headerShown: false}}
-          />
-          <Stack.Screen
-            name="Chat"
-            component={customComponent(Chat)}
-            options={{headerShown: false}}
-          />
-          <Stack.Screen
             name="DailyProgram"
             component={customComponent(DailyProgram)}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="LogIn"
+            component={customComponent(LogIn)}
             options={{headerShown: false}}
           />
         </Stack.Navigator>
