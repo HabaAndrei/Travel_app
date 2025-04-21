@@ -29,7 +29,7 @@ const CardFeedback = (props) => {
     const rez = await firebaseFirestore.addIntoDatabase({
       database: 'feedback',
       id: false,
-      columnsWithValues: {uid: props?.user?.uid ?? 'user disconnected', feedback, feedbackCategory: feedbackCategoryState}
+      columnsWithValues: {uid: props?.user?.userDetails?.email_verified ?? 'user disconnected', feedback, feedbackCategory: feedbackCategoryState}
     });
 
     if(rez.err){
