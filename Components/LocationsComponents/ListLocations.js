@@ -3,7 +3,7 @@ import { Heading, Center, Text, Spinner } from '@gluestack-ui/themed';
 import { getDataFromAsyncStorage, addDataToAsyncStorage, formatDateFromMilliseconds} from '../../diverse';
 import { useState } from 'react';
 import CardDatePicker from './CardDatePicker.js';
-import LocationCard from './LocationCard.js';
+import LocationPresentation from './LocationPresentation.js';
 import NavigationDivider from '../NavigationDivider.js';
 
 /** Component that represents a list of locations that can be picked to visit */
@@ -150,7 +150,7 @@ const ListLocations = (props) => {
         </Center>
 
         {props.locations.map((location, index) =>(
-          <LocationCard
+          <LocationPresentation
             key={index}
             location={location}
             index={index}
