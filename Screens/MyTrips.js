@@ -15,8 +15,8 @@ const MyTrips = (props) => {
   const firebaseFirestore = new FirebaseFirestore();
 
   useEffect(() => {
-    if (!isFocused || !props.user.uid) return;
-    getPlansFromDb(props.user.uid);
+    if (!isFocused || !props?.user?.uid) return;
+    getPlansFromDb(props?.user?.uid);
   }, [isFocused]);
 
   async function getPlansFromDb(uid) {
@@ -71,7 +71,7 @@ const MyTrips = (props) => {
     <SafeAreaView style={{ flex: 1 }}>
       <ScrollView style={{ flex: 1 }}>
 
-        {plans.length ?
+        {plans?.length ?
           <>
             <Center>
               <HStack alignItems="center">
@@ -100,7 +100,7 @@ const MyTrips = (props) => {
             textDate={`From: ${formatTime(plan.startDate)} | To: ${formatTime(plan.endDate)}`}
             deleteFunction={deleteTrip}
             deleteFunctionParameters={[index]}
-            title={`${plan.country} - ${plan.city}`}
+            title={`${plan?.country} - ${plan?.city}`}
             functionRedirect={goToTripScreen}
             functionRedirectParameters={[plan]}
             nameRedirect={'See the travel'}
