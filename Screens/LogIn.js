@@ -268,8 +268,8 @@ const LogIn = (props) => {
             <ModalReAuth  isModalVisibleReAuth={isModalVisibleReAuth} setModalVisibleReAuth={setModalVisibleReAuth} />
 
             <ViewIfUserExistsWithoutEmailVerified
-              user={props.user}
-              emailVerified_code={props.user?.emailVerified_code}
+              user={props?.user}
+              emailVerified_code={props?.user?.userDetails?.email_verified}
               sendCodeToEmail={sendCodeToEmail}
               setCodeVerify={setCodeVerify}
               codeVerify={codeVerify}

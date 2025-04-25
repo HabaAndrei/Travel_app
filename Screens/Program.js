@@ -78,9 +78,8 @@ const Program = (props) => {
   async function createProgramAi({startDate, endDate, city, country, locations, urlImageCity, hotelAddress}){
     setRecomandation(false);
     setProgram([]);
-    const user_token = await firebaseAuth.getAuthToken();
     axios.post(EnvConfig.getInstance().get('address_function_ai_generation'),
-      {generationType: 'generateProgram', startDate, endDate, city, country, locations, hotelAddress, user_token}
+      {generationType: 'generateProgram', startDate, endDate, city, country, locations, hotelAddress}
     ).then((data)=>{
       if(data.data.isResolved){
         const days = data.data.data;
@@ -136,6 +135,10 @@ const Program = (props) => {
   }
 
   async function saveProgramInDb(){
+    if (!props.user?.userDetails?.email_verified) {
+      props.navigation.navigate('LogIn');
+      return;
+    }
     if ( isSavingProgram.current ) return;
     isSavingProgram.current = true;
     const rez = await multiGetFromAsyncStorage(["travelProgram", "travelParameter"]);
