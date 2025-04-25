@@ -43,9 +43,8 @@ const CheckboxActivities = (props) => {
   async function createActivities(){
     const { city, country } = props.destinationActivities;
     if (!props.destinationActivities.isOpenModalActivities || props.destinationActivities.checkbox.length) return;
-    const user_token = await firebaseAuth.getAuthToken();
     axios.post(EnvConfig.getInstance().get('address_function_ai_generation'), {
-      generationType: 'generateActivities', city, country, user_token
+      generationType: 'generateActivities', city, country
     }).then((data) => {
       if (data.data.isResolved) {
         if(data?.data?.paramsLocation?.data){

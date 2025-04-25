@@ -14,7 +14,7 @@ const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 function ViewSpinner(props) {
   return props.isLoading ? (
     <View style={styles.spinnerContainer}>
-      <Spinner size="large" color="blue" bg="rgba(0, 0, 0, 0.43)" />
+      <Spinner size="large" color="blue" style={{backgroundColor: 'rgba(255, 255, 255, 0.4)', borderRadius: '50%'}} />
     </View>
   ) : null;
 }
@@ -77,11 +77,10 @@ const FindLocation = (props) => {
     setDetails({});
     setImageNotFoud(false);
 
-    const user_token = await firebaseAuth.getAuthToken();
     try {
       const data = await axios.post(
         EnvConfig.getInstance().get('address_function_find_location'),
-        { image: image.uri, user_token },
+        { image: image.uri },
         { headers: { "Content-Type": "application/json" } }
       );
       setLoading(false);

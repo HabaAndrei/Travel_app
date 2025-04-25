@@ -40,9 +40,8 @@ const Locations = (props) => {
   async function createLocationsAi({city, country, customActivity, selectedActivities, isLocalPlaces, scaleVisit}){
     setLocations([]);
     setRecomandation(false);
-    const user_token = await firebaseAuth.getAuthToken();
     axios.post(EnvConfig.getInstance().get('address_function_ai_generation'), { generationType: 'generateLocations',
-      city, country, customActivity, selectedActivities, isLocalPlaces, scaleVisit, user_token
+      city, country, customActivity, selectedActivities, isLocalPlaces, scaleVisit
     }).then((data)=>{
       if(data.data.isResolved){
         const urlImageCity = data?.data?.urlImageCity;
