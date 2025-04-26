@@ -1,10 +1,11 @@
 import { StyleSheet, Text, View, SafeAreaView, ScrollView, Image, Pressable, Dimensions } from 'react-native';
-import { Heading, Center, Spinner } from '@gluestack-ui/themed';
+import { Heading, Center } from '@gluestack-ui/themed';
 import { useState } from 'react';
 import axios from 'axios';
 import * as ImagePicker from 'expo-image-picker';
 import { EnvConfig } from '../providers/EnvConfig.js';
 import CustomButton from '../CustomElements/CustomButton.js';
+import CustomSpinner from '../CustomElements/CustomSpinner.js';
 import { FirebaseAuth } from '../Firebase.js';
 import { isBase64 } from '../diverse.js';
 import * as FileSystem from 'expo-file-system';
@@ -14,7 +15,7 @@ const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 function ViewSpinner(props) {
   return props.isLoading ? (
     <View style={styles.spinnerContainer}>
-      <Spinner size="large" color="blue" style={{backgroundColor: 'rgba(255, 255, 255, 0.4)', borderRadius: '50%'}} />
+      <CustomSpinner />
     </View>
   ) : null;
 }
