@@ -1,10 +1,11 @@
 import { View, ScrollView, Dimensions, StyleSheet, TextInput } from 'react-native'
-import { Heading, Center, Text, Spinner } from '@gluestack-ui/themed';
+import { Heading, Center, Text } from '@gluestack-ui/themed';
 import { getDataFromAsyncStorage, addDataToAsyncStorage, formatDateFromMilliseconds} from '../../diverse';
 import { useState } from 'react';
 import CardDatePicker from './CardDatePicker.js';
 import LocationPresentation from './LocationPresentation.js';
 import NavigationDivider from '../NavigationDivider.js';
+import CustomSpinner from '../../CustomElements/CustomSpinner.js';
 
 /** Component that represents a list of locations that can be picked to visit */
 const ListLocations = (props) => {
@@ -124,7 +125,7 @@ const ListLocations = (props) => {
     {!props.locations?.length ? (
       <View style={{ marginTop: screenHeight / 3, }}>
         <Center  >
-          <Spinner size="large" color="blue" bg="rgba(0, 0, 0, 0.43)" />
+          <CustomSpinner />
         </Center>
       </View>
     ) : (

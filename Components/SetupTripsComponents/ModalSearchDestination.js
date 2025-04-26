@@ -1,10 +1,10 @@
 import { FlatList, Modal, StyleSheet, Text, Pressable, View, TextInput, SafeAreaView } from 'react-native';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Spinner } from "@gluestack-ui/themed";
 import CustomButton from '../../CustomElements/CustomButton.js';
 import { FirebaseFirestore } from '../../Firebase.js';
 import {EnvConfig} from '../../providers/EnvConfig.js';
+import CustomSpinner from '../../CustomElements/CustomSpinner.js';
 
 /** Modal that allows the client to search for destinations to visit - country and city */
 const ModalSearchDestination = (props) => {
@@ -132,7 +132,7 @@ const ModalSearchDestination = (props) => {
                 </View>
               ) : (
                 <View style={styles.spinnerContainer}>
-                  <Spinner size="large" color="blue" bg="rgba(0, 0, 0, 0.43)" />
+                  <CustomSpinner />
                 </View>
               )}
               <CustomButton name="Close" func={closeModal} />
