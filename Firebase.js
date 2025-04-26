@@ -208,6 +208,15 @@ class FirebaseFirestore{
     })
   }
 
+  async appVersions(){
+    return this._storeErr(async ()=>{
+      const docRef = doc(db, "app_versions", 'app_versions');
+      const dataFromDB = await getDoc(docRef);
+      const data = dataFromDB.data();
+      return {isResolved:true, data};
+    })
+  }
+
 
 }
 
