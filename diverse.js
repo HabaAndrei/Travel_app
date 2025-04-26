@@ -1,6 +1,8 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { FirebaseFirestore } from './Firebase';
 import {EnvConfig} from './providers/EnvConfig';
+import * as Application from 'expo-application';
+import { Platform } from 'react-native';
 
 const firebaseFirestore = new FirebaseFirestore();
 
@@ -35,7 +37,7 @@ function toMinutes(time) {
   return hours * 60 + minutes;
 }
 
-function getHours(startTime, endTime) {
+function getHours(startTime, endTime, sameDay = false) {
 
   // Find the index of the colon that separates hours and minutes
   const colonIndexStart = startTime.indexOf(':');
@@ -56,7 +58,7 @@ function getHours(startTime, endTime) {
   // Adjust for negative values (crossing midnight)
   if (Number(hours) < 0) {
     hours = (24 - Number(startHour)) + Number(endHour);
-  } else if (Number(hours) == 0) {
+  } else if (Number(hours) == 0 && !sameDay) {
     hours = 24
   }
   if (Number(minutes) < 0) {
@@ -190,9 +192,26 @@ function isBase64(str) {
   return base64Regex.test(str);
 }
 
+async function existsUpdates(){
+  const os = Platform.OS;
+  const app_version = Application.nativeBuildVersion;
+  if ( !os || os === 'web' || !app_version ) return false;
+
+  const result_version = await firebaseFirestore.appVersions();
+  if ( !result_version['isResolved'] ) return false;
+  const ios_version = result_version['data']['IOS']['version'];
+  const android_version = result_version['data']['ANDROID']['version'];
+
+  const getNumber = (num) => Number(num.replaceAll('.', ''));
+
+  if (os === 'ios' && (getNumber(ios_version) > getNumber(app_version))) return {url: result_version['data']['IOS']['url']};
+  if (os === 'android' && (getNumber(android_version) > getNumber(app_version))) return {url: result_version['data']['ANDROID']['url']};
+  return false;
+}
+
 export {
   isValidPassword, isValidEmail, removeItemFromAsyncStorage, getDataFromAsyncStorage, addDataToAsyncStorage,
   multiRemoveFromAsyncStorage, multiSetFromAsyncStorage, getAllKeysFromAsyncStorage, multiGetFromAsyncStorage,
   formatDateFromMilliseconds, deleteAllFromAsyncStorage, getDays, getHours, toMinutes, imagePath,
-  getUrlImage, isBase64
+  getUrlImage, isBase64, existsUpdates
 };
