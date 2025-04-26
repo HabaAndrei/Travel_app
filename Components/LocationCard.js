@@ -47,19 +47,19 @@ const LocationCard = (props) => {
         mb="$2"
         sx={{ color: "$textLight700" }}
       >
-        {props.time}
+        {props?.time}
       </Text>
       <TimePicker
-        getTime={props.getTime}
-        extraFunction={props.extraFunction}
+        getTime={props?.getTime}
+        extraFunction={props?.extraFunction}
       />
 
     </View>
 
     {props.address ?
       <Text size="m" style={{ marginTop: 10 }}>
-        <Text bold={true}>Address: </Text> {props.address}
-        <Text style={styles.buttonText} onPress={() => props.copyInClipboard(`${props.address}`)}>
+        <Text bold={true}>Address: </Text> {props?.address}
+        <Text style={styles.buttonText} onPress={() => props.copyInClipboard(`${props?.address}`)}>
           {' '}
           Copy
         </Text>
@@ -68,18 +68,18 @@ const LocationCard = (props) => {
 
     {props.info ?
       <Text size="m" style={{ marginTop: 10 }}>
-        <Text bold={true}>Info:</Text> {props.info}
+        <Text bold={true}>Info:</Text> {props?.info}
       </Text> : null
     }
     {props.description ?
       <Text size="m" style={{ marginTop: 10 }}>
-        <Text bold={true}>Description: </Text>{props.description}
+        <Text bold={true}>Description: </Text>{props?.description}
       </Text> : null
     }
 
     <View style={{ flex: 1, marginTop: 20 }}>
-      {props.arrayWithLinkImages.length ?
-        <ImageCarousel imageUrls={props.arrayWithLinkImages }/>
+      {props?.arrayWithLinkImages?.length ?
+        <ImageCarousel imageUrls={props?.arrayWithLinkImages }/>
         : null
       }
     </View>

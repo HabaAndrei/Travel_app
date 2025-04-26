@@ -51,7 +51,7 @@ const CountdownNews = (props) => {
       const title = place;
       if (date === actualDate) {
         if (toMinutes(`${actualHour}:${actualMinutes}`) < toMinutes(time)) {
-          const { minutes, hours } = getHours(`${actualHour}:${actualMinutes}`, time);
+          const { minutes, hours } = getHours(`${actualHour}:${actualMinutes}`, time, true);
           const infTwo = formatTimeMessage({hours, minutes, address});
           news.push({ title, infOne, infTwo, urlLocation, website, address });
         }

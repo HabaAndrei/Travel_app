@@ -1,9 +1,8 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, Pressable } from 'react-native';
 import Notification from './Notification';
 import ConfirmActionModal from './Modals/ConfirmActionModal';
 import uuid from 'react-native-uuid';
-import LogIn from '../Screens/LogIn.js';
 import { StatusBar } from 'expo-status-bar';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
@@ -14,13 +13,18 @@ import Entypo from '@expo/vector-icons/Entypo';
 import { useFocusEffect } from '@react-navigation/native';
 
 /** The main layout for the entire application */
-const Layout = ({ children, navigation, route, user, setUser}) => {
+const Layout = ({ children, navigation, route, user, setUser, updateApp}) => {
 
   const insets = useSafeAreaInsets();
   const [isConfirmActionModal, setConfirmActionModal] = useState(false);
   const [notification, setNotification] = useState([]);
   const [deletePromise, setDeletePromise] = useState(null);
-  const [navigationPath, setNavigationPath] = useState('SetupTrip')
+  const [navigationPath, setNavigationPath] = useState('SetupTrip');
+
+  useEffect(()=>{
+    if ( !updateApp ) return;
+    navigation.navigate('Update', {updateApp});
+  }, [updateApp]);
 
   useFocusEffect(
     useCallback(() => {
@@ -74,56 +78,47 @@ const Layout = ({ children, navigation, route, user, setUser}) => {
 
       <Notification  notification={notification} setNotification={setNotification}  />
 
-      {user?.userDetails?.email_verified ?
+      <View style={styles.content}>
+        {renderChildrenWithProps()}
+      </View>
 
-        <View style={styles.content}>
+      {navigationPath && !updateApp ?
+        <View style={styles.footerContainer}>
+          <ScrollView
+            horizontal={true}
+            style={styles.footer}
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={styles.footerContent}
+          >
+            <Pressable style={styles.pressable} onPress={() => navigation.navigate('MyTrips')} >
+              <FontAwesome6 name="earth-americas" size={navigationPath === 'MyTrips' ? 27 : 22} color="white" />
+              <Text style={styles.pressableText}>My Trips</Text>
+            </Pressable>
 
-          {renderChildrenWithProps()}
-        </View>
-        :
-        <LogIn   user={user} setUser={setUser} addNotification={addNotification}
-          areYouSure={areYouSure}  navigation={navigation} />
-      }
+            <Pressable style={styles.pressable} onPress={() => navigation.navigate('FindLocation')} >
+              <FontAwesome name="search" size={navigationPath === 'FindLocation' ? 27 : 22} color="white" />
+              <Text style={styles.pressableText}>Find place</Text>
+            </Pressable>
 
+            <Pressable style={styles.pressable} onPress={() => navigation.navigate('SetupTrip')} >
+              <Entypo name="circle-with-plus" size={navigationPath === 'SetupTrip' ? 27 : 22} color="white" />
+              <Text style={styles.pressableText}>New trip</Text>
+            </Pressable>
 
-     {user?.userDetails?.email_verified ?
+            <Pressable style={styles.pressable} onPress={() => navigation.navigate('Chat')} >
+              <MaterialCommunityIcons name="robot-outline" size={navigationPath === 'Chat' ? 27 : 22} color="white" />
+              <Text style={styles.pressableText}>Assistant</Text>
+            </Pressable>
 
-      <View style={styles.footerContainer}>
-        <ScrollView
-          horizontal={true}
-          style={styles.footer}
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={styles.footerContent}
-        >
-          <Pressable style={styles.pressable} onPress={() => navigation.navigate('MyTrips')} >
-            <FontAwesome6 name="earth-americas" size={navigationPath === 'MyTrips' ? 27 : 22} color="white" />
-            <Text style={styles.pressableText}>My Trips</Text>
-          </Pressable>
+            <Pressable style={styles.pressable} onPress={() => navigation.navigate('UserSettings')} >
+              <Feather name="settings" size={navigationPath === 'UserSettings' ? 27 : 22} color="white" />
+              <Text style={styles.pressableText}>Settings</Text>
+            </Pressable>
 
-          <Pressable style={styles.pressable} onPress={() => navigation.navigate('FindLocation')} >
-            <FontAwesome name="search" size={navigationPath === 'FindLocation' ? 27 : 22} color="white" />
-            <Text style={styles.pressableText}>Find place</Text>
-          </Pressable>
-
-          <Pressable style={styles.pressable} onPress={() => navigation.navigate('SetupTrip')} >
-            <Entypo name="circle-with-plus" size={navigationPath === 'SetupTrip' ? 27 : 22} color="white" />
-            <Text style={styles.pressableText}>New trip</Text>
-          </Pressable>
-
-          <Pressable style={styles.pressable} onPress={() => navigation.navigate('Chat')} >
-            <MaterialCommunityIcons name="robot-outline" size={navigationPath === 'Chat' ? 27 : 22} color="white" />
-            <Text style={styles.pressableText}>Assistant</Text>
-          </Pressable>
-
-          <Pressable style={styles.pressable} onPress={() => navigation.navigate('UserSettings')} >
-            <Feather name="settings" size={navigationPath === 'UserSettings' ? 27 : 22} color="white" />
-            <Text style={styles.pressableText}>Settings</Text>
-          </Pressable>
-
-        </ScrollView>
-      </View> : <View
-        style={styles.footerContainerClear}
-      />
+          </ScrollView>
+        </View> : <View
+          style={styles.footerContainerClear}
+        />
       }
     </View>
   );

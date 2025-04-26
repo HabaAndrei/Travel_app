@@ -3,7 +3,7 @@ import {useState, useEffect, useRef} from 'react'
 import { formatDateFromMilliseconds, removeItemFromAsyncStorage,
   addDataToAsyncStorage, multiSetFromAsyncStorage, getDataFromAsyncStorage,
   multiGetFromAsyncStorage, multiRemoveFromAsyncStorage} from '../diverse.js';
-import { Spinner, Center, Heading, Text, Divider, HStack, TrashIcon,RepeatIcon, CheckIcon,  Icon } from "@gluestack-ui/themed";
+import { Center, Heading, Text, Divider, HStack, TrashIcon,RepeatIcon, CheckIcon,  Icon } from "@gluestack-ui/themed";
 import { useIsFocused } from '@react-navigation/native';
 import {FirebaseFirestore, FirebaseAuth} from '../Firebase.js';
 import axios from 'axios';
@@ -11,6 +11,7 @@ import NavbarProgram from '../Components/NavbarProgram.js';
 import CardPresentationTrip from '../Components/CardPresentationTrip.js';
 import InputHotelAddress from '../Components/ProgramComponents/InputHotelAddress.js';
 import { EnvConfig } from '../providers/EnvConfig.js';
+import CustomSpinner from '../CustomElements/CustomSpinner.js';
 
 /** Program screen => where the client can see the generated program */
 const Program = (props) => {
@@ -78,9 +79,8 @@ const Program = (props) => {
   async function createProgramAi({startDate, endDate, city, country, locations, urlImageCity, hotelAddress}){
     setRecomandation(false);
     setProgram([]);
-    const user_token = await firebaseAuth.getAuthToken();
     axios.post(EnvConfig.getInstance().get('address_function_ai_generation'),
-      {generationType: 'generateProgram', startDate, endDate, city, country, locations, hotelAddress, user_token}
+      {generationType: 'generateProgram', startDate, endDate, city, country, locations, hotelAddress}
     ).then((data)=>{
       if(data.data.isResolved){
         const days = data.data.data;
@@ -136,6 +136,10 @@ const Program = (props) => {
   }
 
   async function saveProgramInDb(){
+    if (!props.user?.userDetails?.email_verified) {
+      props.navigation.navigate('LogIn');
+      return;
+    }
     if ( isSavingProgram.current ) return;
     isSavingProgram.current = true;
     const rez = await multiGetFromAsyncStorage(["travelProgram", "travelParameter"]);
@@ -196,7 +200,7 @@ const Program = (props) => {
             {!program?.length ?
               <View  style={{ marginTop: screenHeight / 3 }} >
                 <Center  >
-                  <Spinner size="large" color="blue" bg="rgba(0, 0, 0, 0.43)" />
+                  <CustomSpinner />
                 </Center>
               </View> :
 

@@ -59,8 +59,8 @@ const Trip = (props) => {
     const timestamp = new Date(time).getTime();
     let hour = new Date(timestamp).getHours();
     let minutes = new Date(timestamp).getMinutes();
-    if (JSON.stringify(minutes).length < 2) minutes = "0" + JSON.stringify(minutes);
-    if (JSON.stringify(hour).length < 2) hour = "0" + JSON.stringify(hour);
+    if (JSON.stringify(minutes)?.length < 2) minutes = "0" + JSON.stringify(minutes);
+    if (JSON.stringify(hour)?.length < 2) hour = "0" + JSON.stringify(hour);
     let program = [...tripProgram];
     program[indexDay.current].activities[indexActivityRef.current].time = `${hour}:${minutes}`;
     const id = props.route.params.id;
@@ -139,7 +139,7 @@ const Trip = (props) => {
       return obDay;
     });
     const startDate = formatDateFromMilliseconds(new Date(program[0].date).getTime());
-    const endDate = formatDateFromMilliseconds(new Date(program[program.length - 1].date).getTime());
+    const endDate = formatDateFromMilliseconds(new Date(program[program?.length - 1].date).getTime());
     // update program in database
     const rez = await firebaseFirestore.updateColumnsDatabase({
       database: 'programs',
@@ -160,15 +160,15 @@ const Trip = (props) => {
     let { program } = props.route.params;
     if (typeof program === 'string') program = JSON.parse(program);
     const locGeo = program[indexLocation].activities.filter((ob) => ob?.geometry_location);
-    if (locGeo.length === 1) {
+    if (locGeo?.length === 1) {
       const place = strLatLngMaps(locGeo[0]);
       openMap({ start: place, end: place });
-    } else if (locGeo.length === 2) {
+    } else if (locGeo?.length === 2) {
       openMap({ start: strLatLngMaps(locGeo[0]), end: strLatLngMaps(locGeo[1]) });
-    } else if (locGeo.length > 2) {
+    } else if (locGeo?.length > 2) {
       const first = locGeo[0];
-      const mid = locGeo.slice(1, locGeo.length - 1);
-      const last = locGeo[locGeo.length - 1];
+      const mid = locGeo.slice(1, locGeo?.length - 1);
+      const last = locGeo[locGeo?.length - 1];
       const addressWaypoints = mid.map((ob) => strLatLngMaps(ob));
       openMap({ start: strLatLngMaps(first), waypoints: addressWaypoints, end: strLatLngMaps(last) });
     }
@@ -181,14 +181,14 @@ const Trip = (props) => {
 
       <View style={styles.container}>
         <Text style={styles.title}>
-          {props.route.params.country} - {props.route.params.city}
+          {props.route.params.country} - {props?.route?.params?.city}
         </Text>
       </View>
 
       <InputHotelAddress
         hotelAddress={hotelAddressTrip}
         setHotelAddress={setHotelAddressTrip}
-        idFromDatabase={props.route.params?.id}
+        idFromDatabase={props?.route?.params?.id}
       />
 
       <ModalAddNewDay
@@ -207,7 +207,7 @@ const Trip = (props) => {
                   return (
                     <>
                       <AccordionTitleText>
-                        Day {dayProgram.day} - {dayProgram.title}
+                        Day {dayProgram?.day} - {dayProgram?.title}
                       </AccordionTitleText>
                       {isExpanded ? (
                         <Icon as={RemoveIcon} m="$2" w="$4" h="$4" />
@@ -254,14 +254,14 @@ const Trip = (props) => {
                 return (
                   <LocationCard
                     key={indexActivity}
-                    place={activity.place}
-                    time={activity.time}
-                    address={activity.address}
-                    info={activity.info}
-                    description={activity.description}
-                    arrayWithLinkImages={activity.arrayWithLinkImages}
-                    website={activity.website}
-                    urlLocation={activity.urlLocation}
+                    place={activity?.place}
+                    time={activity?.time}
+                    address={activity?.address}
+                    info={activity?.info}
+                    description={activity?.description}
+                    arrayWithLinkImages={activity?.arrayWithLinkImages}
+                    website={activity?.website}
+                    urlLocation={activity?.urlLocation}
                     deleteActivity={deleteActivity}
                     deleteActivityParams={[index, indexActivity]}
                     getTime={handleConfirmTime}
@@ -269,7 +269,7 @@ const Trip = (props) => {
                       indexActivityRef.current = indexActivity;
                       indexDay.current = index;
                     }}
-                    copyInClipboard={()=>copyInClipboard(activity.address)}
+                    copyInClipboard={()=>copyInClipboard(activity?.address)}
                     changeDefaultStyle={true}
                   />
                 )

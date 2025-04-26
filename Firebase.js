@@ -65,36 +65,36 @@ class FirebaseFirestore{
     })
   }
 
-  async askQuestion(messagesConversation, user_token){
-    return this._storeErr(async ()=>{
-      const {uid} = auth.currentUser;
-      const data = await this.getPlansFromDbWithUid(uid);
-      if(!data.isResolved){
-        return {isResolved: false, err: data.err};
-      }
-      let tripsData = '';
-      if(data.data.length){
-        const rez = data.data.map((trip)=>{
-          let {city, country, startDate, endDate, programDaysString} = trip;
-          programDaysString = JSON.parse(programDaysString);
-          const daysWithInfo = programDaysString.map((full_day)=>{
-            let {day, date, activities} = full_day;
-            const info_activities = activities.map((activity)=>{
-              const {time, info, urlLocation, website, place, description, address} = activity;
-              return {time, info,
-                urlLocation: urlLocation ? urlLocation : '',
-                website: website ? website : '',
-                place, description, address
-              };
-            })
-            return {day, date, info_activities};
-          })
-          return {city, country, startDate, endDate, daysWithInfo};
+  async userPlans(){
+    const uid = auth.currentUser?.uid;
+    if (!uid) return '';
+    const data = await this.getPlansFromDbWithUid(uid);
+    if(!data.isResolved || !data.data?.length) return '';
+    const rez = data.data.map((trip)=>{
+      let {city, country, startDate, endDate, programDaysString} = trip;
+      programDaysString = JSON.parse(programDaysString);
+      const daysWithInfo = programDaysString.map((full_day)=>{
+        let {day, date, activities} = full_day;
+        const info_activities = activities.map((activity)=>{
+          const {time, info, urlLocation, website, place, description, address} = activity;
+          return {time, info,
+            urlLocation: urlLocation ? urlLocation : '',
+            website: website ? website : '',
+            place, description, address
+          };
         })
-        tripsData = JSON.stringify(rez);
-      }
+        return {day, date, info_activities};
+      })
+      return {city, country, startDate, endDate, daysWithInfo};
+    })
+    return JSON.stringify(rez);
+  }
+
+  async askQuestion(messagesConversation){
+    return this._storeErr(async ()=>{
+      const tripsData = await this.userPlans();
       const rezQuery =  await axios.post(EnvConfig.getInstance().get('address_function_ai_generation'), {
-        messagesConversation, tripsData, generationType: 'generateChatResponse', user_token
+        messagesConversation, tripsData, generationType: 'generateChatResponse'
       });
       if(rezQuery?.data?.isResolved){
         return {isResolved: true, data: rezQuery?.data?.data};
@@ -205,6 +205,15 @@ class FirebaseFirestore{
         await addDoc(collection(db, database), columnsWithValues);
       }
       return {isResolved: true};
+    })
+  }
+
+  async appVersions(){
+    return this._storeErr(async ()=>{
+      const docRef = doc(db, "app_versions", 'app_versions');
+      const dataFromDB = await getDoc(docRef);
+      const data = dataFromDB.data();
+      return {isResolved:true, data};
     })
   }
 
