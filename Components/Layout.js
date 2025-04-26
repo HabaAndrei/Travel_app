@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, Pressable } from 'react-native';
 import Notification from './Notification';
 import ConfirmActionModal from './Modals/ConfirmActionModal';
@@ -13,13 +13,18 @@ import Entypo from '@expo/vector-icons/Entypo';
 import { useFocusEffect } from '@react-navigation/native';
 
 /** The main layout for the entire application */
-const Layout = ({ children, navigation, route, user, setUser}) => {
+const Layout = ({ children, navigation, route, user, setUser, updateApp}) => {
 
   const insets = useSafeAreaInsets();
   const [isConfirmActionModal, setConfirmActionModal] = useState(false);
   const [notification, setNotification] = useState([]);
   const [deletePromise, setDeletePromise] = useState(null);
   const [navigationPath, setNavigationPath] = useState('SetupTrip');
+
+  useEffect(()=>{
+    if ( !updateApp ) return;
+    navigation.navigate('Update', {updateApp});
+  }, [updateApp]);
 
   useFocusEffect(
     useCallback(() => {
@@ -77,7 +82,7 @@ const Layout = ({ children, navigation, route, user, setUser}) => {
         {renderChildrenWithProps()}
       </View>
 
-      {navigationPath ?
+      {navigationPath && !updateApp ?
         <View style={styles.footerContainer}>
           <ScrollView
             horizontal={true}
