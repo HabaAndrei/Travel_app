@@ -64,7 +64,9 @@
     "twrnc": "^4.5.1",
     "typescript": "~5.3.3",
     "undefined": "@/components/icon",
-    "expo-image-picker": "~16.0.6"
+    "expo-image-picker": "~16.0.6",
+    "expo-application": "~6.0.2",
+    "expo-linking": "~7.0.5"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
