@@ -7,6 +7,7 @@ import CustomButton from '../../CustomElements/CustomButton.js';
 import { FirebaseFirestore, FirebaseAuth } from '../../Firebase.js';
 import { EnvConfig } from '../../providers/EnvConfig.js';
 import CustomSpinner from '../../CustomElements/CustomSpinner.js';
+import { authorizationHeaders } from '../../diverse.js';
 
 function ViewSpinner(props) {
   return (
@@ -44,9 +45,9 @@ const CheckboxActivities = (props) => {
   async function createActivities(){
     const { city, country } = props.destinationActivities;
     if (!props.destinationActivities.isOpenModalActivities || props.destinationActivities.checkbox.length) return;
-    axios.post(EnvConfig.getInstance().get('address_function_ai_generation'), {
-      generationType: 'generateActivities', city, country
-    }).then((data) => {
+    const body = { generationType: 'generateActivities', city, country }
+    axios.post(EnvConfig.getInstance().get('address_function_ai_generation'),
+    body, await authorizationHeaders(body)).then((data) => {
       if (data.data.isResolved) {
         if(data?.data?.paramsLocation?.data){
           setParamsLocation(data?.data?.paramsLocation?.data?.local_places_and_tourist_places);
