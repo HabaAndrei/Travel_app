@@ -217,7 +217,7 @@ async function digestCrypto(value){
 }
 
 async function authorizationHeaders(body){
-  const token = await digestCrypto(JSON.stringify(body) + 'test');
+  const token = await digestCrypto(JSON.stringify(body) +  EnvConfig.getInstance().get('authorization_custom_token'));
   return {
     headers: {
       Authorization: token,
