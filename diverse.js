@@ -1,9 +1,8 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { FirebaseFirestore } from './Firebase';
-import {EnvConfig} from './providers/EnvConfig';
+import { EnvConfig } from './providers/EnvConfig';
 import * as Application from 'expo-application';
 import { Platform } from 'react-native';
-import * as Crypto from 'expo-crypto';
 
 const firebaseFirestore = new FirebaseFirestore();
 
@@ -210,25 +209,10 @@ async function existsUpdates(){
   return false;
 }
 
-async function digestCrypto(value){
-  return await Crypto.digestStringAsync(
-    Crypto.CryptoDigestAlgorithm.SHA256, value
-  );
-}
-
-async function authorizationHeaders(body){
-  const token = await digestCrypto(JSON.stringify(body) +  EnvConfig.getInstance().get('authorization_custom_token'));
-  return {
-    headers: {
-      Authorization: token,
-      'Content-Type': 'application/json'
-    }
-  }
-}
 
 export {
   isValidPassword, isValidEmail, removeItemFromAsyncStorage, getDataFromAsyncStorage, addDataToAsyncStorage,
   multiRemoveFromAsyncStorage, multiSetFromAsyncStorage, getAllKeysFromAsyncStorage, multiGetFromAsyncStorage,
   formatDateFromMilliseconds, deleteAllFromAsyncStorage, getDays, getHours, toMinutes, imagePath,
-  getUrlImage, isBase64, existsUpdates, authorizationHeaders
+  getUrlImage, isBase64, existsUpdates
 };
