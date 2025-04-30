@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { FirebaseFirestore } from './Firebase';
-import {EnvConfig} from './providers/EnvConfig';
+import { EnvConfig } from './providers/EnvConfig';
 import * as Application from 'expo-application';
 import { Platform } from 'react-native';
 
@@ -208,6 +208,7 @@ async function existsUpdates(){
   if (os === 'android' && (getNumber(android_version) > getNumber(app_version))) return {url: result_version['data']['ANDROID']['url']};
   return false;
 }
+
 
 export {
   isValidPassword, isValidEmail, removeItemFromAsyncStorage, getDataFromAsyncStorage, addDataToAsyncStorage,

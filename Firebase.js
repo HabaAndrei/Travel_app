@@ -8,6 +8,7 @@ import { getReactNativePersistence } from '@firebase/auth/dist/rn/index.js';
 import axios from 'axios';
 import * as Device from 'expo-device';
 import { EnvConfig } from './providers/EnvConfig';
+import { authorizationHeaders } from './providers/utils.js';
 
 const firebaseConfig = {
   apiKey: EnvConfig.getInstance().get('api_key'),
@@ -93,9 +94,10 @@ class FirebaseFirestore{
   async askQuestion(messagesConversation){
     return this._storeErr(async ()=>{
       const tripsData = await this.userPlans();
-      const rezQuery =  await axios.post(EnvConfig.getInstance().get('address_function_ai_generation'), {
-        messagesConversation, tripsData, generationType: 'generateChatResponse'
-      });
+      const body = { messagesConversation, tripsData, generationType: 'generateChatResponse' };
+      const rezQuery =  await axios.post(EnvConfig.getInstance().get('address_function_ai_generation'),
+        body, await authorizationHeaders(body)
+      );
       if(rezQuery?.data?.isResolved){
         return {isResolved: true, data: rezQuery?.data?.data};
       }else{

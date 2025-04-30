@@ -1,17 +1,18 @@
 import { StyleSheet, View, ScrollView, Dimensions, SafeAreaView } from 'react-native'
-import {useState, useEffect, useRef} from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { formatDateFromMilliseconds, removeItemFromAsyncStorage,
   addDataToAsyncStorage, multiSetFromAsyncStorage, getDataFromAsyncStorage,
-  multiGetFromAsyncStorage, multiRemoveFromAsyncStorage} from '../diverse.js';
+  multiGetFromAsyncStorage, multiRemoveFromAsyncStorage } from '../diverse.js';
 import { Center, Heading, Text, Divider, HStack, TrashIcon,RepeatIcon, CheckIcon,  Icon } from "@gluestack-ui/themed";
 import { useIsFocused } from '@react-navigation/native';
-import {FirebaseFirestore, FirebaseAuth} from '../Firebase.js';
+import { FirebaseFirestore } from '../Firebase.js';
 import axios from 'axios';
 import NavbarProgram from '../Components/NavbarProgram.js';
 import CardPresentationTrip from '../Components/CardPresentationTrip.js';
 import InputHotelAddress from '../Components/ProgramComponents/InputHotelAddress.js';
 import { EnvConfig } from '../providers/EnvConfig.js';
 import CustomSpinner from '../CustomElements/CustomSpinner.js';
+import { authorizationHeaders } from '../providers/utils.js';
 
 /** Program screen => where the client can see the generated program */
 const Program = (props) => {
@@ -27,7 +28,6 @@ const Program = (props) => {
   const isSavingProgram = useRef(false);
 
   const firebaseFirestore = new FirebaseFirestore();
-  const firebaseAuth = new FirebaseAuth();
   const screenHeight = Dimensions.get('window').height;
 
   useEffect(()=>{
@@ -79,8 +79,9 @@ const Program = (props) => {
   async function createProgramAi({startDate, endDate, city, country, locations, urlImageCity, hotelAddress}){
     setRecomandation(false);
     setProgram([]);
+    const body = {generationType: 'generateProgram', startDate, endDate, city, country, locations, hotelAddress}
     axios.post(EnvConfig.getInstance().get('address_function_ai_generation'),
-      {generationType: 'generateProgram', startDate, endDate, city, country, locations, hotelAddress}
+      body, await authorizationHeaders(body)
     ).then((data)=>{
       if(data.data.isResolved){
         const days = data.data.data;

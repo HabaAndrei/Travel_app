@@ -6,9 +6,9 @@ import * as ImagePicker from 'expo-image-picker';
 import { EnvConfig } from '../providers/EnvConfig.js';
 import CustomButton from '../CustomElements/CustomButton.js';
 import CustomSpinner from '../CustomElements/CustomSpinner.js';
-import { FirebaseAuth } from '../Firebase.js';
 import { isBase64 } from '../diverse.js';
 import * as FileSystem from 'expo-file-system';
+import { authorizationHeaders } from '../providers/utils.js';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
@@ -25,8 +25,6 @@ const FindLocation = (props) => {
   const [details, setDetails] = useState({});
   const [isImageNotFound, setImageNotFoud] = useState(false);
   const [isLoading, setLoading] = useState(false);
-
-  const firebaseAuth = new FirebaseAuth();
 
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -79,10 +77,10 @@ const FindLocation = (props) => {
     setImageNotFoud(false);
 
     try {
+      const body = { image: image.uri };
       const data = await axios.post(
         EnvConfig.getInstance().get('address_function_find_location'),
-        { image: image.uri },
-        { headers: { "Content-Type": "application/json" } }
+        body, await authorizationHeaders(body)
       );
       setLoading(false);
       if (!data?.data?.isResolved) {

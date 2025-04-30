@@ -6,8 +6,9 @@ import axios from 'axios';
 import { Text } from '@gluestack-ui/themed';
 import NavbarProgram from '../Components/NavbarProgram';
 import ListLocations from '../Components/LocationsComponents/ListLocations.js';
-import { FirebaseFirestore, FirebaseAuth } from '../Firebase.js';
+import { FirebaseFirestore } from '../Firebase.js';
 import { EnvConfig } from '../providers/EnvConfig.js';
+import { authorizationHeaders } from '../providers/utils.js';
 
 /** Location screen => where the user sees generated locations */
 const Locations = (props) => {
@@ -17,7 +18,6 @@ const Locations = (props) => {
   const [isRecomandation, setRecomandation] = useState(false);
 
   const firebaseFirestore = new FirebaseFirestore();
-  const firebaseAuth = new FirebaseAuth();
 
   useEffect(()=>{
 
@@ -40,9 +40,13 @@ const Locations = (props) => {
   async function createLocationsAi({city, country, customActivity, selectedActivities, isLocalPlaces, scaleVisit}){
     setLocations([]);
     setRecomandation(false);
-    axios.post(EnvConfig.getInstance().get('address_function_ai_generation'), { generationType: 'generateLocations',
+    const body = {
+      generationType: 'generateLocations',
       city, country, customActivity, selectedActivities, isLocalPlaces, scaleVisit
-    }).then((data)=>{
+    };
+    axios.post(EnvConfig.getInstance().get('address_function_ai_generation'),
+      body, await authorizationHeaders(body)
+    ).then((data)=>{
       if(data.data.isResolved){
         const urlImageCity = data?.data?.urlImageCity;
         const arrayWithLocations = data.data.data;
