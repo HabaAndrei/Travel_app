@@ -217,10 +217,28 @@ async function existsUpdates(){
   return false;
 }
 
+async function verifyFreeTier(){
+  const infoFreeTier = await getDataFromAsyncStorage('usedFreeTierNumber');
+  const numberFreeTier = infoFreeTier?.data;
+  if (!infoFreeTier.isResolved) {
+    return {continue: true};
+  } else if (infoFreeTier.isResolved && !numberFreeTier) {
+    addDataToAsyncStorage('usedFreeTierNumber', 1);
+    return {continue: true}
+  } else if (infoFreeTier.isResolved && numberFreeTier) {
+    if (numberFreeTier > 5) {
+      return {continue: false};
+    }
+    addDataToAsyncStorage('usedFreeTierNumber', numberFreeTier + 1);
+    return {continue: true};
+  }
+  return {continue: true};
+}
+
 
 export {
   isValidPassword, isValidEmail, removeItemFromAsyncStorage, getDataFromAsyncStorage, addDataToAsyncStorage,
   multiRemoveFromAsyncStorage, multiSetFromAsyncStorage, getAllKeysFromAsyncStorage, multiGetFromAsyncStorage,
   formatDateFromMilliseconds, deleteAllFromAsyncStorage, getDays, getTimeDifferece, toMinutes, imagePath,
-  getUrlImage, isBase64, existsUpdates
+  getUrlImage, isBase64, existsUpdates, verifyFreeTier
 };
