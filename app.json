@@ -1,10 +1,10 @@
 {
   "expo": {
-    "name": "expo_app",
-    "slug": "expo_app",
-    "version": "1.0.0",
-    "orientation": "portrait",
+    "name": "Travel Bot",
     "icon": "./assets/icon.png",
+    "version": "1.0.0",
+    "slug": "expo_app",
+    "orientation": "portrait",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "splash": {
@@ -13,8 +13,11 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true,
-      "bundleIdentifier": "com.haba03.expo-app"
+      "supportsTablet": false,
+      "bundleIdentifier": "com.haba03.travelbot",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -39,6 +42,24 @@
         "projectId": "c7c58597-1248-43c8-9622-f728ad207573"
       }
     },
-    "owner": "haba03"
+    "owner": "haba03",
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/c7c58597-1248-43c8-9622-f728ad207573"
+    },
+    "plugins": [
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "enableProguardInReleaseBuilds": true,
+            "extraProguardRules": "-keep public class com.horcrux.svg.** {*;}",
+            "allowBackup": false
+          }
+        }
+      ]
+    ]
   }
 }
