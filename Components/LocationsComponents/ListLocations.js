@@ -119,6 +119,8 @@ const ListLocations = (props) => {
     }
   }
 
+  console.log(props.locations);
+
   return (
   <ScrollView>
 
