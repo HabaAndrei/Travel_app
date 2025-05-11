@@ -22,6 +22,8 @@ const TicketsComponent = ({ tickets }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.header}>🎟️ Buy tickets</Text>
+      <Text style={styles.description}>Tickets for this location and from surroundings</Text>
+
       <ScrollView>
         {visibleTickets.map((ticket, index) => (
           <TouchableOpacity
@@ -33,6 +35,7 @@ const TicketsComponent = ({ tickets }) => {
           </TouchableOpacity>
         ))}
       </ScrollView>
+
       {tickets.length > MAX_VISIBLE && (
         <CustomButton func={handleToggle} name={showAll ? 'See less' : 'See more'} />
       )}
@@ -53,8 +56,12 @@ const styles = StyleSheet.create({
   header: {
     fontSize: 20,
     fontWeight: 'bold',
-    marginBottom: 12,
     color: '#333',
+  },
+  description: {
+    fontSize: 14,
+    color: '#555',
+    marginBottom: 12,
   },
   ticket: {
     paddingVertical: 10,
