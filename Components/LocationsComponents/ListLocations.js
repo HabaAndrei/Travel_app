@@ -125,7 +125,9 @@ const ListLocations = (props) => {
     {!props.locations?.length ? (
       <View style={{ marginTop: screenHeight / 3, }}>
         <Center  >
-          <CustomSpinner />
+        <Text>Just a moment...</Text>
+        <CustomSpinner />
+        <Text>We're finding the best places for you!</Text>
         </Center>
       </View>
     ) : (

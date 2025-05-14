@@ -1,4 +1,4 @@
-import { View, ScrollView, SafeAreaView } from 'react-native'
+import { View, ScrollView, SafeAreaView, TouchableOpacity, Text, Linking } from 'react-native'
 import { useState } from 'react';
 import {VStack, HStack, Button, ButtonText, Divider, Heading, Center, Icon, SettingsIcon} from '@gluestack-ui/themed'
 import { FirebaseAuth } from '../Firebase.js';
@@ -107,6 +107,16 @@ const UserSettings = (props) => {
         <UserDisconnected user={props.user} >
           <CustomButton name={'Log in'} func={logIn} />
         </UserDisconnected>
+
+        <Center style={{marginTop: 10}}>
+          <TouchableOpacity
+            onPress={() => Linking.openURL("mailto:travelbot.suport@gmail.com")}
+          >
+            <Text
+              style={{fontSize: 16, textDecorationLine: 'underline', padding: 10}}
+            > Suport: travelbot.suport@gmail.com </Text>
+          </TouchableOpacity>
+        </Center>
 
       </ScrollView>
     </SafeAreaView>

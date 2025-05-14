@@ -201,7 +201,9 @@ const Program = (props) => {
             {!program?.length ?
               <View  style={{ marginTop: screenHeight / 3 }} >
                 <Center  >
+                  <Text>Now...</Text>
                   <CustomSpinner />
+                  <Text>Your perfect schedule is on the way!</Text>
                 </Center>
               </View> :
 
