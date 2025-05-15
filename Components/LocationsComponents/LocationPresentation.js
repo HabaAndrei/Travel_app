@@ -20,7 +20,8 @@ const LocationPresentation = (props) => {
         {props.location?.name}
       </Heading>
 
-      { props?.location?.tickets?.length ? <TicketsComponent tickets={props?.location?.tickets} /> : null }
+      {/* Hide tickets from location */}
+      {/* { props?.location?.tickets?.length ? <TicketsComponent tickets={props?.location?.tickets} /> : null } */}
 
       <View style={{ flex: 1, marginTop: 20 }}>
         {props?.location?.arrayWithLinkImages?.length ? (
