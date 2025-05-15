@@ -1,6 +1,7 @@
-import { StyleSheet, View, Image, PanResponder, Dimensions } from 'react-native';
+import { StyleSheet, View, Image, PanResponder, Dimensions, TouchableOpacity } from 'react-native';
 import { useState, useMemo } from 'react';
 import { getUrlImage } from '../diverse.js';
+import AntDesign from '@expo/vector-icons/AntDesign';
 
 const ImageMemo = ({ link }) => {
   const { width } = Dimensions.get('window');
@@ -18,9 +19,17 @@ const ImageCarousel = (props) => {
   const [startX, setStartX] = useState(0);
   const [startY, setStartY] = useState(0);
 
+  function moveRight(){
+    setImageNumber((number) => (number >= props.imageUrls.length - 1 ? number : number + 1));
+  }
+
+  function moveLeft(){
+    setImageNumber((number) => (number <= 0 ? number : number - 1));
+  }
+
   const panResponder = PanResponder.create({
     onMoveShouldSetPanResponder: (evt, gestureState) => {
-      return Math.abs(gestureState.dx) > Math.abs(gestureState.dy); // Detectăm dacă swipe-ul este orizontal
+      return Math.abs(gestureState.dx) > Math.abs(gestureState.dy); // Detect if swipe is orizontal
     },
     onPanResponderGrant: (evt) => {
       setStartX(evt.nativeEvent.pageX);
@@ -34,11 +43,9 @@ const ImageCarousel = (props) => {
 
       if (Math.abs(diffX) > Math.abs(diffY)) {
         if (diffX > 20) {
-          setImageNumber((number) =>
-            number >= props.imageUrls.length - 1 ? number : number + 1
-          );
+          moveRight();
         } else if (diffX < -20) {
-          setImageNumber((number) => (number <= 0 ? number : number - 1));
+          moveLeft();
         }
       }
     },
@@ -49,6 +56,19 @@ const ImageCarousel = (props) => {
   return (
     <View style={styles.container} {...panResponder.panHandlers}>
       {ImageCustom}
+
+      <TouchableOpacity onPress={moveLeft} style={styles.leftArrow}>
+        <View style={styles.arrowBackground}>
+          <AntDesign name="leftcircleo" size={30} color="white" />
+        </View>
+      </TouchableOpacity>
+
+      <TouchableOpacity onPress={moveRight} style={styles.rightArrow}>
+        <View style={styles.arrowBackground}>
+          <AntDesign name="rightcircleo" size={30} color="white" />
+        </View>
+      </TouchableOpacity>
+
       <View style={styles.dotsContainer}>
         {props.imageUrls.map((_, index) => (
           <View
@@ -92,5 +112,31 @@ const styles = StyleSheet.create({
   },
   inactiveDot: {
     backgroundColor: '#ccc',
-  }
+  },
+  leftArrow: {
+    position: 'absolute',
+    left: 10,
+    top: '50%',
+    transform: [{ translateY: -18 }],
+    zIndex: 1,
+  },
+  rightArrow: {
+    position: 'absolute',
+    right: 10,
+    top: '50%',
+    transform: [{ translateY: -18 }],
+    zIndex: 1,
+  },
+  arrowBackground: {
+    backgroundColor: 'rgba(128, 128, 128, 0.4)',
+    borderRadius: 25,
+    padding: 6,
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 5,
+  },
 });

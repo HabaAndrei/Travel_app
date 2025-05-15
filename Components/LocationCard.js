@@ -3,6 +3,7 @@ import { Card, Heading, Link, LinkText, Text, VStack, Divider, HStack, TrashIcon
 import TimePicker from './Pickers/TimePicker.js';
 import ImageCarousel from './ImageCarousel.js';
 import CenteredDividerLinks from './CenteredDividerLinks.js';
+import TicketsComponent from './TicketsComponent.js';
 
 const LocationCard = (props) => {
 
@@ -66,15 +67,18 @@ const LocationCard = (props) => {
       </Text> : <Text></Text>
     }
 
-    {props.info ?
-      <Text size="m" style={{ marginTop: 10 }}>
-        <Text bold={true}>Info:</Text> {props?.info}
-      </Text> : null
-    }
     {props.description ?
       <Text size="m" style={{ marginTop: 10 }}>
         <Text bold={true}>Description: </Text>{props?.description}
       </Text> : null
+    }
+
+    {props?.tickets?.length ?
+      <TicketsComponent tickets={props.tickets} />
+      :
+      <Text size="m" style={{ marginTop: 10 }}>
+        <Text bold={true}>Info:</Text> {props?.info}
+      </Text>
     }
 
     <View style={{ flex: 1, marginTop: 20 }}>

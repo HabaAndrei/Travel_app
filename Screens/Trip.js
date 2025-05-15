@@ -271,6 +271,7 @@ const Trip = (props) => {
                     }}
                     copyInClipboard={()=>copyInClipboard(activity?.address)}
                     changeDefaultStyle={true}
+                    tickets={activity.tickets}
                   />
                 )
               })}

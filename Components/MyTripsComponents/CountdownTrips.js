@@ -1,7 +1,7 @@
 import { StyleSheet, View, PanResponder } from 'react-native'
 import { useEffect, useState } from 'react'
 import { Card, Text, Heading } from '@gluestack-ui/themed';
-import {formatDateFromMilliseconds, getDays, getHours, toMinutes} from '../../diverse.js';
+import {formatDateFromMilliseconds, getDays, getTimeDifferece, toMinutes} from '../../diverse.js';
 
 /** Component that provides notifications about locations that will be visited by the user */
 const CountdownNews = (props) => {
@@ -51,7 +51,11 @@ const CountdownNews = (props) => {
       const title = place;
       if (date === actualDate) {
         if (toMinutes(`${actualHour}:${actualMinutes}`) < toMinutes(time)) {
-          const { minutes, hours } = getHours(`${actualHour}:${actualMinutes}`, time, true);
+          const { minutes, hours } = getTimeDifferece({
+            startTime: `${actualHour}:${actualMinutes}`,
+            endTime: time,
+            sameDay: true,
+          });
           const infTwo = formatTimeMessage({hours, minutes, address});
           news.push({ title, infOne, infTwo, urlLocation, website, address });
         }
@@ -61,7 +65,11 @@ const CountdownNews = (props) => {
           endDate: new Date(date).getTime()
         });
         if (days === 1) {
-          const { minutes, hours } = getHours(`${actualHour}:${actualMinutes}`, time);
+          const { minutes, hours } = getTimeDifferece({
+            startTime: `${actualHour}:${actualMinutes}`,
+            endTime: time,
+            nextDay: true
+          });
           const infTwo = formatTimeMessage({hours, minutes, address});
           news.push({ title, infOne, infTwo, urlLocation, website, address });
         } else {

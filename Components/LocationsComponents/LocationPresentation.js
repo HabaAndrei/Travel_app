@@ -3,9 +3,11 @@ import { Card, HStack, Heading, Center, Link, Divider, LinkText, VStack } from '
 import ImageCarousel from '../ImageCarousel.js';
 import CustomButton from '../../CustomElements/CustomButton.js';
 import ListPackeges from './ListPackeges.js';
+import TicketsComponent from '../TicketsComponent.js';
 
 /** This component represents a presentation of a location */
 const LocationPresentation = (props) => {
+
   return (
     <Card
       p="$5"
@@ -17,6 +19,9 @@ const LocationPresentation = (props) => {
       <Heading size="md" fontFamily="$heading" mb="$4">
         {props.location?.name}
       </Heading>
+
+      {/* Hide tickets from location */}
+      {/* { props?.location?.tickets?.length ? <TicketsComponent tickets={props?.location?.tickets} /> : null } */}
 
       <View style={{ flex: 1, marginTop: 20 }}>
         {props?.location?.arrayWithLinkImages?.length ? (

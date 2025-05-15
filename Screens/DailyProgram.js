@@ -100,6 +100,7 @@ const DailyProgram = (props) => {
                 getTime={getTime}
                 extraFunction={()=>{indexActivity.current = index}}
                 copyInClipboard={()=>copyInClipboard(activity.address)}
+                tickets={activity.tickets}
               />
             )
           })}

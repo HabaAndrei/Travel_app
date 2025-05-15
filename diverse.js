@@ -37,7 +37,11 @@ function toMinutes(time) {
   return hours * 60 + minutes;
 }
 
-function getHours(startTime, endTime, sameDay = false) {
+function getTimeDifferece(data) {
+
+  let {startTime, endTime, sameDay, nextDay} = data;
+  if (!sameDay) sameDay = false;
+  if (!nextDay) nextDay = false;
 
   // Find the index of the colon that separates hours and minutes
   const colonIndexStart = startTime.indexOf(':');
@@ -58,13 +62,17 @@ function getHours(startTime, endTime, sameDay = false) {
   // Adjust for negative values (crossing midnight)
   if (Number(hours) < 0) {
     hours = (24 - Number(startHour)) + Number(endHour);
-  } else if (Number(hours) == 0 && !sameDay) {
+  } else if (Number(hours) === 0 && !sameDay) {
     hours = 24
+  } else if (Number(hours) > 0 && nextDay) {
+    hours = 24 + hours
   }
+
   if (Number(minutes) < 0) {
     minutes = (60 - Number(startMinutes)) + Number(endMinutes);
     hours -= 1;
   }
+
   return { minutes, hours };
 }
 
@@ -209,10 +217,28 @@ async function existsUpdates(){
   return false;
 }
 
+async function verifyFreeTier(){
+  const infoFreeTier = await getDataFromAsyncStorage('usedFreeTierNumber');
+  const numberFreeTier = infoFreeTier?.data;
+  if (!infoFreeTier.isResolved) {
+    return {continue: true};
+  } else if (infoFreeTier.isResolved && !numberFreeTier) {
+    addDataToAsyncStorage('usedFreeTierNumber', 1);
+    return {continue: true}
+  } else if (infoFreeTier.isResolved && numberFreeTier) {
+    if (numberFreeTier > 5) {
+      return {continue: false};
+    }
+    addDataToAsyncStorage('usedFreeTierNumber', numberFreeTier + 1);
+    return {continue: true};
+  }
+  return {continue: true};
+}
+
 
 export {
   isValidPassword, isValidEmail, removeItemFromAsyncStorage, getDataFromAsyncStorage, addDataToAsyncStorage,
   multiRemoveFromAsyncStorage, multiSetFromAsyncStorage, getAllKeysFromAsyncStorage, multiGetFromAsyncStorage,
-  formatDateFromMilliseconds, deleteAllFromAsyncStorage, getDays, getHours, toMinutes, imagePath,
-  getUrlImage, isBase64, existsUpdates
+  formatDateFromMilliseconds, deleteAllFromAsyncStorage, getDays, getTimeDifferece, toMinutes, imagePath,
+  getUrlImage, isBase64, existsUpdates, verifyFreeTier
 };
