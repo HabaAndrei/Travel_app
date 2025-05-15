@@ -29,7 +29,7 @@ const CardFeedback = (props) => {
     const rez = await firebaseFirestore.addIntoDatabase({
       database: 'feedback',
       id: false,
-      columnsWithValues: {uid: props.user.uid, feedback, feedbackCategory: feedbackCategoryState}
+      columnsWithValues: {uid: props?.user?.userDetails?.email_verified ?? 'user disconnected', feedback, feedbackCategory: feedbackCategoryState}
     });
 
     if(rez.err){
@@ -79,7 +79,7 @@ const CardFeedback = (props) => {
           </Textarea>
         </View>
 
-        <CustomButton name={'Send feedback'} func={sendFeedback} style={styles.button}/>
+        <CustomButton name={'Send feedback'} func={sendFeedback} />
       </Card>
     </View>
   )

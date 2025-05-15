@@ -4,6 +4,7 @@ class EnvConfig {
         if (!this.instance){
             this.instance = new EnvConfig();
             this.instance.config = {
+                authorization_custom_token: process.env.EXPO_PUBLIC_AUTHORIZATION_CUSTOM_TOKEN,
                 server_address_images: process.env.EXPO_PUBLIC_SERVER_ADDRESS_IMAGES,
                 address_function_fuzzy: process.env.EXPO_PUBLIC_ADDRESS_FUNCTION_FUZZY,
                 address_function_ai_generation: process.env.EXPO_PUBLIC_ADDRESS_FUNCTION_AI_GENERATION,

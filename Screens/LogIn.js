@@ -1,6 +1,5 @@
 import { StyleSheet, View, Text, ScrollView, SafeAreaView, ImageBackground, KeyboardAvoidingView, Platform } from 'react-native'
 import { useReducer, useState, useRef } from 'react'
-import { Spinner } from '@gluestack-ui/themed'
 import { FirebaseAuth, FirebaseFirestore } from '../Firebase.js'
 import { isValidEmail, isValidPassword, deleteAllFromAsyncStorage } from "../diverse.js"
 import uuid from 'react-native-uuid';
@@ -12,6 +11,7 @@ import InputComponent from '../Components/LogInComponents/InputComponent.js';
 import ViewIfUserExistsWithoutEmailVerified from '../Components/LogInComponents/ViewIfUserExistsWithoutEmailVerified.js';
 import SignInSignUpView from '../Components/LogInComponents/SignInSignUpView.js';
 import { EnvConfig } from '../providers/EnvConfig.js';
+import CustomSpinner from '../CustomElements/CustomSpinner.js';
 
 function ViewIfUserDoesntExist(props){
   return (
@@ -256,7 +256,7 @@ const LogIn = (props) => {
 
             {isLoadingSendEmail ?
               <View style={styles.spinnerContainer}>
-                <Spinner size="large" color="white" />
+                <CustomSpinner />
               </View> : null
             }
 
@@ -268,8 +268,8 @@ const LogIn = (props) => {
             <ModalReAuth  isModalVisibleReAuth={isModalVisibleReAuth} setModalVisibleReAuth={setModalVisibleReAuth} />
 
             <ViewIfUserExistsWithoutEmailVerified
-              user={props.user}
-              emailVerified_code={props.user?.emailVerified_code}
+              user={props?.user}
+              emailVerified_code={props?.user?.userDetails?.email_verified}
               sendCodeToEmail={sendCodeToEmail}
               setCodeVerify={setCodeVerify}
               codeVerify={codeVerify}

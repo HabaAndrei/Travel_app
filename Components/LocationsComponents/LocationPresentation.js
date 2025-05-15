@@ -1,11 +1,13 @@
 import { StyleSheet, View } from 'react-native'
 import { Card, HStack, Heading, Center, Link, Divider, LinkText, VStack } from '@gluestack-ui/themed';
-import ImageCarousel from '../ImageCarousel';
+import ImageCarousel from '../ImageCarousel.js';
 import CustomButton from '../../CustomElements/CustomButton.js';
 import ListPackeges from './ListPackeges.js';
+import TicketsComponent from '../TicketsComponent.js';
 
 /** This component represents a presentation of a location */
-const LocationCard = (props) => {
+const LocationPresentation = (props) => {
+
   return (
     <Card
       p="$5"
@@ -15,19 +17,22 @@ const LocationCard = (props) => {
       style={[styles.cardPressable, props.location.selected && styles.selectedCard]}
     >
       <Heading size="md" fontFamily="$heading" mb="$4">
-        {props.location.name}
+        {props.location?.name}
       </Heading>
 
+      {/* Hide tickets from location */}
+      {/* { props?.location?.tickets?.length ? <TicketsComponent tickets={props?.location?.tickets} /> : null } */}
+
       <View style={{ flex: 1, marginTop: 20 }}>
-        {props.location.arrayWithLinkImages.length ? (
-          <ImageCarousel imageUrls={props.location.arrayWithLinkImages} />
+        {props?.location?.arrayWithLinkImages?.length ? (
+          <ImageCarousel imageUrls={props?.location?.arrayWithLinkImages} />
         ) : null}
       </View>
 
       <VStack space="md" justifyContent="center" alignItems="center">
         <HStack h="$10" justifyContent="center" alignItems="center">
           <Link
-            href={props.location.website ? props.location.website : ''}
+            href={props?.location?.website ? props?.location?.website : ''}
             isExternal
           >
             <HStack alignItems="center">
@@ -38,17 +43,17 @@ const LocationCard = (props) => {
                 color="$primary600"
                 textDecorationLine="none"
               >
-                {props.location.website ? 'Visit their website' : ''}
+                {props?.location?.website ? 'Visit their website' : ''}
               </LinkText>
             </HStack>
           </Link>
 
-          {props.location.urlLocation && props.location.website ? (
+          {props?.location?.urlLocation && props?.location?.website ? (
             <Divider orientation="vertical" mx="$2.5" bg="$emerald500" h={15} />
           ) : null}
 
           <Link
-            href={props.location.urlLocation ? props.location.urlLocation : ''}
+            href={props?.location?.urlLocation ? props?.location?.urlLocation : ''}
             isExternal
           >
             <HStack alignItems="center">
@@ -59,7 +64,7 @@ const LocationCard = (props) => {
                 color="$primary600"
                 textDecorationLine="none"
               >
-                {props.location.urlLocation ? 'Google location' : ''}
+                {props?.location?.urlLocation ? 'Google location' : ''}
               </LinkText>
             </HStack>
           </Link>
@@ -68,24 +73,24 @@ const LocationCard = (props) => {
 
       <Center>
         <CustomButton
-          name={props.location.selected ? 'Remove location from your visit' : 'Pick location for your visit'}
-          func={props.pressOnLocations}
-          paramFunc={props.index}
+          name={props?.location?.selected ? 'Remove location from your visit' : 'Pick location for your visit'}
+          func={props?.pressOnLocations}
+          paramFunc={props?.index}
         />
       </Center>
 
-      {props.location?.dataTimeLocation && props.location?.selected ? (
+      {props?.location?.dataTimeLocation && props?.location?.selected ? (
         <ListPackeges
-          dataTimeLocation={props.location.dataTimeLocation}
-          indexLocation={props.index}
-          selectPackage={props.selectPackage}
+          dataTimeLocation={props?.location?.dataTimeLocation}
+          indexLocation={props?.index}
+          selectPackage={props?.selectPackage}
         />
       ) : null}
     </Card>
   )
 }
 
-export default LocationCard
+export default LocationPresentation;
 
 const styles = StyleSheet.create({
   cardPressable: {

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import {View, Text, ScrollView, StyleSheet, TouchableOpacity, TextInput, KeyboardAvoidingView,
-  Platform, Keyboard, Pressable} from 'react-native';
-import {FirebaseFirestore, FirebaseAuth} from '../Firebase.js';
+import { View, Text, ScrollView, StyleSheet, TouchableOpacity, TextInput, KeyboardAvoidingView,
+  Platform, Keyboard, Pressable } from 'react-native';
+import { FirebaseFirestore } from '../Firebase.js';
 import SelectConversation from '../Components/ChatComponents/SelectConversation.js';
 import { useIsFocused } from '@react-navigation/native';
 import uuid from 'react-native-uuid';
@@ -17,7 +17,6 @@ const Chat = (props) => {
   const [idSelectedConversation, setIdSelectedConversation] = useState('');
 
   const firebaseFirestore = new FirebaseFirestore();
-  const firebaseAuth = new FirebaseAuth();
 
   useEffect(()=>{
     if(!isFocused)return;
@@ -25,7 +24,7 @@ const Chat = (props) => {
   }, []);
 
   useEffect(()=>{
-    if(idSelectedConversation){_getMessages(idSelectedConversation)}
+    if(idSelectedConversation) _getMessages(idSelectedConversation)
   }, [idSelectedConversation])
 
   async function _getMessages(idConv){
@@ -38,6 +37,7 @@ const Chat = (props) => {
   }
 
   async function getConversations(){
+    if (!props.user?.userDetails?.email_verified) return;
     const data = await firebaseFirestore.getConversations();
     if(data.isResolved){
       const convs = data.data.map((ob)=>{return {id: ob.id, name: ob.name}})
@@ -46,8 +46,7 @@ const Chat = (props) => {
   }
 
   async function getResponse(messages, idConv){
-    const user_token = await firebaseAuth.getAuthToken();
-    const data = await firebaseFirestore.askQuestion(messages, user_token);
+    const data = await firebaseFirestore.askQuestion(messages);
     if(data.isResolved){
       setConversation((prev)=>{
         const newConv = prev.map((ob)=>{
@@ -55,6 +54,7 @@ const Chat = (props) => {
         })
         return [...newConv];
       })
+      if (!props.user?.userDetails?.email_verified) return;
       const time = new Date().getTime();
       firebaseFirestore.addIntoDatabase({
         database: 'messages',
@@ -81,30 +81,32 @@ const Chat = (props) => {
       const name = conv[0].mes.slice(0, 15);
       setConversations((prev) => [...prev, {id: uuidConv, name}])
       setIdSelectedConversation({id: uuidConv, name});
-      firebaseFirestore.addIntoDatabase({
-        database: 'conversations',
-        id: false,
-        columnsWithValues: {uid: props.user.uid, id: uuidConv, name}
-      });
+      if (props.user?.userDetails?.email_verified) {
+        firebaseFirestore.addIntoDatabase({
+          database: 'conversations',
+          id: false,
+          columnsWithValues: {uid: props.user.uid, id: uuidConv, name}
+        });
+      }
     }else{
       uuidConv = idSelectedConversation;
     }
     getResponse(conv, uuidConv);
+    setMessage('');
 
+    if (!props.user?.userDetails?.email_verified) return;
     firebaseFirestore.addIntoDatabase({
       database: 'messages',
       id: false,
       columnsWithValues: {uid: props.user.uid, idConv: uuidConv, type: 'user', mes: message, time}
     });
 
-    setMessage('');
   }
 
   async function _deleteChat(){
     if(!idSelectedConversation)return;
     const response = await props.areYouSure();
     if (!response) return;
-    firebaseFirestore.deleteChat(idSelectedConversation);
     setConversations((prev)=>{
       let newConvs = [];
       prev.forEach((ob)=>{
@@ -113,6 +115,8 @@ const Chat = (props) => {
       return [...newConvs];
     })
     newChat();
+    if (!props.user?.userDetails?.email_verified) return;
+    firebaseFirestore.deleteChat(idSelectedConversation);
   }
 
   function newChat(){

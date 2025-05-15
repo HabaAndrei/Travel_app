@@ -1,20 +1,21 @@
 import { StyleSheet, Text, View, SafeAreaView, ScrollView, Image, Pressable, Dimensions } from 'react-native';
-import { Heading, Center, Spinner } from '@gluestack-ui/themed';
+import { Heading, Center } from '@gluestack-ui/themed';
 import { useState } from 'react';
 import axios from 'axios';
 import * as ImagePicker from 'expo-image-picker';
 import { EnvConfig } from '../providers/EnvConfig.js';
 import CustomButton from '../CustomElements/CustomButton.js';
-import { FirebaseAuth } from '../Firebase.js';
+import CustomSpinner from '../CustomElements/CustomSpinner.js';
 import { isBase64 } from '../diverse.js';
 import * as FileSystem from 'expo-file-system';
+import { authorizationHeaders } from '../providers/utils.js';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
 function ViewSpinner(props) {
   return props.isLoading ? (
     <View style={styles.spinnerContainer}>
-      <Spinner size="large" color="blue" bg="rgba(0, 0, 0, 0.43)" />
+      <CustomSpinner />
     </View>
   ) : null;
 }
@@ -24,8 +25,6 @@ const FindLocation = (props) => {
   const [details, setDetails] = useState({});
   const [isImageNotFound, setImageNotFoud] = useState(false);
   const [isLoading, setLoading] = useState(false);
-
-  const firebaseAuth = new FirebaseAuth();
 
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -77,12 +76,11 @@ const FindLocation = (props) => {
     setDetails({});
     setImageNotFoud(false);
 
-    const user_token = await firebaseAuth.getAuthToken();
     try {
+      const body = { image: image.uri };
       const data = await axios.post(
         EnvConfig.getInstance().get('address_function_find_location'),
-        { image: image.uri, user_token },
-        { headers: { "Content-Type": "application/json" } }
+        body, await authorizationHeaders(body)
       );
       setLoading(false);
       if (!data?.data?.isResolved) {

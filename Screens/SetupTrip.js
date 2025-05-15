@@ -5,6 +5,7 @@ import SearchDestination from '../Components/SetupTripsComponents/SearchDestinat
 import CheckboxActivities from '../Components/SetupTripsComponents/CheckboxActivities.js';
 import NavbarProgram from '../Components/NavbarProgram.js';
 import CustomButton from '../CustomElements/CustomButton.js';
+import { verifyFreeTier } from '../diverse.js';
 
 /** SetupTrip screen => where client inputs the initial elements to create locations */
 const SetupTrip = (props) => {
@@ -62,9 +63,18 @@ const SetupTrip = (props) => {
     return true;
   }
 
-  function goToProgramPage(){
+  async function goToProgramPage(){
     if(!verifyDestinationRequest())return;
 
+    // Verify if a user who is not logged in still has access to the free tier
+    if (!props.user?.userDetails?.email_verified) {
+      const verificationFreeTier = await verifyFreeTier();
+      // If the user no longer has access to the free tier, redirect them to log in
+      if (!verificationFreeTier.continue) {
+        props.navigation.navigate('LogIn');
+        return;
+      }
+    }
     const selectedActivities = destinationActivities.checkbox
       .filter(ob => ob.selected)
       .map(ob => ob.category);
