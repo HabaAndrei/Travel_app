@@ -1,4 +1,4 @@
-import { StyleSheet, View, ScrollView, Dimensions, SafeAreaView } from 'react-native'
+import { StyleSheet, View, ScrollView, Dimensions, SafeAreaView, Pressable } from 'react-native'
 import { useState, useEffect, useRef } from 'react'
 import { formatDateFromMilliseconds, removeItemFromAsyncStorage,
   addDataToAsyncStorage, multiSetFromAsyncStorage, getDataFromAsyncStorage,
@@ -235,24 +235,30 @@ const Program = (props) => {
                 ))}
 
                 <HStack h="$10" justifyContent="center" alignItems="center">
-                  <HStack alignItems="center"  >
-                    <Text bold={true} onPress={()=>{deleteAllProgram()}} >Delete</Text>
-                    <Icon as={TrashIcon} m="$2" w="$6" h="$6" />
-                  </HStack>
+                  <Pressable onPress={()=>{deleteAllProgram()}} >
+                    <HStack alignItems="center"  >
+                      <Text bold={true} >Delete</Text>
+                      <Icon as={TrashIcon} m="$2" w="$6" h="$6" />
+                    </HStack>
+                  </Pressable>
 
                   <Divider  style={{ margin: 15 }}  orientation="vertical"  mx="$2.5"  bg="$emerald500"  h={25}  $dark-bg="$emerald400" />
 
-                  <HStack alignItems="center">
-                    <Text bold={true} onPress={()=>regenerateProgram()} >Regenerate</Text>
-                    <Icon as={RepeatIcon} m="$2" w="$6" h="$6" />
-                  </HStack>
+                  <Pressable onPress={()=>regenerateProgram()} >
+                    <HStack alignItems="center">
+                      <Text bold={true} >Regenerate</Text>
+                      <Icon as={RepeatIcon} m="$2" w="$6" h="$6" />
+                    </HStack>
+                  </Pressable>
 
                   <Divider  style={{ margin: 15 }}  orientation="vertical"  mx="$2.5"  bg="$indigo500"  h={25}  $dark-bg="$indigo400"/>
 
-                  <HStack alignItems="center">
-                    <Text bold={true} onPress={()=>saveProgramInDb()} >Save</Text>
-                    <Icon as={CheckIcon} m="$2" w="$6" h="$6" />
-                  </HStack>
+                  <Pressable onPress={()=>saveProgramInDb()} >
+                    <HStack alignItems="center">
+                      <Text bold={true} >Save</Text>
+                      <Icon as={CheckIcon} m="$2" w="$6" h="$6" />
+                    </HStack>
+                  </Pressable>
                 </HStack>
 
               </View>
