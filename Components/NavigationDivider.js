@@ -1,16 +1,18 @@
-import { View } from 'react-native';
+import { View, Pressable } from 'react-native';
 import { HStack, Text, Divider, ArrowLeftIcon, CheckIcon, Icon } from '@gluestack-ui/themed';
 
 const NavigationDivider = (props) => {
   return (
     <View>
       <HStack h="$10" alignItems="center">
-        <HStack alignItems="center" flex={1} justifyContent="flex-end">
-          <Icon as={ArrowLeftIcon} m="$2" w="$6" h="$6" />
-          <Text bold onPress={() => props.firstFunction()}>
-            {props.firstFunctionName}
-          </Text>
-        </HStack>
+        <Pressable onPress={() => props.firstFunction()} style={{ flex: 1 }}>
+          <HStack alignItems="center" justifyContent="flex-end">
+            <Icon as={ArrowLeftIcon} m="$2" w="$6" h="$6" />
+            <Text bold>
+              {props.firstFunctionName}
+            </Text>
+          </HStack>
+        </Pressable>
 
         <Divider
           orientation="vertical"
@@ -20,12 +22,14 @@ const NavigationDivider = (props) => {
           alignSelf="center"
         />
 
-        <HStack alignItems="center" flex={1} justifyContent="flex-start">
-          <Text bold onPress={() => props.secondFunction()}>
-            {props.secondFunctionName}
-          </Text>
-          <Icon as={CheckIcon} m="$2" w="$6" h="$6" />
-        </HStack>
+        <Pressable onPress={() => props.secondFunction()} style={{ flex: 1 }}>
+          <HStack alignItems="center" justifyContent="flex-start">
+            <Text bold>
+              {props.secondFunctionName}
+            </Text>
+            <Icon as={CheckIcon} m="$2" w="$6" h="$6" />
+          </HStack>
+        </Pressable>
       </HStack>
     </View>
   );
